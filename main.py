@@ -24,10 +24,10 @@ class Main:
         file_title = download_result["title"]
         
         transcription_text = transcriber.transcribe(file_path)
-        FileManager.save_text(transcription_text, output_file=f"{file_title}.txt")
+        FileManager.save_text(transcription_text, output_file=f"{file_title}_transcription.txt")
         
         summarized_text = summarizer.summarize(transcription_text)
-        FileManager.save_text(summarized_text, output_file=f"summarized_{file_title}_summary.md")
+        FileManager.save_text(summarized_text, output_file=f"{file_title}_summary.md")
         
         end_time = datetime.now(self.timezone)
         print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
