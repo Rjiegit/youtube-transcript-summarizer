@@ -8,6 +8,7 @@ import requests
 from dotenv import load_dotenv
 from datetime import datetime
 import pytz
+import argparse
 
 load_dotenv()
 
@@ -126,8 +127,13 @@ try:
     print(f"程式開始於：{start_time.strftime('%Y-%m-%d %H:%M:%S')}")
     
     
+    # 設定 argparse 來接收命令列引數
+    parser = argparse.ArgumentParser(description="下載 YouTube 影片並轉錄字幕")
+    parser.add_argument("youtube_url", type=str, help="YouTube 影片網址")
+    args = parser.parse_args()
+    
     # 主流程
-    youtube_url = "https://www.youtube.com/watch?v=UcmNQTk-pY4&t=1s"
+    youtube_url = args.youtube_url
     download_result = download_youtube_video(youtube_url)
     file_path = download_result["path"]
     file_title = download_result["title"]
