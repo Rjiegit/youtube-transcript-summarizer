@@ -1,16 +1,13 @@
 # YouTube Transcript Summarizer
 
 此專案是一個簡單的 YouTube 文字轉錄摘要工具。
-利用 Docker 容器與 Ollama 的 Llama 模型進行影片文字生成與摘要。請遵循以下步驟來設定開發環境並運行應用程式。
+利用 Docker 容器與 LLM 進行影片文字生成與摘要。請遵循以下步驟來設定開發環境並運行應用程式。
 
 ## 專案需求
 - Docker Compose
-- Ollama 服務 (https://github.com/ollama/ollama)
-
-## 環境設置
-
-1. 確保系統已安裝 Docker 和 Docker Compose。這將用於啟動應用程式的 Docker 容器化環境。
-2. 安裝並啟動 Ollama，用於下載和使用 Llama 模型來進行文字摘要處理。
+- OpenAI API Key(optional)
+- Google Gemini API Key(optional)
+- Ollama(optional) (https://github.com/ollama/ollama)
 
 ## 快速開始
 
@@ -46,6 +43,25 @@ pip install -r requirements.txt
 pip freeze > requirements.txt
 ```
 
+
+### OpenAI API
+
+設定 OpenAI API Key
+
+```
+// .env
+OPENAI_API_KEY=YOUR_KEY
+```
+
+### Google Gemini API
+
+設定 Google Gemini API Key
+
+```
+// .env
+GOOGLE_GEMINI_API_KEY=YOUR_KEY
+```
+
 ### Ollama 設置
 
 請先下載並啟動 Ollama 服務，然後下載所需的模型。
@@ -74,4 +90,4 @@ ollama pull llama3.2
 python main.py "youtube_video_url"
 ```
 
-此指令會自動下載指定 YouTube 影片的文字內容，並利用 Ollama 的 Llama 模型進行摘要處理。
+此指令會自動下載指定 YouTube 影片的文字內容，並利用 LLM 進行摘要處理。
