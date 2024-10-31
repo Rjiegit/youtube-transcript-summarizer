@@ -1,10 +1,11 @@
 # 選擇基礎映像
 FROM python:3.9-slim
 
-# 安裝 ffmpeg
-RUN apt-get update && \
-    apt-get install -y ffmpeg && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+# 安裝必要的程式
+RUN apt update && \
+    apt install -y ffmpeg && \
+    apt install -y git && \
+    apt clean && rm -rf /var/lib/apt/lists/*
 
 # 設置工作目錄
 WORKDIR /usr/src/app
@@ -14,4 +15,4 @@ WORKDIR /usr/src/app
 # RUN pip install -r requirements.txt
 
 # 設置預設指令（如果需要）
-# CMD ["python", "app.py"]
+# CMD ["python", "main.py"]

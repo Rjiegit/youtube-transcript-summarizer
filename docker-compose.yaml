@@ -2,8 +2,7 @@
 services:
   app:
     build:
-        context: ./
-        dockerfile: .docker/Dockerfile
+        context: ./.docker
     volumes:
       - ./:/usr/src/app
     tty: true
