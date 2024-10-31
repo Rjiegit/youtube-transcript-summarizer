@@ -1,4 +1,4 @@
-# Youtube Summary
+# Youtube transcript summarizer
 
 ## Develop
 
