@@ -11,14 +11,14 @@ class Summarizer:
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.google_gemini_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
         
-    def summarize(self, text):
-        return self.summarize_with_google_gemini(text)
+    def summarize(self, title, text):
+        return self.summarize_with_google_gemini(title, text)
     
-    def get_prompt(self, text):
-        return f"請將這份逐字稿轉換成一篇淺顯易懂、重點突出、流程清晰的文章，包含內容分析、關鍵資訊提取、重新撰寫、強調重點、完善結構，並在適當位置添加重點提示，確保整個脈絡清晰有條理。請使用繁體中文作為輸出。===\n\n{text}"
+    def get_prompt(self, title, text):
+        return f"請將這份逐字稿轉換成一篇淺顯易懂、重點突出、流程清晰的文章，包含內容分析、關鍵資訊提取、重新撰寫、強調重點、完善結構，確保整個脈絡清晰有條理。請使用繁體中文作為輸出。===\nTitle:{title}\n{text}"
         
 
-    def summarize_with_openai(self, text):
+    def summarize_with_openai(self, title, text):
         if not self.openai_api_key:
             raise ValueError("API key is not set. Please add it to the .env file.")
         
@@ -30,18 +30,18 @@ class Summarizer:
         )
         return response.choices[0].text.strip()
 
-    def summarize_with_google_gemini(self, text):
+    def summarize_with_google_gemini(self, title, text):
         if not self.google_gemini_api_key:
             raise ValueError("API key is not set. Please add it to the .env file.")
         
         genai.configure(api_key=self.google_gemini_api_key)
         
         model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content(self.get_prompt(text))
+        response = model.generate_content(self.get_prompt(title, text))
         
         return response.text
         
-    def summarize_with_ollama(self, text):
+    def summarize_with_ollama(self, title, text):
         print(f"Summarize with Ollama...")
         url = "http://host.docker.internal:11434/api/generate"
         headers = {
@@ -49,7 +49,7 @@ class Summarizer:
         }
         data = {
             "model": "llama3.2",
-            "prompt": self.get_prompt(text),
+            "prompt": self.get_prompt(title, text),
             "stream": False
         }
         response = requests.post(url, headers=headers, json=data)

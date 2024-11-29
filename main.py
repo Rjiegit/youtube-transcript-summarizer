@@ -26,8 +26,9 @@ class Main:
         transcription_text = transcriber.transcribe(file_path)
         FileManager.save_text(transcription_text, output_file=f"{file_title}_transcription.txt")
         
-        summarized_text = summarizer.summarize(transcription_text)
-        FileManager.save_text(summarized_text, output_file=f"{file_title}_summary.md")
+        datetime_now = datetime.now().strftime('%Y%m%d%H%M%S')
+        summarized_text = summarizer.summarize(file_title, transcription_text)
+        FileManager.save_text(summarized_text, output_file=f"_summarized/{datetime_now}_{file_title}.md")
         
         end_time = datetime.now(self.timezone)
         print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
