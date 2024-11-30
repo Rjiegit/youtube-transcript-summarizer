@@ -5,7 +5,7 @@ from youtube_downloader import YouTubeDownloader
 from transcriber import Transcriber
 from summarizer import Summarizer
 from file_manager import FileManager
-from notion import Notion
+from summary_storage import SummaryStorage
 
 class Main:
     def __init__(self, youtube_url):
@@ -25,14 +25,13 @@ class Main:
         file_title = download_result["title"]
 
         transcription_text = transcriber.transcribe(file_path)
-        FileManager.save_text(transcription_text, output_file=f"{file_title}_transcription.txt")
         
         datetime_now = datetime.now().strftime('%Y%m%d%H%M%S')
         summarized_text = summarizer.summarize(file_title, transcription_text)
         FileManager.save_text(summarized_text, output_file=f"_summarized/{datetime_now}_{file_title}.md")
 
-        notion = Notion()
-        notion.add_page(
+        summary_storage = SummaryStorage()
+        summary_storage.save(
             title=file_title,
             text=summarized_text,
             model="",
