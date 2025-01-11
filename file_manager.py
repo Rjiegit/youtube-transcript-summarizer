@@ -1,4 +1,5 @@
 import re
+import os
 
 class FileManager:
     @staticmethod
@@ -16,3 +17,11 @@ class FileManager:
             file.write(text)
             
         print(f"Text saved to {full_path}")
+
+    @staticmethod
+    def delete_file(file_path):
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            print(f"File {file_path} deleted.")
+        else:
+            print(f"File {file_path} not found.")

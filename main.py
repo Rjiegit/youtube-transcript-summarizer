@@ -41,7 +41,8 @@ class Main:
         end_time = datetime.now(self.timezone)
         print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"Total time: {(end_time - start_time).total_seconds()} seconds")
-
+    
+        FileManager.delete_file(file_path)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Download YouTube video and transcribe subtitles")
