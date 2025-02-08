@@ -34,16 +34,7 @@ class Main:
                 model="",
                 url=file_path
             )
-            
-            datetime_now = datetime.now().strftime('%Y%m%d%H%M%S')
-            summarized_text = summarizer.summarize(file_title, transcription_text)
-            FileManager.save_text(summarized_text, output_file=f"_summarized/{datetime_now}_{file_title}.md")
-            summary_storage.save(
-                title=file_title,
-                text=summarized_text,
-                model="",
-                url=file_path
-            )
+            os.remove(file_path)
 
         end_time = datetime.now(self.timezone)
         print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
