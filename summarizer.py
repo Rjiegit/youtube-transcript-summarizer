@@ -15,7 +15,7 @@ class Summarizer:
         return self.summarize_with_google_gemini(title, text)
     
     def get_prompt(self, title, text):
-        return f"請將這份逐字稿轉換成一篇淺顯易懂、重點突出、流程清晰的文章，包含內容分析、關鍵資訊提取、重新撰寫、強調重點、完善結構，確保整個脈絡清晰有條理。請使用繁體中文作為輸出。===\nTitle:{title}\n{text}"
+        return f"請將這份逐字稿轉換成一篇淺顯易懂、重點突出、流程清晰的文章，包含內容分析、關鍵資訊提取、重新撰寫、強調重點、完善結構，確保整個脈絡清晰有條理。也幫我使用 markdown 整理出 Mind Map 。請使用繁體中文作為輸出。===\nTitle:{title}\n{text}"
         
 
     def summarize_with_openai(self, title, text):
@@ -36,7 +36,7 @@ class Summarizer:
         
         genai.configure(api_key=self.google_gemini_api_key)
         
-        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+        model = genai.GenerativeModel('gemini-2.0-flash')
         response = model.generate_content(self.get_prompt(title, text))
         
         return response.text

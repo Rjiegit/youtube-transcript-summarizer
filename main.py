@@ -18,10 +18,14 @@ class Main:
         summarizer = Summarizer()
         summary_storage = SummaryStorage()
 
-        # Process all mp4 files in data/videos folder
+        audio_files = glob.glob("data/audio/*.mp3")
         video_files = glob.glob("data/videos/*.mp4")
-        for file_path in video_files:
-            file_title = os.path.basename(file_path).split('.')[0]
+        files_to_process = audio_files + video_files
+        
+        for file_path in files_to_process:
+            file_title = os.path.splitext(os.path.basename(file_path))[0]
+            file_title = file_title.replace("utomp3.com - ", "")
+                
             print(f"Processing file: {file_title}")
             transcription_text = transcriber.transcribe(file_path)
             
@@ -35,6 +39,12 @@ class Main:
                 url=file_path
             )
             os.remove(file_path)
+            
+        # Delete all Zone.Identifier files
+        zone_files = glob.glob("data/videos/*Zone.Identifier")
+        for file_path in zone_files:
+            os.remove(file_path)
+        
 
         end_time = datetime.now(self.timezone)
         print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
