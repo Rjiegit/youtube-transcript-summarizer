@@ -18,7 +18,7 @@ class Main:
         summarizer = Summarizer()
         summary_storage = SummaryStorage()
 
-        audio_files = glob.glob("data/audio/*.mp3")
+        audio_files = glob.glob("data/videos/*.mp3")
         video_files = glob.glob("data/videos/*.mp4")
         files_to_process = audio_files + video_files
         
