@@ -14,6 +14,7 @@ class Main:
     def run(self):
         start_time = datetime.now(self.timezone)
         print(f"Process started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        
         transcriber = Transcriber(model="base")
         summarizer = Summarizer()
         summary_storage = SummaryStorage()
@@ -40,17 +41,20 @@ class Main:
             )
             os.remove(file_path)
             
-        # Delete all Zone.Identifier files
-        zone_files = glob.glob("data/videos/*Zone.Identifier")
-        for file_path in zone_files:
-            os.remove(file_path)
-        
+        self.delete_zone_identifier_files()
 
         end_time = datetime.now(self.timezone)
         print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
         print(f"Total time: {(end_time - start_time).total_seconds()} seconds")
-    
-        FileManager.delete_file(file_path)
+
+    def delete_zone_identifier_files(self):
+        zone_files = glob.glob("data/videos/*Zone.Identifier")
+        try:
+            for file_path in zone_files:
+                os.remove(file_path)
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Trying to delete files again...")
 
 if __name__ == "__main__":
     
