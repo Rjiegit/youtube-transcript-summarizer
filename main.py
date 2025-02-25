@@ -19,9 +19,12 @@ class Main:
         summarizer = Summarizer()
         summary_storage = SummaryStorage()
 
-        audio_files = glob.glob("data/videos/*.mp3")
-        video_files = glob.glob("data/videos/*.mp4")
-        files_to_process = audio_files + video_files
+        mp3_files = glob.glob("data/videos/*.mp3")
+        mp4_files = glob.glob("data/videos/*.mp4")
+        m4a_files = glob.glob("data/videos/*.m4a")
+        files_to_process = mp3_files + mp4_files + m4a_files
+        
+        print(f"Total files to process: {len(files_to_process)}")
         
         for file_path in files_to_process:
             file_title = os.path.splitext(os.path.basename(file_path))[0]
