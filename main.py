@@ -27,12 +27,19 @@ class Main:
         print(f"Total files to process: {len(files_to_process)}")
         
         for file_path in files_to_process:
+            self.process_file(file_path, transcriber, summarizer, summary_storage)
+            
+        self.delete_zone_identifier_files()
+
+        end_time = datetime.now(self.timezone)
+        print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"Total time: {(end_time - start_time).total_seconds()} seconds")
+
+    def process_file(self, file_path, transcriber, summarizer, summary_storage):
+        try:
             file_title = os.path.splitext(os.path.basename(file_path))[0]
-            file_title = file_title.replace("utomp3.com - ", "")
-                
             print(f"Processing file: {file_title}")
             transcription_text = transcriber.transcribe(file_path)
-            
             datetime_now = datetime.now().strftime('%Y%m%d%H%M%S')
             summarized_text = summarizer.summarize(file_title, transcription_text)
             FileManager.save_text(summarized_text, output_file=f"_summarized/{datetime_now}_{file_title}.md")
@@ -43,12 +50,8 @@ class Main:
                 url=file_path
             )
             os.remove(file_path)
-            
-        self.delete_zone_identifier_files()
-
-        end_time = datetime.now(self.timezone)
-        print(f"Process ended at: {end_time.strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"Total time: {(end_time - start_time).total_seconds()} seconds")
+        except Exception as e:
+            print(f"Error processing file {file_path}: {e}")
 
     def delete_zone_identifier_files(self):
         zone_files = glob.glob("data/videos/*Zone.Identifier")
@@ -57,7 +60,6 @@ class Main:
                 os.remove(file_path)
         except Exception as e:
             print(f"Error: {e}")
-            print("Trying to delete files again...")
 
 if __name__ == "__main__":
     
@@ -67,3 +69,6 @@ if __name__ == "__main__":
         app.run()
     except Exception as e:
         print(f"Error: {e}")
+    finally:
+        print("Process completed.")
+        os._exit(0)

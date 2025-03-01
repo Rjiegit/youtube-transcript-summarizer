@@ -21,6 +21,6 @@ class Transcriber:
         
         transcript_text = ""
         for segment in segments:
-            print(f"[{segment.start:.2f}s -> {segment.end:.2f}s] {segment.text}")
+            # print(f"[{segment.start:.2f}s -> {segment.end:.2f}s] {segment.text}")
             transcript_text += segment.text
         return transcript_text
