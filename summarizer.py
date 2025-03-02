@@ -25,7 +25,7 @@ class Summarizer:
         openai.api_key = self.openai_api_key
         response = openai.Completion.create(
             engine="gpt-4o-mini",
-            prompt=self.get_prompt(text),
+            prompt=self.get_prompt(title=title, text=text),
             temperature=0.5
         )
         return response.choices[0].text.strip()
@@ -37,7 +37,7 @@ class Summarizer:
         genai.configure(api_key=self.google_gemini_api_key)
         
         model = genai.GenerativeModel('gemini-2.0-flash')
-        response = model.generate_content(self.get_prompt(title, text))
+        response = model.generate_content(self.get_prompt(title=title, text=text))
         
         return response.text
         
@@ -49,7 +49,7 @@ class Summarizer:
         }
         data = {
             "model": "llama3.2",
-            "prompt": self.get_prompt(title, text),
+            "prompt": self.get_prompt(title=title, text=text),
             "stream": False
         }
         response = requests.post(url, headers=headers, json=data)
