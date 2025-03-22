@@ -15,7 +15,7 @@ class Summarizer:
         return self.summarize_with_google_gemini(title, text)
     
     def get_prompt(self, title, text):
-        return f"請根據以下逐字稿內容，產生一篇容易理解的完整文章。文章須依序包含：首段為逐字稿重點整理、接著為詳細內容說明、最後以 Markdown 格式呈現心智圖。請使用繁體中文輸出。===\nTitle: {title}\n{text}"
+        return f"請根據以下逐字稿內容，產生一篇容易理解的完整文章。文章須依序包含:總結、分章節總結、最後整理出 Insight。請使用繁體中文輸出。===\nTitle: {title}\n{text}"
         
 
     def summarize_with_openai(self, title, text):
