@@ -1,4 +1,5 @@
 import whisper
+import os
 from faster_whisper import WhisperModel
 
 class Transcriber:
@@ -16,7 +17,12 @@ class Transcriber:
     
     def transcribe_with_faster_whisper(self, file_path):
         print(f"Transcribing audio with Faster Whisper...")
-        whisper_model = WhisperModel(self.model, compute_type="float32")
+        num_cpus = max(1, os.cpu_count() - 1)
+        whisper_model = WhisperModel(
+            self.model, 
+            compute_type="float32", 
+            num_workers=num_cpus
+            )
         segments, _ = whisper_model.transcribe(file_path)
         
         transcript_text = ""
