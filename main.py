@@ -15,7 +15,7 @@ class Main:
         start_time = datetime.now(self.timezone)
         print(f"Process started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
         
-        transcriber = Transcriber(model_size="base")
+        transcriber = Transcriber(model_size="tiny")
         summarizer = Summarizer()
         summary_storage = SummaryStorage()
 

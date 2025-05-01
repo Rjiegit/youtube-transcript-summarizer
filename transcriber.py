@@ -3,7 +3,7 @@ import os
 from faster_whisper import WhisperModel
 
 class Transcriber:
-    def __init__(self, model_size="tiny"):
+    def __init__(self, model_size="base"):
         self.model_size = model_size
     
     def transcribe(self, file_path):
