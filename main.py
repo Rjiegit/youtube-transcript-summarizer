@@ -15,7 +15,7 @@ class Main:
         start_time = datetime.now(self.timezone)
         print(f"Process started at: {start_time.strftime('%Y-%m-%d %H:%M:%S')}")
         
-        transcriber = Transcriber(model="base")
+        transcriber = Transcriber(model_size="base")
         summarizer = Summarizer()
         summary_storage = SummaryStorage()
 
@@ -26,7 +26,8 @@ class Main:
         
         print(f"Total files to process: {len(files_to_process)}")
         
-        for file_path in files_to_process:
+        for index, file_path in enumerate(files_to_process, start=1):
+            print(f"Processing file {index}/{len(files_to_process)}: {file_path}")
             self.process_file(file_path, transcriber, summarizer, summary_storage)
             
         self.delete_zone_identifier_files()
@@ -37,6 +38,7 @@ class Main:
 
     def process_file(self, file_path, transcriber, summarizer, summary_storage):
         try:
+            start_time = datetime.now()  # 記錄開始時間
             file_title = os.path.splitext(os.path.basename(file_path))[0]
             print(f"Processing file: {file_title}")
             transcription_text = transcriber.transcribe(file_path)
@@ -50,9 +52,21 @@ class Main:
                 model="",
                 url=file_path
             )
-            os.remove(file_path)
+            self.delete_file(file_path)
+            
+            end_time = datetime.now()  # 記錄結束時間
+            processing_time = (end_time - start_time).total_seconds()
+            print(f"Finished processing {file_title} in {processing_time:.2f} seconds")
         except Exception as e:
             print(f"Error processing file {file_path}: {e}")
+            self.delete_file(file_path)
+
+    def delete_file(self, file_path):
+        try:
+            os.remove(file_path)
+            print(f"Deleted file: {file_path}")
+        except Exception as e:
+            print(f"Error deleting file {file_path}: {e}")
 
     def delete_zone_identifier_files(self):
         zone_files = glob.glob("data/videos/*Zone.Identifier")
