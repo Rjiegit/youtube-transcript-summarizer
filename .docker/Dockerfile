@@ -5,6 +5,7 @@ FROM python:3.9-slim
 RUN apt update && \
     apt install -y ffmpeg && \
     apt install -y git && \
+    apt install -y make && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # 設置工作目錄
