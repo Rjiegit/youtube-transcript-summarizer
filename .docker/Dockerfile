@@ -6,6 +6,7 @@ RUN apt update && \
     apt install -y ffmpeg && \
     apt install -y git && \
     apt install -y make && \
+    apt install -y yt-dlp && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # 設置工作目錄
