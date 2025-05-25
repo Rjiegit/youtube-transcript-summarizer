@@ -80,14 +80,30 @@ ollama pull llama3.2
 
 ## 使用方法
 
-### 執行 YouTube 文字轉錄摘要
+### 1. 下載 YouTube 影片音訊
 
-待環境設置完成後，可以在容器中執行 Python 腳本來處理 YouTube 影片文字轉錄並生成摘要。
+請先將欲處理的 YouTube 影片音訊下載至 `data/videos/` 目錄。你可以使用 `yt-dlp` 工具，或直接使用 Makefile 指令：
 
-1. 進入 Docker 容器中的 app 服務。
-2. 執行轉錄與摘要腳本，具體指令會根據腳本設計有所不同，例如：
 ```bash
-python main.py "youtube_video_url"
+make yt-dlp url="YOUR_URL"
 ```
 
-此指令會自動下載指定 YouTube 影片的文字內容，並利用 LLM 進行摘要處理。
+此指令會自動將指定 YouTube 影片的音訊下載到 `data/videos/` 目錄下。
+
+---
+
+### 2. 執行文字轉錄與摘要
+
+在 app 服務容器內，執行主程式：
+
+```bash
+make run
+```
+或
+```bash
+python main.py
+```
+
+此指令會自動處理 `data/videos/` 目錄下的音訊檔案，進行文字轉錄並利用 LLM 進行摘要處理。
+
+---
