@@ -1,5 +1,5 @@
 # 選擇基礎映像
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 # 安裝必要的程式
 RUN apt update && \
