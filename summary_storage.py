@@ -1,6 +1,7 @@
 import os
 from notion_client import Client
 from dotenv import load_dotenv
+from logger import logger
 
 
 class SummaryStorage:
@@ -75,6 +76,6 @@ class SummaryStorage:
                 },
                 children=children
             )
-            print("新增成功！頁面ID:", response["id"])
+            logger.info(f"新增成功！頁面ID: {response['id']}")
         except Exception as e:
-            print("發生錯誤:", e)
+            logger.error(f"發生錯誤: {e}")

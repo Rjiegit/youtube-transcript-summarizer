@@ -1,6 +1,7 @@
 import whisper
 import os
 from faster_whisper import WhisperModel
+from logger import logger
 
 class Transcriber:
     def __init__(self, model_size="base"):
@@ -10,13 +11,13 @@ class Transcriber:
         return self.transcribe_with_faster_whisper(file_path)
     
     def transcribe_with_whisper(self, file_path):
-        print(f"Transcribing audio with Whisper...")
+        logger.info(f"Transcribing audio with Whisper...")
         whisper_model = whisper.load_model(self.model_size)
         result = whisper_model.transcribe(file_path, verbose=True, fp16=False)
         return result['text']
     
     def transcribe_with_faster_whisper(self, file_path):
-        print(f"Transcribing audio with Faster Whisper...")
+        logger.info(f"Transcribing audio with Faster Whisper...")
         whisper_model = WhisperModel(
             self.model_size, 
             compute_type="int8",

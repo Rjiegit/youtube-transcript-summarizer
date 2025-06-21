@@ -4,6 +4,7 @@ import requests
 from dotenv import load_dotenv
 import google.generativeai as genai
 import prompt
+from logger import logger
 
 load_dotenv()
 
@@ -43,7 +44,7 @@ class Summarizer:
         return response.text
         
     def summarize_with_ollama(self, title, text):
-        print(f"Summarize with Ollama...")
+        logger.info(f"Summarize with Ollama...")
         url = "http://host.docker.internal:11434/api/generate"
         headers = {
             "Content-Type": "application/json"
@@ -58,4 +59,5 @@ class Summarizer:
             summary = response.json().get("response", "")
             return summary
         else:
+            logger.error(f"Error from Ollama API: {response.status_code} {response.text}")
             raise Exception(f"Error from Ollama API: {response.status_code} {response.text}")
