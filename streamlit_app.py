@@ -17,6 +17,10 @@ st.markdown("""
 
 url = st.text_input("請輸入影片或音訊網址 (如 YouTube)")
 
+# 初始化 session state 的歷史紀錄
+if "history" not in st.session_state:
+    st.session_state["history"] = []
+
 if st.button("開始分析") and url:
     import time
     start_time = time.time()
@@ -61,6 +65,21 @@ if st.button("開始分析") and url:
                 st.subheader("摘要結果")
                 st.markdown(summarized_text)
                 st.download_button("下載摘要檔案", data=summarized_text, file_name=os.path.basename(output_file))
+                # 新增到 session_state 歷史紀錄
+                st.session_state["history"].append({
+                    "url": url,
+                    "title": file_title,
+                    "summary": summarized_text
+                })
             except Exception as e:
                 st.error(f"分析失敗: {e}")
                 progress.progress(0, text="分析失敗")
+
+# 顯示本 session 歷史紀錄
+if st.session_state["history"]:
+    st.subheader("本次瀏覽歷史紀錄")
+    for i, record in enumerate(reversed(st.session_state["history"])):
+        # 以標題為主顯示
+        title = record.get("title") or record.get("url")
+        with st.expander(f"{title}"):
+            st.markdown(record["summary"])
