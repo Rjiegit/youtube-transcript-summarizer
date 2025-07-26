@@ -76,18 +76,6 @@ class Main:
                 os.remove(file_path)
         except Exception as e:
             logger.error(f"Error: {e}")
-            
-    def truncate_filename(filename, max_length=200):
-        """
-        截斷檔名，使其不超過指定的最大長度。
-        """
-        logger.info(f"Truncating filename: {filename}")
-        base_name, ext = os.path.splitext(filename)
-        # 計算需要截斷的長度
-        if len(base_name) + len(ext) > max_length:
-            base_name = base_name[:max_length - len(ext)]
-        # 返回截斷後的檔名
-        return base_name + ext
 
 if __name__ == "__main__":
     
