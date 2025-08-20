@@ -91,25 +91,61 @@ st.header("🔄 動態隊列模式 (實驗)")
 init_dynamic_queue_state()
 dq = get_queue_state()
 
-col_in, col_btn, col_ctrl = st.columns([4,1,2])
+col_in, col_btn, col_ctrl = st.columns([5,1,2])
 with col_in:
-    dq["current_url_input"] = st.text_input("輸入 YouTube URL 並加入隊列", value=dq.get("current_url_input", ""))
+    dq["current_url_input"] = st.text_input("輸入 YouTube URL（加入後自動開始處理）", value=dq.get("current_url_input", ""))
 with col_btn:
-    if st.button("➕ 加入隊列"):
-        ok, msg = DynamicQueueManager.add_url(dq.get("current_url_input", ""))
+    add_pressed = st.button("➕ 加入並處理")
+    
+# 處理按鈕事件（在按鈕定義後）
+if add_pressed:
+    current_input = dq.get("current_url_input", "")
+    if current_input.strip():
+        # 確保 session state 存在
+        if "dynamic_queue" not in st.session_state:
+            init_dynamic_queue_state()
+        
+        # 調用 add_url
+        ok, msg = DynamicQueueManager.add_url(current_input)
+        
         if ok:
-            dq["current_url_input"] = ""
-            st.success(msg)
+            # 直接更新 session state
+            st.session_state["dynamic_queue"]["current_url_input"] = ""
+            current_length = len(st.session_state["dynamic_queue"]["task_queue"])
+            st.success(f"{msg}，隊列長度: {current_length}")
+            # 立即重新渲染
+            st.rerun()
         else:
             st.warning(msg)
-        st.rerun()
+    else:
+        st.warning("請輸入 YouTube URL")
 with col_ctrl:
-    start = st.button("▶️ 開始", disabled=dq["is_processing"])
-    stop = st.button("⏹ 停止", disabled=not dq["is_processing"])
-    clear = st.button("🧹 清空", disabled=dq["is_processing"])
-    if start:
-        DynamicQueueManager.start_processing()
-        st.rerun()
+    stop = st.button("⏹ 停止處理", disabled=not dq["is_processing"])
+    clear = st.button("🧹 清空隊列", disabled=dq["is_processing"])
+    
+    # 測試按鈕 - 添加假任務來測試
+    test_pressed = st.button("🧪 測試加入")
+
+# 處理測試按鈕
+if test_pressed:
+    if "dynamic_queue" not in st.session_state:
+        init_dynamic_queue_state()
+    test_task = {
+        "id": f"test_{len(st.session_state['dynamic_queue']['task_queue'])}",
+        "url": f"https://www.youtube.com/watch?v=test{len(st.session_state['dynamic_queue']['task_queue'])}",
+        "status": "waiting",
+        "title": "測試任務",
+        "added_time": "2025-08-20T12:00:00",
+        "start_time": "",
+        "end_time": "",
+        "error_msg": "",
+        "result_path": "",
+        "retry_count": 0,
+    }
+    st.session_state["dynamic_queue"]["task_queue"].append(test_task)
+    st.success(f"測試任務已加入，當前隊列長度: {len(st.session_state['dynamic_queue']['task_queue'])}")
+    st.rerun()
+    
     if stop:
         DynamicQueueManager.stop_processing()
         st.rerun()
@@ -121,15 +157,28 @@ with col_ctrl:
 if dq["is_processing"]:
     DynamicQueueManager.processing_loop()
 
+# 重新獲取最新狀態用於顯示
+dq = get_queue_state()
 update_stats()
 stats = dq["stats"]
 st.markdown(f"**進度**: {stats['completed']} / {stats['total']} 完成 | 失敗: {stats['failed']}")
 if dq["is_processing"]:
-    st.info("處理中... 新增的任務會自動排隊。")
+    st.info("🔄 處理中... 新增的任務會自動加入隊列並依序處理。")
 elif stats['waiting'] > 0:
-    st.info("有等待中的任務，按 ▶️ 開始 進行處理。")
+    st.info("⚠️ 有等待中的任務但處理已停止。加入新任務將自動重新開始處理。")
+elif stats['total'] == 0:
+    st.info("💡 輸入 YouTube URL 並點擊「加入並處理」開始使用動態隊列功能！")
 
 with st.expander("📋 任務隊列", expanded=True):
+    # 再次確保使用最新狀態
+    dq = get_queue_state()
+    # 除錯信息
+    st.write(f"隊列狀態: 總數 {len(dq['task_queue'])}, 當前索引 {dq.get('current_index', 0)}, 處理中: {dq.get('is_processing', False)}")
+    
+    # 顯示原始 session state 內容（除錯用）
+    if st.checkbox("顯示詳細除錯信息"):
+        st.json(st.session_state.get("dynamic_queue", {}))
+    
     if not dq["task_queue"]:
         st.write("目前沒有任務。")
     else:
@@ -220,3 +269,8 @@ if st.session_state["history"]:
         title = record.get("title") or record.get("url")
         with st.expander(f"{title}"):
             st.markdown(record["summary"])
+
+# 在頁面最後檢查是否需要自動開始處理（不會中斷UI顯示）
+if not dq["is_processing"]:
+    if DynamicQueueManager.auto_start_if_needed():
+        st.rerun()

@@ -30,8 +30,27 @@ def configure_providers(*, downloader=None, transcriber=None, summarizer=None):
 
 class DynamicQueueManager:
     @staticmethod
-    def add_url(raw_url: str) -> tuple[bool, str]:
+    def auto_start_if_needed():
+        """檢查是否需要自動開始處理"""
         dq = get_queue_state()
+        if not dq["is_processing"] and dq["task_queue"]:
+            # 檢查是否有等待中的任務
+            waiting_tasks = [t for t in dq["task_queue"] if t["status"] == "waiting"]
+            if waiting_tasks:
+                dq["is_processing"] = True
+                dq["should_stop"] = False
+                return True
+        return False
+    
+    @staticmethod
+    def add_url(raw_url: str) -> tuple[bool, str]:
+        # 直接操作 session state 而不是通過引用
+        if "dynamic_queue" not in st.session_state:
+            from queue_state import init_dynamic_queue_state
+            init_dynamic_queue_state()
+        
+        dq = st.session_state["dynamic_queue"]
+        
         if not raw_url.strip():
             return False, "URL 為空"
         if not is_valid_youtube_url(raw_url):
@@ -42,7 +61,9 @@ class DynamicQueueManager:
             if t.get("url") == norm:
                 return False, "此 URL 已在隊列中"
         task_id = uuid.uuid4().hex[:12]
-        dq["task_queue"].append({
+        
+        # 建立新任務
+        new_task = {
             "id": task_id,
             "url": norm,
             "status": "waiting",
@@ -53,8 +74,12 @@ class DynamicQueueManager:
             "error_msg": "",
             "result_path": "",
             "retry_count": 0,
-        })
+        }
+        
+        # 直接加入到 session state
+        dq["task_queue"].append(new_task)
         update_stats()
+        
         return True, "已加入隊列"
 
     @staticmethod
