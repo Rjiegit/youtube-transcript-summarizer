@@ -192,62 +192,26 @@ with st.expander("✅ 結果列表", expanded=True):
                             else:
                                 st.markdown(content)
                         else:
-                            st.warning(f"檔案不存在: {summary_path}")
-                            # 嘗試尋找可能的替代路徑
-                            if summary_path:
-                                possible_paths = [
-                                    f"data/{os.path.basename(summary_path)}",
-                                    f"data/_summarized_{os.path.basename(summary_path)}",
-                                    summary_path.replace("_summarized/", "data/")
-                                ]
-                                for alt_path in possible_paths:
-                                    if os.path.exists(alt_path):
-                                        st.info(f"找到替代檔案: {alt_path}")
-                                        with open(alt_path, 'r', encoding='utf-8') as f:
-                                            content = f.read()
-                                        if len(content) > 2000:
-                                            st.markdown(content[:2000] + "\n\n...(內容過長，已截斷)")
-                                        else:
-                                            st.markdown(content)
-                                        break
-                                else:
-                                    st.error("找不到任何可能的檔案路徑")
+                            st.error(f"檔案不存在: {summary_path}")
                     except Exception as e:
                         st.error(f"讀取檔案失敗: {e}")
                 
                 with col2:
-                    download_content = None
-                    download_filename = None
-                    
-                    # 嘗試從多個可能的路徑讀取檔案
-                    if summary_path:
-                        possible_paths = [
-                            summary_path,
-                            f"data/{os.path.basename(summary_path)}",
-                            f"data/_summarized_{os.path.basename(summary_path)}",
-                            summary_path.replace("_summarized/", "data/")
-                        ]
-                        
-                        for path in possible_paths:
-                            if os.path.exists(path):
-                                try:
-                                    with open(path, 'r', encoding='utf-8') as f:
-                                        download_content = f.read()
-                                    download_filename = os.path.basename(path)
-                                    break
-                                except Exception:
-                                    continue
-                    
-                    if download_content:
-                        st.download_button(
-                            "📥 下載",
-                            data=download_content,
-                            file_name=download_filename,
-                            mime="text/markdown",
-                            key=f"download_{r['id']}"
-                        )
+                    if summary_path and os.path.exists(summary_path):
+                        try:
+                            with open(summary_path, 'r', encoding='utf-8') as f:
+                                download_content = f.read()
+                            st.download_button(
+                                "📥 下載",
+                                data=download_content,
+                                file_name=os.path.basename(summary_path),
+                                mime="text/markdown",
+                                key=f"download_{r['id']}"
+                            )
+                        except Exception as e:
+                            st.error(f"準備下載失敗: {e}")
                     else:
-                        st.error("無法找到檔案")
+                        st.error("檔案不存在，無法下載")
 
 # 原單檔處理歷史紀錄
 if st.session_state["history"]:

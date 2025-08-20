@@ -134,14 +134,24 @@ class DynamicQueueManager:
                 task["step"] = "summarizing"
                 summarizer = _Providers.summarizer_cls()
                 file_title = os.path.splitext(os.path.basename(file_path))[0]
+                # 使用時間戳記和任務ID確保檔名唯一性
+                timestamp = now_iso().replace(":", "").replace("-", "").replace("T", "_")[:15]  # YYYYMMDD_HHMMSS
+                unique_prefix = f"{timestamp}_{task['id'][:8]}"
+                
                 # 清理檔名並截斷過長的檔名
                 sanitized_title = FileManager.sanitize_filename(file_title)
-                sanitized_title = FileManager.truncate_filename(sanitized_title + ".md")
+                # 計算可用的標題長度 (總長度 - prefix - 副檔名)
+                max_title_length = 200 - len(unique_prefix) - 5  # 5 for ".md" + "_"
+                if len(sanitized_title) > max_title_length:
+                    sanitized_title = sanitized_title[:max_title_length]
+                
+                final_filename = f"{unique_prefix}_{sanitized_title}.md"
+                
                 summarized_text = summarizer.summarize(file_title, transcription_text)
-                output_file = f"_summarized_{sanitized_title}"
-                FileManager.save_text(summarized_text, output_file=output_file)
-                # 實際檔案路徑是 data/ + 清理後的檔名
-                actual_file_path = f"data/{FileManager.sanitize_filename(FileManager.truncate_filename(output_file))}"
+                FileManager.save_text(summarized_text, output_file=final_filename)
+                
+                # 實際檔案路徑
+                actual_file_path = f"data/{final_filename}"
                 task["title"] = file_title
                 task["status"] = "completed"
                 task["step"] = "done"
