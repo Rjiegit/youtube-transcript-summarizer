@@ -1,7 +1,81 @@
 import re
 import os
+import time
+import random
+
+try:
+    import streamlit as st
+except ImportError:
+    st = None
+
+try:
+    from test_sample_manager import TestSampleManager
+except ImportError:
+    TestSampleManager = None
 
 class FileManager:
+    @staticmethod
+    def _is_test_mode(text, output_file):
+        """檢測是否為測試模式"""
+        # 方法 1: 檢查 Streamlit session_state
+        if st and hasattr(st, 'session_state') and st.session_state.get('test_mode', False):
+            return True
+        
+        # 方法 2: 檢查檔案名中的測試標記
+        if output_file and any(marker in output_file for marker in ['test_', 'mock_', '_test', '_mock']):
+            return True
+        
+        # 方法 3: 檢查文字內容中的測試標記
+        if text and any(marker in text for marker in ['[測試模式]', '[mock]', '[test]']):
+            return True
+            
+        return False
+    
+    @staticmethod
+    def _mock_save_text(text, output_file):
+        """模擬檔案存儲過程"""
+        print(f"[測試模式] 模擬存儲檔案: {output_file}")
+        
+        # 檢查 TestSampleManager 是否可用
+        if TestSampleManager is None:
+            print(f"[測試模式] TestSampleManager 不可用，使用基本模擬")
+            time.sleep(random.uniform(0.1, 0.3))
+            mock_path = f"mock_data/mock_{output_file}"
+            print(f"[測試模式] 模擬檔案儲存完成: {mock_path}")
+            return {"path": mock_path, "success": True, "size": len(text)}
+        
+        # 模擬處理時間
+        time.sleep(random.uniform(0.1, 0.3))
+        
+        # 檢查是否要模擬錯誤
+        sample_manager = TestSampleManager()
+        if sample_manager.simulate_error():
+            error_msg = sample_manager.get_random_error_message()
+            print(f"[測試模式] 模擬檔案存儲錯誤: {error_msg}")
+            raise Exception(f"[測試模式] {error_msg}")
+        
+        # 模擬檔案處理
+        dir_path = 'mock_data'
+        sanitized_file = FileManager.sanitize_filename(output_file)
+        sanitized_file = FileManager.truncate_filename(sanitized_file)
+        mock_path = f"{dir_path}/{sanitized_file}"
+        
+        print(f"[測試模式] 模擬檔案處理...")
+        print(f"[測試模式] 原始檔名: {output_file}")
+        print(f"[測試模式] 清理後檔名: {sanitized_file}")
+        print(f"[測試模式] 模擬路徑: {mock_path}")
+        print(f"[測試模式] 文字大小: {len(text)} 字元")
+        print(f"[測試模式] 檔案儲存完成: {mock_path}")
+        
+        return {
+            "path": mock_path,
+            "success": True,
+            "original_file": output_file,
+            "sanitized_file": sanitized_file,
+            "size": len(text),
+            "text_preview": text[:100] + "..." if len(text) > 100 else text
+        }
+
     @staticmethod
     def sanitize_filename(filename):
         return re.sub(r'[\\/:*?"<>|]', '_', filename)
@@ -33,17 +107,30 @@ class FileManager:
     
     @staticmethod
     def save_text(text, output_file):
+        # 檢查是否為測試模式
+        if FileManager._is_test_mode(text, output_file):
+            return FileManager._mock_save_text(text, output_file)
+        
         print(f"Saving text to {output_file}...")
         dir_path = 'data'
-        santized_file = FileManager.sanitize_filename(output_file)
+        sanitized_file = FileManager.sanitize_filename(output_file)
         # 截斷過長的檔名，但保持副檔名
-        santized_file = FileManager.truncate_filename(santized_file)
-        full_path = f"{dir_path}/{santized_file}"
+        sanitized_file = FileManager.truncate_filename(sanitized_file)
+        full_path = f"{dir_path}/{sanitized_file}"
         
         with open(full_path, "w", encoding="utf-8") as file:
             file.write(text)
             
         print(f"Text saved to {full_path}")
+        
+        # 返回結果以保持一致性
+        return {
+            "path": full_path,
+            "success": True,
+            "original_file": output_file,
+            "sanitized_file": sanitized_file,
+            "size": len(text)
+        }
 
     @staticmethod
     def delete_file(file_path):
