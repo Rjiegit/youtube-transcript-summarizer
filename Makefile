@@ -5,6 +5,9 @@ install:
 	chmod a+rx /usr/local/bin/yt-dlp
 	pip install -r requirements.txt
 
+freeze:
+	pip freeze > requirements.txt
+
 run:
 	python main.py
 
