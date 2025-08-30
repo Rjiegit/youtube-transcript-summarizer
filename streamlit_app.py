@@ -86,7 +86,7 @@ if st.button("開始分析") and url:
 
                     # Generate timestamp for the output file
                     datetime_now = datetime.now(config.timezone).strftime('%Y%m%d%H%M%S')
-                    output_file = f"_summarized/{datetime_now}_{file_title}.md"
+                    output_file = f"data/summaries/{datetime_now}_{file_title}.md"
 
                     # Save the summary to a file
                     file_manager.save_text(summarized_text, output_file)

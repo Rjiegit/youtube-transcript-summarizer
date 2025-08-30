@@ -41,7 +41,7 @@ def _process_task(task: Task, db: BaseDB):
 
         # Save summary to file
         sanitized_title = FileManager.sanitize_filename(task.title)
-        output_file = f"data/{sanitized_title}.md"
+        output_file = f"data/summaries/{sanitized_title}.md"
         FileManager.save_text(summarized_text, output_file)
 
         # Save summary to storage (e.g., Notion)

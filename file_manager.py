@@ -112,11 +112,17 @@ class FileManager:
             return FileManager._mock_save_text(text, output_file)
         
         print(f"Saving text to {output_file}...")
-        dir_path = 'data'
+        
+        # Extract directory from output_file and create if it doesn't exist
+        output_dir = os.path.dirname(output_file)
+        if output_dir and not os.path.exists(output_dir):
+            os.makedirs(output_dir, exist_ok=True) # exist_ok=True prevents error if dir already exists
+            print(f"Created directory: {output_dir}")
+
         sanitized_file = FileManager.sanitize_filename(output_file)
         # 截斷過長的檔名，但保持副檔名
         sanitized_file = FileManager.truncate_filename(sanitized_file)
-        full_path = f"{dir_path}/{sanitized_file}"
+        full_path = os.path.join(output_dir, sanitized_file) # Use os.path.join for path construction
         
         with open(full_path, "w", encoding="utf-8") as file:
             file.write(text)
