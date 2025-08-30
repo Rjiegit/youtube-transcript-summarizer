@@ -17,6 +17,18 @@ def add_url_callback(db_choice):
 def main_view():
     st.title("YouTube Transcript Summarizer")
 
+    # Initialize state for processing
+    if 'processing_tasks' not in st.session_state:
+        st.session_state.processing_tasks = False
+
+    # This block will execute when the state is True after a rerun
+    if st.session_state.processing_tasks:
+        with st.spinner("Processing all pending tasks..."):
+            process_pending_tasks()
+        st.session_state.success_message = "Finished processing all pending tasks."
+        st.session_state.processing_tasks = False # Reset state
+        st.rerun()
+
     if "success_message" in st.session_state:
         st.success(st.session_state.success_message)
         del st.session_state.success_message
@@ -35,11 +47,14 @@ def main_view():
     with col1:
         st.button("Add to Queue", on_click=add_url_callback, args=(db_choice_add,), use_container_width=True)
     with col2:
-        if st.button("Process All Pending Tasks", use_container_width=True):
-            with st.spinner("Processing all pending tasks..."):
-                process_pending_tasks()
-            st.session_state.success_message = "Finished processing all pending tasks."
-            st.rerun()
+        # Only show the button if not processing
+        if not st.session_state.processing_tasks:
+            if st.button("Process All Pending Tasks", use_container_width=True, type="primary"):
+                st.session_state.processing_tasks = True
+                st.rerun()
+        else:
+            # Show an indicator that processing is happening
+            st.info("Processing...")
 
     # Section for displaying tasks
     st.header("Tasks in Database")
