@@ -6,12 +6,13 @@
 
 本工具採用模組化設計，主要由以下核心組件構成：
 
-- **主控制器 (Main)**: 負責協調整個應用程序的工作流程
-- **處理器 (Processor)**: 處理單個文件的轉錄和摘要流程
-- **轉錄器 (Transcriber)**: 使用 OpenAI 的 Whisper 模型將音訊轉換為文字
-- **摘要生成器 (Summarizer)**: 使用 LLM (如 Google Gemini、OpenAI GPT 或本地 Ollama) 生成摘要
-- **文件管理器 (FileManager)**: 處理文件操作，如保存和刪除
-- **摘要存儲器 (SummaryStorage)**: 將摘要保存到 Notion 等外部平台
+- **`transcriber.py`**: 處理影片轉錄邏輯。
+- **`summarizer.py`**: 處理文字摘要邏輯。
+- **`streamlit_app.py`**: 包含所有 UI 相關程式碼。
+- **`youtube_downloader.py`**: 管理影片下載內容。
+- **`processing.py`**: 處理單個文件的轉錄和摘要流程。
+- **`file_manager.py`**: 處理文件操作，如保存和刪除。
+- **`summary_storage.py`**: 將摘要保存到 Notion 等外部平台。
 
 工作流程自動化且高效：從 YouTube 下載影片 → 提取音訊 → 使用 Whisper 進行轉錄 → 使用 LLM 生成摘要 → 以 Markdown 格式保存結果 → 可選擇存儲到 Notion。整個流程在 Docker 容器中運行，確保環境一致性與易於部署。
 
@@ -199,6 +200,12 @@ transcriber = Transcriber(model_size="base")  # 可選: tiny, base, small, mediu
 在 prompt.py 中，可以自定義摘要的提示詞模板。
 
 ## 開發相關
+
+### 開發指令
+
+- **執行測試**: `pytest`
+- **檢查程式碼風格**: `ruff check .`
+- **格式化程式碼**: `ruff format .`
 
 ### 更新依賴
 
