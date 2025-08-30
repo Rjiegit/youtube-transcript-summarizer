@@ -6,7 +6,7 @@ import os
 os.environ["NOTION_API_KEY"] = "test_api_key"
 os.environ["NOTION_DATABASE_ID"] = "test_db_id"
 
-from db import NotionDB
+from database.notion_client import NotionDB
 
 
 class TestNotionDB(unittest.TestCase):

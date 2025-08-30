@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import sqlite3
 import os
 
-from db import SQLiteDB
+from database.sqlite_client import SQLiteDB
 
 
 class TestSQLiteDB(unittest.TestCase):
