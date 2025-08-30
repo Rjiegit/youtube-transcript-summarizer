@@ -7,3 +7,18 @@ services:
     tty: true
     ports:
       - "8501:8501"
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: streamlit run streamlit_app.py
+
+  scheduler:
+    build:
+      context: ./.docker
+    volumes:
+      - ./:/usr/src/app
+    tty: true
+    restart: unless-stopped
+    env_file:
+      - .env
+    command: python scheduler.py
