@@ -1,11 +1,16 @@
 
 import os
 from db.db_factory import DBFactory
-from youtube_downloader import YouTubeDownloader
+import time
+from db.database_interface import BaseDB
+from db.task import Task
 from transcriber import Transcriber
 from summarizer import Summarizer
+from youtube_downloader import YouTubeDownloader
+from file_manager import FileManager
+from summary_storage import SummaryStorage
 from logger import logger
-from db.task import Task
+import os
 
 def get_db_client():
     """Gets the database client based on the environment variable."""
@@ -13,38 +18,52 @@ def get_db_client():
     logger.info(f"Using {db_type} database.")
     return DBFactory.get_db(db_type)
 
-def process_task(db, task: Task):
-    """Processes a single task."""
-    logger.info(f"Processing task {task.id}: {task.url}")
-
+def _process_task(task: Task, db: BaseDB):
+    logger.info(f"Processing task: {task.url}")
+    start_time = time.time() # Record start time
     try:
-        # Download
-        downloader = YouTubeDownloader(task.url)
-        video_info = downloader.download()
-        video_path = video_info["path"]
-        video_title = video_info["title"]
+        # Update task status to Processing
+        db.update_task_status(task.id, "Processing", title=task.title)
+
+        # Download video
+        downloader = YouTubeDownloader(task.url, output_path="data")
+        result = downloader.download()
+        file_path = result["path"]
+        task.title = result["title"] # Update task title from download result
 
         # Transcribe
-        transcriber = Transcriber(model_size="tiny")
-        transcription_text = transcriber.transcribe(video_path)
+        transcriber = Transcriber()
+        transcription_text = transcriber.transcribe(file_path)
 
         # Summarize
         summarizer = Summarizer()
-        summarized_text = summarizer.summarize(video_title, transcription_text)
+        summarized_text = summarizer.summarize(task.title, transcription_text)
 
-        # Update DB
-        db.update_task_status(task.id, "Completed", title=video_title, summary=summarized_text)
-        logger.info(f"Successfully processed task {task.id}")
+        # Save summary to file
+        sanitized_title = FileManager.sanitize_filename(task.title)
+        output_file = f"data/{sanitized_title}.md"
+        FileManager.save_text(summarized_text, output_file)
+
+        # Save summary to storage (e.g., Notion)
+        summary_storage = SummaryStorage()
+        summary_storage.save(
+            title=task.title,
+            text=summarized_text,
+            model="whisper-openai", # Assuming a model name
+            url=task.url
+        )
+
+        end_time = time.time() # Record end time
+        duration = end_time - start_time
+        # Update task status to Completed
+        db.update_task_status(task.id, "Completed", title=task.title, summary=summarized_text, processing_duration=duration)
+        logger.info(f"Task {task.id} completed in {duration:.2f} seconds.")
 
     except Exception as e:
+        end_time = time.time() # Record end time even on failure
+        duration = end_time - start_time
         logger.error(f"Error processing task {task.id}: {e}")
-        db.update_task_status(task.id, "Failed", error_message=str(e))
-
-    finally:
-        # Clean up downloaded file
-        if 'video_path' in locals() and os.path.exists(video_path):
-            os.remove(video_path)
-            logger.info(f"Deleted video file: {video_path}")
+        db.update_task_status(task.id, "Failed", error_message=str(e), processing_duration=duration)
 
 def process_pending_tasks():
     """Processes all pending tasks in the database."""
@@ -56,4 +75,4 @@ def process_pending_tasks():
         return
 
     for task in pending_tasks:
-        process_task(db, task)
+        _process_task(task, db)

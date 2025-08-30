@@ -14,13 +14,15 @@ class NotionTaskAdapter(TaskAdapter):
         summary = summary_list[0]['text']['content'] if summary_list else ''
         title_list = data['properties']['Name']['title']
         title = title_list[0]['text']['content'] if title_list else ''
+        processing_duration = data['properties'].get('Processing Duration', {}).get('number')
         return Task(
             id=data['id'],
             url=data['properties']['URL']['url'],
             status=data['properties']['Status']['select']['name'],
             title=title,
             summary=summary,
-            created_at=datetime.fromisoformat(data['created_time'])
+            created_at=datetime.fromisoformat(data['created_time']),
+            processing_duration=processing_duration
         )
 
 class SQLiteTaskAdapter(TaskAdapter):
@@ -31,5 +33,6 @@ class SQLiteTaskAdapter(TaskAdapter):
             status=data['status'],
             title=data['title'] or "",
             summary=data['summary'] or "",
-            created_at=datetime.fromisoformat(data['created_at'])
+            created_at=datetime.fromisoformat(data['created_at']),
+            processing_duration=data.get('processing_duration')
         )

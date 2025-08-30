@@ -84,21 +84,27 @@ def main_view():
         paginated_tasks = tasks[start_idx:end_idx]
 
         # Display tasks in a table-like format
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
         col1.write("**URL**")
         col2.write("**Title**")
         col3.write("**Status**")
         col4.write("**Created At (Taipei)**")
-        col5.write("**Action**")
+        col5.write("**Duration (s)**") # New column
+        col6.write("**Action**")
 
         for task in paginated_tasks:
-            col1, col2, col3, col4, col5 = st.columns(5)
+            col1, col2, col3, col4, col5, col6 = st.columns(6)
             col1.write(task.url)
             col2.write(task.title)
             col3.write(task.status)
             taipei_time = task.created_at.astimezone(timezone(timedelta(hours=8)))
             col4.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
-            if col5.button("View", key=f"view_{task.id}"):
+            # Display duration if available and task is completed
+            if task.status == "Completed" and task.processing_duration is not None:
+                col5.write(f"{task.processing_duration:.2f}")
+            else:
+                col5.write("-") # Or some other placeholder
+            if col6.button("View", key=f"view_{task.id}"):
                 st.session_state.selected_task_id = task.id
                 st.session_state.db_choice = db_choice_view
                 st.rerun()
@@ -127,6 +133,8 @@ def detail_view(task_id, db_choice):
         st.write(f"**URL:** {task.url}")
         st.write(f"**Title:** {task.title}")
         st.write(f"**Status:** {task.status}")
+        if task.processing_duration is not None:
+            st.write(f"**Processing Duration:** {task.processing_duration:.2f} seconds")
         st.header("Summary")
         st.markdown(task.summary)
     else:

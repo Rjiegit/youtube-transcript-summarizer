@@ -31,7 +31,8 @@ class SQLiteDB(BaseDB):
                 summary TEXT,
                 error_message TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                processing_duration REAL
             )
         """)
         conn.commit()
@@ -75,15 +76,34 @@ class SQLiteDB(BaseDB):
         conn.close()
         return self.adapter.to_task(dict(row)) if row else None
 
-    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None) -> None:
-        """Updates the status of a task."""
+    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None, processing_duration: float = None) -> None:
+        """Updates the status and other fields of a task."""
         conn = self._get_connection()
         cursor = conn.cursor()
         now = datetime.now()
-        cursor.execute("""
+        
+        set_clauses = ["status = ?", "updated_at = ?"]
+        params = [status, now]
+
+        if title is not None:
+            set_clauses.append("title = ?")
+            params.append(title)
+        if summary is not None:
+            set_clauses.append("summary = ?")
+            params.append(summary)
+        if error_message is not None:
+            set_clauses.append("error_message = ?")
+            params.append(error_message)
+        if processing_duration is not None:
+            set_clauses.append("processing_duration = ?")
+            params.append(processing_duration)
+
+        params.append(task_id) # Add task_id to the end
+
+        cursor.execute(f"""
             UPDATE tasks
-            SET status = ?, title = ?, summary = ?, error_message = ?, updated_at = ?
+            SET {", ".join(set_clauses)}
             WHERE id = ?
-        """, (status, title, summary, error_message, now, task_id))
+        """, tuple(params))
         conn.commit()
         conn.close()
