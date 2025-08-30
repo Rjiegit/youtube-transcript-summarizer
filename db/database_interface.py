@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any
+from typing import List
+from db.task import Task
 
 class BaseDB(ABC):
     """Abstract base class for a database interface."""
@@ -15,20 +16,20 @@ class BaseDB(ABC):
         pass
 
     @abstractmethod
-    def get_pending_tasks(self) -> List[Dict[str, Any]]:
+    def get_pending_tasks(self) -> List[Task]:
         """Gets all tasks with a 'Pending' status.
 
         Returns:
-            A list of tasks, where each task is a dictionary.
+            A list of tasks.
         """
         pass
 
     @abstractmethod
-    def get_all_tasks(self) -> List[Dict[str, Any]]:
+    def get_all_tasks(self) -> List[Task]:
         """Gets all tasks from the database.
 
         Returns:
-            A list of tasks, where each task is a dictionary.
+            A list of tasks.
         """
         pass
 

@@ -1,6 +1,8 @@
 import streamlit as st
 from db.db_factory import DBFactory
 from processing import process_pending_tasks
+from db.task import Task
+import pandas as pd
 
 st.title("YouTube Transcript Summarizer")
 
@@ -34,19 +36,5 @@ tasks = db.get_all_tasks()
 if not tasks:
     st.write("No tasks in the database.")
 else:
-    # Create a list of dictionaries to display in a table
-    task_list = []
-    for task in tasks:
-        if db_choice_view == "Notion":
-            task_list.append({
-                "URL": task['properties']['URL']['url'],
-                "Status": task['properties']['Status']['select']['name'],
-                "Summary": task['properties']['Summary']['rich_text'][0]['text']['content'] if task['properties']['Summary']['rich_text'] else ''
-            })
-        else:
-            task_list.append({
-                "URL": task['url'],
-                "Status": task['status'],
-                "Summary": task['summary']
-            })
-    st.table(task_list)
+    df = pd.DataFrame(tasks)
+    st.table(df)

@@ -1,7 +1,9 @@
 import sqlite3
 from datetime import datetime
-from database_interface import BaseDB
-from typing import List, Dict, Any
+from db.database_interface import BaseDB
+from typing import List
+from db.task import Task
+from db.task_adapter import SQLiteTaskAdapter
 
 class SQLiteDB(BaseDB):
     """SQLite database connector."""
@@ -9,6 +11,7 @@ class SQLiteDB(BaseDB):
     def __init__(self, db_path="data/tasks.db"):
         """Initializes the SQLite database."""
         self.db_path = db_path
+        self.adapter = SQLiteTaskAdapter()
         self._create_table()
 
     def _get_connection(self):
@@ -42,23 +45,23 @@ class SQLiteDB(BaseDB):
         conn.commit()
         conn.close()
 
-    def get_pending_tasks(self) -> List[Dict[str, Any]]:
+    def get_pending_tasks(self) -> List[Task]:
         """Gets all tasks with a 'Pending' status."""
         conn = self._get_connection()
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM tasks WHERE status = 'Pending'")
-        tasks = [dict(row) for row in cursor.fetchall()]
+        tasks = [self.adapter.to_task(dict(row)) for row in cursor.fetchall()]
         conn.close()
         return tasks
 
-    def get_all_tasks(self) -> List[Dict[str, Any]]:
+    def get_all_tasks(self) -> List[Task]:
         """Gets all tasks from the database."""
         conn = self._get_connection()
         conn.row_factory = sqlite3.Row
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM tasks")
-        tasks = [dict(row) for row in cursor.fetchall()]
+        tasks = [self.adapter.to_task(dict(row)) for row in cursor.fetchall()]
         conn.close()
         return tasks
 
