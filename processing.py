@@ -33,7 +33,7 @@ def process_task(db, task: Task):
         summarized_text = summarizer.summarize(video_title, transcription_text)
 
         # Update DB
-        db.update_task_status(task.id, "Completed", summary=summarized_text)
+        db.update_task_status(task.id, "Completed", title=video_title, summary=summarized_text)
         logger.info(f"Successfully processed task {task.id}")
 
     except Exception as e:

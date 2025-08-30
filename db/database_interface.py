@@ -34,12 +34,25 @@ class BaseDB(ABC):
         pass
 
     @abstractmethod
-    def update_task_status(self, task_id: str, status: str, summary: str = None, error_message: str = None) -> None:
+    def get_task_by_id(self, task_id: str) -> Task:
+        """Gets a single task by its ID.
+
+        Args:
+            task_id: The ID of the task to retrieve.
+
+        Returns:
+            A single task object.
+        """
+        pass
+
+    @abstractmethod
+    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None) -> None:
         """Updates the status of a task.
 
         Args:
             task_id: The ID of the task to update.
             status: The new status of the task.
+            title: The title of the video.
             summary: The summary of the video.
             error_message: An error message if the task failed.
         """

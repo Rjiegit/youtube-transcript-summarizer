@@ -41,7 +41,7 @@ class SQLiteDB(BaseDB):
         """Adds a new task to the database."""
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO tasks (url, status) VALUES (?, ?)", (url, status))
+        cursor.execute("INSERT INTO tasks (url, status, title) VALUES (?, ?, ?)", (url, status, url))
         conn.commit()
         conn.close()
 
@@ -65,15 +65,25 @@ class SQLiteDB(BaseDB):
         conn.close()
         return tasks
 
-    def update_task_status(self, task_id: str, status: str, summary: str = None, error_message: str = None) -> None:
+    def get_task_by_id(self, task_id: str) -> Task:
+        """Gets a single task by its ID from the SQLite database."""
+        conn = self._get_connection()
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
+        row = cursor.fetchone()
+        conn.close()
+        return self.adapter.to_task(dict(row)) if row else None
+
+    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None) -> None:
         """Updates the status of a task."""
         conn = self._get_connection()
         cursor = conn.cursor()
         now = datetime.now()
         cursor.execute("""
             UPDATE tasks
-            SET status = ?, summary = ?, error_message = ?, updated_at = ?
+            SET status = ?, title = ?, summary = ?, error_message = ?, updated_at = ?
             WHERE id = ?
-        """, (status, summary, error_message, now, task_id))
+        """, (status, title, summary, error_message, now, task_id))
         conn.commit()
         conn.close()
