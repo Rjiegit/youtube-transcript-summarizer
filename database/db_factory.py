@@ -1,6 +1,6 @@
-from db.notion_client import NotionDB
-from db.sqlite_client import SQLiteDB
-from db.database_interface import BaseDB
+from database.notion_client import NotionDB
+from database.sqlite_client import SQLiteDB
+from database.database_interface import BaseDB
 
 class DBFactory:
     @staticmethod

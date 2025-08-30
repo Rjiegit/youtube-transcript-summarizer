@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from db.task import Task
+from database.task import Task
 
 class BaseDB(ABC):
     """Abstract base class for a database interface."""

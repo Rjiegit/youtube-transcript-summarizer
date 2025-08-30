@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict, Any
-from db.task import Task
+from database.task import Task
 from datetime import datetime
 
 class TaskAdapter(ABC):

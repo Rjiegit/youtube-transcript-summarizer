@@ -1,9 +1,9 @@
 import os
 from notion_client import Client
-from db.database_interface import BaseDB
+from database.database_interface import BaseDB
 from typing import List
-from db.task import Task
-from db.task_adapter import NotionTaskAdapter
+from database.task import Task
+from database.task_adapter import NotionTaskAdapter
 
 class NotionDB(BaseDB):
     """Notion database connector."""

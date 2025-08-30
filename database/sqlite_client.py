@@ -1,9 +1,9 @@
 import sqlite3
 from datetime import datetime
-from db.database_interface import BaseDB
+from database.database_interface import BaseDB
 from typing import List
-from db.task import Task
-from db.task_adapter import SQLiteTaskAdapter
+from database.task import Task
+from database.task_adapter import SQLiteTaskAdapter
 
 class SQLiteDB(BaseDB):
     """SQLite database connector."""

@@ -1,5 +1,5 @@
 import streamlit as st
-from db.db_factory import DBFactory
+from database.db_factory import DBFactory
 from processing import process_pending_tasks
 import math
 from datetime import timezone, timedelta

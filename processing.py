@@ -1,9 +1,9 @@
 
 import os
-from db.db_factory import DBFactory
+from database.db_factory import DBFactory
 import time
-from db.database_interface import BaseDB
-from db.task import Task
+from database.database_interface import BaseDB
+from database.task import Task
 from transcriber import Transcriber
 from summarizer import Summarizer
 from youtube_downloader import YouTubeDownloader
