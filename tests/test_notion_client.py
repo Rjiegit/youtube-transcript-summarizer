@@ -8,9 +8,9 @@ os.environ["NOTION_DATABASE_ID"] = "test_db_id"
 
 from db import NotionDB
 
-class TestNotionDB(unittest.TestCase):
 
-    @patch('db.notion_client.Client')
+class TestNotionDB(unittest.TestCase):
+    @patch("db.notion_client.Client")
     def setUp(self, MockClient):
         self.mock_notion = MockClient.return_value
         self.db = NotionDB()
@@ -54,8 +54,8 @@ class TestNotionDB(unittest.TestCase):
             page_id=task_id,
             properties={
                 "Status": {"select": {"name": "Completed"}},
-                "Summary": {"rich_text": [{"text": {"content": summary}}]}
-            }
+                "Summary": {"rich_text": [{"text": {"content": summary}}]},
+            },
         )
 
     def test_update_task_status_failed(self):
@@ -68,9 +68,10 @@ class TestNotionDB(unittest.TestCase):
             page_id=task_id,
             properties={
                 "Status": {"select": {"name": "Failed"}},
-                "Error Message": {"rich_text": [{"text": {"content": error_message}}]}
-            }
+                "Error Message": {"rich_text": [{"text": {"content": error_message}}]},
+            },
         )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

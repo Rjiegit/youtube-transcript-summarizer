@@ -2,6 +2,7 @@ from database.notion_client import NotionDB
 from database.sqlite_client import SQLiteDB
 from database.database_interface import BaseDB
 
+
 class DBFactory:
     @staticmethod
     def get_db(db_type: str) -> BaseDB:

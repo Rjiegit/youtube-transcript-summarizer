@@ -5,6 +5,7 @@ from typing import List
 from database.task import Task
 from database.task_adapter import NotionTaskAdapter
 
+
 class NotionDB(BaseDB):
     """Notion database connector."""
 
@@ -20,7 +21,7 @@ class NotionDB(BaseDB):
             parent={"database_id": self.database_id},
             properties={
                 "URL": {"url": url},
-                "Name": {"title": [{"text": {"content": url}}]}, 
+                "Name": {"title": [{"text": {"content": url}}]},
                 "Status": {"select": {"name": status}},
             },
         )
@@ -48,7 +49,15 @@ class NotionDB(BaseDB):
         response = self.notion.pages.retrieve(page_id=task_id)
         return self.adapter.to_task(response)
 
-    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None, processing_duration: float = None) -> None:
+    def update_task_status(
+        self,
+        task_id: str,
+        status: str,
+        title: str = None,
+        summary: str = None,
+        error_message: str = None,
+        processing_duration: float = None,
+    ) -> None:
         """Updates the status of a task in the Notion database."""
         properties = {"Status": {"select": {"name": status}}}
         if title:
@@ -56,7 +65,9 @@ class NotionDB(BaseDB):
         if summary:
             properties["Summary"] = {"rich_text": [{"text": {"content": summary}}]}
         if error_message:
-            properties["Error Message"] = {"rich_text": [{"text": {"content": error_message}}]}
+            properties["Error Message"] = {
+                "rich_text": [{"text": {"content": error_message}}]
+            }
         if processing_duration is not None:
             properties["Processing Duration"] = {"number": processing_duration}
 

@@ -5,6 +5,7 @@ from typing import List
 from database.task import Task
 from database.task_adapter import SQLiteTaskAdapter
 
+
 class SQLiteDB(BaseDB):
     """SQLite database connector."""
 
@@ -42,7 +43,10 @@ class SQLiteDB(BaseDB):
         """Adds a new task to the database."""
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO tasks (url, status, title) VALUES (?, ?, ?)", (url, status, url))
+        cursor.execute(
+            "INSERT INTO tasks (url, status, title) VALUES (?, ?, ?)",
+            (url, status, url),
+        )
         conn.commit()
         conn.close()
 
@@ -76,12 +80,20 @@ class SQLiteDB(BaseDB):
         conn.close()
         return self.adapter.to_task(dict(row)) if row else None
 
-    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None, processing_duration: float = None) -> None:
+    def update_task_status(
+        self,
+        task_id: str,
+        status: str,
+        title: str = None,
+        summary: str = None,
+        error_message: str = None,
+        processing_duration: float = None,
+    ) -> None:
         """Updates the status and other fields of a task."""
         conn = self._get_connection()
         cursor = conn.cursor()
         now = datetime.now()
-        
+
         set_clauses = ["status = ?", "updated_at = ?"]
         params = [status, now]
 
@@ -98,12 +110,15 @@ class SQLiteDB(BaseDB):
             set_clauses.append("processing_duration = ?")
             params.append(processing_duration)
 
-        params.append(task_id) # Add task_id to the end
+        params.append(task_id)  # Add task_id to the end
 
-        cursor.execute(f"""
+        cursor.execute(
+            f"""
             UPDATE tasks
             SET {", ".join(set_clauses)}
             WHERE id = ?
-        """, tuple(params))
+        """,
+            tuple(params),
+        )
         conn.commit()
         conn.close()

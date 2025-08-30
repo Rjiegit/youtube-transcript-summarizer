@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 from database.task import Task
 
+
 class BaseDB(ABC):
     """Abstract base class for a database interface."""
 
@@ -46,7 +47,14 @@ class BaseDB(ABC):
         pass
 
     @abstractmethod
-    def update_task_status(self, task_id: str, status: str, title: str = None, summary: str = None, error_message: str = None) -> None:
+    def update_task_status(
+        self,
+        task_id: str,
+        status: str,
+        title: str = None,
+        summary: str = None,
+        error_message: str = None,
+    ) -> None:
         """Updates the status of a task.
 
         Args:

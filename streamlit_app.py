@@ -4,6 +4,7 @@ from processing import process_pending_tasks
 import math
 from datetime import timezone, timedelta
 
+
 def add_url_callback(db_choice):
     url = st.session_state.url_input
     if url:
@@ -14,11 +15,12 @@ def add_url_callback(db_choice):
     else:
         st.toast("Please enter a URL", icon="❌")
 
+
 def main_view():
     st.title("YouTube Transcript Summarizer")
 
     # Initialize state for processing
-    if 'processing_tasks' not in st.session_state:
+    if "processing_tasks" not in st.session_state:
         st.session_state.processing_tasks = False
 
     # This block will execute when the state is True after a rerun
@@ -26,22 +28,29 @@ def main_view():
         with st.spinner("Processing all pending tasks..."):
             process_pending_tasks()
         st.toast("Finished processing all pending tasks.", icon="✅")
-        st.session_state.processing_tasks = False # Reset state
+        st.session_state.processing_tasks = False  # Reset state
         st.rerun()
 
     # Section for adding URLs to the queue
     st.header("Add YouTube URL to Queue")
     db_choice_add = st.selectbox("Select Database", ["SQLite", "Notion"], key="add_db")
-    
+
     st.text_input("Enter YouTube URL", key="url_input")
 
     col1, col2, _ = st.columns([2, 3, 2])
     with col1:
-        st.button("Add to Queue", on_click=add_url_callback, args=(db_choice_add,), use_container_width=True)
+        st.button(
+            "Add to Queue",
+            on_click=add_url_callback,
+            args=(db_choice_add,),
+            use_container_width=True,
+        )
     with col2:
         # Only show the button if not processing
         if not st.session_state.processing_tasks:
-            if st.button("Process All Pending Tasks", use_container_width=True, type="primary"):
+            if st.button(
+                "Process All Pending Tasks", use_container_width=True, type="primary"
+            ):
                 st.session_state.processing_tasks = True
                 st.rerun()
         else:
@@ -50,7 +59,9 @@ def main_view():
 
     # Section for displaying tasks
     st.header("Tasks in Database")
-    db_choice_view = st.selectbox("Select Database to View", ["SQLite", "Notion"], key="view_db")
+    db_choice_view = st.selectbox(
+        "Select Database to View", ["SQLite", "Notion"], key="view_db"
+    )
     db = DBFactory.get_db(db_choice_view)
 
     tasks = db.get_all_tasks()
@@ -62,12 +73,17 @@ def main_view():
         tasks.sort(key=lambda x: x.created_at, reverse=True)
 
         # Pagination
-        if 'page_size' not in st.session_state:
+        if "page_size" not in st.session_state:
             st.session_state.page_size = 20
-        if 'current_page' not in st.session_state:
+        if "current_page" not in st.session_state:
             st.session_state.current_page = 1
 
-        page_size = st.selectbox("Items per page", [20, 50, 100], index=[20, 50, 100].index(st.session_state.page_size), key="page_size_selector")
+        page_size = st.selectbox(
+            "Items per page",
+            [20, 50, 100],
+            index=[20, 50, 100].index(st.session_state.page_size),
+            key="page_size_selector",
+        )
         st.session_state.page_size = page_size
 
         total_pages = math.ceil(len(tasks) / st.session_state.page_size)
@@ -81,7 +97,7 @@ def main_view():
         col2.write("**Title**")
         col3.write("**Status**")
         col4.write("**Created At (Taipei)**")
-        col5.write("**Duration (s)**") # New column
+        col5.write("**Duration (s)**")  # New column
         col6.write("**Action**")
 
         for task in paginated_tasks:
@@ -95,7 +111,7 @@ def main_view():
             if task.status == "Completed" and task.processing_duration is not None:
                 col5.write(f"{task.processing_duration:.2f}")
             else:
-                col5.write("-") # Or some other placeholder
+                col5.write("-")  # Or some other placeholder
             if col6.button("View", key=f"view_{task.id}"):
                 st.session_state.selected_task_id = task.id
                 st.session_state.db_choice = db_choice_view
@@ -115,6 +131,7 @@ def main_view():
                 if st.session_state.current_page < total_pages:
                     st.session_state.current_page += 1
                     st.rerun()
+
 
 def detail_view(task_id, db_choice):
     st.title("Task Details")
@@ -137,9 +154,9 @@ def detail_view(task_id, db_choice):
         del st.session_state.db_choice
         st.rerun()
 
+
 if __name__ == "__main__":
     if "selected_task_id" in st.session_state:
         detail_view(st.session_state.selected_task_id, st.session_state.db_choice)
     else:
         main_view()
-

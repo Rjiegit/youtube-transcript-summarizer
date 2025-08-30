@@ -11,7 +11,7 @@ import datetime
 
 class TestSampleManager:
     """管理測試模式下使用的樣本資料"""
-    
+
     def __init__(self):
         # 預定義的樣本資料集
         self.samples = {
@@ -85,9 +85,8 @@ ChatGPT 正在重新定義程式設計師的工作方式，它不僅提高了開
 ⭐⭐⭐⭐⭐ (5/5)
 
 這是一個非常實用的技術分享，內容既有理論深度又有實際應用價值，強烈推薦給所有程式設計相關從業者觀看。
-                """.strip()
+                """.strip(),
             },
-            
             "news": {
                 "title": "2024 年台灣科技產業展望：AI 浪潮下的機會與挑戰",
                 "description": "分析台灣科技產業在人工智能時代的發展機會，以及半導體、軟體業面臨的轉型挑戰",
@@ -182,9 +181,8 @@ ChatGPT 正在重新定義程式設計師的工作方式，它不僅提高了開
 ⭐⭐⭐⭐⭐ (5/5)
 
 這是了解台灣科技產業發展趨勢的重要資訊，對於相關從業者和關心台灣經濟發展的民眾都具有重要參考價值。
-                """.strip()
+                """.strip(),
             },
-            
             "podcast": {
                 "title": "創業路上的心理學：如何克服創業焦慮與自我懷疑",
                 "description": "專訪心理諮商師探討創業者常見的心理挑戰，分享實用的心理調適技巧和成功心態建立方法",
@@ -319,9 +317,8 @@ Lisa：非常感謝陳博士今天的分享，我相信對我們的聽眾很有�
 ⭐⭐⭐⭐⭐ (5/5)
 
 這是一集非常實用且深度的播客內容，不僅提供了專業的心理學觀點，也有具體可執行的建議，強烈推薦給所有創業路上的朋友。
-                """.strip()
+                """.strip(),
             },
-            
             "education": {
                 "title": "Python 資料科學入門：Pandas 基礎操作完整教學",
                 "description": "從零開始學習 Pandas 庫，掌握資料讀取、清理、分析的核心技能，適合初學者的完整教學",
@@ -566,9 +563,8 @@ df.groupby('City').agg({
 ⭐⭐⭐⭐⭐ (5/5)
 
 這是一堂結構完整、內容實用的 Pandas 入門課程，適合零基礎學習者，教學節奏適中，例子清晰易懂，強烈推薦給想要學習資料科學的朋友。
-                """.strip()
+                """.strip(),
             },
-            
             "lifestyle": {
                 "title": "極簡生活的藝術：如何在繁忙世界中找到內心平靜",
                 "description": "分享極簡生活的實踐方法，探討如何透過減少物質慾望和生活簡化來獲得更多幸福感和內心平靜",
@@ -748,54 +744,85 @@ Emma 分享她三年來的極簡生活實踐經驗，探討如何透過簡化物
 ⭐⭐⭐⭐⭐ (5/5)
 
 這是一個非常實用且具有啟發性的極簡生活分享，Emma 的經驗分享真誠而具體，提供了可執行的建議和深刻的生活哲學思考，強烈推薦給想要改善生活品質的朋友。
-                """.strip()
-            }
+                """.strip(),
+            },
         }
-    
+
     def get_sample_by_type(self, sample_type: str) -> Optional[Dict]:
         """根據類型獲取樣本資料"""
         return self.samples.get(sample_type)
-    
+
     def get_sample_by_url(self, url: str) -> Dict:
         """根據 URL 智慧選擇適當的樣本資料"""
         # 從 URL 中提取類型提示
         url_lower = url.lower()
-        
+
         # 根據 URL 關鍵字選擇樣本類型 (按優先級排序)
-        if any(keyword in url_lower for keyword in ['news', 'report', '新聞', 'taiwan', 'update', 'industry']):
-            sample_type = 'news'
-        elif any(keyword in url_lower for keyword in ['podcast', 'interview', '訪談', 'talk', 'startup', 'entrepreneur']):
-            sample_type = 'podcast'
-        elif any(keyword in url_lower for keyword in ['tutorial', 'lesson', 'learn', 'python', 'pandas', 'course', 'education']):
-            sample_type = 'education'
-        elif any(keyword in url_lower for keyword in ['lifestyle', 'life', '生活', 'minimal', 'simple', 'living']):
-            sample_type = 'lifestyle'
-        elif any(keyword in url_lower for keyword in ['tech', 'programming', 'code', 'ai', 'chatgpt', 'developer']):
-            sample_type = 'tech'
+        if any(
+            keyword in url_lower
+            for keyword in ["news", "report", "新聞", "taiwan", "update", "industry"]
+        ):
+            sample_type = "news"
+        elif any(
+            keyword in url_lower
+            for keyword in [
+                "podcast",
+                "interview",
+                "訪談",
+                "talk",
+                "startup",
+                "entrepreneur",
+            ]
+        ):
+            sample_type = "podcast"
+        elif any(
+            keyword in url_lower
+            for keyword in [
+                "tutorial",
+                "lesson",
+                "learn",
+                "python",
+                "pandas",
+                "course",
+                "education",
+            ]
+        ):
+            sample_type = "education"
+        elif any(
+            keyword in url_lower
+            for keyword in ["lifestyle", "life", "生活", "minimal", "simple", "living"]
+        ):
+            sample_type = "lifestyle"
+        elif any(
+            keyword in url_lower
+            for keyword in ["tech", "programming", "code", "ai", "chatgpt", "developer"]
+        ):
+            sample_type = "tech"
         else:
             # 如果無法判斷，隨機選擇一個
             sample_type = random.choice(list(self.samples.keys()))
-        
+
         return self.samples[sample_type]
-    
+
     def get_sample_by_id(self, task_id: str) -> Dict:
         """根據任務 ID 選擇樣本（支援測試任務中的 test_type）"""
         # 如果 task_id 包含類型資訊
-        if '_tech' in task_id:
-            return self.samples['tech']
-        elif '_news' in task_id:
-            return self.samples['news']
-        elif '_podcast' in task_id:
-            return self.samples['podcast']
-        elif '_education' in task_id:
-            return self.samples['education']
-        elif '_lifestyle' in task_id:
-            return self.samples['lifestyle']
+        if "_tech" in task_id:
+            return self.samples["tech"]
+        elif "_news" in task_id:
+            return self.samples["news"]
+        elif "_podcast" in task_id:
+            return self.samples["podcast"]
+        elif "_education" in task_id:
+            return self.samples["education"]
+        elif "_lifestyle" in task_id:
+            return self.samples["lifestyle"]
         else:
             # 從 ID 的數字部分選擇
             try:
                 import re
-                numbers = re.findall(r'\d+', task_id)
+
+                numbers = re.findall(r"\d+", task_id)
                 if numbers:
                     # 根據數字選擇樣本類型
                     num = int(numbers[-1])
@@ -804,33 +831,35 @@ Emma 分享她三年來的極簡生活實踐經驗，探討如何透過簡化物
                     return self.samples[selected_type]
             except:
                 pass
-            
+
             # 預設返回 tech 樣本
-            return self.samples['tech']
-    
+            return self.samples["tech"]
+
     def get_mock_download_result(self, url: str) -> Tuple[str, Dict]:
         """模擬下載結果，返回檔案路徑和元資料"""
         sample = self.get_sample_by_url(url)
-        
+
         # 生成模擬檔案路徑
-        safe_title = "".join(c for c in sample['title'] if c.isalnum() or c in (' ', '-', '_')).rstrip()
+        safe_title = "".join(
+            c for c in sample["title"] if c.isalnum() or c in (" ", "-", "_")
+        ).rstrip()
         filename = f"mock_audio_{safe_title[:30]}.mp3"
         file_path = f"/tmp/{filename}"
-        
+
         # 模擬元資料
         metadata = {
-            'title': sample['title'],
-            'description': sample['description'],
-            'duration': sample['duration'],
-            'url': url,
-            'file_path': file_path,
-            'file_size': random.randint(10, 50) * 1024 * 1024,  # 10-50MB
-            'format': 'mp3',
-            'quality': 'best'
+            "title": sample["title"],
+            "description": sample["description"],
+            "duration": sample["duration"],
+            "url": url,
+            "file_path": file_path,
+            "file_size": random.randint(10, 50) * 1024 * 1024,  # 10-50MB
+            "format": "mp3",
+            "quality": "best",
         }
-        
+
         return file_path, metadata
-    
+
     def get_mock_transcript(self, audio_path: str, task_id: str = None) -> str:
         """根據音訊檔案路徑或任務 ID 返回模擬轉錄文字"""
         if task_id:
@@ -838,21 +867,21 @@ Emma 分享她三年來的極簡生活實踐經驗，探討如何透過簡化物
         else:
             # 根據檔案名稱中的關鍵字選擇樣本
             filename = audio_path.lower()
-            if 'tech' in filename or 'programming' in filename:
-                sample = self.samples['tech']
-            elif 'news' in filename:
-                sample = self.samples['news']
-            elif 'podcast' in filename or 'interview' in filename:
-                sample = self.samples['podcast']
-            elif 'tutorial' in filename or 'lesson' in filename:
-                sample = self.samples['education']
-            elif 'lifestyle' in filename or 'life' in filename:
-                sample = self.samples['lifestyle']
+            if "tech" in filename or "programming" in filename:
+                sample = self.samples["tech"]
+            elif "news" in filename:
+                sample = self.samples["news"]
+            elif "podcast" in filename or "interview" in filename:
+                sample = self.samples["podcast"]
+            elif "tutorial" in filename or "lesson" in filename:
+                sample = self.samples["education"]
+            elif "lifestyle" in filename or "life" in filename:
+                sample = self.samples["lifestyle"]
             else:
-                sample = self.samples['tech']  # 預設
-        
-        return sample['transcript']
-    
+                sample = self.samples["tech"]  # 預設
+
+        return sample["transcript"]
+
     def get_mock_summary(self, transcript: str, task_id: str = None) -> str:
         """根據轉錄文字或任務 ID 返回模擬摘要"""
         if task_id:
@@ -860,25 +889,27 @@ Emma 分享她三年來的極簡生活實踐經驗，探討如何透過簡化物
         else:
             # 根據轉錄文字的關鍵字選擇樣本
             text_lower = transcript.lower()
-            if any(keyword in text_lower for keyword in ['chatgpt', 'ai', '程式', '開發']):
-                sample = self.samples['tech']
-            elif any(keyword in text_lower for keyword in ['新聞', '產業', '台灣']):
-                sample = self.samples['news']
-            elif any(keyword in text_lower for keyword in ['創業', '諮商', '心理']):
-                sample = self.samples['podcast']
-            elif any(keyword in text_lower for keyword in ['python', 'pandas', '教學']):
-                sample = self.samples['education']
-            elif any(keyword in text_lower for keyword in ['極簡', '生活', '整理']):
-                sample = self.samples['lifestyle']
+            if any(
+                keyword in text_lower for keyword in ["chatgpt", "ai", "程式", "開發"]
+            ):
+                sample = self.samples["tech"]
+            elif any(keyword in text_lower for keyword in ["新聞", "產業", "台灣"]):
+                sample = self.samples["news"]
+            elif any(keyword in text_lower for keyword in ["創業", "諮商", "心理"]):
+                sample = self.samples["podcast"]
+            elif any(keyword in text_lower for keyword in ["python", "pandas", "教學"]):
+                sample = self.samples["education"]
+            elif any(keyword in text_lower for keyword in ["極簡", "生活", "整理"]):
+                sample = self.samples["lifestyle"]
             else:
-                sample = self.samples['tech']  # 預設
-        
-        return sample['summary']
-    
+                sample = self.samples["tech"]  # 預設
+
+        return sample["summary"]
+
     def simulate_error(self, error_rate: float = 0.1) -> bool:
         """模擬錯誤發生（預設 10% 機率）"""
         return random.random() < error_rate
-    
+
     def get_random_error_message(self) -> str:
         """獲取隨機錯誤訊息"""
         error_messages = [
@@ -886,25 +917,25 @@ Emma 分享她三年來的極簡生活實踐經驗，探討如何透過簡化物
             "模擬 API 配額不足",
             "模擬檔案處理失敗",
             "模擬服務暫時不可用",
-            "模擬音訊格式不支援"
+            "模擬音訊格式不支援",
         ]
         return random.choice(error_messages)
-    
+
     def get_available_types(self) -> list:
         """獲取所有可用的樣本類型"""
         return list(self.samples.keys())
-    
+
     def get_sample_info(self, sample_type: str) -> Dict:
         """獲取特定樣本的基本資訊（不包含完整內容）"""
         if sample_type not in self.samples:
             return {}
-        
+
         sample = self.samples[sample_type]
         return {
-            'type': sample_type,
-            'title': sample['title'],
-            'description': sample['description'],
-            'duration': sample['duration'],
-            'transcript_length': len(sample['transcript']),
-            'summary_length': len(sample['summary'])
+            "type": sample_type,
+            "title": sample["title"],
+            "description": sample["description"],
+            "duration": sample["duration"],
+            "transcript_length": len(sample["transcript"]),
+            "summary_length": len(sample["summary"]),
         }
