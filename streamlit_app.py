@@ -9,10 +9,10 @@ def add_url_callback(db_choice):
     if url:
         db = DBFactory.get_db(db_choice)
         db.add_task(url)
-        st.session_state.success_message = f"Successfully added to queue: {url} using {db_choice}"
+        st.toast(f"Successfully added to queue: {url} using {db_choice}", icon="✅")
         st.session_state.url_input = ""
     else:
-        st.session_state.error_message = "Please enter a URL"
+        st.toast("Please enter a URL", icon="❌")
 
 def main_view():
     st.title("YouTube Transcript Summarizer")
@@ -25,17 +25,9 @@ def main_view():
     if st.session_state.processing_tasks:
         with st.spinner("Processing all pending tasks..."):
             process_pending_tasks()
-        st.session_state.success_message = "Finished processing all pending tasks."
+        st.toast("Finished processing all pending tasks.", icon="✅")
         st.session_state.processing_tasks = False # Reset state
         st.rerun()
-
-    if "success_message" in st.session_state:
-        st.success(st.session_state.success_message)
-        del st.session_state.success_message
-    
-    if "error_message" in st.session_state:
-        st.error(st.session_state.error_message)
-        del st.session_state.error_message
 
     # Section for adding URLs to the queue
     st.header("Add YouTube URL to Queue")
