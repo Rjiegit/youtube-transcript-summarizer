@@ -54,6 +54,7 @@ class BaseDB(ABC):
         title: str = None,
         summary: str = None,
         error_message: str = None,
+        processing_duration: float | None = None,
     ) -> None:
         """Updates the status of a task.
 
@@ -63,5 +64,6 @@ class BaseDB(ABC):
             title: The title of the video.
             summary: The summary of the video.
             error_message: An error message if the task failed.
+            processing_duration: Total processing time in seconds.
         """
         pass

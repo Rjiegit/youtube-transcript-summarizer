@@ -1,5 +1,5 @@
 import os
-import openai
+from openai import OpenAI
 import requests
 from dotenv import load_dotenv
 import google.generativeai as genai
@@ -86,13 +86,17 @@ class Summarizer:
         if not self.openai_api_key:
             raise ValueError("API key is not set. Please add it to the .env file.")
 
-        openai.api_key = self.openai_api_key
-        response = openai.Completion.create(
-            engine="gpt-4o-mini",
-            prompt=self.get_prompt(title=title, text=text),
+        client = OpenAI(api_key=self.openai_api_key)
+        prompt_text = self.get_prompt(title=title, text=text)
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt_text},
+            ],
             temperature=0.5,
         )
-        return response.choices[0].text.strip()
+        return resp.choices[0].message.content.strip()
 
     def summarize_with_google_gemini(self, title, text):
         if not self.google_gemini_api_key:

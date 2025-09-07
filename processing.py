@@ -10,6 +10,7 @@ from file_manager import FileManager
 from summary_storage import SummaryStorage
 from logger import logger
 import os
+from config import Config
 
 
 def get_db_client():
@@ -32,13 +33,25 @@ def _process_task(task: Task, db: BaseDB):
         file_path = result["path"]
         task.title = result["title"]  # Update task title from download result
 
-        # Transcribe
-        transcriber = Transcriber()
+        # Transcribe (use model size from Config)
+        cfg = Config()
+        transcriber = Transcriber(model_size=cfg.transcription_model_size)
         transcription_text = transcriber.transcribe(file_path)
 
         # Summarize
         summarizer = Summarizer()
         summarized_text = summarizer.summarize(task.title, transcription_text)
+
+        # Determine model label dynamically
+        if summarizer._is_test_mode(transcription_text):
+            summarizer_label = "mock"
+        elif summarizer.google_gemini_api_key:
+            summarizer_label = "gemini-2.0-flash"
+        elif summarizer.openai_api_key:
+            summarizer_label = "gpt-4o-mini"
+        else:
+            summarizer_label = "unknown"
+        model_label = f"faster-whisper-{cfg.transcription_model_size}+{summarizer_label}"
 
         # Save summary to file
         sanitized_title = FileManager.sanitize_filename(task.title)
@@ -50,7 +63,7 @@ def _process_task(task: Task, db: BaseDB):
         summary_storage.save(
             title=task.title,
             text=summarized_text,
-            model="whisper-openai",  # Assuming a model name
+            model=model_label,
             url=task.url,
         )
 
