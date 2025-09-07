@@ -130,12 +130,12 @@ class FileManager:
             )  # exist_ok=True prevents error if dir already exists
             print(f"Created directory: {output_dir}")
 
-        sanitized_file = FileManager.sanitize_filename(output_file)
+        # 僅清理檔名，不要清理整個路徑，避免把路徑的斜線變成底線
+        base_name = os.path.basename(output_file)
+        sanitized_file = FileManager.sanitize_filename(base_name)
         # 截斷過長的檔名，但保持副檔名
         sanitized_file = FileManager.truncate_filename(sanitized_file)
-        full_path = os.path.join(
-            output_dir, sanitized_file
-        )  # Use os.path.join for path construction
+        full_path = os.path.join(output_dir, sanitized_file)  # 正確的路徑組合
 
         with open(full_path, "w", encoding="utf-8") as file:
             file.write(text)

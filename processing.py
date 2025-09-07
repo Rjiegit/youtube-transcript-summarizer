@@ -11,6 +11,29 @@ from summary_storage import SummaryStorage
 from logger import logger
 import os
 from config import Config
+from url_validator import extract_video_id
+
+
+def build_summary_output_path(title: str, url: str, now: float | None = None) -> str:
+    """Build a unique output path for the summary file.
+
+    Pattern: data/summaries/_summarized_YYYYMMDDHHMMSS_<videoId|noid>_<sanitized_title>.md
+
+    Args:
+        title: Video title to include in filename (sanitized later).
+        url: The YouTube URL; used to extract videoId.
+        now: Optional epoch seconds to freeze timestamp (for testing).
+
+    Returns:
+        The target path under data/summaries/.
+    """
+    ts = time.strftime(
+        "%Y%m%d%H%M%S", time.localtime(now) if now is not None else time.localtime()
+    )
+    video_id = extract_video_id(url) or "noid"
+    sanitized_title = FileManager.sanitize_filename(title or "untitled")
+    filename = f"_summarized_{ts}_{video_id}_{sanitized_title}.md"
+    return os.path.join("data", "summaries", filename)
 
 
 def get_db_client():
@@ -53,9 +76,8 @@ def _process_task(task: Task, db: BaseDB):
             summarizer_label = "unknown"
         model_label = f"faster-whisper-{cfg.transcription_model_size}+{summarizer_label}"
 
-        # Save summary to file
-        sanitized_title = FileManager.sanitize_filename(task.title)
-        output_file = f"data/summaries/{sanitized_title}.md"
+        # Save summary to file (unique filename)
+        output_file = build_summary_output_path(task.title, task.url)
         FileManager.save_text(summarized_text, output_file)
 
         # Save summary to storage (e.g., Notion)

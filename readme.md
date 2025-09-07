@@ -178,7 +178,12 @@ def summarize(self, title, text):
 
 ## 輸出結果
 
-處理完成後，摘要文件將保存在 `data/` 目錄下，檔名格式為：`_summarized_YYYYMMDDHHMMSS_影片標題.md`。
+處理完成後，摘要文件將保存在 `data/summaries/` 目錄下，檔名格式為：
+`_summarized_YYYYMMDDHHMMSS_<YouTubeID>_影片標題.md`。
+
+說明：
+- 每次處理都加入時間戳與 YouTube 影片 ID，避免同標題重複覆蓋。
+- 範例：`_summarized_20250101T123000_dQw4w9WgXcQ_我的筆記.md`
 
 摘要內容以 Markdown 格式呈現，包含：
 - 完整資訊與重要細節
