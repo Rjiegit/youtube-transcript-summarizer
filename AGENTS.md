@@ -36,5 +36,8 @@
 - Never commit secrets; validate via `config.py` and keep fallbacks sensible.
 - Large downloads and outputs live in `data/`; avoid committing generated artifacts.
 
+# Communication Guideline
+Please use Traditional Chinese (Taiwan) as the primary language for communication and documentation. Technical terms can be kept in English. English explanations may be provided when necessary.
+
 ## Notes
 - Primary UX is via Streamlit; CLI/cron entry points may vary. When adding new entry scripts, document them in the README and wire Makefile targets accordingly.
