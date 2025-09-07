@@ -65,15 +65,8 @@ def _process_task(task: Task, db: BaseDB):
         summarizer = Summarizer()
         summarized_text = summarizer.summarize(task.title, transcription_text)
 
-        # Determine model label dynamically
-        if summarizer._is_test_mode(transcription_text):
-            summarizer_label = "mock"
-        elif summarizer.google_gemini_api_key:
-            summarizer_label = "gemini-2.5`-flash"
-        elif summarizer.openai_api_key:
-            summarizer_label = "gpt-4o-mini"
-        else:
-            summarizer_label = "unknown"
+        # Determine model label dynamically from Summarizer
+        summarizer_label = getattr(summarizer, "last_model_label", "unknown")
         model_label = f"faster-whisper-{cfg.transcription_model_size}+{summarizer_label}"
 
         # Save summary to file (unique filename)

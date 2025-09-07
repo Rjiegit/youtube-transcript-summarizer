@@ -21,17 +21,54 @@ except ImportError:
 load_dotenv()
 
 
+# Centralized model constants
+OPENAI_MODEL = "gpt-4o-mini"
+GEMINI_MODEL = "gemini-2.5-flash"
+OLLAMA_MODEL = "llama3.2"
+
+
 class Summarizer:
     def __init__(self):
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.google_gemini_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
+        # Keep last-used backend/model label for callers
+        self.last_backend = None  # one of: mock, gemini, openai, ollama, unknown
+        self.last_model_label = None
 
     def summarize(self, title, text):
-        # 檢查是否為測試模式
-        if self._is_test_mode(text):
-            return self._mock_summarize(title, text)
+        # Decide backend based on environment and test mode
+        backend = self._determine_backend(text)
+        self.last_backend = backend
+        self.last_model_label = self._get_model_label(backend)
 
-        return self.summarize_with_google_gemini(title, text)
+        if backend == "mock":
+            return self._mock_summarize(title, text)
+        if backend == "gemini":
+            return self.summarize_with_google_gemini(title, text)
+        if backend == "openai":
+            return self.summarize_with_openai(title, text)
+        # Could add ollama auto-detect here in the future
+        raise ValueError("No available summarization backend (set API keys or enable test mode)")
+
+    def _determine_backend(self, text):
+        if self._is_test_mode(text):
+            return "mock"
+        if self.google_gemini_api_key:
+            return "gemini"
+        if self.openai_api_key:
+            return "openai"
+        return "unknown"
+
+    def _get_model_label(self, backend):
+        if backend == "mock":
+            return "mock"
+        if backend == "gemini":
+            return GEMINI_MODEL
+        if backend == "openai":
+            return OPENAI_MODEL
+        if backend == "ollama":
+            return OLLAMA_MODEL
+        return "unknown"
 
     def _is_test_mode(self, text):
         """檢測是否為測試模式"""
@@ -89,7 +126,7 @@ class Summarizer:
         client = OpenAI(api_key=self.openai_api_key)
         prompt_text = self.get_prompt(title=title, text=text)
         resp = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=OPENAI_MODEL,
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt_text},
@@ -104,7 +141,7 @@ class Summarizer:
 
         genai.configure(api_key=self.google_gemini_api_key)
 
-        model = genai.GenerativeModel("gemini-2.5-flash")
+        model = genai.GenerativeModel(GEMINI_MODEL)
         response = model.generate_content(self.get_prompt(title=title, text=text))
 
         return response.text
@@ -114,7 +151,7 @@ class Summarizer:
         url = "http://host.docker.internal:11434/api/generate"
         headers = {"Content-Type": "application/json"}
         data = {
-            "model": "llama3.2",
+            "model": OLLAMA_MODEL,
             "prompt": self.get_prompt(title=title, text=text),
             "stream": False,
         }
