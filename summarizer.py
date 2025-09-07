@@ -104,7 +104,7 @@ class Summarizer:
 
         genai.configure(api_key=self.google_gemini_api_key)
 
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-2.5-flash")
         response = model.generate_content(self.get_prompt(title=title, text=text))
 
         return response.text

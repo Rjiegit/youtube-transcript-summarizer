@@ -69,7 +69,7 @@ def _process_task(task: Task, db: BaseDB):
         if summarizer._is_test_mode(transcription_text):
             summarizer_label = "mock"
         elif summarizer.google_gemini_api_key:
-            summarizer_label = "gemini-2.0-flash"
+            summarizer_label = "gemini-2.5`-flash"
         elif summarizer.openai_api_key:
             summarizer_label = "gpt-4o-mini"
         else:
