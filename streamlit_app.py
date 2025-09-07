@@ -33,7 +33,8 @@ def main_view():
 
     # Section for adding URLs to the queue
     st.header("Add YouTube URL to Queue")
-    db_choice_add = st.selectbox("Select Database", ["SQLite", "Notion"], key="add_db")
+    # Use a single database selection for the entire view
+    db_choice = st.selectbox("Select Database", ["SQLite", "Notion"], key="db_choice")
 
     st.text_input("Enter YouTube URL", key="url_input")
 
@@ -42,7 +43,7 @@ def main_view():
         st.button(
             "Add to Queue",
             on_click=add_url_callback,
-            args=(db_choice_add,),
+            args=(db_choice,),
             use_container_width=True,
         )
     with col2:
@@ -59,10 +60,8 @@ def main_view():
 
     # Section for displaying tasks
     st.header("Tasks in Database")
-    db_choice_view = st.selectbox(
-        "Select Database to View", ["SQLite", "Notion"], key="view_db"
-    )
-    db = DBFactory.get_db(db_choice_view)
+    # Reuse the same database selection for viewing tasks
+    db = DBFactory.get_db(db_choice)
 
     tasks = db.get_all_tasks()
 
@@ -114,7 +113,7 @@ def main_view():
                 col5.write("-")  # Or some other placeholder
             if col6.button("View", key=f"view_{task.id}"):
                 st.session_state.selected_task_id = task.id
-                st.session_state.db_choice = db_choice_view
+                st.session_state.db_choice = db_choice
                 st.rerun()
 
         # Pagination controls
