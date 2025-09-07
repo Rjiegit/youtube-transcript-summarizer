@@ -25,8 +25,10 @@ def main_view():
 
     # This block will execute when the state is True after a rerun
     if st.session_state.processing_tasks:
+        # Use the top selector's current choice from session state
+        selected_db = st.session_state.get("add_db", "SQLite")
         with st.spinner("Processing all pending tasks..."):
-            process_pending_tasks()
+            process_pending_tasks(selected_db)
         st.toast("Finished processing all pending tasks.", icon="✅")
         st.session_state.processing_tasks = False  # Reset state
         st.rerun()
@@ -59,9 +61,9 @@ def main_view():
 
     # Section for displaying tasks
     st.header("Tasks in Database")
-    db_choice_view = st.selectbox(
-        "Select Database to View", ["SQLite", "Notion"], key="view_db"
-    )
+    # Use the top selectbox choice for viewing as well to avoid duplicate selectors
+    db_choice_view = st.session_state.get("add_db", "SQLite")
+    st.caption(f"Using database: {db_choice_view}")
     db = DBFactory.get_db(db_choice_view)
 
     tasks = db.get_all_tasks()

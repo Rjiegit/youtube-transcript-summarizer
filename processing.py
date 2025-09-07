@@ -75,9 +75,13 @@ def _process_task(task: Task, db: BaseDB):
         )
 
 
-def process_pending_tasks():
-    """Processes all pending tasks in the database."""
-    db = get_db_client()
+def process_pending_tasks(db_type: str | None = None):
+    """Processes all pending tasks in the database.
+
+    If db_type is provided, it will be used to select the database; otherwise,
+    the environment variable DB_TYPE (default sqlite) is used.
+    """
+    db = DBFactory.get_db(db_type) if db_type else get_db_client()
     pending_tasks = db.get_pending_tasks()
     logger.info(f"Found {len(pending_tasks)} pending tasks.")
 
