@@ -113,7 +113,9 @@ def main_view():
                 col5.write("-")  # Or some other placeholder
             if col6.button("View", key=f"view_{task.id}"):
                 st.session_state.selected_task_id = task.id
-                st.session_state.db_choice = db_choice
+                # Store selection under a different key to avoid
+                # modifying the widget-backed session key "db_choice".
+                st.session_state.selected_db_choice = db_choice
                 st.rerun()
 
         # Pagination controls
@@ -150,12 +152,20 @@ def detail_view(task_id, db_choice):
 
     if st.button("Back to Main View"):
         del st.session_state.selected_task_id
-        del st.session_state.db_choice
+        if "selected_db_choice" in st.session_state:
+            del st.session_state.selected_db_choice
         st.rerun()
 
 
 if __name__ == "__main__":
     if "selected_task_id" in st.session_state:
-        detail_view(st.session_state.selected_task_id, st.session_state.db_choice)
+        # Use a separate session key to carry the db selection
+        # into the detail view to avoid conflicting with the
+        # selectbox widget key "db_choice" in the main view.
+        chosen_db = st.session_state.get(
+            "selected_db_choice",
+            st.session_state.get("db_choice", "SQLite"),
+        )
+        detail_view(st.session_state.selected_task_id, chosen_db)
     else:
         main_view()
