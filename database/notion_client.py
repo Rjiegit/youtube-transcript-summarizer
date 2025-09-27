@@ -4,6 +4,7 @@ from database.database_interface import BaseDB
 from typing import List
 from database.task import Task
 from database.task_adapter import NotionTaskAdapter
+from database.notion_utils import build_rich_text_array
 
 
 class NotionDB(BaseDB):
@@ -17,11 +18,15 @@ class NotionDB(BaseDB):
 
     def add_task(self, url: str, status: str = "Pending") -> None:
         """Adds a new task to the Notion database."""
+        name_text = build_rich_text_array(url or "") or [
+            {"type": "text", "text": {"content": url or ""}}
+        ]
+
         self.notion.pages.create(
             parent={"database_id": self.database_id},
             properties={
                 "URL": {"url": url},
-                "Name": {"title": [{"text": {"content": url}}]},
+                "Name": {"title": name_text},
                 "Status": {"select": {"name": status}},
             },
         )
@@ -61,12 +66,12 @@ class NotionDB(BaseDB):
         """Updates the status of a task in the Notion database."""
         properties = {"Status": {"select": {"name": status}}}
         if title:
-            properties["Name"] = {"title": [{"text": {"content": title}}]}
+            properties["Name"] = {"title": build_rich_text_array(title)}
         if summary:
-            properties["Summary"] = {"rich_text": [{"text": {"content": summary}}]}
+            properties["Summary"] = {"rich_text": build_rich_text_array(summary)}
         if error_message:
             properties["Error Message"] = {
-                "rich_text": [{"text": {"content": error_message}}]
+                "rich_text": build_rich_text_array(error_message)
             }
         if processing_duration is not None:
             properties["Processing Duration"] = {"number": processing_duration}

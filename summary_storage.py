@@ -5,6 +5,12 @@ from logger import logger
 import time
 import random
 
+from database.notion_utils import (
+    NOTION_RICH_TEXT_LIMIT,
+    build_rich_text_array,
+    chunk_text,
+)
+
 try:
     import streamlit as st
 except ImportError:
@@ -77,7 +83,7 @@ class SummaryStorage:
 
         # 模擬成功的存儲結果
         mock_page_id = f"mock_page_{random.randint(100000, 999999)}"
-        text_chunks = len(self.split_text(text, limit=2000))
+        text_chunks = len(self.split_text(text, limit=NOTION_RICH_TEXT_LIMIT))
 
         logger.info(f"[測試模式] 模擬 Notion 存儲完成")
         logger.info(f"[測試模式] 模擬頁面ID: {mock_page_id}")
@@ -96,8 +102,8 @@ class SummaryStorage:
             "text_chunks": text_chunks,
         }
 
-    def split_text(self, text, limit=2000):
-        return [text[i : i + limit] for i in range(0, len(text), limit)]
+    def split_text(self, text, limit=NOTION_RICH_TEXT_LIMIT):
+        return chunk_text(text, limit=limit)
 
     def get_notion_env(self):
         load_dotenv()
@@ -113,19 +119,13 @@ class SummaryStorage:
         database_id = notion_env["database_id"]
 
         try:
-            text_chunks = self.split_text(text, limit=2000)
+            text_chunks = chunk_text(text, NOTION_RICH_TEXT_LIMIT)
 
             children = [
                 {
                     "object": "block",
                     "paragraph": {
-                        "rich_text": [
-                            {
-                                "text": {
-                                    "content": chunk,
-                                },
-                            },
-                        ],
+                        "rich_text": build_rich_text_array(chunk),
                         "color": "default",
                     },
                 }
@@ -136,25 +136,15 @@ class SummaryStorage:
                 parent={"database_id": database_id},
                 properties={
                     "Title": {
-                        "title": [
-                            {
-                                "text": {
-                                    "content": title,
-                                },
-                            },
-                        ],
+                        "title": build_rich_text_array(title)
+                        or [{"type": "text", "text": {"content": ""}}],
                     },
                     "URL": {
                         "url": url,
                     },
                     "Model": {
-                        "rich_text": [
-                            {
-                                "text": {
-                                    "content": model,
-                                },
-                            },
-                        ],
+                        "rich_text": build_rich_text_array(model)
+                        or [{"type": "text", "text": {"content": ""}}],
                     },
                     "Public": {
                         "checkbox": False,
