@@ -1,7 +1,9 @@
 import os
+from typing import Optional
+
 from notion_client import Client
+
 from database.database_interface import BaseDB
-from typing import List
 from database.task import Task
 from database.task_adapter import NotionTaskAdapter
 from database.notion_utils import build_rich_text_array
@@ -31,7 +33,7 @@ class NotionDB(BaseDB):
             },
         )
 
-    def get_pending_tasks(self) -> List[Task]:
+    def get_pending_tasks(self) -> list[Task]:
         """Gets all tasks with a 'Pending' status from the Notion database."""
         response = self.notion.databases.query(
             database_id=self.database_id,
@@ -43,13 +45,13 @@ class NotionDB(BaseDB):
         results = response.get("results", [])
         return [self.adapter.to_task(item) for item in results]
 
-    def get_all_tasks(self) -> List[Task]:
+    def get_all_tasks(self) -> list[Task]:
         """Gets all tasks from the Notion database."""
         response = self.notion.databases.query(database_id=self.database_id)
         results = response.get("results", [])
         return [self.adapter.to_task(item) for item in results]
 
-    def get_task_by_id(self, task_id: str) -> Task:
+    def get_task_by_id(self, task_id: str) -> Optional[Task]:
         """Gets a single task by its ID from the Notion database."""
         response = self.notion.pages.retrieve(page_id=task_id)
         return self.adapter.to_task(response)
@@ -77,3 +79,27 @@ class NotionDB(BaseDB):
             properties["Processing Duration"] = {"number": processing_duration}
 
         self.notion.pages.update(page_id=task_id, properties=properties)
+
+    def create_retry_task(
+        self, source_task: Task, retry_reason: Optional[str] = None
+    ) -> Task:
+        """Creates a new pending task cloned from a failed Notion task."""
+        reason = retry_reason or source_task.error_message or "Manual retry"
+        name_value = source_task.title or source_task.url or ""
+        properties = {
+            "URL": {"url": source_task.url},
+            "Name": {"title": build_rich_text_array(name_value)},
+            "Status": {"select": {"name": "Pending"}},
+        }
+        if reason:
+            properties["Retry Reason"] = {
+                "rich_text": build_rich_text_array(reason)
+            }
+        if source_task.id:
+            properties["Retry Of"] = {"relation": [{"id": source_task.id}]}
+
+        response = self.notion.pages.create(
+            parent={"database_id": self.database_id},
+            properties=properties,
+        )
+        return self.adapter.to_task(response)

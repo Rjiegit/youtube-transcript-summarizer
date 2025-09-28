@@ -10,5 +10,8 @@ class Task:
     status: str
     title: str = ""
     summary: str = ""
-    created_at: datetime = None
+    created_at: Optional[datetime] = None
     processing_duration: Optional[float] = None
+    error_message: str = ""
+    retry_of_task_id: Optional[str] = None
+    retry_reason: str = ""

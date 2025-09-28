@@ -6,22 +6,6 @@ import math
 from datetime import timezone, timedelta
 
 
-SCROLL_FLAG_KEY = "scroll_to_view_top"
-
-
-def maybe_scroll_to_top():
-    if st.session_state.get(SCROLL_FLAG_KEY):
-        st.session_state[SCROLL_FLAG_KEY] = False
-        st.components.v1.html(
-            """
-            <script>
-            window.scrollTo({ top: 0, behavior: 'auto' });
-            </script>
-            """,
-            height=0,
-        )
-
-
 def add_url_callback(db_choice):
     url = st.session_state.url_input
     if url:
@@ -42,7 +26,6 @@ def add_url_callback(db_choice):
 
 def main_view():
     st.title("YouTube Transcript Summarizer")
-    maybe_scroll_to_top()
 
     # Initialize state for processing
     if "processing_tasks" not in st.session_state:
@@ -141,7 +124,6 @@ def main_view():
                 # Store selection under a different key to avoid
                 # modifying the widget-backed session key "db_choice".
                 st.session_state.selected_db_choice = db_choice
-                st.session_state[SCROLL_FLAG_KEY] = True
                 st.rerun()
 
         # Pagination controls
@@ -162,7 +144,6 @@ def main_view():
 
 def detail_view(task_id, db_choice):
     st.title("Task Details")
-    maybe_scroll_to_top()
     db = DBFactory.get_db(db_choice)
     task = db.get_task_by_id(task_id)
 
@@ -181,7 +162,6 @@ def detail_view(task_id, db_choice):
         del st.session_state.selected_task_id
         if "selected_db_choice" in st.session_state:
             del st.session_state.selected_db_choice
-        st.session_state[SCROLL_FLAG_KEY] = True
         st.rerun()
 
 

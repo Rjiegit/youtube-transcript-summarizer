@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
+
 from database.task import Task
 
 
@@ -14,7 +15,7 @@ class BaseDB(ABC):
             url: The URL of the YouTube video.
             status: The initial status of the task.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_pending_tasks(self) -> List[Task]:
@@ -23,7 +24,7 @@ class BaseDB(ABC):
         Returns:
             A list of tasks.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_all_tasks(self) -> List[Task]:
@@ -32,7 +33,7 @@ class BaseDB(ABC):
         Returns:
             A list of tasks.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def get_task_by_id(self, task_id: str) -> Task:
@@ -44,7 +45,7 @@ class BaseDB(ABC):
         Returns:
             A single task object.
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def update_task_status(
@@ -54,7 +55,7 @@ class BaseDB(ABC):
         title: str = None,
         summary: str = None,
         error_message: str = None,
-        processing_duration: float | None = None,
+        processing_duration: Optional[float] = None,
     ) -> None:
         """Updates the status of a task.
 
@@ -66,4 +67,13 @@ class BaseDB(ABC):
             error_message: An error message if the task failed.
             processing_duration: Total processing time in seconds.
         """
-        pass
+        raise NotImplementedError
+
+    @abstractmethod
+    def create_retry_task(
+        self,
+        source_task: Task,
+        retry_reason: Optional[str] = None,
+    ) -> Task:
+        """Creates a new pending task cloned from a failed task."""
+        raise NotImplementedError

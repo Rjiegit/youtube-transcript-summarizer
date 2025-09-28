@@ -16,6 +16,10 @@ def extract_video_id(url: str) -> Optional[str]:
     for pat in YOUTUBE_PATTERNS:
         m = pat.search(url)
         if m:
+            end_index = m.end(1)
+            if end_index < len(url) and re.match(r"[A-Za-z0-9_-]", url[end_index]):
+                # ID length exceeds 11 characters; skip this match.
+                continue
             return m.group(1)
     return None
 
