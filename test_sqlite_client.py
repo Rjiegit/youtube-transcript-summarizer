@@ -19,7 +19,9 @@ class TestSQLiteClient(unittest.TestCase):
             pass
 
     def test_add_and_get_pending_tasks(self):
-        self.db.add_task("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        created = self.db.add_task("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        self.assertIsNotNone(created.id)
+        self.assertEqual(created.status, "Pending")
         tasks = self.db.get_pending_tasks()
         self.assertEqual(len(tasks), 1)
         t = tasks[0]

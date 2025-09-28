@@ -9,6 +9,7 @@ This project is a Python-based application that downloads YouTube video transcri
 - **Language:** Python 3.10+
 - **Main Libraries:**
   - `streamlit`: For the web interface.
+  - `fastapi`: For building the API.
   - `pytube`: For downloading YouTube videos.
   - `openai`: For accessing summarization models.
   - `pytest`: For unit testing.

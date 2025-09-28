@@ -10,6 +10,7 @@
 - Install deps and yt-dlp: `make install`
 - Run Streamlit app: `make streamlit` (or `streamlit run streamlit_app.py`)
 - Docker (dev): `docker compose up -d` to start the app on `:8501`
+- 在 container 中執行指令：`docker compose exec app bash -lc "<COMMAND>"`（會在 `app` service 的 bash shell 內執行，適合需要 container 環境的工具）
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`
 - One-shot download+process: `make auto url="<YOUTUBE_URL>"`
 - Tests (unittest discovery): `make test` or `python -m unittest discover -s . -p "test*.py" -v`

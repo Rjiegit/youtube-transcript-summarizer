@@ -8,12 +8,15 @@ class BaseDB(ABC):
     """Abstract base class for a database interface."""
 
     @abstractmethod
-    def add_task(self, url: str, status: str = "Pending") -> None:
-        """Adds a new task to the database.
+    def add_task(self, url: str, status: str = "Pending") -> Task:
+        """Adds a new task to the database and returns its representation.
 
         Args:
             url: The URL of the YouTube video.
             status: The initial status of the task.
+
+        Returns:
+            The persisted task instance, including the generated identifier.
         """
         raise NotImplementedError
 

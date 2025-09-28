@@ -14,17 +14,25 @@ class NotionDB(BaseDB):
 
     def __init__(self):
         """Initializes the Notion client."""
-        self.notion = Client(auth=os.environ.get("NOTION_API_KEY"))
+        self.api_key = os.environ.get("NOTION_API_KEY")
         self.database_id = os.environ.get("NOTION_DATABASE_ID")
+        self.notion = Client(auth=self.api_key)
         self.adapter = NotionTaskAdapter()
 
-    def add_task(self, url: str, status: str = "Pending") -> None:
+    def _ensure_configuration(self) -> None:
+        if not self.api_key:
+            raise RuntimeError("NOTION_API_KEY is not configured.")
+        if not self.database_id:
+            raise RuntimeError("NOTION_DATABASE_ID is not configured.")
+
+    def add_task(self, url: str, status: str = "Pending") -> Task:
         """Adds a new task to the Notion database."""
+        self._ensure_configuration()
         name_text = build_rich_text_array(url or "") or [
             {"type": "text", "text": {"content": url or ""}}
         ]
 
-        self.notion.pages.create(
+        response = self.notion.pages.create(
             parent={"database_id": self.database_id},
             properties={
                 "URL": {"url": url},
@@ -32,9 +40,11 @@ class NotionDB(BaseDB):
                 "Status": {"select": {"name": status}},
             },
         )
+        return self.adapter.to_task(response)
 
     def get_pending_tasks(self) -> list[Task]:
         """Gets all tasks with a 'Pending' status from the Notion database."""
+        self._ensure_configuration()
         response = self.notion.databases.query(
             database_id=self.database_id,
             filter={
@@ -47,12 +57,14 @@ class NotionDB(BaseDB):
 
     def get_all_tasks(self) -> list[Task]:
         """Gets all tasks from the Notion database."""
+        self._ensure_configuration()
         response = self.notion.databases.query(database_id=self.database_id)
         results = response.get("results", [])
         return [self.adapter.to_task(item) for item in results]
 
     def get_task_by_id(self, task_id: str) -> Optional[Task]:
         """Gets a single task by its ID from the Notion database."""
+        self._ensure_configuration()
         response = self.notion.pages.retrieve(page_id=task_id)
         return self.adapter.to_task(response)
 
@@ -66,6 +78,7 @@ class NotionDB(BaseDB):
         processing_duration: float = None,
     ) -> None:
         """Updates the status of a task in the Notion database."""
+        self._ensure_configuration()
         properties = {"Status": {"select": {"name": status}}}
         if title:
             properties["Name"] = {"title": build_rich_text_array(title)}
@@ -84,6 +97,7 @@ class NotionDB(BaseDB):
         self, source_task: Task, retry_reason: Optional[str] = None
     ) -> Task:
         """Creates a new pending task cloned from a failed Notion task."""
+        self._ensure_configuration()
         reason = retry_reason or source_task.error_message or "Manual retry"
         name_value = source_task.title or source_task.url or ""
         properties = {

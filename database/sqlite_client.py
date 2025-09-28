@@ -53,16 +53,24 @@ class SQLiteDB(BaseDB):
         conn.commit()
         conn.close()
 
-    def add_task(self, url: str, status: str = "Pending") -> None:
-        """Adds a new task to the database."""
+    def add_task(self, url: str, status: str = "Pending") -> Task:
+        """Adds a new task to the database and returns the stored record."""
         conn = self._get_connection()
-        cursor = conn.cursor()
-        cursor.execute(
-            "INSERT INTO tasks (url, status, title) VALUES (?, ?, ?)",
-            (url, status, url),
-        )
-        conn.commit()
-        conn.close()
+        try:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO tasks (url, status, title) VALUES (?, ?, ?)",
+                (url, status, url),
+            )
+            new_id = cursor.lastrowid
+            conn.commit()
+        finally:
+            conn.close()
+
+        task = self.get_task_by_id(str(new_id))
+        if task is None:  # pragma: no cover - defensive guard
+            raise RuntimeError("Failed to load newly created task")
+        return task
 
     def get_pending_tasks(self) -> list[Task]:
         """Gets all tasks with a 'Pending' status."""

@@ -1,4 +1,4 @@
-.PHONY: install run yt-dlp auto test streamlit docker-build docker-up docker-down
+.PHONY: install run yt-dlp auto test streamlit api docker-build docker-up docker-down
 
 install:
 	curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
@@ -13,6 +13,9 @@ run:
 
 streamlit:
 	streamlit run streamlit_app.py
+
+api:
+	uvicorn api.server:app --reload --host 0.0.0.0 --port 8080
 
 test:
 	python -m unittest discover -s . -p "test*.py" -v

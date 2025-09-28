@@ -8,6 +8,7 @@
 
 - **`transcriber.py`**: 處理影片轉錄邏輯。
 - **`summarizer.py`**: 處理文字摘要邏輯。
+- **`api/server.py`**: 提供 FastAPI HTTP API，對外開放新增任務的端點。
 - **`streamlit_app.py`**: 包含所有 UI 相關程式碼。
 - **`youtube_downloader.py`**: 管理影片下載內容。
 - **`processing.py`**: 處理單個文件的轉錄和摘要流程。
@@ -70,6 +71,7 @@ docker compose up -d
 ```
 
 此指令會啟動 Docker 容器，包括主要的應用服務 (app service)。
+- 預設對外開放 8501（Streamlit）與 8080（FastAPI）。
 
 ### 3. 進入應用服務
 
@@ -150,6 +152,40 @@ Streamlit 界面特點：
 - Streamlit 版本不會自動刪除原始影片文件
 - 提供了視覺化的處理進度
 - 支持在瀏覽器中直接預覽摘要內容
+### 啟動 FastAPI 任務 API
+
+這個 API 提供 `POST /tasks` 端點，讓外部服務可以將新任務排入佇列。
+
+1. 啟動開發伺服器：
+
+```bash
+make api
+```
+
+服務會在 `http://localhost:8080` 提供 API。
+
+2. 送出新增任務請求：
+
+```bash
+curl -X POST http://localhost:8080/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "db_type": "sqlite"}'
+```
+
+成功回應範例：
+
+```json
+{
+  "task_id": "1",
+  "status": "Pending",
+  "db_type": "sqlite",
+  "message": "Task queued successfully."
+}
+```
+
+> 注意：若要寫入 Notion，必須在 `.env` 中設定 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`，缺漏時 API 會回傳 400 錯誤。
+
+若想於 Docker 環境啟動，可先進入 `app` 服務：`docker compose exec app bash -lc "make api"`，API 會同樣綁定宿主機的 8080 連接埠。
 
 ## 使用 Ollama (本地模型)
 
@@ -211,6 +247,7 @@ transcriber = Transcriber(model_size="base")  # 可選: tiny, base, small, mediu
 - **執行測試**: `pytest`
 - **檢查程式碼風格**: `ruff check .`
 - **格式化程式碼**: `ruff format .`
+- **啟動 REST API**: `make api`（啟動 FastAPI 伺服器於 http://localhost:8080）
 
 ### 更新依賴
 
