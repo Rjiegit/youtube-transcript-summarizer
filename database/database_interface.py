@@ -51,6 +51,42 @@ class BaseDB(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def acquire_next_task(
+        self,
+        worker_id: str,
+        lock_timeout_seconds: int = 300,
+    ) -> Optional[Task]:
+        """Atomically picks the next executable task and marks it as processing.
+
+        Args:
+            worker_id: Identifier of the worker acquiring the task.
+            lock_timeout_seconds: Seconds after which stale locks can be reclaimed.
+
+        Returns:
+            The claimed task, or None if no executable task is available.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def acquire_processing_lock(
+        self,
+        worker_id: str,
+        lock_timeout_seconds: int = 300,
+    ) -> bool:
+        """Attempts to acquire a global processing lock for the worker."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def refresh_processing_lock(self, worker_id: str) -> None:
+        """Extends the lease of the global processing lock."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def release_processing_lock(self, worker_id: str) -> None:
+        """Releases the global processing lock if held by the worker."""
+        raise NotImplementedError
+
+    @abstractmethod
     def update_task_status(
         self,
         task_id: str,

@@ -51,6 +51,8 @@ class NotionTaskAdapter(TaskAdapter):
             error_message=error_message,
             retry_of_task_id=retry_of_task_id,
             retry_reason=retry_reason,
+            locked_at=None,
+            worker_id=None,
         )
 
 
@@ -68,6 +70,12 @@ class SQLiteTaskAdapter(TaskAdapter):
 
         raw_id = data.get("id")
         task_id = str(raw_id) if raw_id is not None else ""
+        locked_at_value = data.get("locked_at")
+        locked_at = (
+            datetime.fromisoformat(locked_at_value)
+            if locked_at_value is not None
+            else None
+        )
         return Task(
             id=task_id,
             url=data.get("url", ""),
@@ -79,4 +87,6 @@ class SQLiteTaskAdapter(TaskAdapter):
             error_message=(data.get("error_message") or ""),
             retry_of_task_id=retry_of_id,
             retry_reason=(data.get("retry_reason") or ""),
+            locked_at=locked_at,
+            worker_id=data.get("worker_id"),
         )

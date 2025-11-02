@@ -1,9 +1,51 @@
-import streamlit as st
-from database.db_factory import DBFactory
-from processing import process_pending_tasks
-from url_validator import normalize_youtube_url, is_valid_youtube_url
+# ruff: noqa: E402 - streamlit needs top-level imports
+import os
 import math
 from datetime import timezone, timedelta
+from typing import Any, Dict
+
+import requests
+import streamlit as st
+
+from database.db_factory import DBFactory
+from url_validator import normalize_youtube_url, is_valid_youtube_url
+
+API_BASE_URL = os.environ.get("TASK_API_BASE_URL", "http://localhost:8080")
+
+
+def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
+    """Send POST to /processing-jobs and return status + payload."""
+    endpoint = f"{API_BASE_URL.rstrip('/')}/processing-jobs"
+    response = requests.post(endpoint, json=payload, timeout=10)
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body
+
+
+def trigger_processing_via_api(db_choice: str):
+    """Trigger the FastAPI worker endpoint and surface result in the UI."""
+    payload = {"db_type": db_choice.lower()}
+
+    try:
+        with st.spinner("正在排程背景處理..."):
+            status, body = _call_processing_api(payload)
+    except requests.RequestException as exc:
+        st.error(f"無法連線至 API：{exc}")
+        return
+
+    if status == 202:
+        worker_id = body.get("worker_id")
+        message = body.get("message", "已排程背景處理。")
+        note = f"{message}（worker: {worker_id}）" if worker_id else message
+        st.toast(note, icon="✅")
+    elif status == 409:
+        detail = body.get("detail") or body.get("message") or "背景處理已在進行中。"
+        st.toast(detail, icon="ℹ️")
+    else:
+        detail = body.get("detail") or body.get("message") or "未知錯誤"
+        st.error(f"啟動背景處理失敗：{detail}")
 
 
 def add_url_callback(db_choice):
@@ -27,18 +69,6 @@ def add_url_callback(db_choice):
 def main_view():
     st.title("YouTube Transcript Summarizer")
 
-    # Initialize state for processing
-    if "processing_tasks" not in st.session_state:
-        st.session_state.processing_tasks = False
-
-    # This block will execute when the state is True after a rerun
-    if st.session_state.processing_tasks:
-        with st.spinner("Processing all pending tasks..."):
-            process_pending_tasks()
-        st.toast("Finished processing all pending tasks.", icon="✅")
-        st.session_state.processing_tasks = False  # Reset state
-        st.rerun()
-
     # Section for adding URLs to the queue
     st.header("Add YouTube URL to Queue")
     # Use a single database selection for the entire view
@@ -55,16 +85,12 @@ def main_view():
             use_container_width=True,
         )
     with col2:
-        # Only show the button if not processing
-        if not st.session_state.processing_tasks:
-            if st.button(
-                "Process All Pending Tasks", use_container_width=True, type="primary"
-            ):
-                st.session_state.processing_tasks = True
-                st.rerun()
-        else:
-            # Show an indicator that processing is happening
-            st.info("Processing...")
+        if st.button(
+            "Trigger Background Processing",
+            use_container_width=True,
+            type="primary",
+        ):
+            trigger_processing_via_api(db_choice)
 
     # Section for displaying tasks
     st.header("Tasks in Database")

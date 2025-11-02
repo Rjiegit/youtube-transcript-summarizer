@@ -15,3 +15,5 @@ class Task:
     error_message: str = ""
     retry_of_task_id: Optional[str] = None
     retry_reason: str = ""
+    locked_at: Optional[datetime] = None
+    worker_id: Optional[str] = None

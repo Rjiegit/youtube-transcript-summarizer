@@ -154,7 +154,7 @@ Streamlit 界面特點：
 - 支持在瀏覽器中直接預覽摘要內容
 ### 啟動 FastAPI 任務 API
 
-這個 API 提供 `POST /tasks` 端點，讓外部服務可以將新任務排入佇列。
+這個 API 提供 `POST /tasks` 與 `POST /processing-jobs` 端點，分別用於排程新任務與觸發背景處理。
 
 1. 啟動開發伺服器：
 
@@ -184,6 +184,28 @@ curl -X POST http://localhost:8080/tasks \
 ```
 
 > 注意：若要寫入 Notion，必須在 `.env` 中設定 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`，缺漏時 API 會回傳 400 錯誤。
+
+3. 觸發背景處理流程：
+
+```bash
+curl -X POST http://localhost:8080/processing-jobs \
+  -H "Content-Type: application/json" \
+  -d '{"db_type": "sqlite"}'
+```
+
+成功回應會立即回傳 202 Accepted，內容如下：
+
+```json
+{
+  "worker_id": "api-worker-123456",
+  "db_type": "sqlite",
+  "accepted": true,
+  "message": "Processing worker scheduled."
+}
+```
+
+如果已經有 worker 正在處理，API 會回傳 409 Conflict 並附上 `Processing already running.` 提示。
+新的 worker 會持續撈取佇列直到沒有可執行的任務，處理期間新增的任務也會在同一輪內完成。
 
 若想於 Docker 環境啟動，可先進入 `app` 服務：`docker compose exec app bash -lc "make api"`，API 會同樣綁定宿主機的 8080 連接埠。
 

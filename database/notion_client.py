@@ -68,6 +68,41 @@ class NotionDB(BaseDB):
         response = self.notion.pages.retrieve(page_id=task_id)
         return self.adapter.to_task(response)
 
+    def acquire_next_task(
+        self,
+        worker_id: str,
+        lock_timeout_seconds: int = 300,
+    ) -> Optional[Task]:
+        """Best-effort acquisition of the next pending task in Notion.
+
+        Notion API does not support true row-level locking; we optimistically
+        pick the first pending task and mark it as processing.
+        """
+        pending = self.get_pending_tasks()
+        if not pending:
+            return None
+
+        task = pending[0]
+        self.update_task_status(task.id, "Processing")
+        task.status = "Processing"
+        return task
+
+    def acquire_processing_lock(
+        self,
+        worker_id: str,
+        lock_timeout_seconds: int = 300,
+    ) -> bool:
+        """No-op global lock for Notion backend (single worker assumption)."""
+        return True
+
+    def refresh_processing_lock(self, worker_id: str) -> None:  # pragma: no cover - Notion passthrough
+        """No-op heartbeat for Notion backend."""
+        return None
+
+    def release_processing_lock(self, worker_id: str) -> None:  # pragma: no cover - Notion passthrough
+        """No-op release for Notion backend."""
+        return None
+
     def update_task_status(
         self,
         task_id: str,

@@ -1,4 +1,5 @@
 import os
+import sqlite3
 import tempfile
 import unittest
 
@@ -74,6 +75,53 @@ class TestSQLiteClient(unittest.TestCase):
         # Ensure the retry task is persisted in storage and retrievable.
         persisted = self.db.get_task_by_id(retry_task.id)
         self.assertEqual(persisted.retry_of_task_id, str(original.id))
+
+    def test_acquire_next_task_marks_processing(self):
+        self.db.add_task("https://youtu.be/example1")
+        claimed = self.db.acquire_next_task(worker_id="worker-1")
+        self.assertIsNotNone(claimed)
+        self.assertEqual(claimed.status, "Processing")
+        self.assertEqual(claimed.worker_id, "worker-1")
+        self.assertIsNotNone(claimed.locked_at)
+
+        # No more pending tasks remain.
+        self.assertIsNone(self.db.acquire_next_task(worker_id="worker-1"))
+
+    def test_acquire_next_task_reclaims_stale_processing_task(self):
+        created = self.db.add_task("https://youtu.be/example2")
+        first_claim = self.db.acquire_next_task("worker-2", lock_timeout_seconds=5)
+        self.assertIsNotNone(first_claim)
+        self.assertEqual(first_claim.worker_id, "worker-2")
+
+        # Rewind locked_at to simulate a stalled worker.
+        conn = sqlite3.connect(self.tmp.name)
+        try:
+            conn.execute(
+                "UPDATE tasks SET locked_at = datetime('now', '-600 seconds') WHERE id = ?",
+                (created.id,),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
+        reclaimed = self.db.acquire_next_task("worker-3", lock_timeout_seconds=10)
+        self.assertIsNotNone(reclaimed)
+        self.assertEqual(reclaimed.id, created.id)
+        self.assertEqual(reclaimed.worker_id, "worker-3")
+
+    def test_processing_lock_allows_single_worker(self):
+        self.assertTrue(
+            self.db.acquire_processing_lock("worker-a", lock_timeout_seconds=30)
+        )
+        self.assertFalse(
+            self.db.acquire_processing_lock("worker-b", lock_timeout_seconds=30)
+        )
+
+        self.db.release_processing_lock("worker-a")
+
+        self.assertTrue(
+            self.db.acquire_processing_lock("worker-b", lock_timeout_seconds=30)
+        )
 
 
 if __name__ == "__main__":

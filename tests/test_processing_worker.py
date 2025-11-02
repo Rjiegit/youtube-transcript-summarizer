@@ -1,0 +1,155 @@
+import os
+import sys
+import tempfile
+import types
+import unittest
+from unittest.mock import patch
+
+# Provide lightweight stubs for optional dependencies when running in minimal envs.
+if "pytz" not in sys.modules:  # pragma: no cover - testing scaffold
+    pytz_stub = types.ModuleType("pytz")
+
+    def _fake_timezone(_name: str):
+        class _FakeTZ:
+            def localize(self, value):
+                return value
+
+        return _FakeTZ()
+
+    pytz_stub.timezone = _fake_timezone
+    sys.modules["pytz"] = pytz_stub
+
+if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
+    notion_stub = types.ModuleType("notion_client")
+
+    class _Client:  # minimal stub
+        def __init__(self, *_, **__):
+            pass
+
+    notion_stub.Client = _Client
+    sys.modules["notion_client"] = notion_stub
+
+from database.sqlite_client import SQLiteDB
+from processing import ProcessingWorker
+
+
+class TestProcessingWorker(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.NamedTemporaryFile(delete=False)
+        self.tmp.close()
+        self.db = SQLiteDB(db_path=self.tmp.name)
+
+    def tearDown(self):
+        try:
+            os.unlink(self.tmp.name)
+        except FileNotFoundError:
+            pass
+
+    @patch("processing.SummaryStorage")
+    @patch("processing.FileManager.save_text")
+    @patch("processing.Summarizer")
+    @patch("processing.Transcriber")
+    @patch("processing.YouTubeDownloader")
+    def test_worker_processes_all_tasks(
+        self,
+        mock_downloader,
+        mock_transcriber,
+        mock_summarizer,
+        mock_save_text,
+        mock_summary_storage,
+    ):
+        self.db.add_task("https://youtu.be/alpha")
+        self.db.add_task("https://youtu.be/bravo")
+
+        downloader_instance = mock_downloader.return_value
+        downloader_instance.download.return_value = {
+            "path": "/tmp/audio.wav",
+            "title": "Sample Title",
+        }
+
+        transcriber_instance = mock_transcriber.return_value
+        transcriber_instance.transcribe.return_value = "transcription text"
+
+        summarizer_instance = mock_summarizer.return_value
+        summarizer_instance.summarize.return_value = "summary"
+        summarizer_instance.last_model_label = "gpt"
+
+        mock_save_text.return_value = None
+        mock_summary_storage.return_value.save.return_value = None
+
+        worker = ProcessingWorker(
+            self.db,
+            worker_id="worker-test",
+            task_lock_timeout_seconds=1,
+            processing_lock_timeout_seconds=5,
+            lock_refresh_interval=1,
+        )
+        summary = worker.run()
+
+        self.assertTrue(summary.acquired_lock)
+        self.assertEqual(summary.processed_tasks, 2)
+        self.assertEqual(summary.failed_tasks, 0)
+
+        # All tasks should be completed in the database.
+        tasks = self.db.get_all_tasks()
+        self.assertTrue(all(task.status == "Completed" for task in tasks))
+        self.assertEqual(mock_save_text.call_count, 2)
+        self.assertEqual(mock_summary_storage.return_value.save.call_count, 2)
+
+    @patch("processing.SummaryStorage")
+    @patch("processing.FileManager.save_text")
+    @patch("processing.Summarizer")
+    @patch("processing.Transcriber")
+    @patch("processing.YouTubeDownloader")
+    def test_worker_continues_after_failure(
+        self,
+        mock_downloader,
+        mock_transcriber,
+        mock_summarizer,
+        mock_save_text,
+        mock_summary_storage,
+    ):
+        first_task = self.db.add_task("https://youtu.be/charlie")
+        second_task = self.db.add_task("https://youtu.be/delta")
+
+        downloader_instance = mock_downloader.return_value
+        downloader_instance.download.side_effect = [
+            Exception("download failed"),
+            {"path": "/tmp/audio.wav", "title": "Recovered Title"},
+        ]
+
+        transcriber_instance = mock_transcriber.return_value
+        transcriber_instance.transcribe.return_value = "transcription text"
+
+        summarizer_instance = mock_summarizer.return_value
+        summarizer_instance.summarize.return_value = "summary"
+        summarizer_instance.last_model_label = "gpt"
+
+        mock_save_text.return_value = None
+        mock_summary_storage.return_value.save.return_value = None
+
+        worker = ProcessingWorker(
+            self.db,
+            worker_id="worker-retry",
+            task_lock_timeout_seconds=1,
+            processing_lock_timeout_seconds=5,
+            lock_refresh_interval=1,
+        )
+        summary = worker.run()
+
+        self.assertTrue(summary.acquired_lock)
+        self.assertEqual(summary.processed_tasks, 1)
+        self.assertEqual(summary.failed_tasks, 1)
+
+        failed = self.db.get_task_by_id(first_task.id)
+        succeeded = self.db.get_task_by_id(second_task.id)
+        self.assertEqual(failed.status, "Failed")
+        self.assertEqual(succeeded.status, "Completed")
+
+        # Only the successful task should trigger snapshots/saves.
+        self.assertEqual(mock_save_text.call_count, 1)
+        self.assertEqual(mock_summary_storage.return_value.save.call_count, 1)
+
+
+if __name__ == "__main__":
+    unittest.main()
