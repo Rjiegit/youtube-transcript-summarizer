@@ -223,6 +223,8 @@ class ProcessingWorker:
                 task.title or "untitled",
                 task.url,
                 cfg.discord_webhook_url,
+                notion_url=cfg.notion_url,
+                notion_task_id=task.id,
             )
             logger.info(
                 f"Worker {self.worker_id} completed task {task.id} in {duration:.2f} seconds"

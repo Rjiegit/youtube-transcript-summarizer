@@ -60,8 +60,8 @@ class TestProcessingWorker(unittest.TestCase):
         mock_summary_storage,
         mock_notify,
     ):
-        self.db.add_task("https://youtu.be/alpha")
-        self.db.add_task("https://youtu.be/bravo")
+        first_task = self.db.add_task("https://youtu.be/alpha")
+        second_task = self.db.add_task("https://youtu.be/bravo")
 
         downloader_instance = mock_downloader.return_value
         downloader_instance.download.return_value = {
@@ -98,8 +98,20 @@ class TestProcessingWorker(unittest.TestCase):
         self.assertEqual(mock_save_text.call_count, 2)
         self.assertEqual(mock_summary_storage.return_value.save.call_count, 2)
         self.assertEqual(mock_notify.call_count, 2)
-        mock_notify.assert_any_call("Sample Title", "https://youtu.be/alpha", None)
-        mock_notify.assert_any_call("Sample Title", "https://youtu.be/bravo", None)
+        mock_notify.assert_any_call(
+            "Sample Title",
+            "https://youtu.be/alpha",
+            None,
+            notion_url=None,
+            notion_task_id=first_task.id,
+        )
+        mock_notify.assert_any_call(
+            "Sample Title",
+            "https://youtu.be/bravo",
+            None,
+            notion_url=None,
+            notion_task_id=second_task.id,
+        )
 
     @patch("processing.send_task_completion_notification")
     @patch("processing.SummaryStorage")
@@ -157,7 +169,11 @@ class TestProcessingWorker(unittest.TestCase):
         self.assertEqual(mock_save_text.call_count, 1)
         self.assertEqual(mock_summary_storage.return_value.save.call_count, 1)
         mock_notify.assert_called_once_with(
-            "Recovered Title", "https://youtu.be/delta", None
+            "Recovered Title",
+            "https://youtu.be/delta",
+            None,
+            notion_url=None,
+            notion_task_id=second_task.id,
         )
 
 

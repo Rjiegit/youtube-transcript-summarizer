@@ -22,6 +22,8 @@ def send_task_completion_notification(
     youtube_url: str,
     webhook_url: Optional[str],
     *,
+    notion_url: Optional[str] = None,
+    notion_task_id: Optional[str] = None,
     post: Optional[PostFunc] = None,
     timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
 ) -> bool:
@@ -41,8 +43,21 @@ def send_task_completion_notification(
             return False
         sender = requests.post
 
+    message_lines = [f"✅ 任務完成：{title}", youtube_url]
+
+    notion_url_value = (notion_url or "").strip()
+    notion_task_id_value = (notion_task_id or "").strip()
+    if notion_url_value and notion_task_id_value:
+        normalized_base = notion_url_value.rstrip("/")
+        notion_link = f"{normalized_base}/{notion_task_id_value}"
+        message_lines.append(f"Notion：{notion_link}")
+    elif notion_url_value or notion_task_id_value:
+        logger.info(
+            "Notion link information incomplete; sending Discord notification without Notion URL."
+        )
+
     payload = {
-        "content": f"✅ 任務完成：{title}\n{youtube_url}",
+        "content": "\n".join(message_lines),
     }
 
     try:

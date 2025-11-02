@@ -60,6 +60,14 @@ OPENAI_API_KEY=your_openai_api_key
 
 # Google Gemini API (可選)
 GOOGLE_GEMINI_API_KEY=your_gemini_api_key
+
+# Notion 儲存與通知（可選）
+NOTION_API_KEY=your_notion_api_key
+NOTION_DATABASE_ID=your_notion_database_id
+NOTION_URL=https://www.notion.so/your-workspace
+
+# Discord 通知（可選）
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/......
 ```
 
 ### 2. 啟動 Docker 服務
@@ -187,7 +195,7 @@ curl -X POST http://localhost:8080/tasks \
 }
 ```
 
-> 注意：若要寫入 Notion，必須在 `.env` 中設定 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`，缺漏時 API 會回傳 400 錯誤。
+> 注意：若要寫入 Notion，必須在 `.env` 中設定 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`，缺漏時 API 會回傳 400 錯誤。若希望 Discord 通知附上 Notion 頁面連結，請額外設定 `NOTION_URL`（例如 `https://www.notion.so/your-workspace`）。
 
 3. 觸發背景處理流程：
 
