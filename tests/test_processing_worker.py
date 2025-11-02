@@ -45,6 +45,7 @@ class TestProcessingWorker(unittest.TestCase):
         except FileNotFoundError:
             pass
 
+    @patch("processing.send_task_completion_notification")
     @patch("processing.SummaryStorage")
     @patch("processing.FileManager.save_text")
     @patch("processing.Summarizer")
@@ -57,6 +58,7 @@ class TestProcessingWorker(unittest.TestCase):
         mock_summarizer,
         mock_save_text,
         mock_summary_storage,
+        mock_notify,
     ):
         self.db.add_task("https://youtu.be/alpha")
         self.db.add_task("https://youtu.be/bravo")
@@ -76,6 +78,7 @@ class TestProcessingWorker(unittest.TestCase):
 
         mock_save_text.return_value = None
         mock_summary_storage.return_value.save.return_value = None
+        mock_notify.return_value = True
 
         worker = ProcessingWorker(
             self.db,
@@ -90,12 +93,15 @@ class TestProcessingWorker(unittest.TestCase):
         self.assertEqual(summary.processed_tasks, 2)
         self.assertEqual(summary.failed_tasks, 0)
 
-        # All tasks should be completed in the database.
         tasks = self.db.get_all_tasks()
         self.assertTrue(all(task.status == "Completed" for task in tasks))
         self.assertEqual(mock_save_text.call_count, 2)
         self.assertEqual(mock_summary_storage.return_value.save.call_count, 2)
+        self.assertEqual(mock_notify.call_count, 2)
+        mock_notify.assert_any_call("Sample Title", "https://youtu.be/alpha", None)
+        mock_notify.assert_any_call("Sample Title", "https://youtu.be/bravo", None)
 
+    @patch("processing.send_task_completion_notification")
     @patch("processing.SummaryStorage")
     @patch("processing.FileManager.save_text")
     @patch("processing.Summarizer")
@@ -108,6 +114,7 @@ class TestProcessingWorker(unittest.TestCase):
         mock_summarizer,
         mock_save_text,
         mock_summary_storage,
+        mock_notify,
     ):
         first_task = self.db.add_task("https://youtu.be/charlie")
         second_task = self.db.add_task("https://youtu.be/delta")
@@ -127,6 +134,7 @@ class TestProcessingWorker(unittest.TestCase):
 
         mock_save_text.return_value = None
         mock_summary_storage.return_value.save.return_value = None
+        mock_notify.return_value = True
 
         worker = ProcessingWorker(
             self.db,
@@ -146,9 +154,11 @@ class TestProcessingWorker(unittest.TestCase):
         self.assertEqual(failed.status, "Failed")
         self.assertEqual(succeeded.status, "Completed")
 
-        # Only the successful task should trigger snapshots/saves.
         self.assertEqual(mock_save_text.call_count, 1)
         self.assertEqual(mock_summary_storage.return_value.save.call_count, 1)
+        mock_notify.assert_called_once_with(
+            "Recovered Title", "https://youtu.be/delta", None
+        )
 
 
 if __name__ == "__main__":

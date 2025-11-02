@@ -40,6 +40,7 @@ class Config:
         self.google_gemini_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
         self.notion_api_key = os.getenv("NOTION_API_KEY")
         self.notion_database_id = os.getenv("NOTION_DATABASE_ID")
+        self.discord_webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
 
         # File paths
         self.data_dir = "data"

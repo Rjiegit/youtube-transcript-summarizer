@@ -12,6 +12,7 @@ from database.database_interface import BaseDB
 from database.db_factory import DBFactory
 from database.task import Task
 from file_manager import FileManager
+from discord_notifier import send_task_completion_notification
 from logger import logger
 from url_validator import extract_video_id
 
@@ -217,6 +218,11 @@ class ProcessingWorker:
                 title=task.title,
                 summary=summarized_text,
                 processing_duration=duration,
+            )
+            send_task_completion_notification(
+                task.title or "untitled",
+                task.url,
+                cfg.discord_webhook_url,
             )
             logger.info(
                 f"Worker {self.worker_id} completed task {task.id} in {duration:.2f} seconds"
