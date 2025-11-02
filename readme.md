@@ -136,13 +136,15 @@ streamlit run streamlit_app.py
 
 3. 使用界面功能：
    - 在文本框中輸入 YouTube 影片網址
-   - 點擊「開始分析」按鈕開始處理
+   - 點擊「Add to Queue」後即會透過 API 建立任務並自動排程背景處理
+   - 若需要手動重新排程，可使用「Trigger Background Processing」按鈕
    - 查看處理進度和結果
    - 下載生成的摘要文件
    - 瀏覽本次會話的歷史記錄
 
 Streamlit 界面特點：
 - 直觀的用戶界面，無需命令行操作
+- 新增任務後自動啟動背景處理，並提示鎖定狀態
 - 實時顯示處理進度
 - 直接在瀏覽器中查看摘要結果
 - 一鍵下載摘要文件
@@ -179,7 +181,9 @@ curl -X POST http://localhost:8080/tasks \
   "task_id": "1",
   "status": "Pending",
   "db_type": "sqlite",
-  "message": "Task queued successfully."
+  "message": "Task queued successfully. Processing worker scheduled (worker: api-worker-123456).",
+  "processing_started": true,
+  "processing_worker_id": "api-worker-123456"
 }
 ```
 

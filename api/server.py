@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import os
+import threading
 import uuid
 from contextlib import suppress
+from dataclasses import dataclass
 
-from fastapi import BackgroundTasks, FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from database.db_factory import DBFactory
@@ -55,6 +57,14 @@ class TaskCreateResponse(BaseModel):
     status: str = Field(..., description="Current status of the task.")
     db_type: str = Field(..., description="Database backend used to persist the task.")
     message: str = Field(..., description="Human readable status message.")
+    processing_started: bool = Field(
+        default=False,
+        description="Indicates whether a background worker was scheduled.",
+    )
+    processing_worker_id: str | None = Field(
+        default=None,
+        description="Worker identifier if background processing was scheduled.",
+    )
 
 
 class ProcessingJobCreateRequest(BaseModel):
@@ -139,6 +149,63 @@ def _run_processing_worker(db_type: str, worker_id: str) -> None:
             db.release_processing_lock(worker_id)
 
 
+@dataclass
+class SchedulingResult:
+    accepted: bool
+    worker_id: str | None
+    message: str
+
+
+def _schedule_processing_job(
+    *,
+    db_type: str,
+    db,
+    worker_id: str | None = None,
+) -> SchedulingResult:
+    """Shared helper to schedule the background worker with locking semantics."""
+
+    assigned_worker_id = worker_id or f"api-worker-{uuid.uuid4().hex}"
+
+    try:
+        lock_acquired = db.acquire_processing_lock(
+            assigned_worker_id, PROCESSING_LOCK_TIMEOUT_SECONDS
+        )
+    except NotImplementedError:  # pragma: no cover - for non-locking backends
+        lock_acquired = True
+
+    if not lock_acquired:
+        return SchedulingResult(
+            accepted=False,
+            worker_id=None,
+            message="Processing already running.",
+        )
+
+    try:
+        worker_thread = threading.Thread(
+            target=_run_processing_worker,
+            args=(db_type, assigned_worker_id),
+            daemon=True,
+        )
+        worker_thread.start()
+    except Exception as exc:  # pragma: no cover - defensive guard
+        with suppress(Exception):
+            db.release_processing_lock(assigned_worker_id)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to schedule processing worker.",
+        ) from exc
+
+    logger.info(
+        f"Scheduled processing worker {assigned_worker_id} for backend {db_type}"
+    )
+
+    return SchedulingResult(
+        accepted=True,
+        worker_id=assigned_worker_id,
+        message="Processing worker scheduled.",
+    )
+
+
 @app.post("/tasks", response_model=TaskCreateResponse, status_code=status.HTTP_201_CREATED)
 def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
     """Create a new task and persist it in the selected backend."""
@@ -166,11 +233,46 @@ def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
             detail="Failed to create task.",
         ) from exc
 
+    try:
+        scheduling_result = _schedule_processing_job(
+            db_type=payload.db_type,
+            db=db,
+        )
+    except HTTPException as exc:
+        logger.error(
+            f"Failed to schedule processing worker after task creation: {exc.detail}"
+        )
+        scheduling_result = SchedulingResult(
+            accepted=False,
+            worker_id=None,
+            message=str(exc.detail) if exc.detail else "Failed to schedule processing worker.",
+        )
+    except Exception as exc:  # pragma: no cover - defensive guard
+        logger.error(
+            f"Failed to schedule processing worker after task creation: {exc}"
+        )
+        scheduling_result = SchedulingResult(
+            accepted=False,
+            worker_id=None,
+            message="Task queued, but failed to schedule processing worker.",
+        )
+
+    message = "Task queued successfully."
+    if scheduling_result.accepted:
+        worker_note = (
+            f" Processing worker scheduled (worker: {scheduling_result.worker_id})."
+        )
+        message += worker_note
+    else:
+        message += f" {scheduling_result.message}"
+
     return TaskCreateResponse(
         task_id=str(task.id),
         status=task.status,
         db_type=payload.db_type,
-        message="Task queued successfully.",
+        message=message,
+        processing_started=scheduling_result.accepted,
+        processing_worker_id=scheduling_result.worker_id,
     )
 
 
@@ -180,46 +282,28 @@ def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
     status_code=status.HTTP_202_ACCEPTED,
 )
 def create_processing_job_endpoint(
-    payload: ProcessingJobCreateRequest, background_tasks: BackgroundTasks
+    payload: ProcessingJobCreateRequest,
 ) -> ProcessingJobCreateResponse:
     """Schedule the background worker that drains the task queue."""
 
     _ensure_db_configuration(payload.db_type)
     db = _get_database(payload.db_type)
 
-    worker_id = payload.worker_id or f"api-worker-{uuid.uuid4().hex}"
-
-    try:
-        lock_acquired = db.acquire_processing_lock(
-            worker_id,
-            PROCESSING_LOCK_TIMEOUT_SECONDS,
-        )
-    except NotImplementedError:  # pragma: no cover - for non-locking backends
-        lock_acquired = True
-
-    if not lock_acquired:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Processing already running.",
-        )
-
-    try:
-        background_tasks.add_task(_run_processing_worker, payload.db_type, worker_id)
-    except Exception as exc:  # pragma: no cover - defensive guard
-        with suppress(Exception):
-            db.release_processing_lock(worker_id)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to schedule processing worker.",
-        ) from exc
-
-    logger.info(
-        f"Scheduled processing worker {worker_id} for backend {payload.db_type}"
+    scheduling_result = _schedule_processing_job(
+        db_type=payload.db_type,
+        db=db,
+        worker_id=payload.worker_id,
     )
 
+    if not scheduling_result.accepted:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=scheduling_result.message,
+        )
+
     return ProcessingJobCreateResponse(
-        worker_id=worker_id,
+        worker_id=scheduling_result.worker_id or "",
         db_type=payload.db_type,
         accepted=True,
-        message="Processing worker scheduled.",
+        message=scheduling_result.message,
     )

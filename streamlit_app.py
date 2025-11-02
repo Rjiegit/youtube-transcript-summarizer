@@ -13,6 +13,17 @@ from url_validator import normalize_youtube_url, is_valid_youtube_url
 API_BASE_URL = os.environ.get("TASK_API_BASE_URL", "http://localhost:8080")
 
 
+def _call_create_task_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
+    """Send POST to /tasks and return status + payload."""
+    endpoint = f"{API_BASE_URL.rstrip('/')}/tasks"
+    response = requests.post(endpoint, json=payload, timeout=10)
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body
+
+
 def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
     """Send POST to /processing-jobs and return status + payload."""
     endpoint = f"{API_BASE_URL.rstrip('/')}/processing-jobs"
@@ -55,13 +66,26 @@ def add_url_callback(db_choice):
         if not normalized or not is_valid_youtube_url(normalized):
             st.toast("Invalid YouTube URL", icon="❌")
             return
-        db = DBFactory.get_db(db_choice)
-        db.add_task(normalized)
-        st.toast(
-            f"Successfully added to queue: {normalized} using {db_choice}",
-            icon="✅",
-        )
-        st.session_state.url_input = ""
+        payload = {"url": normalized, "db_type": db_choice.lower()}
+        try:
+            with st.spinner("正在新增任務並排程背景處理..."):
+                status, body = _call_create_task_api(payload)
+        except requests.RequestException as exc:
+            st.error(f"無法連線至 API：{exc}")
+            return
+
+        if status == 201:
+            message = body.get(
+                "message",
+                f"Successfully added to queue: {normalized}",
+            )
+            icon = "✅" if body.get("processing_started", False) else "ℹ️"
+            st.toast(message, icon=icon)
+            st.session_state.url_input = ""
+        else:
+            detail = body.get("detail") or body.get("message") or "新增任務失敗。"
+            icon = "ℹ️" if status == 409 else "❌"
+            st.toast(f"{detail} (status {status})", icon=icon)
     else:
         st.toast("Please enter a URL", icon="❌")
 
