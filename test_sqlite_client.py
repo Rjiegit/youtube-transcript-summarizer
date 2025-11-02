@@ -30,6 +30,7 @@ class TestSQLiteClient(unittest.TestCase):
         self.assertTrue(t.created_at is not None)
         self.assertEqual(t.retry_of_task_id, None)
         self.assertEqual(t.retry_reason, "")
+        self.assertIsNone(t.notion_page_id)
 
     def test_update_task_status_and_get_by_id(self):
         self.db.add_task("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
@@ -43,6 +44,7 @@ class TestSQLiteClient(unittest.TestCase):
             summary="Summary...",
             error_message=None,
             processing_duration=1.23,
+            notion_page_id="page-123",
         )
 
         got = self.db.get_task_by_id(t.id)
@@ -51,6 +53,7 @@ class TestSQLiteClient(unittest.TestCase):
         self.assertAlmostEqual(got.processing_duration, 1.23, places=2)
         self.assertEqual(got.retry_of_task_id, None)
         self.assertEqual(got.retry_reason, "")
+        self.assertEqual(got.notion_page_id, "page-123")
 
     def test_create_retry_task(self):
         url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"

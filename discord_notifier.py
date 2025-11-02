@@ -49,7 +49,8 @@ def send_task_completion_notification(
     notion_task_id_value = (notion_task_id or "").strip()
     if notion_url_value and notion_task_id_value:
         normalized_base = notion_url_value.rstrip("/")
-        notion_link = f"{normalized_base}/{notion_task_id_value}"
+        sanitized_id = notion_task_id_value.replace("-", "")
+        notion_link = f"{normalized_base}/{sanitized_id or notion_task_id_value}"
         message_lines.append(f"Notion：{notion_link}")
     elif notion_url_value or notion_task_id_value:
         logger.info(

@@ -31,7 +31,7 @@ class SummaryStorage:
         if self._is_test_mode(title, text, url):
             return self._mock_save(title, text, model, url)
 
-        self.save_with_notion(title, text, model, url)
+        return self.save_with_notion(title, text, model, url)
 
     def _is_test_mode(self, title, text, url):
         """檢測是否為測試模式"""

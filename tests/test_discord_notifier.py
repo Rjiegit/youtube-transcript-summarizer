@@ -34,7 +34,7 @@ class TestDiscordNotifier(unittest.TestCase):
             (
                 "✅ 任務完成：Title\n"
                 "https://youtu.be/id\n"
-                "Notion：https://www.notion.so/workspace/12345678-1234-1234-1234-1234567890ab"
+                "Notion：https://www.notion.so/workspace/123456781234123412341234567890ab"
             ),
         )
 

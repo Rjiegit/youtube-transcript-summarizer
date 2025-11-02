@@ -111,6 +111,7 @@ class NotionDB(BaseDB):
         summary: str = None,
         error_message: str = None,
         processing_duration: float = None,
+        notion_page_id: Optional[str] = None,
     ) -> None:
         """Updates the status of a task in the Notion database."""
         self._ensure_configuration()

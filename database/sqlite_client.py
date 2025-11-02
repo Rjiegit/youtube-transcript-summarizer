@@ -39,7 +39,8 @@ class SQLiteDB(BaseDB):
                 retry_of_task_id INTEGER,
                 retry_reason TEXT,
                 locked_at TIMESTAMP,
-                worker_id TEXT
+                worker_id TEXT,
+                notion_page_id TEXT
             )
             """
         )
@@ -64,6 +65,8 @@ class SQLiteDB(BaseDB):
             cursor.execute("ALTER TABLE tasks ADD COLUMN locked_at TIMESTAMP")
         if "worker_id" not in existing_columns:
             cursor.execute("ALTER TABLE tasks ADD COLUMN worker_id TEXT")
+        if "notion_page_id" not in existing_columns:
+            cursor.execute("ALTER TABLE tasks ADD COLUMN notion_page_id TEXT")
 
         conn.commit()
         conn.close()
@@ -281,6 +284,7 @@ class SQLiteDB(BaseDB):
         summary: str = None,
         error_message: str = None,
         processing_duration: float = None,
+        notion_page_id: Optional[str] = None,
     ) -> None:
         """Updates the status and other fields of a task."""
         conn = self._get_connection()
@@ -302,6 +306,9 @@ class SQLiteDB(BaseDB):
         if processing_duration is not None:
             set_clauses.append("processing_duration = ?")
             params.append(processing_duration)
+        if notion_page_id is not None:
+            set_clauses.append("notion_page_id = ?")
+            params.append(notion_page_id)
 
         if status != "Processing":
             set_clauses.append("locked_at = NULL")

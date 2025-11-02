@@ -204,12 +204,20 @@ class ProcessingWorker:
             output_file = build_summary_output_path(task.title, task.url)
             FileManager.save_text(summarized_text, output_file)
 
-            SummaryStorage().save(
+            notion_page_id: Optional[str] = task.notion_page_id
+            summary_storage = SummaryStorage()
+            storage_result = summary_storage.save(
                 title=task.title,
                 text=summarized_text,
                 model=model_label,
                 url=task.url,
             )
+
+            if isinstance(storage_result, dict):
+                raw_page_id = storage_result.get("page_id")
+                if raw_page_id:
+                    notion_page_id = str(raw_page_id)
+                    task.notion_page_id = notion_page_id
 
             duration = time.time() - start_time
             self.db.update_task_status(
@@ -218,13 +226,14 @@ class ProcessingWorker:
                 title=task.title,
                 summary=summarized_text,
                 processing_duration=duration,
+                notion_page_id=notion_page_id,
             )
             send_task_completion_notification(
                 task.title or "untitled",
                 task.url,
                 cfg.discord_webhook_url,
                 notion_url=cfg.notion_url,
-                notion_task_id=task.id,
+                notion_task_id=notion_page_id,
             )
             logger.info(
                 f"Worker {self.worker_id} completed task {task.id} in {duration:.2f} seconds"

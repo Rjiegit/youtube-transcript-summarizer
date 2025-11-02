@@ -40,6 +40,7 @@ class NotionTaskAdapter(TaskAdapter):
         processing_duration = properties.get("Processing Duration", {}).get("number")
 
         notion_id = data.get("id")
+        notion_page_id = str(notion_id) if notion_id is not None else None
         return Task(
             id=str(notion_id) if notion_id is not None else "",
             url=properties.get("URL", {}).get("url", ""),
@@ -53,6 +54,7 @@ class NotionTaskAdapter(TaskAdapter):
             retry_reason=retry_reason,
             locked_at=None,
             worker_id=None,
+            notion_page_id=notion_page_id,
         )
 
 
@@ -76,6 +78,8 @@ class SQLiteTaskAdapter(TaskAdapter):
             if locked_at_value is not None
             else None
         )
+        notion_page = data.get("notion_page_id")
+        notion_page_id = str(notion_page) if notion_page is not None else None
         return Task(
             id=task_id,
             url=data.get("url", ""),
@@ -89,4 +93,5 @@ class SQLiteTaskAdapter(TaskAdapter):
             retry_reason=(data.get("retry_reason") or ""),
             locked_at=locked_at,
             worker_id=data.get("worker_id"),
+            notion_page_id=notion_page_id,
         )

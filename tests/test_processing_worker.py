@@ -77,7 +77,10 @@ class TestProcessingWorker(unittest.TestCase):
         summarizer_instance.last_model_label = "gpt"
 
         mock_save_text.return_value = None
-        mock_summary_storage.return_value.save.return_value = None
+        mock_summary_storage.return_value.save.side_effect = [
+            {"page_id": "11111111-2222-3333-4444-555555555555"},
+            {"page_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"},
+        ]
         mock_notify.return_value = True
 
         worker = ProcessingWorker(
@@ -95,6 +98,15 @@ class TestProcessingWorker(unittest.TestCase):
 
         tasks = self.db.get_all_tasks()
         self.assertTrue(all(task.status == "Completed" for task in tasks))
+        notion_ids = {task.id: task.notion_page_id for task in tasks}
+        self.assertEqual(
+            notion_ids.get(first_task.id),
+            "11111111-2222-3333-4444-555555555555",
+        )
+        self.assertEqual(
+            notion_ids.get(second_task.id),
+            "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+        )
         self.assertEqual(mock_save_text.call_count, 2)
         self.assertEqual(mock_summary_storage.return_value.save.call_count, 2)
         self.assertEqual(mock_notify.call_count, 2)
@@ -103,14 +115,14 @@ class TestProcessingWorker(unittest.TestCase):
             "https://youtu.be/alpha",
             None,
             notion_url=None,
-            notion_task_id=first_task.id,
+            notion_task_id="11111111-2222-3333-4444-555555555555",
         )
         mock_notify.assert_any_call(
             "Sample Title",
             "https://youtu.be/bravo",
             None,
             notion_url=None,
-            notion_task_id=second_task.id,
+            notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
         )
 
     @patch("processing.send_task_completion_notification")
@@ -145,7 +157,9 @@ class TestProcessingWorker(unittest.TestCase):
         summarizer_instance.last_model_label = "gpt"
 
         mock_save_text.return_value = None
-        mock_summary_storage.return_value.save.return_value = None
+        mock_summary_storage.return_value.save.return_value = {
+            "page_id": "ffffffff-1111-2222-3333-444444444444"
+        }
         mock_notify.return_value = True
 
         worker = ProcessingWorker(
@@ -165,6 +179,10 @@ class TestProcessingWorker(unittest.TestCase):
         succeeded = self.db.get_task_by_id(second_task.id)
         self.assertEqual(failed.status, "Failed")
         self.assertEqual(succeeded.status, "Completed")
+        self.assertEqual(
+            succeeded.notion_page_id,
+            "ffffffff-1111-2222-3333-444444444444",
+        )
 
         self.assertEqual(mock_save_text.call_count, 1)
         self.assertEqual(mock_summary_storage.return_value.save.call_count, 1)
@@ -173,7 +191,7 @@ class TestProcessingWorker(unittest.TestCase):
             "https://youtu.be/delta",
             None,
             notion_url=None,
-            notion_task_id=second_task.id,
+            notion_task_id="ffffffff-1111-2222-3333-444444444444",
         )
 
 
