@@ -3,7 +3,7 @@ from typing import Optional
 
 from notion_client import Client
 
-from database.database_interface import BaseDB
+from database.database_interface import BaseDB, ProcessingLockInfo
 from database.task import Task
 from database.task_adapter import NotionTaskAdapter
 from database.notion_utils import build_rich_text_array
@@ -101,6 +101,14 @@ class NotionDB(BaseDB):
 
     def release_processing_lock(self, worker_id: str) -> None:  # pragma: no cover - Notion passthrough
         """No-op release for Notion backend."""
+        return None
+
+    def read_processing_lock(self) -> ProcessingLockInfo:  # pragma: no cover - Notion passthrough
+        """Notion backend does not maintain a global lock."""
+        return ProcessingLockInfo(worker_id=None, locked_at=None)
+
+    def clear_processing_lock(self) -> None:  # pragma: no cover - Notion passthrough
+        """No-op clear operation for Notion backend."""
         return None
 
     def update_task_status(

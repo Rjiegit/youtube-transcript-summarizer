@@ -126,6 +126,24 @@ class TestSQLiteClient(unittest.TestCase):
             self.db.acquire_processing_lock("worker-b", lock_timeout_seconds=30)
         )
 
+    def test_read_processing_lock_returns_current_owner(self):
+        acquired = self.db.acquire_processing_lock("worker-info", lock_timeout_seconds=30)
+        self.assertTrue(acquired)
+
+        lock_info = self.db.read_processing_lock()
+        self.assertEqual(lock_info.worker_id, "worker-info")
+        self.assertIsNotNone(lock_info.locked_at)
+
+    def test_clear_processing_lock_removes_owner(self):
+        self.assertTrue(
+            self.db.acquire_processing_lock("worker-clear", lock_timeout_seconds=30)
+        )
+
+        self.db.clear_processing_lock()
+        lock_info = self.db.read_processing_lock()
+        self.assertIsNone(lock_info.worker_id)
+        self.assertIsNone(lock_info.locked_at)
+
 
 if __name__ == "__main__":
     unittest.main()

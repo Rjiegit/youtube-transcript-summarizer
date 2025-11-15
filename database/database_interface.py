@@ -1,7 +1,19 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from datetime import datetime
 from typing import List, Optional
 
 from database.task import Task
+
+
+@dataclass
+class ProcessingLockInfo:
+    """Metadata describing the global processing lock."""
+
+    worker_id: str | None
+    locked_at: datetime | None
 
 
 class BaseDB(ABC):
@@ -84,6 +96,16 @@ class BaseDB(ABC):
     @abstractmethod
     def release_processing_lock(self, worker_id: str) -> None:
         """Releases the global processing lock if held by the worker."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def read_processing_lock(self) -> ProcessingLockInfo:
+        """Reads the current state of the processing lock."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def clear_processing_lock(self) -> None:
+        """Unconditionally clears the processing lock."""
         raise NotImplementedError
 
     @abstractmethod

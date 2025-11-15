@@ -68,6 +68,9 @@ NOTION_URL=https://www.notion.so/your-workspace
 
 # Discord 通知（可選）
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/......
+
+# Processing lock 管理
+PROCESSING_LOCK_ADMIN_TOKEN=your_admin_token
 ```
 
 ### 2. 啟動 Docker 服務
@@ -218,6 +221,46 @@ curl -X POST http://localhost:8080/processing-jobs \
 
 如果已經有 worker 正在處理，API 會回傳 409 Conflict 並附上 `Processing already running.` 提示。
 新的 worker 會持續撈取佇列直到沒有可執行的任務，處理期間新增的任務也會在同一輪內完成。
+
+### 4. 查詢與釋放 processing lock（維運專用）
+
+當 `/processing-jobs` 回傳 `Processing already running.`，表示全域鎖仍由某個 worker 持有；此時可用下列維運端點查詢或強制釋放：
+
+- `GET /processing-lock`
+  - 回傳 lock 狀態（持有者、最後更新時間、是否超過 `PROCESSING_LOCK_TIMEOUT_SECONDS`）。
+  - 需要附帶 `X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}` header。
+  - 範例：
+
+    ```bash
+    curl http://localhost:8080/processing-lock \
+      -H "X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}"
+    ```
+
+- `DELETE /processing-lock`
+  - 詢問後釋放 lock；若 `expected_worker_id` 與目前持有者一致則直接釋放。
+  - 可加入 `force=true`（需 `force_threshold_seconds`）來清除停滯的 lock，或 `dry_run=true` 先預檢。
+  - 需要 `X-Maintainer-Token` header。
+  - 範例：先查詢持有者，再確認一致後釋放：
+
+    ```bash
+    curl -X DELETE http://localhost:8080/processing-lock \
+      -H "Content-Type: application/json" \
+      -H "X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}" \
+      -d '{"expected_worker_id": "api-worker-123", "reason": "recovery after crash"}'
+    ```
+
+  - 若要強制清除鎖，請另外提供 `force=true` 與 `force_threshold_seconds`（以秒為單位）：
+
+    ```bash
+    curl -X DELETE http://localhost:8080/processing-lock \
+      -H "Content-Type: application/json" \
+      -H "X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}" \
+      -d '{"force": true, "force_threshold_seconds": 1200, "reason": "stale worker cleanup"}'
+    ```
+
+    這個流程會先確認鎖已經停滯超過設定秒數才會真正 clear，避免誤殺活著的 worker。
+
+請將 `PROCESSING_LOCK_ADMIN_TOKEN` 設定在 `.env` 中，此值即為上述 `X-Maintainer-Token` 的內容，僅限內部維運人員使用。
 
 若想於 Docker 環境啟動，可先進入 `app` 服務：`docker compose exec app bash -lc "make api"`，API 會同樣綁定宿主機的 8080 連接埠。
 

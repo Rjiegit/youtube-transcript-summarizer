@@ -2,6 +2,7 @@ import os
 import sys
 import types
 import unittest
+from datetime import datetime, timedelta
 from unittest.mock import MagicMock, patch
 
 # Provide lightweight stubs for optional dependencies when running in minimal envs.
@@ -38,6 +39,7 @@ except ModuleNotFoundError:  # pragma: no cover - testing scaffold
     HTTPException = RuntimeError  # type: ignore
     status = types.SimpleNamespace(HTTP_500_INTERNAL_SERVER_ERROR=500)  # type: ignore
 
+from database.database_interface import ProcessingLockInfo
 from database.task import Task
 from processing import ProcessingSummary, PROCESSING_LOCK_TIMEOUT_SECONDS
 
@@ -317,6 +319,141 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.json()["detail"], "Processing already running.")
+        mock_db.release_processing_lock.assert_not_called()
+
+
+@unittest.skipIf(TestClient is None, "fastapi is not installed")
+class TestProcessingLockEndpoints(unittest.TestCase):
+    """Tests for the GET/DELETE /processing-lock endpoints."""
+
+    def setUp(self) -> None:
+        self.client = TestClient(app)
+        self.admin_token = "lock-secret"
+
+    def test_processing_lock_status_requires_token(self) -> None:
+        with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
+            response = self.client.get("/processing-lock")
+
+        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.json()["detail"], "Missing maintainer token.")
+
+    def test_processing_lock_status_returns_snapshot(self) -> None:
+        locked_at = datetime.utcnow() - timedelta(seconds=PROCESSING_LOCK_TIMEOUT_SECONDS + 60)
+        lock_info = ProcessingLockInfo(worker_id="api-worker-xyz", locked_at=locked_at)
+        mock_db = MagicMock()
+        mock_db.read_processing_lock.return_value = lock_info
+
+        with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
+            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+                response = self.client.get(
+                    "/processing-lock",
+                    headers={"X-Maintainer-Token": self.admin_token},
+                )
+
+        self.assertEqual(response.status_code, 200)
+        snapshot = response.json()["snapshot"]
+        self.assertEqual(snapshot["worker_id"], "api-worker-xyz")
+        self.assertTrue(snapshot["stale"])
+
+    def test_processing_lock_delete_dry_run(self) -> None:
+        lock_info = ProcessingLockInfo(
+            worker_id="api-worker-lock",
+            locked_at=datetime.utcnow() - timedelta(seconds=30),
+        )
+        mock_db = MagicMock()
+        mock_db.read_processing_lock.return_value = lock_info
+
+        with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
+            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+                response = self.client.delete(
+                    "/processing-lock",
+                    json={"dry_run": True},
+                    headers={"X-Maintainer-Token": self.admin_token},
+                )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertFalse(payload["released"])
+        self.assertEqual(payload["reason"], "dry_run")
+        self.assertEqual(payload["before"], payload["after"])
+        mock_db.release_processing_lock.assert_not_called()
+        mock_db.clear_processing_lock.assert_not_called()
+
+    def test_processing_lock_delete_with_expected_worker(self) -> None:
+        before = ProcessingLockInfo(
+            worker_id="api-worker-sanity",
+            locked_at=datetime.utcnow() - timedelta(seconds=120),
+        )
+        after = ProcessingLockInfo(worker_id=None, locked_at=None)
+        mock_db = MagicMock()
+        mock_db.read_processing_lock.side_effect = [before, after]
+
+        with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
+            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+                response = self.client.delete(
+                    "/processing-lock",
+                    json={
+                        "expected_worker_id": "api-worker-sanity",
+                        "reason": "worker stuck after deploy",
+                    },
+                    headers={"X-Maintainer-Token": self.admin_token},
+                )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["released"])
+        self.assertEqual(payload["reason"], "worker stuck after deploy")
+        self.assertEqual(payload["before"]["worker_id"], "api-worker-sanity")
+        self.assertIsNone(payload["after"]["worker_id"])
+        mock_db.release_processing_lock.assert_called_once_with("api-worker-sanity")
+        mock_db.clear_processing_lock.assert_not_called()
+
+    def test_processing_lock_force_threshold_conflict(self) -> None:
+        lock_info = ProcessingLockInfo(
+            worker_id="api-worker-force",
+            locked_at=datetime.utcnow(),
+        )
+        mock_db = MagicMock()
+        mock_db.read_processing_lock.return_value = lock_info
+
+        with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
+            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+                response = self.client.delete(
+                    "/processing-lock",
+                    json={"force": True, "force_threshold_seconds": 60},
+                    headers={"X-Maintainer-Token": self.admin_token},
+                )
+
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(
+            response.json()["detail"],
+            "Processing lock has not aged enough for a forced release.",
+        )
+        mock_db.clear_processing_lock.assert_not_called()
+
+    def test_processing_lock_force_successful_release(self) -> None:
+        before = ProcessingLockInfo(
+            worker_id="api-worker-forceable",
+            locked_at=datetime.utcnow() - timedelta(seconds=3_600),
+        )
+        after = ProcessingLockInfo(worker_id=None, locked_at=None)
+        mock_db = MagicMock()
+        mock_db.read_processing_lock.side_effect = [before, after]
+
+        with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
+            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+                response = self.client.delete(
+                    "/processing-lock",
+                    json={"force": True, "force_threshold_seconds": 1200, "reason": "cleanup"},
+                    headers={"X-Maintainer-Token": self.admin_token},
+                )
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertTrue(payload["released"])
+        self.assertEqual(payload["reason"], "cleanup")
+        self.assertIsNone(payload["after"]["worker_id"])
+        mock_db.clear_processing_lock.assert_called_once()
         mock_db.release_processing_lock.assert_not_called()
 
 

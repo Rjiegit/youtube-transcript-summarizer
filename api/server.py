@@ -7,10 +7,11 @@ import threading
 import uuid
 from contextlib import suppress
 from dataclasses import dataclass
-
-from fastapi import FastAPI, HTTPException, status
+from datetime import datetime
+from fastapi import FastAPI, Header, HTTPException, status
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from database.database_interface import ProcessingLockInfo
 from database.db_factory import DBFactory
 from logger import logger
 from processing import (
@@ -21,6 +22,13 @@ from url_validator import normalize_youtube_url, is_valid_youtube_url
 
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
 REQUIRED_NOTION_ENV_VARS: tuple[str, ...] = ("NOTION_API_KEY", "NOTION_DATABASE_ID")
+
+
+def _normalize_db_type(value: str) -> str:
+    normalized = (value or "").lower()
+    if normalized not in SUPPORTED_DB_TYPES:
+        raise ValueError("db_type must be either 'sqlite' or 'notion'.")
+    return normalized
 
 
 class TaskCreateRequest(BaseModel):
@@ -99,6 +107,110 @@ class ProcessingJobCreateResponse(BaseModel):
     message: str = Field(..., description="Human readable status message.")
 
 
+class ProcessingLockSnapshot(BaseModel):
+    """Representation of the processing lock state for inspection."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    worker_id: str | None = Field(
+        default=None,
+        description="Identifier of the worker holding the lock.",
+    )
+    locked_at: datetime | None = Field(
+        default=None,
+        description="UTC timestamp of when the lock was last refreshed.",
+    )
+    age_seconds: float | None = Field(
+        default=None,
+        description="Seconds since the lock was last refreshed.",
+    )
+    stale: bool = Field(
+        default=False,
+        description="Indicates whether the lock has exceeded the timeout threshold.",
+    )
+
+
+class ProcessingLockStatusResponse(BaseModel):
+    """Response payload for GET /processing-lock."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    db_type: str = Field(..., description="Database backend being inspected.")
+    snapshot: ProcessingLockSnapshot = Field(
+        ...,
+        description="Snapshot of the current processing lock.",
+    )
+
+
+class ProcessingLockReleaseRequest(BaseModel):
+    """Incoming payload when attempting to release the processing lock."""
+
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    db_type: str = Field(
+        default="sqlite",
+        description="Database backend whose lock is being inspected (sqlite|notion).",
+    )
+    expected_worker_id: str | None = Field(
+        default=None,
+        description="Worker ID that must match the current lock holder (unless force=true).",
+    )
+    force: bool = Field(
+        default=False,
+        description="Whether to forcibly clear the lock even if the expected worker does not match.",
+    )
+    force_threshold_seconds: int | None = Field(
+        default=None,
+        description="Minimum age (in seconds) the lock must reach before a forced clear is allowed.",
+    )
+    reason: str | None = Field(
+        default=None,
+        description="Human-readable note describing why the lock is being released.",
+    )
+    dry_run: bool = Field(
+        default=False,
+        description="If true, the API only reports the current lock state without modifying it.",
+    )
+
+    @field_validator("db_type")
+    @classmethod
+    def _normalize_db_type(cls, value: str) -> str:
+        return _normalize_db_type(value)
+
+    @field_validator("force_threshold_seconds")
+    @classmethod
+    def _validate_threshold(cls, value: int | None) -> int | None:
+        if value is None:
+            return None
+        if value < 0:
+            raise ValueError("force_threshold_seconds must be greater than or equal to 0.")
+        return value
+
+
+class ProcessingLockReleaseResponse(BaseModel):
+    """Response payload after attempting to release the lock."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    db_type: str = Field(..., description="Database backend that was inspected.")
+    released: bool = Field(
+        ...,
+        description="True if the lock was cleared; false if it remained untouched.",
+    )
+    reason: str | None = Field(
+        default=None,
+        description="Optional explanation for why the lock was or was not released.",
+    )
+    before: ProcessingLockSnapshot = Field(
+        ...,
+        description="Lock snapshot observed before any action.",
+    )
+    after: ProcessingLockSnapshot = Field(
+        ...,
+        description="Lock snapshot after taking the requested action.",
+    )
+
+
 app = FastAPI(
     title="Task API",
     version="1.0.0",
@@ -130,6 +242,41 @@ def _get_database(db_type: str):
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(exc),
         ) from exc
+
+
+def _ensure_maintainer_token(token: str | None) -> None:
+    admin_token = os.environ.get("PROCESSING_LOCK_ADMIN_TOKEN")
+    if not admin_token:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Processing lock admin token is not configured.",
+        )
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing maintainer token.",
+        )
+    if token != admin_token:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid maintainer token.",
+        )
+
+
+def _build_lock_snapshot(info: ProcessingLockInfo) -> ProcessingLockSnapshot:
+    now = datetime.utcnow()
+    age_seconds: float | None = None
+    if info.locked_at:
+        age_seconds = max(0.0, (now - info.locked_at).total_seconds())
+    stale = (
+        age_seconds is not None and age_seconds >= PROCESSING_LOCK_TIMEOUT_SECONDS
+    )
+    return ProcessingLockSnapshot(
+        worker_id=info.worker_id,
+        locked_at=info.locked_at,
+        age_seconds=age_seconds,
+        stale=stale,
+    )
 
 
 def _run_processing_worker(db_type: str, worker_id: str) -> None:
@@ -306,4 +453,121 @@ def create_processing_job_endpoint(
         db_type=payload.db_type,
         accepted=True,
         message=scheduling_result.message,
+    )
+
+
+@app.get(
+    "/processing-lock",
+    response_model=ProcessingLockStatusResponse,
+    status_code=status.HTTP_200_OK,
+)
+def get_processing_lock_status(
+    db_type: str = "sqlite",
+    maintainer_token: str | None = Header(None, alias="X-Maintainer-Token"),
+) -> ProcessingLockStatusResponse:
+    """Inspect the current processing lock for the selected backend."""
+
+    normalized_db_type = _normalize_db_type(db_type)
+    _ensure_maintainer_token(maintainer_token)
+    _ensure_db_configuration(normalized_db_type)
+    db = _get_database(normalized_db_type)
+    snapshot = _build_lock_snapshot(db.read_processing_lock())
+    logger.info(
+        f"Maintainer inspected processing lock for {normalized_db_type} "
+        f"(worker={snapshot.worker_id}, stale={snapshot.stale})"
+    )
+    return ProcessingLockStatusResponse(
+        db_type=normalized_db_type,
+        snapshot=snapshot,
+    )
+
+
+@app.delete(
+    "/processing-lock",
+    response_model=ProcessingLockReleaseResponse,
+    status_code=status.HTTP_200_OK,
+)
+def delete_processing_lock(
+    payload: ProcessingLockReleaseRequest,
+    maintainer_token: str | None = Header(None, alias="X-Maintainer-Token"),
+) -> ProcessingLockReleaseResponse:
+    """Attempt to release the global processing lock, optionally forcing it."""
+
+    _ensure_maintainer_token(maintainer_token)
+    _ensure_db_configuration(payload.db_type)
+    db = _get_database(payload.db_type)
+    before_info = db.read_processing_lock()
+    before_snapshot = _build_lock_snapshot(before_info)
+
+    if not before_info.worker_id:
+        logger.info(
+            f"Processing lock release requested for {payload.db_type} "
+            "but no lock was present."
+        )
+        return ProcessingLockReleaseResponse(
+            db_type=payload.db_type,
+            released=False,
+            reason="lock_not_found",
+            before=before_snapshot,
+            after=before_snapshot,
+        )
+
+    if payload.dry_run:
+        logger.info(
+            f"Processing lock dry-run for {payload.db_type} (worker={before_info.worker_id})."
+        )
+        return ProcessingLockReleaseResponse(
+            db_type=payload.db_type,
+            released=False,
+            reason=payload.reason or "dry_run",
+            before=before_snapshot,
+            after=before_snapshot,
+        )
+
+    if payload.force:
+        threshold = payload.force_threshold_seconds or 0
+        lock_age = before_snapshot.age_seconds or 0.0
+        if threshold > 0 and lock_age < threshold:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Processing lock has not aged enough for a forced release.",
+            )
+
+        db.clear_processing_lock()
+        after_snapshot = _build_lock_snapshot(db.read_processing_lock())
+        logger.info(
+            f"Processing lock force-released for {payload.db_type} "
+            f"(worker={before_info.worker_id}, reason={payload.reason})"
+        )
+        return ProcessingLockReleaseResponse(
+            db_type=payload.db_type,
+            released=True,
+            reason=payload.reason,
+            before=before_snapshot,
+            after=after_snapshot,
+        )
+
+    if not payload.expected_worker_id:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="expected_worker_id is required unless force=true.",
+        )
+
+    if before_info.worker_id != payload.expected_worker_id:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Lock is held by {before_info.worker_id}.",
+        )
+
+    db.release_processing_lock(before_info.worker_id)
+    after_snapshot = _build_lock_snapshot(db.read_processing_lock())
+    logger.info(
+        f"Processing lock released for {payload.db_type} (worker={before_info.worker_id})."
+    )
+    return ProcessingLockReleaseResponse(
+        db_type=payload.db_type,
+        released=True,
+        reason=payload.reason,
+        before=before_snapshot,
+        after=after_snapshot,
     )

@@ -2,7 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Optional
 
-from database.database_interface import BaseDB
+from database.database_interface import BaseDB, ProcessingLockInfo
 from database.task import Task
 from database.task_adapter import SQLiteTaskAdapter
 
@@ -275,6 +275,51 @@ class SQLiteDB(BaseDB):
         )
         conn.commit()
         conn.close()
+
+    def read_processing_lock(self) -> ProcessingLockInfo:
+        """Read the global processing lock metadata."""
+        conn = self._get_connection()
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        try:
+            row = cursor.execute(
+                "SELECT worker_id, locked_at FROM processing_lock WHERE id = 1"
+            ).fetchone()
+        finally:
+            conn.close()
+
+        if not row or not row["worker_id"] or not row["locked_at"]:
+            return ProcessingLockInfo(worker_id=None, locked_at=None)
+
+        locked_at_raw = row["locked_at"]
+        try:
+            locked_at = datetime.fromisoformat(locked_at_raw)
+        except ValueError:
+            locked_at = datetime.utcnow()
+
+        return ProcessingLockInfo(worker_id=row["worker_id"], locked_at=locked_at)
+
+    def clear_processing_lock(self) -> None:
+        """Unconditionally clear the global processing lock."""
+        conn = self._get_connection()
+        conn.isolation_level = None
+        cursor = conn.cursor()
+        try:
+            cursor.execute("BEGIN IMMEDIATE")
+            cursor.execute(
+                """
+                UPDATE processing_lock
+                SET worker_id = NULL,
+                    locked_at = NULL
+                WHERE id = 1
+                """
+            )
+            cursor.execute("COMMIT")
+        except sqlite3.OperationalError:
+            cursor.execute("ROLLBACK")
+            raise
+        finally:
+            conn.close()
 
     def update_task_status(
         self,

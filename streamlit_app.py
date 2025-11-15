@@ -35,6 +35,42 @@ def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
     return response.status_code, body
 
 
+def _call_processing_lock_status(
+    db_choice: str, maintainer_token: str | None
+) -> tuple[int, Dict[str, Any]]:
+    endpoint = f"{API_BASE_URL.rstrip('/')}/processing-lock"
+    headers = {"X-Maintainer-Token": maintainer_token} if maintainer_token else {}
+    params = {"db_type": db_choice.lower()}
+
+    response = requests.get(endpoint, headers=headers, params=params, timeout=10)
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body
+
+
+def _call_processing_lock_release(
+    db_choice: str,
+    maintainer_token: str | None,
+    payload: Dict[str, Any],
+) -> tuple[int, Dict[str, Any]]:
+    endpoint = f"{API_BASE_URL.rstrip('/')}/processing-lock"
+    headers = {"X-Maintainer-Token": maintainer_token} if maintainer_token else {}
+    body_payload = {"db_type": db_choice.lower(), **payload}
+    response = requests.delete(
+        endpoint,
+        headers=headers,
+        json=body_payload,
+        timeout=10,
+    )
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body
+
+
 def trigger_processing_via_api(db_choice: str):
     """Trigger the FastAPI worker endpoint and surface result in the UI."""
     payload = {"db_type": db_choice.lower()}
@@ -57,6 +93,86 @@ def trigger_processing_via_api(db_choice: str):
     else:
         detail = body.get("detail") or body.get("message") or "未知錯誤"
         st.error(f"啟動背景處理失敗：{detail}")
+
+
+def _maybe_show_lock_snapshot() -> None:
+    snapshot = st.session_state.get("processing_lock_snapshot")
+    if not snapshot:
+        return
+
+    st.markdown("**最近一次 lock 狀態**")
+    if not snapshot.get("worker_id"):
+        st.success("目前沒有持有者。")
+        return
+
+    age_value = snapshot.get("age_seconds")
+    st.write(
+        f"- Worker: `{snapshot.get('worker_id')}`\n"
+        f"- Locked At: {snapshot.get('locked_at')}\n"
+        f"- Age (秒): {age_value if age_value is not None else '-'}\n"
+        f"- Stale: {snapshot.get('stale')}"
+    )
+
+
+def query_processing_lock(db_choice: str, maintainer_token: str) -> None:
+    if not maintainer_token:
+        st.warning("請先輸入 X-Maintainer-Token 才能查詢 lock。")
+        return
+
+    try:
+        status, body = _call_processing_lock_status(db_choice, maintainer_token)
+    except requests.RequestException as exc:
+        st.error(f"查詢 lock 失敗：{exc}")
+        return
+
+    if status == 200:
+        snapshot = body.get("snapshot") or {}
+        st.session_state.processing_lock_snapshot = snapshot
+        st.success("已取得 lock 狀態。")
+        _maybe_show_lock_snapshot()
+    else:
+        detail = body.get("detail") or body.get("message") or "查詢失敗"
+        st.error(f"{detail} (status {status})")
+
+
+def release_processing_lock(
+    db_choice: str,
+    maintainer_token: str,
+    expected_worker: str,
+    reason: str,
+    force: bool,
+    force_threshold: int,
+) -> None:
+    if not maintainer_token:
+        st.warning("請先輸入 X-Maintainer-Token 才能釋放 lock。")
+        return
+
+    payload: Dict[str, Any] = {"reason": reason or None}
+    if expected_worker:
+        payload["expected_worker_id"] = expected_worker
+    if force:
+        payload["force"] = True
+        payload["force_threshold_seconds"] = force_threshold
+
+    try:
+        status, body = _call_processing_lock_release(
+            db_choice,
+            maintainer_token,
+            payload,
+        )
+    except requests.RequestException as exc:
+        st.error(f"釋放 lock 失敗：{exc}")
+        return
+
+    if status == 200:
+        st.success("Processing lock 已更新。")
+        after_snapshot = body.get("after") or {}
+        st.session_state.processing_lock_snapshot = after_snapshot
+        st.info(body.get("reason") or "Lock 釋放完成")
+        _maybe_show_lock_snapshot()
+    else:
+        detail = body.get("detail") or body.get("message") or "操作失敗"
+        st.error(f"{detail} (status {status})")
 
 
 def add_url_callback(db_choice):
@@ -115,6 +231,51 @@ def main_view():
             type="primary",
         ):
             trigger_processing_via_api(db_choice)
+
+    with st.expander("Processing Lock 管理（維運專用）"):
+        lock_token = st.text_input(
+            "X-Maintainer-Token",
+            type="password",
+            key="lock_admin_token_input",
+        )
+        st.caption("透過維運端點查詢或釋放 Processing Lock。Token 來自 `.env` 的 PROCESSING_LOCK_ADMIN_TOKEN。")
+
+        if st.button("查詢 Processing Lock", key="lock_status_btn"):
+            query_processing_lock(db_choice, lock_token)
+
+        _maybe_show_lock_snapshot()
+
+        st.divider()
+
+        expected_worker = st.text_input(
+            "預期的 worker_id（非必要）",
+            key="lock_expected_worker",
+        )
+        reason = st.text_input(
+            "釋放理由",
+            key="lock_release_reason",
+        )
+        force = st.checkbox(
+            "強制釋放（需搭配 force_threshold_seconds）",
+            key="lock_force_checkbox",
+        )
+        force_threshold = st.number_input(
+            "Force threshold (秒)",
+            min_value=0,
+            value=1200,
+            step=60,
+            key="lock_force_threshold",
+        )
+
+        if st.button("釋放 Processing Lock", key="lock_release_btn"):
+            release_processing_lock(
+                db_choice,
+                lock_token,
+                expected_worker,
+                reason,
+                force,
+                int(force_threshold),
+            )
 
     # Section for displaying tasks
     st.header("Tasks in Database")
