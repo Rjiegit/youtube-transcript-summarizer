@@ -45,6 +45,7 @@ class TestProcessingWorker(unittest.TestCase):
         except FileNotFoundError:
             pass
 
+    @patch("processing.Config")
     @patch("processing.send_task_completion_notification")
     @patch("processing.SummaryStorage")
     @patch("processing.FileManager.save_text")
@@ -59,6 +60,7 @@ class TestProcessingWorker(unittest.TestCase):
         mock_save_text,
         mock_summary_storage,
         mock_notify,
+        mock_config,
     ):
         first_task = self.db.add_task("https://youtu.be/alpha")
         second_task = self.db.add_task("https://youtu.be/bravo")
@@ -81,6 +83,11 @@ class TestProcessingWorker(unittest.TestCase):
             {"page_id": "11111111-2222-3333-4444-555555555555"},
             {"page_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"},
         ]
+        mock_config.return_value = types.SimpleNamespace(
+            transcription_model_size="tiny",
+            notion_url=None,
+            discord_webhook_url=None,
+        )
         mock_notify.return_value = True
 
         worker = ProcessingWorker(
@@ -125,6 +132,7 @@ class TestProcessingWorker(unittest.TestCase):
             notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
         )
 
+    @patch("processing.Config")
     @patch("processing.send_task_completion_notification")
     @patch("processing.SummaryStorage")
     @patch("processing.FileManager.save_text")
@@ -139,6 +147,7 @@ class TestProcessingWorker(unittest.TestCase):
         mock_save_text,
         mock_summary_storage,
         mock_notify,
+        mock_config,
     ):
         first_task = self.db.add_task("https://youtu.be/charlie")
         second_task = self.db.add_task("https://youtu.be/delta")
@@ -160,6 +169,11 @@ class TestProcessingWorker(unittest.TestCase):
         mock_summary_storage.return_value.save.return_value = {
             "page_id": "ffffffff-1111-2222-3333-444444444444"
         }
+        mock_config.return_value = types.SimpleNamespace(
+            transcription_model_size="tiny",
+            notion_url=None,
+            discord_webhook_url=None,
+        )
         mock_notify.return_value = True
 
         worker = ProcessingWorker(

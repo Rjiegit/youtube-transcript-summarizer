@@ -100,7 +100,8 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         worker_id_used = mock_db.acquire_processing_lock.call_args[0][0]
         self.assertEqual(payload["processing_worker_id"], worker_id_used)
         self.assertIn("Processing worker scheduled", payload["message"])
-        mock_get_db.assert_called_once_with("sqlite")
+        self.assertEqual(mock_get_db.call_count, 2)
+        mock_get_db.assert_any_call("sqlite")
         mock_db.add_task.assert_called_once_with(self.normalized_url)
         mock_db.acquire_processing_lock.assert_called_once()
         mock_db.release_processing_lock.assert_called_once_with(worker_id_used)
@@ -187,7 +188,8 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         worker_id_used = mock_db.acquire_processing_lock.call_args[0][0]
         self.assertEqual(payload["processing_worker_id"], worker_id_used)
         self.assertIn("Processing worker scheduled", payload["message"])
-        mock_get_db.assert_called_once_with("notion")
+        self.assertEqual(mock_get_db.call_count, 2)
+        mock_get_db.assert_any_call("notion")
         mock_db.add_task.assert_called_once_with(self.normalized_url)
         mock_db.release_processing_lock.assert_called_once_with(worker_id_used)
         mock_thread.assert_called_once()
