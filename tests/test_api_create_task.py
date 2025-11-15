@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 import types
@@ -367,7 +368,8 @@ class TestProcessingLockEndpoints(unittest.TestCase):
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
             with patch("api.server.DBFactory.get_db", return_value=mock_db):
-                response = self.client.delete(
+                response = self.client.request(
+                    "DELETE",
                     "/processing-lock",
                     json={"dry_run": True},
                     headers={"X-Maintainer-Token": self.admin_token},
@@ -392,7 +394,8 @@ class TestProcessingLockEndpoints(unittest.TestCase):
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
             with patch("api.server.DBFactory.get_db", return_value=mock_db):
-                response = self.client.delete(
+                response = self.client.request(
+                    "DELETE",
                     "/processing-lock",
                     json={
                         "expected_worker_id": "api-worker-sanity",
@@ -420,7 +423,8 @@ class TestProcessingLockEndpoints(unittest.TestCase):
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
             with patch("api.server.DBFactory.get_db", return_value=mock_db):
-                response = self.client.delete(
+                response = self.client.request(
+                    "DELETE",
                     "/processing-lock",
                     json={"force": True, "force_threshold_seconds": 60},
                     headers={"X-Maintainer-Token": self.admin_token},
@@ -444,9 +448,14 @@ class TestProcessingLockEndpoints(unittest.TestCase):
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
             with patch("api.server.DBFactory.get_db", return_value=mock_db):
-                response = self.client.delete(
+                response = self.client.request(
+                    "DELETE",
                     "/processing-lock",
-                    json={"force": True, "force_threshold_seconds": 1200, "reason": "cleanup"},
+                    json={
+                        "force": True,
+                        "force_threshold_seconds": 1200,
+                        "reason": "cleanup",
+                    },
                     headers={"X-Maintainer-Token": self.admin_token},
                 )
 
