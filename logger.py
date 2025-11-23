@@ -1,15 +1,3 @@
-class Logger:
-    @staticmethod
-    def info(msg):
-        print(f"[INFO] {msg}")
+"""Compatibility import for the shared logger."""
 
-    @staticmethod
-    def warning(msg):
-        print(f"[WARNING] {msg}")
-
-    @staticmethod
-    def error(msg):
-        print(f"[ERROR] {msg}")
-
-
-logger = Logger()
+from src.core.logger import *  # noqa: F401,F403

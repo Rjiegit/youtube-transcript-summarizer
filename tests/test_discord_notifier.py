@@ -69,7 +69,7 @@ class TestDiscordNotifier(unittest.TestCase):
             captured["content"] = json["content"]
             return _StubResponse(204, "ok")
 
-        with patch("discord_notifier.logger") as mock_logger:
+        with patch("src.infrastructure.notifications.discord.logger") as mock_logger:
             mock_logger.warning = mock_logger.warning  # attribute to avoid AttributeError
             result = send_task_completion_notification(
                 "Title",

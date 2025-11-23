@@ -4,16 +4,19 @@
 
 ## 專案架構與工作流程
 
-本工具採用模組化設計，主要由以下核心組件構成：
+本工具採用模組化設計，並將核心程式碼集中在 `src/` 目錄：
 
-- **`transcriber.py`**: 處理影片轉錄邏輯。
-- **`summarizer.py`**: 處理文字摘要邏輯。
-- **`api/server.py`**: 提供 FastAPI HTTP API，對外開放新增任務的端點。
-- **`streamlit_app.py`**: 包含所有 UI 相關程式碼。
-- **`youtube_downloader.py`**: 管理影片下載內容。
-- **`processing.py`**: 處理單個文件的轉錄和摘要流程。
-- **`file_manager.py`**: 處理文件操作，如保存和刪除。
-- **`summary_storage.py`**: 將摘要保存到 Notion 等外部平台。
+- **`src/infrastructure/media/transcription/transcriber.py`**：使用 Whisper/Faster-Whisper 進行音訊轉錄。
+- **`src/infrastructure/llm/summarizer_service.py`**：整合 OpenAI / Gemini / Mock 後端以生成摘要。
+- **`src/apps/api/main.py`**：FastAPI 入口，提供 `/tasks`、`/processing-jobs`、`/processing-lock` 等端點（`api/server.py` 僅為相容 wrapper）。
+- **`src/apps/ui/streamlit_app.py`**：Streamlit UI（`streamlit_app.py` wrapper 供 `streamlit run` 使用）。
+- **`src/infrastructure/media/downloader.py`**：以 yt-dlp 管理影片與音訊下載。
+- **`src/services/pipeline/processing_runner.py`**：`ProcessingWorker` orchestration，負責任務鎖、轉錄、摘要與儲存。
+- **`src/infrastructure/storage/file_storage.py`**：負責 Markdown 檔案輸出及檔名清理。
+- **`src/infrastructure/storage/summary_storage.py`**：將摘要同步到 Notion；可依需求替換其他儲存後端。
+- **`src/apps/workers/cli.py`**：CLI/排程入口，方便 `make run` 與 Docker scheduler 呼叫。
+
+> 註：根目錄仍保留 `streamlit_app.py`、`processing.py` 等 wrapper，以確保既有指令與單元測試的 import 路徑相容；實際邏輯皆位於 `src/`。
 
 工作流程自動化且高效：從 YouTube 下載影片 → 提取音訊 → 使用 Whisper 進行轉錄 → 使用 LLM 生成摘要 → 以 Markdown 格式保存結果 → 可選擇存儲到 Notion。整個流程在 Docker 容器中運行，確保環境一致性與易於部署。
 
@@ -120,10 +123,11 @@ make yt-dlp url="YOUR_YOUTUBE_URL"
 ```bash
 make run
 ```
-或
+或直接呼叫 CLI 入口：
 ```bash
-python main.py
+python -m src.apps.workers.cli --db-type sqlite --worker-id local-run
 ```
+（`--db-type notion` 亦支援，適合 Notion 佇列；`--worker-id` 可選，用於鎖狀態追蹤。）
 
 ### 一鍵完成整個流程
 
@@ -140,7 +144,7 @@ make auto url="YOUR_YOUTUBE_URL"
 1. 啟動 Streamlit 應用：
 
 ```bash
-streamlit run streamlit_app.py
+streamlit run src/apps/ui/streamlit_app.py
 ```
 
 2. 在瀏覽器中打開顯示的 URL（通常是 http://localhost:8501）
@@ -282,7 +286,7 @@ ollama serve
 ollama pull llama3.2
 ```
 
-4. 在 summarizer.py 中修改 summarize 方法以使用 Ollama：
+4. 在 `src/infrastructure/llm/summarizer_service.py` 中調整 `summarize` 方法即可強制改用 Ollama：
 
 ```python
 def summarize(self, title, text):
@@ -307,24 +311,24 @@ def summarize(self, title, text):
 
 ### 修改 Whisper 模型大小
 
-在 main.py 中，可以修改 Transcriber 的模型大小：
+在 `src/core/config.py` 中可調整 `Config.transcription_model_size`，例如：
 
 ```python
-transcriber = Transcriber(model_size="base")  # 可選: tiny, base, small, medium, large
+self.transcription_model_size = "base"  # 可選: tiny, base, small, medium, large
 ```
 
 ### 修改摘要提示詞
 
-在 prompt.py 中，可以自定義摘要的提示詞模板。
+在 `src/core/prompt.py` 中自定義摘要提示詞模板（`PROMPT_3`）。
 
 ## 開發相關
 
 ### 開發指令
 
-- **執行測試**: `pytest`
-- **檢查程式碼風格**: `ruff check .`
-- **格式化程式碼**: `ruff format .`
-- **啟動 REST API**: `make api`（啟動 FastAPI 伺服器於 http://localhost:8080）
+- **執行測試**: `python -m unittest -v`
+- **Lint**: `flake8 .`
+- **格式化**: `ruff format .`（若需）
+- **啟動 REST API**: `make api`（對 `api/server.py` wrapper 啟動 FastAPI，實作位於 `src/apps/api/main.py`）
 
 ### 更新依賴
 

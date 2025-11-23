@@ -45,13 +45,13 @@ class TestProcessingWorker(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    @patch("processing.Config")
-    @patch("processing.send_task_completion_notification")
-    @patch("processing.SummaryStorage")
-    @patch("processing.FileManager.save_text")
-    @patch("processing.Summarizer")
-    @patch("processing.Transcriber")
-    @patch("processing.YouTubeDownloader")
+    @patch("src.services.pipeline.processing_runner.Config")
+    @patch("src.services.pipeline.processing_runner.send_task_completion_notification")
+    @patch("src.services.pipeline.processing_runner.SummaryStorage")
+    @patch("src.services.pipeline.processing_runner.FileManager.save_text")
+    @patch("src.services.pipeline.processing_runner.Summarizer")
+    @patch("src.services.pipeline.processing_runner.Transcriber")
+    @patch("src.services.pipeline.processing_runner.YouTubeDownloader")
     def test_worker_processes_all_tasks(
         self,
         mock_downloader,
@@ -87,6 +87,7 @@ class TestProcessingWorker(unittest.TestCase):
             transcription_model_size="tiny",
             notion_url=None,
             discord_webhook_url=None,
+            data_dir="data",
         )
         mock_notify.return_value = True
 
@@ -132,13 +133,13 @@ class TestProcessingWorker(unittest.TestCase):
             notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
         )
 
-    @patch("processing.Config")
-    @patch("processing.send_task_completion_notification")
-    @patch("processing.SummaryStorage")
-    @patch("processing.FileManager.save_text")
-    @patch("processing.Summarizer")
-    @patch("processing.Transcriber")
-    @patch("processing.YouTubeDownloader")
+    @patch("src.services.pipeline.processing_runner.Config")
+    @patch("src.services.pipeline.processing_runner.send_task_completion_notification")
+    @patch("src.services.pipeline.processing_runner.SummaryStorage")
+    @patch("src.services.pipeline.processing_runner.FileManager.save_text")
+    @patch("src.services.pipeline.processing_runner.Summarizer")
+    @patch("src.services.pipeline.processing_runner.Transcriber")
+    @patch("src.services.pipeline.processing_runner.YouTubeDownloader")
     def test_worker_continues_after_failure(
         self,
         mock_downloader,
@@ -173,6 +174,7 @@ class TestProcessingWorker(unittest.TestCase):
             transcription_model_size="tiny",
             notion_url=None,
             discord_webhook_url=None,
+            data_dir="data",
         )
         mock_notify.return_value = True
 

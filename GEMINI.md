@@ -18,9 +18,9 @@ This project is a Python-based application that downloads YouTube video transcri
 ## 3. Key Commands
 
 - **Install Dependencies:** `pip install -r requirements.txt`
-- **Run the App:** `streamlit run streamlit_app.py`
-- **Run Tests:** `pytest`
-- **Check Style:** `ruff check .`
+- **Run the App:** `streamlit run src/apps/ui/streamlit_app.py`
+- **Run Tests:** `python -m unittest -v`
+- **Check Style:** `flake8 .`
 - **Format Code:** `ruff format .`
 
 ## 4. Coding Conventions
@@ -33,10 +33,10 @@ This project is a Python-based application that downloads YouTube video transcri
 ## 5. Architectural Patterns
 
 - **Separation of Concerns:**
-  - `transcriber.py`: Handles video transcription logic.
-  - `summarizer.py`: Handles text summarization logic.
-  - `streamlit_app.py`: Contains only UI-related code.
-  - `youtube_downloader.py`: Manages downloading video content.
+  - `src/infrastructure/media/transcription/transcriber.py`: Handles video transcription logic.
+  - `src/infrastructure/llm/summarizer_service.py`: Handles text summarization logic.
+  - `src/apps/ui/streamlit_app.py`: Contains all UI-related code (invoked via root wrapper).
+  - `src/infrastructure/media/downloader.py`: Manages downloading video content.
 - **Error Handling:** Use custom exceptions for specific application errors (e.g., `InvalidURLError`, `DownloadError`).
 
 ## 6. Specific Rules & Constraints

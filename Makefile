@@ -12,10 +12,10 @@ freeze:
 	pip freeze > requirements.txt
 
 run:
-	python main.py
+	python -m src.apps.workers.cli --db-type sqlite
 
 streamlit:
-	streamlit run streamlit_app.py
+	streamlit run src/apps/ui/streamlit_app.py
 
 api:
 	uvicorn api.server:app --reload --reload-exclude ".git" --reload-exclude ".git/*" --host 0.0.0.0 --port 8080

@@ -20,14 +20,21 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `streamlit_app.py`: Streamlit UI entry for local use and Docker.
-- Core modules: `transcriber.py` (Whisper), `summarizer.py` (LLMs), `youtube_downloader.py`, `processing.py`, `file_manager.py`, `summary_storage.py`, `config.py`.
-- Data & storage: `data/` (inputs/outputs), `database/` (Notion/SQLite adapters), `interfaces/` (typed interfaces).
+- `src/apps/ui/streamlit_app.py`: Streamlit UI entry for local use and Docker（根目錄保留 wrapper `streamlit_app.py`，供 `streamlit run` 指令使用）。
+- Core modules（皆位於 `src/`）：
+  - `infrastructure/media/transcription/transcriber.py` (Whisper)
+  - `infrastructure/llm/summarizer_service.py` (LLMs)
+  - `infrastructure/media/downloader.py`
+  - `services/pipeline/processing_runner.py`
+  - `infrastructure/storage/file_storage.py`
+  - `infrastructure/storage/summary_storage.py`
+  - `core/config.py`
+- Data & storage: `data/` (inputs/outputs), `src/infrastructure/persistence/` (Notion/SQLite adapters), `src/domain/interfaces/` (typed interfaces).
 - Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `requirements.txt`, `Makefile`.
 
 ## Build, Test, and Development Commands
 - Install deps and yt-dlp: `make install`
-- Run Streamlit app: `make streamlit` (or `streamlit run streamlit_app.py`)
+- Run Streamlit app: `make streamlit`（等同 `streamlit run src/apps/ui/streamlit_app.py`，若需保持相容亦可 `streamlit run streamlit_app.py`）
 - Docker (dev): `docker compose up -d` to start the app on `:8501`
 - 在 container 中執行指令：`docker compose exec app bash -lc "<COMMAND>"`（會在 `app` service 的 bash shell 內執行，適合需要 container 環境的工具）
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`
