@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import patch
 
-from discord_notifier import RequestException, send_task_completion_notification
+from src.infrastructure.notifications.discord import (
+    RequestException,
+    send_task_completion_notification,
+)
 
 
 class _StubResponse:

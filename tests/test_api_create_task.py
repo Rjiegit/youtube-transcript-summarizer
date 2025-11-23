@@ -33,16 +33,19 @@ if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
 try:  # pragma: no cover - avoid hard dependency in minimal envs
     from fastapi import HTTPException, status
     from fastapi.testclient import TestClient
-    from api.server import app
+    from src.apps.api.main import app
 except ModuleNotFoundError:  # pragma: no cover - testing scaffold
     TestClient = None
     app = None
     HTTPException = RuntimeError  # type: ignore
     status = types.SimpleNamespace(HTTP_500_INTERNAL_SERVER_ERROR=500)  # type: ignore
 
-from database.database_interface import ProcessingLockInfo
-from database.task import Task
-from processing import ProcessingSummary, PROCESSING_LOCK_TIMEOUT_SECONDS
+from src.domain.interfaces.database import ProcessingLockInfo
+from src.domain.tasks.models import Task
+from src.services.pipeline.processing_runner import (
+    PROCESSING_LOCK_TIMEOUT_SECONDS,
+    ProcessingSummary,
+)
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")
@@ -84,12 +87,12 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
             return _ImmediateThread()
 
-        with patch("api.server.DBFactory.get_db", return_value=mock_db) as mock_get_db:
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db) as mock_get_db:
             with patch(
-                "api.server.process_pending_tasks",
+                "src.apps.api.main.process_pending_tasks",
                 side_effect=_fake_process_pending_tasks,
             ):
-                with patch("api.server.threading.Thread", side_effect=_thread_stub) as mock_thread:
+                with patch("src.apps.api.main.threading.Thread", side_effect=_thread_stub) as mock_thread:
                     response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 201)
@@ -109,7 +112,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_thread.assert_called_once()
 
     def test_create_task_invalid_url(self) -> None:
-        with patch("api.server.DBFactory.get_db") as mock_get_db:
+        with patch("src.apps.api.main.DBFactory.get_db") as mock_get_db:
             response = self.client.post("/tasks", json={"url": "not-a-url"})
 
         self.assertEqual(response.status_code, 400)
@@ -122,7 +125,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "", "NOTION_DATABASE_ID": ""},
             clear=False,
         ):
-            with patch("api.server.DBFactory.get_db") as mock_get_db:
+            with patch("src.apps.api.main.DBFactory.get_db") as mock_get_db:
                 response = self.client.post(
                     "/tasks",
                     json={"url": self.valid_url, "db_type": "notion"},
@@ -167,13 +170,13 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "token", "NOTION_DATABASE_ID": "db"},
             clear=False,
         ):
-            with patch("api.server.DBFactory.get_db", return_value=mock_db) as mock_get_db:
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db) as mock_get_db:
                 with patch(
-                    "api.server.process_pending_tasks",
+                    "src.apps.api.main.process_pending_tasks",
                     side_effect=_fake_process_pending_tasks,
                 ):
                     with patch(
-                        "api.server.threading.Thread",
+                        "src.apps.api.main.threading.Thread",
                         side_effect=_thread_stub,
                     ) as mock_thread:
                         response = self.client.post(
@@ -197,7 +200,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_db_factory_error(self) -> None:
         with patch(
-            "api.server.DBFactory.get_db",
+            "src.apps.api.main.DBFactory.get_db",
             side_effect=ValueError("Unknown database type: foo"),
         ):
             response = self.client.post("/tasks", json={"url": self.valid_url})
@@ -219,7 +222,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.add_task.side_effect = RuntimeError("boom")
 
-        with patch("api.server.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 500)
@@ -230,8 +233,8 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
         mock_db.acquire_processing_lock.return_value = False
 
-        with patch("api.server.DBFactory.get_db", return_value=mock_db):
-            with patch("api.server.threading.Thread") as mock_thread:
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.main.threading.Thread") as mock_thread:
                 response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 201)
@@ -245,9 +248,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
 
-        with patch("api.server.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
             with patch(
-                "api.server._schedule_processing_job",
+                "src.apps.api.main._schedule_processing_job",
                 side_effect=HTTPException(
                     status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="Failed to schedule processing worker.",
@@ -284,11 +287,11 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
             return _ImmediateThread()
 
-        with patch("api.server.DBFactory.get_db", return_value=mock_db) as mock_get_db:
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db) as mock_get_db:
             with patch(
-                "api.server.process_pending_tasks", return_value=mock_summary
+                "src.apps.api.main.process_pending_tasks", return_value=mock_summary
             ) as mock_process:
-                with patch("api.server.threading.Thread", side_effect=_thread_stub):
+                with patch("src.apps.api.main.threading.Thread", side_effect=_thread_stub):
                     response = self.client.post(
                         "/processing-jobs",
                         json={"db_type": "sqlite", "worker_id": "api-worker-123"},
@@ -314,7 +317,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.acquire_processing_lock.return_value = False
 
-        with patch("api.server.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
             response = self.client.post(
                 "/processing-jobs",
                 json={"db_type": "sqlite"},
@@ -347,7 +350,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
                 response = self.client.get(
                     "/processing-lock",
                     headers={"X-Maintainer-Token": self.admin_token},
@@ -367,7 +370,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -393,7 +396,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.side_effect = [before, after]
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -422,7 +425,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -447,7 +450,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.side_effect = [before, after]
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("api.server.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",

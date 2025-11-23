@@ -16,7 +16,7 @@
 - **`src/infrastructure/storage/summary_storage.py`**：將摘要同步到 Notion；可依需求替換其他儲存後端。
 - **`src/apps/workers/cli.py`**：CLI/排程入口，方便 `make run` 與 Docker scheduler 呼叫。
 
-> 註：根目錄仍保留 `streamlit_app.py`、`processing.py` 等 wrapper，以確保既有指令與單元測試的 import 路徑相容；實際邏輯皆位於 `src/`。
+> 註：根目錄仍保留 `streamlit_app.py`、`processing.py` 等 wrapper 供舊版指令/部署相容；新程式與測試請直接 import `src.*` 內的模組，實際邏輯皆位於 `src/`。
 
 工作流程自動化且高效：從 YouTube 下載影片 → 提取音訊 → 使用 Whisper 進行轉錄 → 使用 LLM 生成摘要 → 以 Markdown 格式保存結果 → 可選擇存儲到 Notion。整個流程在 Docker 容器中運行，確保環境一致性與易於部署。
 

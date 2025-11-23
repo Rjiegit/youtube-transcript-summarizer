@@ -3,7 +3,7 @@ import sqlite3
 import tempfile
 import unittest
 
-from database.sqlite_client import SQLiteDB
+from src.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
 class TestSQLiteClient(unittest.TestCase):

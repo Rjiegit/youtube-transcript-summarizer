@@ -1,10 +1,6 @@
 import unittest
 
-from url_validator import (
-    extract_video_id,
-    is_valid_youtube_url,
-    normalize_youtube_url,
-)
+from src.core.utils.url import extract_video_id, is_valid_youtube_url, normalize_youtube_url
 
 
 class TestURLValidator(unittest.TestCase):
@@ -41,4 +37,3 @@ class TestURLValidator(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

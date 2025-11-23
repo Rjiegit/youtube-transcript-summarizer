@@ -2,7 +2,7 @@ import os
 import time
 import unittest
 
-from processing import build_summary_output_path
+from src.services.outputs.path_builder import build_summary_output_path
 
 
 class TestBuildSummaryOutputPath(unittest.TestCase):

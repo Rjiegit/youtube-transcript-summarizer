@@ -59,7 +59,7 @@ src/
 - Summary 檔名由 `services/outputs/path_builder.py` 管理，依據 timestamp + video id + sanitized title 產生 `data/summaries/` 內的路徑。
 
 ## 3. 相依模組與相容層
-- 根目錄保留 `processing.py`、`streamlit_app.py`、`api/server.py` 等 wrapper，全部 `from src.... import *`，確保既有 `Makefile`、CLI、測試引用不會立即壞掉。
+- 根目錄保留 `processing.py`、`streamlit_app.py`、`api/server.py` 等 wrapper，全部 `from src.... import *`，僅供舊版指令或部署相容；新程式與測試請直接引用 `src.*`。
 - `Makefile run` 改為執行 `python -m src.apps.workers.cli`，也可直接 `python -m src.apps.api.main` 或 `streamlit run streamlit_app.py`（wrapper 會載入 `src/apps/ui/...`）。
 - Document/README/GEMINI/AGENTS 已同步說明 `src/` 新位置；`structure.md` 即為最新參考。
 

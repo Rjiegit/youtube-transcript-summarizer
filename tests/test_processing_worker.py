@@ -29,8 +29,8 @@ if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
     notion_stub.Client = _Client
     sys.modules["notion_client"] = notion_stub
 
-from database.sqlite_client import SQLiteDB
-from processing import ProcessingWorker
+from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from src.services.pipeline.processing_runner import ProcessingWorker
 
 
 class TestProcessingWorker(unittest.TestCase):
