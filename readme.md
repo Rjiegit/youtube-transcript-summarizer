@@ -8,15 +8,15 @@
 
 - **`src/infrastructure/media/transcription/transcriber.py`**：使用 Whisper/Faster-Whisper 進行音訊轉錄。
 - **`src/infrastructure/llm/summarizer_service.py`**：整合 OpenAI / Gemini / Mock 後端以生成摘要。
-- **`src/apps/api/main.py`**：FastAPI 入口，提供 `/tasks`、`/processing-jobs`、`/processing-lock` 等端點（`api/server.py` 僅為相容 wrapper）。
-- **`src/apps/ui/streamlit_app.py`**：Streamlit UI（`streamlit_app.py` wrapper 供 `streamlit run` 使用）。
+- **`src/apps/api/main.py`**：FastAPI 入口，提供 `/tasks`、`/processing-jobs`、`/processing-lock` 等端點。
+- **`src/apps/ui/streamlit_app.py`**：Streamlit UI。
 - **`src/infrastructure/media/downloader.py`**：以 yt-dlp 管理影片與音訊下載。
 - **`src/services/pipeline/processing_runner.py`**：`ProcessingWorker` orchestration，負責任務鎖、轉錄、摘要與儲存。
 - **`src/infrastructure/storage/file_storage.py`**：負責 Markdown 檔案輸出及檔名清理。
 - **`src/infrastructure/storage/summary_storage.py`**：將摘要同步到 Notion；可依需求替換其他儲存後端。
 - **`src/apps/workers/cli.py`**：CLI/排程入口，方便 `make run` 與 Docker scheduler 呼叫。
 
-> 註：根目錄仍保留 `streamlit_app.py`、`processing.py` 等 wrapper 供舊版指令/部署相容；新程式與測試請直接 import `src.*` 內的模組，實際邏輯皆位於 `src/`。
+> 註：請直接 import `src.*` 內的模組，實際邏輯皆位於 `src/`。
 
 工作流程自動化且高效：從 YouTube 下載影片 → 提取音訊 → 使用 Whisper 進行轉錄 → 使用 LLM 生成摘要 → 以 Markdown 格式保存結果 → 可選擇存儲到 Notion。整個流程在 Docker 容器中運行，確保環境一致性與易於部署。
 
@@ -328,7 +328,7 @@ self.transcription_model_size = "base"  # 可選: tiny, base, small, medium, lar
 - **執行測試**: `python -m unittest -v`
 - **Lint**: `flake8 .`
 - **格式化**: `ruff format .`（若需）
-- **啟動 REST API**: `make api`（對 `api/server.py` wrapper 啟動 FastAPI，實作位於 `src/apps/api/main.py`）
+- **啟動 REST API**: `make api`（啟動 `src/apps/api/main.py` 內的 FastAPI）
 
 ### 更新依賴
 

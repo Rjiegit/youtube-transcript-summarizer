@@ -18,7 +18,7 @@ streamlit:
 	streamlit run src/apps/ui/streamlit_app.py
 
 api:
-	uvicorn api.server:app --reload --reload-exclude ".git" --reload-exclude ".git/*" --host 0.0.0.0 --port 8080
+	uvicorn src.apps.api.main:app --reload --reload-exclude ".git" --reload-exclude ".git/*" --host 0.0.0.0 --port 8080
 
 test:
 	python -m unittest discover -s . -p "test*.py" -v

@@ -58,15 +58,14 @@ src/
 - 這些工廠預設使用 infra 層實作，但在 `tests/test_processing_worker.py` 中可直接 patch 或傳入客製工廠，減少廣域 `patch()`。
 - Summary 檔名由 `services/outputs/path_builder.py` 管理，依據 timestamp + video id + sanitized title 產生 `data/summaries/` 內的路徑。
 
-## 3. 相依模組與相容層
-- 根目錄保留 `processing.py`、`streamlit_app.py`、`api/server.py` 等 wrapper，全部 `from src.... import *`，僅供舊版指令或部署相容；新程式與測試請直接引用 `src.*`。
-- `Makefile run` 改為執行 `python -m src.apps.workers.cli`，也可直接 `python -m src.apps.api.main` 或 `streamlit run streamlit_app.py`（wrapper 會載入 `src/apps/ui/...`）。
+## 3. 相依模組
+- 入口已全面改用 `src.*` 路徑，舊版 wrapper 已移除。
+- `Makefile run` 執行 `python -m src.apps.workers.cli`，FastAPI 請用 `uvicorn src.apps.api.main:app`，Streamlit 請用 `streamlit run src/apps/ui/streamlit_app.py`。
 - Document/README/GEMINI/AGENTS 已同步說明 `src/` 新位置；`structure.md` 即為最新參考。
 
 ## 4. 檔案搬移重點
-- `database/*` → `src/domain/interfaces` + `src/domain/tasks` + `src/infrastructure/persistence/...`
-- `summarizer.py`、`summary_storage.py`、`transcriber.py`、`youtube_downloader.py`、`discord_notifier.py`、`file_manager.py` → 對應 infra 套件。
+- `database/*` 已拆為 `src/domain/interfaces`、`src/domain/tasks`、`src/infrastructure/persistence/...`
+- `summarizer.py`、`summary_storage.py`、`transcriber.py`、`youtube_downloader.py`、`discord_notifier.py`、`file_manager.py` 已移至 infra 套件。
 - `prompt.py` → `src/core/prompt.py`，供 summarizer backends 使用。
-- 透過 wrapper 檔案保留原 import path，同時確保專案未來可逐步淘汰相容層。
 
 > 如需擴充新功能請將 domain/interface/service/infra 分層寫於 `src/`，避免再把新模組放在根目錄。新增入口點請放在 `src/apps/` 並視需要建立對應 wrapper。

@@ -20,7 +20,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/apps/ui/streamlit_app.py`: Streamlit UI entry for local use and Docker（根目錄保留 wrapper `streamlit_app.py`，供 `streamlit run` 指令使用）。
+- `src/apps/ui/streamlit_app.py`: Streamlit UI entry for local use and Docker。
 - Core modules（皆位於 `src/`）：
   - `infrastructure/media/transcription/transcriber.py` (Whisper)
   - `infrastructure/llm/summarizer_service.py` (LLMs)
