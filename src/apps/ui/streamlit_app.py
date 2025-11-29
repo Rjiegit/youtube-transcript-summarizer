@@ -5,22 +5,45 @@ import sys
 from datetime import timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict
+from datetime import datetime
+try:  # pragma: no cover - optional for local runs
+    from dotenv import load_dotenv
+except ModuleNotFoundError:  # pragma: no cover - allow running without python-dotenv
+    def load_dotenv(*_args, **_kwargs):
+        return False
 
 ROOT_DIR = Path(__file__).resolve().parents[3]
 if str(ROOT_DIR) not in sys.path:  # ensure src package can be imported when run via path
     sys.path.insert(0, str(ROOT_DIR))
 
-import requests
-import streamlit as st
+try:
+    import requests
+except ModuleNotFoundError:  # pragma: no cover - allow logic tests without network libs
+    requests = None
+
+try:
+    import streamlit as st
+except ModuleNotFoundError:  # pragma: no cover - allow logic tests without Streamlit
+    st = None
+
+load_dotenv()
 
 from src.core.utils.url import normalize_youtube_url, is_valid_youtube_url
 from src.infrastructure.persistence.factory import DBFactory
 
 API_BASE_URL = os.environ.get("TASK_API_BASE_URL", "http://localhost:8080")
+NOTION_BASE_URL = os.environ.get("NOTION_URL")
+
+
+def _require_streamlit() -> None:
+    if st is None:  # pragma: no cover - guard when Streamlit is absent in tests
+        raise RuntimeError("Streamlit must be installed to run the UI.")
 
 
 def _call_create_task_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
     """Send POST to /tasks and return status + payload."""
+    if requests is None:  # pragma: no cover - guard for missing dependency in tests
+        raise RuntimeError("requests is required to call the API.")
     endpoint = f"{API_BASE_URL.rstrip('/')}/tasks"
     response = requests.post(endpoint, json=payload, timeout=10)
     try:
@@ -32,6 +55,8 @@ def _call_create_task_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]
 
 def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
     """Send POST to /processing-jobs and return status + payload."""
+    if requests is None:  # pragma: no cover - guard for missing dependency in tests
+        raise RuntimeError("requests is required to call the API.")
     endpoint = f"{API_BASE_URL.rstrip('/')}/processing-jobs"
     response = requests.post(endpoint, json=payload, timeout=10)
     try:
@@ -44,6 +69,8 @@ def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
 def _call_processing_lock_status(
     db_choice: str, maintainer_token: str | None
 ) -> tuple[int, Dict[str, Any]]:
+    if requests is None:  # pragma: no cover - guard for missing dependency in tests
+        raise RuntimeError("requests is required to call the API.")
     endpoint = f"{API_BASE_URL.rstrip('/')}/processing-lock"
     headers = {"X-Maintainer-Token": maintainer_token} if maintainer_token else {}
     params = {"db_type": db_choice.lower()}
@@ -61,6 +88,8 @@ def _call_processing_lock_release(
     maintainer_token: str | None,
     payload: Dict[str, Any],
 ) -> tuple[int, Dict[str, Any]]:
+    if requests is None:  # pragma: no cover - guard for missing dependency in tests
+        raise RuntimeError("requests is required to call the API.")
     endpoint = f"{API_BASE_URL.rstrip('/')}/processing-lock"
     headers = {"X-Maintainer-Token": maintainer_token} if maintainer_token else {}
     body_payload = {"db_type": db_choice.lower(), **payload}
@@ -77,8 +106,50 @@ def _call_processing_lock_release(
     return response.status_code, body
 
 
+def build_notion_url(
+    *,
+    notion_base_url: str | None,
+    notion_page_id: str | None,
+    existing_url: str | None = None,
+) -> str | None:
+    """Construct a Notion URL from an existing link or base URL + page id."""
+    if existing_url:
+        return existing_url.strip()
+    if not notion_base_url or not notion_page_id:
+        return None
+    cleaned_id = notion_page_id.replace("-", "")
+    return f"{notion_base_url.rstrip('/')}/{cleaned_id}"
+
+
+def get_notion_display(task: Any, notion_base_url: str | None) -> Dict[str, str]:
+    """Decide how to display Notion URL for a task."""
+    url = build_notion_url(
+        notion_base_url=notion_base_url,
+        notion_page_id=getattr(task, "notion_page_id", None),
+        existing_url=getattr(task, "notion_url", None),
+    )
+    if url:
+        if url.startswith("http://") or url.startswith("https://"):
+            return {"status": "link", "url": url}
+        return {"status": "invalid", "message": "Notion URL 格式錯誤"}
+    placeholder = "Notion 未設定" if not notion_base_url else "尚未同步到 Notion"
+    return {"status": "missing", "message": placeholder}
+
+
+def sort_tasks_for_display(tasks: list[Any]) -> list[Any]:
+    """Sort tasks by created_at desc, falling back to id ordering."""
+    def _sort_key(task: Any):
+        created = getattr(task, "created_at", None)
+        if created is None or not isinstance(created, datetime):
+            return datetime.min.replace(tzinfo=timezone.utc)
+        return created
+
+    return sorted(tasks, key=_sort_key, reverse=True)
+
+
 def trigger_processing_via_api(db_choice: str):
     """Trigger the FastAPI worker endpoint and surface result in the UI."""
+    _require_streamlit()
     payload = {"db_type": db_choice.lower()}
 
     try:
@@ -102,6 +173,7 @@ def trigger_processing_via_api(db_choice: str):
 
 
 def _maybe_show_lock_snapshot() -> None:
+    _require_streamlit()
     snapshot = st.session_state.get("processing_lock_snapshot")
     if not snapshot:
         return
@@ -121,6 +193,7 @@ def _maybe_show_lock_snapshot() -> None:
 
 
 def query_processing_lock(db_choice: str, maintainer_token: str) -> None:
+    _require_streamlit()
     if not maintainer_token:
         st.warning("請先輸入 X-Maintainer-Token 才能查詢 lock。")
         return
@@ -149,6 +222,7 @@ def release_processing_lock(
     force: bool,
     force_threshold: int,
 ) -> None:
+    _require_streamlit()
     if not maintainer_token:
         st.warning("請先輸入 X-Maintainer-Token 才能釋放 lock。")
         return
@@ -182,6 +256,7 @@ def release_processing_lock(
 
 
 def add_url_callback(db_choice):
+    _require_streamlit()
     url = st.session_state.url_input
     if url:
         normalized = normalize_youtube_url(url)
@@ -213,6 +288,7 @@ def add_url_callback(db_choice):
 
 
 def main_view():
+    _require_streamlit()
     st.title("YouTube Transcript Summarizer")
 
     # Section for adding URLs to the queue
@@ -288,14 +364,11 @@ def main_view():
     # Reuse the same database selection for viewing tasks
     db = DBFactory.get_db(db_choice)
 
-    tasks = db.get_all_tasks()
+    tasks = sort_tasks_for_display(db.get_all_tasks())
 
     if not tasks:
         st.write("No tasks in the database.")
     else:
-        # Sort tasks by created_at in descending order
-        tasks.sort(key=lambda x: x.created_at, reverse=True)
-
         # Pagination
         if "page_size" not in st.session_state:
             st.session_state.page_size = 20
@@ -316,27 +389,40 @@ def main_view():
         paginated_tasks = tasks[start_idx:end_idx]
 
         # Display tasks in a table-like format
-        col1, col2, col3, col4, col5, col6 = st.columns(6)
-        col1.write("**URL**")
-        col2.write("**Title**")
-        col3.write("**Status**")
-        col4.write("**Created At (Taipei)**")
-        col5.write("**Duration (s)**")  # New column
-        col6.write("**Action**")
+        header_cols = st.columns(7)
+        header_cols[0].write("**URL**")
+        header_cols[1].write("**Title**")
+        header_cols[2].write("**Status**")
+        header_cols[3].write("**Created At (Taipei)**")
+        header_cols[4].write("**Duration (s)**")
+        header_cols[5].write("**Notion**")
+        header_cols[6].write("**Action**")
 
         for task in paginated_tasks:
-            col1, col2, col3, col4, col5, col6 = st.columns(6)
+            col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
             col1.write(task.url)
             col2.write(task.title)
             col3.write(task.status)
-            taipei_time = task.created_at.astimezone(timezone(timedelta(hours=8)))
-            col4.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
+            if task.created_at:
+                taipei_time = task.created_at.astimezone(timezone(timedelta(hours=8)))
+                col4.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
+            else:
+                col4.write("-")
             # Display duration if available and task is completed
             if task.status == "Completed" and task.processing_duration is not None:
                 col5.write(f"{task.processing_duration:.2f}")
             else:
                 col5.write("-")  # Or some other placeholder
-            if col6.button("View", key=f"view_{task.id}"):
+
+            notion_display = get_notion_display(task, NOTION_BASE_URL)
+            if notion_display["status"] == "link":
+                col6.write(f"[Notion]({notion_display['url']})")
+            elif notion_display["status"] == "invalid":
+                col6.write(f"⚠️ {notion_display['message']}")
+            else:
+                col6.write(notion_display["message"])
+
+            if col7.button("View", key=f"view_{task.id}"):
                 st.session_state.selected_task_id = task.id
                 # Store selection under a different key to avoid
                 # modifying the widget-backed session key "db_choice".
@@ -360,6 +446,7 @@ def main_view():
 
 
 def detail_view(task_id, db_choice):
+    _require_streamlit()
     st.title("Task Details")
     db = DBFactory.get_db(db_choice)
     task = db.get_task_by_id(task_id)
@@ -370,6 +457,13 @@ def detail_view(task_id, db_choice):
         st.write(f"**Status:** {task.status}")
         if task.processing_duration is not None:
             st.write(f"**Processing Duration:** {task.processing_duration:.2f} seconds")
+        notion_display = get_notion_display(task, NOTION_BASE_URL)
+        if notion_display["status"] == "link":
+            st.write(f"**Notion:** [Open Link]({notion_display['url']})")
+        elif notion_display["status"] == "invalid":
+            st.write(f"**Notion:** {notion_display['message']}")
+        else:
+            st.write(f"**Notion:** {notion_display['message']}")
         st.header("Summary")
         st.markdown(task.summary)
     else:

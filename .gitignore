@@ -467,3 +467,8 @@ data
 .claude
 .docs
 CLAUDE.md
+/.codex/sessions/
+/.codex/auth.json
+/.codex/config.toml
+/.codex/history.jsonl
+/.codex/version.json

@@ -1,0 +1,23 @@
+# Docker build context ignores
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+.ruff_cache/
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+.DS_Store
+.idea/
+.vscode/
+data/
+.env
+.env.*
+*.log
+downloads
+transcription.txt

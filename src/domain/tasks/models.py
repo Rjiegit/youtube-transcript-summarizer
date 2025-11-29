@@ -18,3 +18,4 @@ class Task:
     locked_at: Optional[datetime] = None
     worker_id: Optional[str] = None
     notion_page_id: Optional[str] = None
+    notion_url: Optional[str] = None

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import os
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -13,6 +14,16 @@ def _extract_rich_text_content(items: Optional[List[Dict[str, Any]]]) -> str:
         text = item.get("text", {})
         contents.append(text.get("content", ""))
     return "".join(contents)
+
+
+def _build_notion_url(page_id: Optional[str]) -> Optional[str]:
+    """Construct a Notion page URL using NOTION_URL and page id if available."""
+    base = os.environ.get("NOTION_URL")
+    if not base or not page_id:
+        return None
+    cleaned_id = str(page_id).replace("-", "")
+    normalized_base = base.rstrip("/")
+    return f"{normalized_base}/{cleaned_id}"
 
 
 class TaskAdapter(ABC):
@@ -41,6 +52,7 @@ class NotionTaskAdapter(TaskAdapter):
 
         notion_id = data.get("id")
         notion_page_id = str(notion_id) if notion_id is not None else None
+        notion_url = _build_notion_url(notion_page_id)
         return Task(
             id=str(notion_id) if notion_id is not None else "",
             url=properties.get("URL", {}).get("url", ""),
@@ -55,6 +67,7 @@ class NotionTaskAdapter(TaskAdapter):
             locked_at=None,
             worker_id=None,
             notion_page_id=notion_page_id,
+            notion_url=notion_url,
         )
 
 
@@ -80,6 +93,7 @@ class SQLiteTaskAdapter(TaskAdapter):
         )
         notion_page = data.get("notion_page_id")
         notion_page_id = str(notion_page) if notion_page is not None else None
+        notion_url = _build_notion_url(notion_page_id)
         return Task(
             id=task_id,
             url=data.get("url", ""),
@@ -94,4 +108,5 @@ class SQLiteTaskAdapter(TaskAdapter):
             locked_at=locked_at,
             worker_id=data.get("worker_id"),
             notion_page_id=notion_page_id,
+            notion_url=notion_url,
         )

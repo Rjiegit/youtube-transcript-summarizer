@@ -68,3 +68,10 @@ Please use Traditional Chinese (Taiwan) as the primary language for communicatio
 
 ## Notes
 - Primary UX is via Streamlit; CLI/cron entry points may vary. When adding new entry scripts, document them in the README and wire Makefile targets accordingly.
+
+## Active Technologies
+- Python 3.11 + Streamlit, FastAPI backend responses consumed by UI, Notion storage integration (existing), requests/HTTP client for API data (001-notion-url-list)
+- 檔案輸出 (Markdown summaries) + Notion（已有 URL 來源）；無新增持久層 (001-notion-url-list)
+
+## Recent Changes
+- 001-notion-url-list: Added Python 3.11 + Streamlit, FastAPI backend responses consumed by UI, Notion storage integration (existing), requests/HTTP client for API data

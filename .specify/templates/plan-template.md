@@ -31,7 +31,11 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- 極簡與乾淨程式碼：方案需為最小可行變更，避免新增不必要抽象/依賴，遵循 PEP 8、清晰命名與單一職責。
+- 代碼品質：列出靜態檢查與安全檢查（至少 `flake8 .`）如何落實；配置/秘密必須來自環境變數。
+- 測試標準：為每個 User Story 指定必備的單元/整合測試與 mock 策略（隔離 LLM、yt-dlp、Notion 等外部呼叫）；計畫中預留 `make test`。
+- 使用者體驗一致性：說明 CLI/API/Streamlit 的訊息與錯誤回饋格式，以及如何保持預設值一致。
+- 效能目標：定義本次變更的基準與目標（例如處理時間、I/O 次數、資源佔用），並描述量測方式。
 
 ## Project Structure
 
