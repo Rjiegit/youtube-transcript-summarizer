@@ -330,6 +330,10 @@ self.transcription_model_size = "base"  # 可選: tiny, base, small, medium, lar
 - **格式化**: `ruff format .`（若需）
 - **啟動 REST API**: `make api`（啟動 `src/apps/api/main.py` 內的 FastAPI）
 
+```
+CODEX_HOME="$PWD/.codex" codex
+```
+
 ### 更新依賴
 
 若新增或更新依賴項，請執行以下指令來更新 `requirements.txt`：
