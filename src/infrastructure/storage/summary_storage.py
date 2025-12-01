@@ -35,7 +35,7 @@ class SummaryStorage:
 
     def _is_test_mode(self, title, text, url):
         """檢測是否為測試模式"""
-        # 方法 1: 檢查 Streamlit session_state
+        # 只接受顯式旗標（Streamlit 開關或環境變數），避免因關鍵字誤觸
         if (
             st
             and hasattr(st, "session_state")
@@ -43,21 +43,14 @@ class SummaryStorage:
         ):
             return True
 
-        # 方法 2: 檢查 URL 中的測試標記
-        if url and any(marker in url for marker in ["test_", "test/", "v=test"]):
-            return True
-
-        # 方法 3: 檢查文字內容中的測試標記
-        if text and any(
-            marker in text for marker in ["[測試模式]", "[mock]", "[test]"]
-        ):
-            return True
-
-        # 方法 4: 檢查標題中的測試標記
-        if title and any(marker in title for marker in ["測試", "test", "mock"]):
-            return True
-
-        return False
+        env_flag = os.getenv("APP_ENV", "").lower() == "test"
+        force_flag = os.getenv("FORCE_TEST_MODE", "").lower() in [
+            "1",
+            "true",
+            "yes",
+            "on",
+        ]
+        return env_flag or force_flag
 
     def _mock_save(self, title, text, model, url):
         """模擬存儲過程"""

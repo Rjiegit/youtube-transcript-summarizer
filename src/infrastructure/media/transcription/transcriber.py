@@ -52,7 +52,7 @@ class Transcriber:
 
     def _is_test_mode(self, file_path: str = None) -> bool:
         """檢測是否為測試模式"""
-        # 方法 1: 檢查 Streamlit session_state 中的測試模式標記
+        # 只接受顯式旗標（Streamlit 開關或環境變數），避免因檔名含關鍵字誤觸
         if st and hasattr(st, "session_state"):
             try:
                 if st.session_state.get("test_mode", False):
@@ -60,16 +60,14 @@ class Transcriber:
             except Exception:
                 pass
 
-        # 方法 2: 檢查檔案路徑是否為測試檔案
-        if file_path:
-            filename = os.path.basename(file_path).lower()
-            if "test" in filename or "mock" in filename:
-                return True
-            # 只有 mock_audio 開頭的 tmp 檔案才視為測試檔案
-            if "/tmp/" in file_path and "mock_audio" in filename:
-                return True
-
-        return False
+        env_flag = os.getenv("APP_ENV", "").lower() == "test"
+        force_flag = os.getenv("FORCE_TEST_MODE", "").lower() in [
+            "1",
+            "true",
+            "yes",
+            "on",
+        ]
+        return env_flag or force_flag
 
     def _mock_transcribe(self, file_path: str) -> str:
         """模擬轉錄過程，返回測試樣本文字"""

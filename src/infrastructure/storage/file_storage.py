@@ -19,7 +19,7 @@ class FileManager:
     @staticmethod
     def _is_test_mode(text, output_file):
         """檢測是否為測試模式"""
-        # 方法 1: 檢查 Streamlit session_state
+        # 只接受顯式旗標（Streamlit 開關或環境變數），避免因關鍵字誤觸
         if (
             st
             and hasattr(st, "session_state")
@@ -27,19 +27,14 @@ class FileManager:
         ):
             return True
 
-        # 方法 2: 檢查檔案名中的測試標記
-        if output_file and any(
-            marker in output_file for marker in ["test_", "mock_", "_test", "_mock"]
-        ):
-            return True
-
-        # 方法 3: 檢查文字內容中的測試標記
-        if text and any(
-            marker in text for marker in ["[測試模式]", "[mock]", "[test]"]
-        ):
-            return True
-
-        return False
+        env_flag = os.getenv("APP_ENV", "").lower() == "test"
+        force_flag = os.getenv("FORCE_TEST_MODE", "").lower() in [
+            "1",
+            "true",
+            "yes",
+            "on",
+        ]
+        return env_flag or force_flag
 
     @staticmethod
     def _mock_save_text(text, output_file):
