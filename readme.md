@@ -265,7 +265,7 @@ curl -X POST http://localhost:8080/processing-jobs \
 
     這個流程會先確認鎖已經停滯超過設定秒數才會真正 clear，避免誤殺活著的 worker。
 
-請將 `PROCESSING_LOCK_ADMIN_TOKEN` 設定在 `.env` 中，此值即為上述 `X-Maintainer-Token` 的內容，僅限內部維運人員使用。
+請將 `PROCESSING_LOCK_ADMIN_TOKEN` 設定在 `.env` 中，此值即為上述 `X-Maintainer-Token` 的內容，僅限內部維運人員使用；Streamlit 維運介面會自動套用該設定，不需額外輸入。
 
 若想於 Docker 環境啟動，可先進入 `app` 服務：`docker compose exec app bash -lc "make api"`，API 會同樣綁定宿主機的 8080 連接埠。
 

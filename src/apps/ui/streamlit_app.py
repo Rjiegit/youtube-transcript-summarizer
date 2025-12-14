@@ -35,6 +35,13 @@ API_BASE_URL = os.environ.get("TASK_API_BASE_URL", "http://localhost:8080")
 NOTION_BASE_URL = os.environ.get("NOTION_URL")
 
 
+def _get_processing_lock_admin_token() -> str | None:
+    token = os.environ.get("PROCESSING_LOCK_ADMIN_TOKEN")
+    if token:
+        return token.strip()
+    return None
+
+
 def _require_streamlit() -> None:
     if st is None:  # pragma: no cover - guard when Streamlit is absent in tests
         raise RuntimeError("Streamlit must be installed to run the UI.")
@@ -67,12 +74,13 @@ def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
 
 
 def _call_processing_lock_status(
-    db_choice: str, maintainer_token: str | None
+    db_choice: str, maintainer_token: str | None = None
 ) -> tuple[int, Dict[str, Any]]:
     if requests is None:  # pragma: no cover - guard for missing dependency in tests
         raise RuntimeError("requests is required to call the API.")
     endpoint = f"{API_BASE_URL.rstrip('/')}/processing-lock"
-    headers = {"X-Maintainer-Token": maintainer_token} if maintainer_token else {}
+    token = maintainer_token or _get_processing_lock_admin_token()
+    headers = {"X-Maintainer-Token": token} if token else {}
     params = {"db_type": db_choice.lower()}
 
     response = requests.get(endpoint, headers=headers, params=params, timeout=10)
@@ -85,13 +93,14 @@ def _call_processing_lock_status(
 
 def _call_processing_lock_release(
     db_choice: str,
-    maintainer_token: str | None,
     payload: Dict[str, Any],
+    maintainer_token: str | None = None,
 ) -> tuple[int, Dict[str, Any]]:
     if requests is None:  # pragma: no cover - guard for missing dependency in tests
         raise RuntimeError("requests is required to call the API.")
     endpoint = f"{API_BASE_URL.rstrip('/')}/processing-lock"
-    headers = {"X-Maintainer-Token": maintainer_token} if maintainer_token else {}
+    token = maintainer_token or _get_processing_lock_admin_token()
+    headers = {"X-Maintainer-Token": token} if token else {}
     body_payload = {"db_type": db_choice.lower(), **payload}
     response = requests.delete(
         endpoint,
@@ -192,10 +201,11 @@ def _maybe_show_lock_snapshot() -> None:
     )
 
 
-def query_processing_lock(db_choice: str, maintainer_token: str) -> None:
+def query_processing_lock(db_choice: str) -> None:
     _require_streamlit()
+    maintainer_token = _get_processing_lock_admin_token()
     if not maintainer_token:
-        st.warning("請先輸入 X-Maintainer-Token 才能查詢 lock。")
+        st.warning("未設定 PROCESSING_LOCK_ADMIN_TOKEN，無法查詢 Processing Lock。")
         return
 
     try:
@@ -216,15 +226,15 @@ def query_processing_lock(db_choice: str, maintainer_token: str) -> None:
 
 def release_processing_lock(
     db_choice: str,
-    maintainer_token: str,
     expected_worker: str,
     reason: str,
     force: bool,
     force_threshold: int,
 ) -> None:
     _require_streamlit()
+    maintainer_token = _get_processing_lock_admin_token()
     if not maintainer_token:
-        st.warning("請先輸入 X-Maintainer-Token 才能釋放 lock。")
+        st.warning("未設定 PROCESSING_LOCK_ADMIN_TOKEN，無法釋放 Processing Lock。")
         return
 
     payload: Dict[str, Any] = {"reason": reason or None}
@@ -237,8 +247,8 @@ def release_processing_lock(
     try:
         status, body = _call_processing_lock_release(
             db_choice,
-            maintainer_token,
             payload,
+            maintainer_token,
         )
     except requests.RequestException as exc:
         st.error(f"釋放 lock 失敗：{exc}")
@@ -315,15 +325,12 @@ def main_view():
             trigger_processing_via_api(db_choice)
 
     with st.expander("Processing Lock 管理（維運專用）"):
-        lock_token = st.text_input(
-            "X-Maintainer-Token",
-            type="password",
-            key="lock_admin_token_input",
-        )
-        st.caption("透過維運端點查詢或釋放 Processing Lock。Token 來自 `.env` 的 PROCESSING_LOCK_ADMIN_TOKEN。")
+        st.caption("Processing Lock 維運請求會自動使用 `.env` 的 PROCESSING_LOCK_ADMIN_TOKEN。")
+        if not _get_processing_lock_admin_token():
+            st.warning("尚未設定 PROCESSING_LOCK_ADMIN_TOKEN，維運請求將不會送出。")
 
         if st.button("查詢 Processing Lock", key="lock_status_btn"):
-            query_processing_lock(db_choice, lock_token)
+            query_processing_lock(db_choice)
 
         _maybe_show_lock_snapshot()
 
@@ -352,7 +359,6 @@ def main_view():
         if st.button("釋放 Processing Lock", key="lock_release_btn"):
             release_processing_lock(
                 db_choice,
-                lock_token,
                 expected_worker,
                 reason,
                 force,
