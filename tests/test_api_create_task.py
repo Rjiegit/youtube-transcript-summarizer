@@ -329,6 +329,90 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")
+class TestRetryTaskEndpoint(unittest.TestCase):
+    """Tests for the POST /tasks/{task_id}/retry endpoint."""
+
+    def setUp(self) -> None:
+        self.client = TestClient(app)
+
+    def test_retry_task_success_for_failed(self) -> None:
+        source_task = Task(
+            id="10",
+            url="https://youtu.be/example",
+            status="Failed",
+            error_message="boom",
+        )
+        retry_task = Task(
+            id="11",
+            url=source_task.url,
+            status="Pending",
+            retry_of_task_id="10",
+            retry_reason="manual",
+        )
+        mock_db = MagicMock()
+        mock_db.get_task_by_id.return_value = source_task
+        mock_db.create_retry_task.return_value = retry_task
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            response = self.client.post(
+                "/tasks/10/retry",
+                json={"db_type": "sqlite", "retry_reason": "manual"},
+            )
+
+        self.assertEqual(response.status_code, 201)
+        payload = response.json()
+        self.assertEqual(payload["task_id"], "11")
+        self.assertEqual(payload["source_task_id"], "10")
+        self.assertEqual(payload["status"], "Pending")
+        self.assertEqual(payload["db_type"], "sqlite")
+        self.assertIn("Retry task created", payload["message"])
+        mock_db.get_task_by_id.assert_called_once_with("10")
+        mock_db.create_retry_task.assert_called_once_with(source_task, "manual")
+
+    def test_retry_task_rejects_non_failed(self) -> None:
+        source_task = Task(id="20", url="https://youtu.be/example", status="Completed")
+        mock_db = MagicMock()
+        mock_db.get_task_by_id.return_value = source_task
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            response = self.client.post("/tasks/20/retry", json={"db_type": "sqlite"})
+
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(
+            response.json()["detail"],
+            "Task status must be Failed to retry.",
+        )
+        mock_db.create_retry_task.assert_not_called()
+
+    def test_retry_task_not_found(self) -> None:
+        mock_db = MagicMock()
+        mock_db.get_task_by_id.return_value = None
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            response = self.client.post("/tasks/missing/retry", json={"db_type": "sqlite"})
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.json()["detail"], "Task not found.")
+        mock_db.create_retry_task.assert_not_called()
+
+    def test_retry_task_requires_notion_env(self) -> None:
+        with patch.dict(
+            os.environ,
+            {"NOTION_API_KEY": "", "NOTION_DATABASE_ID": ""},
+            clear=False,
+        ):
+            with patch("src.apps.api.main.DBFactory.get_db") as mock_get_db:
+                response = self.client.post(
+                    "/tasks/10/retry",
+                    json={"db_type": "notion"},
+                )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Missing Notion configuration", response.json()["detail"])
+        mock_get_db.assert_not_called()
+
+
+@unittest.skipIf(TestClient is None, "fastapi is not installed")
 class TestProcessingLockEndpoints(unittest.TestCase):
     """Tests for the GET/DELETE /processing-lock endpoints."""
 

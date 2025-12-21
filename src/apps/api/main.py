@@ -75,6 +75,39 @@ class TaskCreateResponse(BaseModel):
     )
 
 
+class TaskRetryRequest(BaseModel):
+    """Incoming payload for retrying a failed task."""
+
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    db_type: str = Field(
+        default="sqlite",
+        description="Database backend to persist the retry task (sqlite|notion).",
+    )
+    retry_reason: str | None = Field(
+        default=None,
+        description="Optional reason for retrying the task.",
+    )
+
+    @field_validator("db_type")
+    @classmethod
+    def normalize_db_type(cls, value: str) -> str:
+        normalized = (value or "").lower()
+        if normalized not in SUPPORTED_DB_TYPES:
+            raise ValueError("db_type must be either 'sqlite' or 'notion'.")
+        return normalized
+
+
+class TaskRetryResponse(BaseModel):
+    """Standard response after creating a retry task."""
+
+    task_id: str = Field(..., description="Identifier of the newly created retry task.")
+    source_task_id: str = Field(..., description="Identifier of the failed task being retried.")
+    status: str = Field(..., description="Current status of the retry task.")
+    db_type: str = Field(..., description="Database backend used to persist the retry task.")
+    message: str = Field(..., description="Human readable status message.")
+
+
 class ProcessingJobCreateRequest(BaseModel):
     """Incoming payload for triggering the processing worker."""
 
@@ -420,6 +453,52 @@ def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
         message=message,
         processing_started=scheduling_result.accepted,
         processing_worker_id=scheduling_result.worker_id,
+    )
+
+
+@app.post(
+    "/tasks/{task_id}/retry",
+    response_model=TaskRetryResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def retry_task(task_id: str, payload: TaskRetryRequest) -> TaskRetryResponse:
+    """Create a retry task from a failed task."""
+
+    _ensure_db_configuration(payload.db_type)
+    db = _get_database(payload.db_type)
+
+    source_task = db.get_task_by_id(task_id)
+    if not source_task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Task not found.",
+        )
+
+    if source_task.status != "Failed":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Task status must be Failed to retry.",
+        )
+
+    try:
+        new_task = db.create_retry_task(source_task, payload.retry_reason)
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc),
+        ) from exc
+    except Exception as exc:  # pragma: no cover - defensive guard
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create retry task.",
+        ) from exc
+
+    return TaskRetryResponse(
+        task_id=str(new_task.id),
+        source_task_id=str(source_task.id),
+        status=new_task.status,
+        db_type=payload.db_type,
+        message="Retry task created.",
     )
 
 

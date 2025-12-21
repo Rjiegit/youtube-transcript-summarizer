@@ -73,6 +73,21 @@ def _call_processing_api(payload: Dict[str, Any]) -> tuple[int, Dict[str, Any]]:
     return response.status_code, body
 
 
+def _call_retry_task_api(
+    task_id: str, payload: Dict[str, Any]
+) -> tuple[int, Dict[str, Any]]:
+    """Send POST to /tasks/{task_id}/retry and return status + payload."""
+    if requests is None:  # pragma: no cover - guard for missing dependency in tests
+        raise RuntimeError("requests is required to call the API.")
+    endpoint = f"{API_BASE_URL.rstrip('/')}/tasks/{task_id}/retry"
+    response = requests.post(endpoint, json=payload, timeout=10)
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body
+
+
 def _call_processing_lock_status(
     db_choice: str, maintainer_token: str | None = None
 ) -> tuple[int, Dict[str, Any]]:
@@ -179,6 +194,30 @@ def trigger_processing_via_api(db_choice: str):
     else:
         detail = body.get("detail") or body.get("message") or "未知錯誤"
         st.error(f"啟動背景處理失敗：{detail}")
+
+
+def retry_task_via_api(task_id: str, db_choice: str) -> None:
+    """Create a retry task for a failed item via the API."""
+    _require_streamlit()
+    payload = {"db_type": db_choice.lower()}
+
+    try:
+        with st.spinner("正在建立重試任務..."):
+            status, body = _call_retry_task_api(task_id, payload)
+    except requests.RequestException as exc:
+        st.error(f"無法連線至 API：{exc}")
+        return
+
+    if status == 201:
+        new_task_id = body.get("task_id")
+        message = body.get("message") or "已建立重試任務。"
+        note = f"{message}（task: {new_task_id}）" if new_task_id else message
+        st.toast(note, icon="✅")
+        return
+
+    detail = body.get("detail") or body.get("message") or "建立重試任務失敗"
+    icon = "ℹ️" if status == 409 else "❌"
+    st.toast(f"{detail} (status {status})", icon=icon)
 
 
 def _maybe_show_lock_snapshot() -> None:
@@ -434,6 +473,9 @@ def main_view():
                 # modifying the widget-backed session key "db_choice".
                 st.session_state.selected_db_choice = db_choice
                 st.rerun()
+            if task.status == "Failed":
+                if col7.button("Retry", key=f"retry_{task.id}"):
+                    retry_task_via_api(task.id, db_choice)
 
         # Pagination controls
         col1, col2, col3 = st.columns([1, 1, 1])
