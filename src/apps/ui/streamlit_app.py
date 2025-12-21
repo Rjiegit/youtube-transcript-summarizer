@@ -26,6 +26,9 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - allow logic tests without Streamlit
     st = None
 
+if st is not None:
+    st.set_page_config(layout="wide")
+
 load_dotenv()
 
 from src.core.utils.url import normalize_youtube_url, is_valid_youtube_url
@@ -362,6 +365,23 @@ def main_view():
     _require_streamlit()
     st.title("YouTube Transcript Summarizer")
 
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stButton"] > button[kind="primary"] {
+            background-color: #1f6feb;
+            border-color: #1f6feb;
+            color: #ffffff;
+        }
+        div[data-testid="stButton"] > button[kind="primary"]:hover {
+            background-color: #1158c7;
+            border-color: #1158c7;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     # Section for adding URLs to the queue
     st.header("Add YouTube URL to Queue")
     # Use a single database selection for the entire view
@@ -448,8 +468,11 @@ def main_view():
                 """
                 <style>
                 .stMultiSelect [data-baseweb="tag"] {
-                    background-color: #1b7f3a;
+                    background-color: #1f6feb;
                     color: #ffffff;
+                }
+                .stMultiSelect [data-baseweb="tag"]:hover {
+                    background-color: #1158c7;
                 }
                 </style>
                 """,
