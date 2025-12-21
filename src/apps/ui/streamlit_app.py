@@ -171,6 +171,28 @@ def sort_tasks_for_display(tasks: list[Any]) -> list[Any]:
     return sorted(tasks, key=_sort_key, reverse=True)
 
 
+def collect_task_status_options(tasks: list[Any]) -> list[str]:
+    """Collect status filter options from tasks while preserving first-seen order."""
+    seen: dict[str, None] = {}
+    for task in tasks:
+        status = getattr(task, "status", None)
+        if not status:
+            continue
+        if status not in seen:
+            seen[status] = None
+    return list(seen.keys())
+
+
+def filter_tasks_by_status(tasks: list[Any], selected_statuses: list[str] | None) -> list[Any]:
+    """Filter tasks by selected statuses; None means no filtering."""
+    if selected_statuses is None:
+        return tasks
+    if not selected_statuses:
+        return []
+    selected_set = set(selected_statuses)
+    return [task for task in tasks if getattr(task, "status", None) in selected_set]
+
+
 def trigger_processing_via_api(db_choice: str):
     """Trigger the FastAPI worker endpoint and surface result in the UI."""
     _require_streamlit()
@@ -414,6 +436,38 @@ def main_view():
     if not tasks:
         st.write("No tasks in the database.")
     else:
+        status_options = collect_task_status_options(tasks)
+        if status_options:
+            if "task_status_filter" in st.session_state:
+                st.session_state.task_status_filter = [
+                    status
+                    for status in st.session_state.task_status_filter
+                    if status in status_options
+                ]
+            st.markdown(
+                """
+                <style>
+                .stMultiSelect [data-baseweb="tag"] {
+                    background-color: #1b7f3a;
+                    color: #ffffff;
+                }
+                </style>
+                """,
+                unsafe_allow_html=True,
+            )
+            selected_statuses = st.multiselect(
+                "狀態篩選",
+                status_options,
+                default=status_options,
+                key="task_status_filter",
+            )
+        else:
+            selected_statuses = None
+        filtered_tasks = filter_tasks_by_status(tasks, selected_statuses)
+        if not filtered_tasks:
+            st.write("沒有符合狀態篩選的任務。")
+            return
+
         # Pagination
         if "page_size" not in st.session_state:
             st.session_state.page_size = 20
@@ -428,10 +482,12 @@ def main_view():
         )
         st.session_state.page_size = page_size
 
-        total_pages = math.ceil(len(tasks) / st.session_state.page_size)
+        total_pages = math.ceil(len(filtered_tasks) / st.session_state.page_size)
+        if st.session_state.current_page > total_pages:
+            st.session_state.current_page = total_pages
         start_idx = (st.session_state.current_page - 1) * st.session_state.page_size
         end_idx = start_idx + st.session_state.page_size
-        paginated_tasks = tasks[start_idx:end_idx]
+        paginated_tasks = filtered_tasks[start_idx:end_idx]
 
         # Display tasks in a table-like format
         header_cols = st.columns(7)
