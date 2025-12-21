@@ -368,6 +368,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         self.assertIn("Retry task created", payload["message"])
         mock_db.get_task_by_id.assert_called_once_with("10")
         mock_db.create_retry_task.assert_called_once_with(source_task, "manual")
+        mock_db.update_task_status.assert_called_once_with("10", "Failed Retry Created")
 
     def test_retry_task_rejects_non_failed(self) -> None:
         source_task = Task(id="20", url="https://youtu.be/example", status="Completed")
@@ -383,6 +384,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
             "Task status must be Failed to retry.",
         )
         mock_db.create_retry_task.assert_not_called()
+        mock_db.update_task_status.assert_not_called()
 
     def test_retry_task_not_found(self) -> None:
         mock_db = MagicMock()
@@ -394,6 +396,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.json()["detail"], "Task not found.")
         mock_db.create_retry_task.assert_not_called()
+        mock_db.update_task_status.assert_not_called()
 
     def test_retry_task_requires_notion_env(self) -> None:
         with patch.dict(

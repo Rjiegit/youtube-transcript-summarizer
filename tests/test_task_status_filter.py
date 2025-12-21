@@ -9,6 +9,7 @@ class TaskStatusFilterTests(unittest.TestCase):
         tasks = [
             SimpleNamespace(status="Pending"),
             SimpleNamespace(status="Failed"),
+            SimpleNamespace(status="Failed Retry Created"),
             SimpleNamespace(status="Pending"),
             SimpleNamespace(status=None),
             SimpleNamespace(status="Completed"),
@@ -16,7 +17,7 @@ class TaskStatusFilterTests(unittest.TestCase):
 
         self.assertEqual(
             collect_task_status_options(tasks),
-            ["Pending", "Failed", "Completed"],
+            ["Pending", "Failed", "Failed Retry Created", "Completed"],
         )
 
     def test_filter_tasks_by_status_handles_none_selection(self):
@@ -33,11 +34,18 @@ class TaskStatusFilterTests(unittest.TestCase):
         tasks = [
             SimpleNamespace(status="Pending"),
             SimpleNamespace(status="Failed"),
+            SimpleNamespace(status="Failed Retry Created"),
             SimpleNamespace(status="Completed"),
         ]
 
-        filtered = filter_tasks_by_status(tasks, ["Failed", "Completed"])
-        self.assertEqual([task.status for task in filtered], ["Failed", "Completed"])
+        filtered = filter_tasks_by_status(
+            tasks,
+            ["Failed", "Failed Retry Created", "Completed"],
+        )
+        self.assertEqual(
+            [task.status for task in filtered],
+            ["Failed", "Failed Retry Created", "Completed"],
+        )
 
 
 if __name__ == "__main__":

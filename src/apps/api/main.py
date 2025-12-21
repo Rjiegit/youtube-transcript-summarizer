@@ -22,6 +22,7 @@ from src.services.pipeline.processing_runner import (
 
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
 REQUIRED_NOTION_ENV_VARS: tuple[str, ...] = ("NOTION_API_KEY", "NOTION_DATABASE_ID")
+FAILED_RETRY_CREATED_STATUS = "Failed Retry Created"
 
 
 def _normalize_db_type(value: str) -> str:
@@ -482,6 +483,7 @@ def retry_task(task_id: str, payload: TaskRetryRequest) -> TaskRetryResponse:
 
     try:
         new_task = db.create_retry_task(source_task, payload.retry_reason)
+        db.update_task_status(source_task.id, FAILED_RETRY_CREATED_STATUS)
     except RuntimeError as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

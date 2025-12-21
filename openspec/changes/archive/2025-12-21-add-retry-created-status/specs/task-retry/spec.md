@@ -1,8 +1,4 @@
-# task-retry Specification
-
-## Purpose
-TBD - created by archiving change add-task-retry-button. Update Purpose after archive.
-## Requirements
+## MODIFIED Requirements
 ### Requirement: Retry Failed Task via API
 系統 MUST 提供建立 retry 任務的 API，且僅允許來源任務狀態為 Failed。
 
@@ -32,4 +28,3 @@ Streamlit 列表頁 MUST 只對 Failed 任務顯示 Retry 按鈕，點擊後建�
 - **WHEN** API 建立 retry 任務成功
 - **THEN** UI MUST 顯示成功提示
 - **AND** 原任務狀態 MUST 更新為 `Failed Retry Created`（重新整理後可見）
-
