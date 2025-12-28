@@ -8,5 +8,5 @@
 - [x] 1.7 Persist recent history across refreshes with a 30-day TTL
 
 ## 2. Validation
-- [ ] 2.1 Manually verify recent history updates after clicking View and survives browser refresh
-- [ ] 2.2 Confirm recent history ordering (most recent first) and no duplicate entries
+- [x] 2.1 Manually verify recent history updates after clicking View and survives browser refresh
+- [x] 2.2 Confirm recent history ordering (most recent first) and no duplicate entries
