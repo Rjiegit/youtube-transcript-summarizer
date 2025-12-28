@@ -5,6 +5,11 @@ from dotenv import load_dotenv
 import google.generativeai as genai
 from src.core import prompt
 from src.core.logger import logger
+from src.infrastructure.llm.model_options import (
+    GEMINI_MODEL,
+    OLLAMA_MODEL,
+    OPENAI_MODEL,
+)
 import time
 import random
 
@@ -19,12 +24,6 @@ except ImportError:
     TestSampleManager = None
 
 load_dotenv()
-
-
-# Centralized model constants
-OPENAI_MODEL = "gpt-4o-mini"
-GEMINI_MODEL = "gemini-2.5-flash"
-OLLAMA_MODEL = "llama3.2"
 
 
 class Summarizer:
