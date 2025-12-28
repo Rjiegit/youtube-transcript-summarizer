@@ -2,6 +2,8 @@
 import os
 import math
 import sys
+import json
+import uuid
 from datetime import timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict
@@ -36,6 +38,9 @@ from src.infrastructure.persistence.factory import DBFactory
 
 API_BASE_URL = os.environ.get("TASK_API_BASE_URL", "http://localhost:8080")
 NOTION_BASE_URL = os.environ.get("NOTION_URL")
+RECENT_TASK_HISTORY_KEY = "recent_task_history"
+RECENT_TASK_HISTORY_TTL_DAYS = 30
+RECENT_TASK_HISTORY_STORE_PATH = Path("data/ui_recent_history.json")
 
 
 def _get_processing_lock_admin_token() -> str | None:
@@ -161,6 +166,134 @@ def get_notion_display(task: Any, notion_base_url: str | None) -> Dict[str, str]
         return {"status": "invalid", "message": "Notion URL 格式錯誤"}
     placeholder = "Notion 未設定" if not notion_base_url else "尚未同步到 Notion"
     return {"status": "missing", "message": placeholder}
+
+
+def _prune_recent_history(history: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    cutoff = datetime.utcnow() - timedelta(days=RECENT_TASK_HISTORY_TTL_DAYS)
+    pruned: list[dict[str, Any]] = []
+    for entry in history:
+        viewed_at = entry.get("viewed_at")
+        if not viewed_at:
+            continue
+        try:
+            viewed_time = datetime.fromisoformat(viewed_at)
+        except (TypeError, ValueError):
+            continue
+        if viewed_time >= cutoff:
+            pruned.append(entry)
+    return pruned
+
+
+def _get_history_client_id() -> str:
+    _require_streamlit()
+    params = dict(st.query_params)
+    client_id_value = params.get("client_id")
+    if isinstance(client_id_value, list):
+        client_id = client_id_value[0] if client_id_value else ""
+    else:
+        client_id = client_id_value or ""
+    if client_id:
+        return client_id
+    new_id = str(uuid.uuid4())
+    st.query_params["client_id"] = new_id
+    return new_id
+
+
+def _load_recent_history_store() -> dict[str, list[dict[str, Any]]]:
+    if not RECENT_TASK_HISTORY_STORE_PATH.exists():
+        return {}
+    try:
+        raw = RECENT_TASK_HISTORY_STORE_PATH.read_text(encoding="utf-8")
+        parsed = json.loads(raw)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    if not isinstance(parsed, dict):
+        return {}
+    store: dict[str, list[dict[str, Any]]] = {}
+    for key, value in parsed.items():
+        if isinstance(value, list):
+            store[str(key)] = value
+    return store
+
+
+def _save_recent_history_store(store: dict[str, list[dict[str, Any]]]) -> None:
+    RECENT_TASK_HISTORY_STORE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    RECENT_TASK_HISTORY_STORE_PATH.write_text(
+        json.dumps(store, ensure_ascii=True, indent=2),
+        encoding="utf-8",
+    )
+
+
+def _load_persistent_history() -> list[dict[str, Any]]:
+    client_id = _get_history_client_id()
+    store = _load_recent_history_store()
+    return store.get(client_id, [])
+
+
+def _save_persistent_history(history: list[dict[str, Any]]) -> None:
+    client_id = _get_history_client_id()
+    store = _load_recent_history_store()
+    store[client_id] = history
+    _save_recent_history_store(store)
+
+
+def _get_recent_task_history() -> list[dict[str, Any]]:
+    _require_streamlit()
+    history = _load_persistent_history()
+    history = _prune_recent_history(history)
+    st.session_state[RECENT_TASK_HISTORY_KEY] = history
+    _save_persistent_history(history)
+    return history
+
+
+def _build_recent_task_entry(task: Any, notion_base_url: str | None) -> dict[str, Any]:
+    notion_display = get_notion_display(task, notion_base_url)
+    notion_url = notion_display["url"] if notion_display.get("status") == "link" else None
+    title = getattr(task, "title", None) or getattr(task, "url", "") or ""
+    return {
+        "id": str(getattr(task, "id", "")),
+        "title": title,
+        "url": getattr(task, "url", "") or "",
+        "notion_url": notion_url,
+        "viewed_at": datetime.utcnow().isoformat(),
+    }
+
+
+def _record_recent_task(task: Any, notion_base_url: str | None) -> None:
+    history = _get_recent_task_history()
+    entry = _build_recent_task_entry(task, notion_base_url)
+    task_id = entry.get("id")
+    history = [item for item in history if item.get("id") != task_id]
+    history.insert(0, entry)
+    st.session_state[RECENT_TASK_HISTORY_KEY] = history
+    _save_persistent_history(history)
+
+
+def _record_recent_task_entry(entry: dict[str, Any]) -> None:
+    history = _get_recent_task_history()
+    task_id = str(entry.get("id", ""))
+    refreshed = {
+        **entry,
+        "id": task_id,
+        "viewed_at": datetime.utcnow().isoformat(),
+    }
+    history = [item for item in history if str(item.get("id")) != task_id]
+    history.insert(0, refreshed)
+    st.session_state[RECENT_TASK_HISTORY_KEY] = history
+    _save_persistent_history(history)
+
+
+def _get_viewed_task_ids() -> set[str]:
+    history = _get_recent_task_history()
+    return {str(item.get("id")) for item in history if item.get("id")}
+
+
+def _open_notion_link(notion_url: str) -> None:
+    _require_streamlit()
+    st.components.v1.html(
+        f"<script>window.open({json.dumps(notion_url)}, '_blank')</script>",
+        height=0,
+    )
 
 
 def sort_tasks_for_display(tasks: list[Any]) -> list[Any]:
@@ -446,10 +579,12 @@ def main_view():
                 int(force_threshold),
             )
 
+    db = DBFactory.get_db(db_choice)
+
+    _get_recent_task_history()
+
     # Section for displaying tasks
     st.header("Tasks in Database")
-    # Reuse the same database selection for viewing tasks
-    db = DBFactory.get_db(db_choice)
 
     tasks = sort_tasks_for_display(db.get_all_tasks())
 
@@ -511,49 +646,55 @@ def main_view():
         start_idx = (st.session_state.current_page - 1) * st.session_state.page_size
         end_idx = start_idx + st.session_state.page_size
         paginated_tasks = filtered_tasks[start_idx:end_idx]
+        viewed_ids = _get_viewed_task_ids()
 
         # Display tasks in a table-like format
-        header_cols = st.columns(7)
+        header_cols = st.columns(8)
         header_cols[0].write("**URL**")
         header_cols[1].write("**Title**")
-        header_cols[2].write("**Status**")
-        header_cols[3].write("**Created At (Taipei)**")
-        header_cols[4].write("**Duration (s)**")
-        header_cols[5].write("**Notion**")
-        header_cols[6].write("**Action**")
+        header_cols[2].write("**Viewed**")
+        header_cols[3].write("**Status**")
+        header_cols[4].write("**Created At (Taipei)**")
+        header_cols[5].write("**Duration (s)**")
+        header_cols[6].write("**Notion**")
+        header_cols[7].write("**Action**")
 
         for task in paginated_tasks:
-            col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
+            col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
             col1.write(task.url)
             col2.write(task.title)
-            col3.write(task.status)
+            col3.write("已看過" if str(task.id) in viewed_ids else "-")
+            col4.write(task.status)
             if task.created_at:
                 taipei_time = task.created_at.astimezone(timezone(timedelta(hours=8)))
-                col4.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
+                col5.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
             else:
-                col4.write("-")
+                col5.write("-")
             # Display duration if available and task is completed
             if task.status == "Completed" and task.processing_duration is not None:
-                col5.write(f"{task.processing_duration:.2f}")
+                col6.write(f"{task.processing_duration:.2f}")
             else:
-                col5.write("-")  # Or some other placeholder
+                col6.write("-")  # Or some other placeholder
 
             notion_display = get_notion_display(task, NOTION_BASE_URL)
             if notion_display["status"] == "link":
-                col6.write(f"[Notion]({notion_display['url']})")
+                if col7.button("Notion", key=f"notion_{task.id}"):
+                    _record_recent_task(task, NOTION_BASE_URL)
+                    _open_notion_link(notion_display["url"])
             elif notion_display["status"] == "invalid":
-                col6.write(f"⚠️ {notion_display['message']}")
+                col7.write(f"⚠️ {notion_display['message']}")
             else:
-                col6.write(notion_display["message"])
+                col7.write(notion_display["message"])
 
-            if col7.button("View", key=f"view_{task.id}"):
+            if col8.button("View", key=f"view_{task.id}"):
+                _record_recent_task(task, NOTION_BASE_URL)
                 st.session_state.selected_task_id = task.id
                 # Store selection under a different key to avoid
                 # modifying the widget-backed session key "db_choice".
                 st.session_state.selected_db_choice = db_choice
                 st.rerun()
             if task.status == "Failed":
-                if col7.button("Retry", key=f"retry_{task.id}"):
+                if col8.button("Retry", key=f"retry_{task.id}"):
                     retry_task_via_api(task.id, db_choice)
 
         # Pagination controls
@@ -579,6 +720,7 @@ def detail_view(task_id, db_choice):
     task = db.get_task_by_id(task_id)
 
     if task:
+        _record_recent_task(task, NOTION_BASE_URL)
         st.write(f"**URL:** {task.url}")
         st.write(f"**Title:** {task.title}")
         st.write(f"**Status:** {task.status}")
@@ -586,7 +728,10 @@ def detail_view(task_id, db_choice):
             st.write(f"**Processing Duration:** {task.processing_duration:.2f} seconds")
         notion_display = get_notion_display(task, NOTION_BASE_URL)
         if notion_display["status"] == "link":
-            st.write(f"**Notion:** [Open Link]({notion_display['url']})")
+            st.write("**Notion:**")
+            if st.button("Open Notion", key=f"detail_notion_{task.id}"):
+                _record_recent_task(task, NOTION_BASE_URL)
+                _open_notion_link(notion_display["url"])
         elif notion_display["status"] == "invalid":
             st.write(f"**Notion:** {notion_display['message']}")
         else:
