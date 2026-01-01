@@ -72,6 +72,7 @@ def retry_task_via_api(task_id: str, db_choice: str) -> None:
         message = body.get("message") or "已建立重試任務。"
         note = f"{message}（task: {new_task_id}）" if new_task_id else message
         st.toast(note, icon="✅")
+        trigger_processing_via_api(db_choice)
         return
 
     detail = body.get("detail") or body.get("message") or "建立重試任務失敗"
