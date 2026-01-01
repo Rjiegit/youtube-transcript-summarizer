@@ -11,13 +11,3 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-
-  scheduler:
-    build:
-      context: ./.docker
-    volumes:
-      - ./:/usr/src/app
-    tty: true
-    restart: unless-stopped
-    env_file:
-      - .env
