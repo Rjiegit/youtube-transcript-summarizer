@@ -46,6 +46,14 @@ class SQLiteDB(BaseDB):
         )
         cursor.execute(
             """
+            CREATE TABLE IF NOT EXISTS recent_task_history (
+                task_id TEXT PRIMARY KEY,
+                viewed_at TIMESTAMP NOT NULL
+            )
+            """
+        )
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS processing_lock (
                 id INTEGER PRIMARY KEY CHECK (id = 1),
                 worker_id TEXT,
@@ -70,6 +78,60 @@ class SQLiteDB(BaseDB):
 
         conn.commit()
         conn.close()
+
+    def record_recent_task_view(
+        self,
+        task_id: str,
+        viewed_at: Optional[datetime] = None,
+    ) -> None:
+        """Record a recent task view, keeping only the latest view per task."""
+        if not task_id:
+            return
+
+        viewed_time = viewed_at or datetime.utcnow()
+        viewed_at_str = viewed_time.isoformat()
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            INSERT INTO recent_task_history (task_id, viewed_at)
+            VALUES (?, ?)
+            ON CONFLICT(task_id) DO UPDATE SET viewed_at = excluded.viewed_at
+            """,
+            (str(task_id), viewed_at_str),
+        )
+        conn.commit()
+        conn.close()
+
+    def prune_recent_task_history(self, cutoff: datetime) -> None:
+        """Remove recent history entries older than the cutoff."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "DELETE FROM recent_task_history WHERE viewed_at < ?",
+            (cutoff.isoformat(),),
+        )
+        conn.commit()
+        conn.close()
+
+    def list_recent_task_history(self) -> list[dict[str, str]]:
+        """Return recent history entries ordered by newest first."""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT task_id, viewed_at
+            FROM recent_task_history
+            ORDER BY viewed_at DESC
+            """
+        )
+        rows = cursor.fetchall()
+        conn.close()
+        return [
+            {"id": str(task_id), "viewed_at": viewed_at}
+            for task_id, viewed_at in rows
+        ]
 
     def add_task(self, url: str, status: str = "Pending") -> Task:
         """Adds a new task to the database and returns the stored record."""

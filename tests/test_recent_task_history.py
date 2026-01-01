@@ -1,17 +1,17 @@
+import os
+import tempfile
 import unittest
-from types import SimpleNamespace
-
 from datetime import datetime, timedelta
+from types import SimpleNamespace
+from unittest import mock
 
-from src.apps.ui.streamlit_app import (
-    _build_recent_task_entry,
-    _prune_recent_history,
-    RECENT_TASK_HISTORY_TTL_DAYS,
-)
+from src.apps.ui.streamlit_app import _build_recent_task_entry, _prune_recent_history
+from src.apps.ui.ui_config import RECENT_TASK_HISTORY_TTL_DAYS
+from src.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
 class RecentTaskHistoryTests(unittest.TestCase):
-    def test_build_recent_entry_prefers_title_and_notion_url(self):
+    def test_build_recent_entry_includes_id_and_viewed_at(self):
         task = SimpleNamespace(
             id="123",
             title="My Task",
@@ -23,39 +23,28 @@ class RecentTaskHistoryTests(unittest.TestCase):
         entry = _build_recent_task_entry(task, "https://notion.so")
 
         self.assertEqual(entry["id"], "123")
-        self.assertEqual(entry["title"], "My Task")
-        self.assertEqual(entry["url"], "http://example.com")
-        self.assertEqual(entry["notion_url"], "https://notion.so/abc")
         self.assertIsInstance(entry["viewed_at"], str)
-
-    def test_build_recent_entry_uses_base_url_and_page_id(self):
-        task = SimpleNamespace(
-            id=5,
-            title=None,
-            url="http://example.com",
-            notion_url=None,
-            notion_page_id="abcd-1234",
-        )
-
-        entry = _build_recent_task_entry(task, "https://notion.so")
-
-        self.assertEqual(entry["id"], "5")
-        self.assertEqual(entry["title"], "http://example.com")
-        self.assertEqual(entry["notion_url"], "https://notion.so/abcd1234")
+        self.assertEqual(set(entry.keys()), {"id", "viewed_at"})
 
     def test_prune_recent_history_keeps_recent_entries(self):
-        now = datetime.utcnow()
-        recent = (now - timedelta(days=1)).isoformat()
-        stale = (now - timedelta(days=RECENT_TASK_HISTORY_TTL_DAYS + 1)).isoformat()
-        history = [
-            {"id": "1", "viewed_at": recent},
-            {"id": "2", "viewed_at": stale},
-            {"id": "3", "viewed_at": recent},
-        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            db_path = os.path.join(temp_dir, "test_tasks.db")
+            db = SQLiteDB(db_path=db_path)
+            now = datetime.utcnow()
+            db.record_recent_task_view(
+                "recent",
+                now - timedelta(days=1),
+            )
+            db.record_recent_task_view(
+                "stale",
+                now - timedelta(days=RECENT_TASK_HISTORY_TTL_DAYS + 1),
+            )
 
-        pruned = _prune_recent_history(history)
+            with mock.patch("src.apps.ui.ui_history._get_history_db", return_value=db):
+                _prune_recent_history()
 
-        self.assertEqual([item["id"] for item in pruned], ["1", "3"])
+            history = db.list_recent_task_history()
+            self.assertEqual([item["id"] for item in history], ["recent"])
 
 
 if __name__ == "__main__":

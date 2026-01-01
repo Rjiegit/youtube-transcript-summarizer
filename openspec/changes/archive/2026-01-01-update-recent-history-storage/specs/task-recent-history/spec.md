@@ -1,8 +1,4 @@
-# task-recent-history Specification
-
-## Purpose
-TBD - created by archiving change add-task-recent-history. Update Purpose after archive.
-## Requirements
+## MODIFIED Requirements
 ### Requirement: UI Task Recent History
 系統 SHALL 在 Streamlit UI 記錄使用者近期開啟過的任務，並以最近開啟者優先排序且去重複。紀錄 SHALL 僅保存 `task_id` 與 `viewed_at`，並持久化於 SQLite 資料庫。
 
@@ -14,13 +10,6 @@ TBD - created by archiving change add-task-recent-history. Update Purpose after 
 - **WHEN** 使用者點選任務的 Notion 連結（包含另開新視窗）
 - **THEN** 該任務會被記錄為最近開啟並更新為最新順序
 
-### Requirement: UI Task Viewed Marker
-系統 SHALL 在任務列表中標示本次 session 內已開啟過的任務，讓使用者辨識已閱讀項目。
-
-#### Scenario: Viewed task shows a marker in list
-- **WHEN** 使用者已開啟過某任務詳情頁
-- **THEN** 任務列表中該任務顯示「已看過」的標示
-
 ### Requirement: UI Task Recent History Retention
 系統 SHALL 保留最近開啟任務記錄最多 30 天，並在超過期限時清理。記錄 SHALL 由 SQLite 來源提供並可在重新整理後取回。
 
@@ -31,4 +20,3 @@ TBD - created by archiving change add-task-recent-history. Update Purpose after 
 #### Scenario: Re-open task moves it to the top without duplication
 - **WHEN** 使用者再次開啟已存在於近期記錄的任務
 - **THEN** 記錄僅保留一筆該任務並移至最前面
-
