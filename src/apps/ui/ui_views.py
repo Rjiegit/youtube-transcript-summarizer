@@ -292,6 +292,11 @@ def main_view() -> None:
     else:
         status_options = collect_task_status_options(tasks)
         if status_options:
+            default_statuses = [
+                status
+                for status in ["Pending", "Processing", "Completed", "Failed"]
+                if status in status_options
+            ]
             if "task_status_filter" in st.session_state:
                 st.session_state.task_status_filter = [
                     status
@@ -315,7 +320,7 @@ def main_view() -> None:
             selected_statuses = st.multiselect(
                 "狀態篩選",
                 status_options,
-                default=status_options,
+                default=default_statuses,
                 key="task_status_filter",
             )
         else:

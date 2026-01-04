@@ -5,19 +5,12 @@ from src.apps.ui.streamlit_app import collect_task_status_options, filter_tasks_
 
 
 class TaskStatusFilterTests(unittest.TestCase):
-    def test_collect_task_status_options_preserves_order(self):
-        tasks = [
-            SimpleNamespace(status="Pending"),
-            SimpleNamespace(status="Failed"),
-            SimpleNamespace(status="Failed Retry Created"),
-            SimpleNamespace(status="Pending"),
-            SimpleNamespace(status=None),
-            SimpleNamespace(status="Completed"),
-        ]
+    def test_collect_task_status_options_returns_fixed_list(self):
+        tasks = [SimpleNamespace(status="Archived")]
 
         self.assertEqual(
             collect_task_status_options(tasks),
-            ["Pending", "Failed", "Failed Retry Created", "Completed"],
+            ["Pending", "Processing", "Completed", "Failed", "Failed Retry Created"],
         )
 
     def test_filter_tasks_by_status_handles_none_selection(self):

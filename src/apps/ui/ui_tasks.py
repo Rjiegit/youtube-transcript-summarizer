@@ -16,16 +16,18 @@ def sort_tasks_for_display(tasks: list[Any]) -> list[Any]:
     return sorted(tasks, key=_sort_key, reverse=True)
 
 
+ALLOWED_STATUS_OPTIONS = [
+    "Pending",
+    "Processing",
+    "Completed",
+    "Failed",
+    "Failed Retry Created",
+]
+
+
 def collect_task_status_options(tasks: list[Any]) -> list[str]:
-    """Collect status filter options from tasks while preserving first-seen order."""
-    seen: dict[str, None] = {}
-    for task in tasks:
-        status = getattr(task, "status", None)
-        if not status:
-            continue
-        if status not in seen:
-            seen[status] = None
-    return list(seen.keys())
+    """Return fixed status filter options."""
+    return list(ALLOWED_STATUS_OPTIONS)
 
 
 def filter_tasks_by_status(tasks: list[Any], selected_statuses: list[str] | None) -> list[Any]:
