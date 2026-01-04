@@ -344,7 +344,7 @@ def main_view() -> None:
         start_idx = (st.session_state.current_page - 1) * st.session_state.page_size
         end_idx = start_idx + st.session_state.page_size
         paginated_tasks = filtered_tasks[start_idx:end_idx]
-        viewed_ids = get_viewed_task_ids()
+        viewed_ids = set(get_viewed_task_ids())
 
         header_cols = st.columns(8)
         header_cols[0].write("**URL**")
@@ -360,7 +360,10 @@ def main_view() -> None:
             col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
             col1.write(task.url)
             col2.write(task.title)
-            col3.write("已看過" if str(task.id) in viewed_ids else "-")
+            viewed_placeholder = col3.empty()
+            task_id_str = str(task.id)
+            viewed_label = "已看過" if task_id_str in viewed_ids else "-"
+            viewed_placeholder.write(viewed_label)
             col4.write(task.status)
             if task.created_at:
                 taipei_time = task.created_at.astimezone(timezone(timedelta(hours=8)))
@@ -377,6 +380,9 @@ def main_view() -> None:
                 if col7.button("Notion", key=f"notion_{task.id}"):
                     record_recent_task(task, NOTION_BASE_URL)
                     open_notion_link(notion_display["url"])
+                    if task_id_str not in viewed_ids:
+                        viewed_ids.add(task_id_str)
+                        viewed_placeholder.write("已看過")
             elif notion_display["status"] == "invalid":
                 col7.write(f"⚠️ {notion_display['message']}")
             else:
