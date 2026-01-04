@@ -25,8 +25,9 @@ WORKDIR /usr/src/app
 COPY ../requirements.txt /usr/src/app/requirements.txt
 
 # 安裝 Python 套件（不執行應用程式）
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip \
+    pip install --upgrade pip && \
+    pip install --retries 5 --timeout 120 -r requirements.txt
 
 # 設置預設指令
 # CMD ["python", "main.py"]
