@@ -1,14 +1,10 @@
 import os
-from faster_whisper import WhisperModel
 from src.core.logger import logger
 import time
 from typing import Optional
 
-# Optional dependency for legacy whisper path.
-try:
-    import whisper
-except ImportError:
-    whisper = None
+import whisper
+from faster_whisper import WhisperModel
 
 # 導入測試樣本管理器
 try:
@@ -37,8 +33,6 @@ class Transcriber:
 
     def transcribe_with_whisper(self, file_path):
         logger.info(f"Transcribing audio with Whisper...")
-        if whisper is None:
-            raise RuntimeError("whisper dependency missing. Install openai-whisper to use this path.")
         whisper_model = whisper.load_model(self.model_size)
         result = whisper_model.transcribe(file_path, verbose=True, fp16=False)
         return result["text"]
