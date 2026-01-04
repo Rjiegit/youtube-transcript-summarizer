@@ -42,13 +42,56 @@ class Transcriber:
             self.model_size,
             compute_type="int8",
         )
-        segments, _ = whisper_model.transcribe(file_path)
+        segments, info = whisper_model.transcribe(file_path)
+
+        total_duration = self._get_total_duration_seconds(info)
+        next_progress = 10
+        last_segment_end = 0.0
 
         transcript_text = ""
         for segment in segments:
             # print(f"[{segment.start:.2f}s -> {segment.end:.2f}s] {segment.text}")
             transcript_text += segment.text
+
+            if total_duration:
+                updates, next_progress = self._get_progress_updates(
+                    segment.end, total_duration, next_progress
+                )
+                for progress in updates:
+                    logger.info(f"[進度] 轉錄 {progress}%")
+            last_segment_end = segment.end
+
+        if total_duration and last_segment_end >= total_duration:
+            logger.info("[進度] 轉錄 100%")
+
         return transcript_text
+
+    def _get_total_duration_seconds(self, info: Optional[object]) -> Optional[float]:
+        if not info:
+            return None
+
+        duration = getattr(info, "duration", None)
+        if isinstance(duration, (int, float)) and duration > 0:
+            return float(duration)
+
+        duration_ms = getattr(info, "duration_ms", None)
+        if isinstance(duration_ms, (int, float)) and duration_ms > 0:
+            return float(duration_ms) / 1000.0
+
+        return None
+
+    def _get_progress_updates(
+        self, segment_end: float, total_duration: float, next_progress: int
+    ) -> tuple[list[int], int]:
+        if total_duration <= 0:
+            return [], next_progress
+
+        progress = int((segment_end / total_duration) * 100)
+        updates = []
+        while progress >= next_progress and next_progress <= 100:
+            updates.append(next_progress)
+            next_progress += 10
+        return updates, next_progress
 
     def _is_test_mode(self, file_path: str = None) -> bool:
         """檢測是否為測試模式"""
