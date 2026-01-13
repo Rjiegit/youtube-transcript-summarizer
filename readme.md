@@ -64,6 +64,8 @@ OPENAI_API_KEY=your_openai_api_key
 # Google Gemini API (可選)
 GOOGLE_GEMINI_API_KEY=your_gemini_api_key
 
+> 註：Gemini 摘要模型目前採「加權隨機」挑選以降低單一模型遇到 rate limit 的機率；可在 `src/infrastructure/llm/model_options.py` 調整 `GEMINI_WEIGHTED_MODELS`（model/weight）。
+
 # Notion 儲存與通知（可選）
 NOTION_API_KEY=your_notion_api_key
 NOTION_DATABASE_ID=your_notion_database_id

@@ -7,11 +7,14 @@ from src.core import prompt
 from src.core.logger import logger
 from src.infrastructure.llm.model_options import (
     GEMINI_MODEL,
+    GEMINI_WEIGHTED_MODELS,
     OLLAMA_MODEL,
     OPENAI_MODEL,
 )
 import time
 import random
+
+from src.infrastructure.llm.gemini_model_selection import choose_weighted_model
 
 try:
     import streamlit as st
@@ -38,13 +41,16 @@ class Summarizer:
         # Decide backend based on environment and test mode
         backend = self._determine_backend(text)
         self.last_backend = backend
-        self.last_model_label = self._get_model_label(backend)
 
         if backend == "mock":
+            self.last_model_label = self._get_model_label(backend)
             return self._mock_summarize(title, text)
         if backend == "gemini":
-            return self.summarize_with_google_gemini(title, text)
+            selected_model = self._choose_gemini_model()
+            self.last_model_label = selected_model
+            return self.summarize_with_google_gemini(title, text, model=selected_model)
         if backend == "openai":
+            self.last_model_label = self._get_model_label(backend)
             return self.summarize_with_openai(title, text)
         # Could add ollama auto-detect here in the future
         raise ValueError("No available summarization backend (set API keys or enable test mode)")
@@ -68,6 +74,15 @@ class Summarizer:
         if backend == "ollama":
             return OLLAMA_MODEL
         return "unknown"
+
+    def _choose_gemini_model(self) -> str:
+        selected_model = GEMINI_MODEL
+        if GEMINI_WEIGHTED_MODELS:
+            try:
+                selected_model = choose_weighted_model(GEMINI_WEIGHTED_MODELS, rng=random)
+            except ValueError:
+                selected_model = GEMINI_MODEL
+        return selected_model
 
     def _is_test_mode(self, text):
         """檢測是否為測試模式"""
@@ -135,14 +150,16 @@ class Summarizer:
         )
         return resp.choices[0].message.content.strip()
 
-    def summarize_with_google_gemini(self, title, text):
+    def summarize_with_google_gemini(self, title, text, model: str | None = None):
         if not self.google_gemini_api_key:
             raise ValueError("API key is not set. Please add it to the .env file.")
 
         genai.configure(api_key=self.google_gemini_api_key)
 
-        model = genai.GenerativeModel(GEMINI_MODEL)
-        response = model.generate_content(self.get_prompt(title=title, text=text))
+        selected_model = model or self._choose_gemini_model()
+        self.last_model_label = selected_model
+        gemini = genai.GenerativeModel(selected_model)
+        response = gemini.generate_content(self.get_prompt(title=title, text=text))
 
         return response.text
 
