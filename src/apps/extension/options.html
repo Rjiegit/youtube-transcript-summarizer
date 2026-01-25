@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Whisper Summary Extension Settings</title>
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main class="panel">
+      <h1>Whisper Summary Extension</h1>
+      <p class="subtitle">Configure the API base URL used to queue new tasks.</p>
+
+      <label class="field" for="apiBaseUrl">
+        <span>API Base URL</span>
+        <input id="apiBaseUrl" type="url" placeholder="http://localhost:8080" />
+      </label>
+
+      <div class="actions">
+        <button id="saveButton" type="button">Save</button>
+        <span id="status" class="status" role="status" aria-live="polite"></span>
+      </div>
+    </main>
+    <script src="options.js"></script>
+  </body>
+</html>

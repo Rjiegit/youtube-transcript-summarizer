@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Whisper Summary",
+  "version": "0.1.0",
+  "description": "Send YouTube video URLs to the Whisper summary API.",
+  "action": {
+    "default_title": "送出摘要任務"
+  },
+  "background": {
+    "service_worker": "service_worker.js"
+  },
+  "options_page": "options.html",
+  "permissions": [
+    "storage",
+    "contextMenus",
+    "activeTab",
+    "tabs",
+    "notifications"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  }
+}

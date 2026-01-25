@@ -205,6 +205,29 @@ curl -X POST http://localhost:8080/tasks \
 }
 ```
 
+## 瀏覽器外掛（Chrome/Edge）
+
+可使用瀏覽器外掛直接在 YouTube 影片頁或列表連結送出摘要任務，免手動複製網址。
+
+### 安裝（開發模式）
+
+1. 開啟 Chrome/Edge 擴充功能管理頁
+   - Chrome: `chrome://extensions/`
+   - Edge: `edge://extensions/`
+2. 啟用「開發人員模式」
+3. 點擊「載入未封裝項目」並選擇資料夾：`src/apps/extension/`
+
+### 設定
+
+1. 在擴充功能列表中點擊「詳細資料」→「擴充功能選項」
+2. 設定 API Base URL（預設 `http://localhost:8080`）
+
+### 使用方式
+
+- 在 YouTube 影片頁點擊工具列的外掛按鈕，即可送出任務
+- 在 YouTube 列表中的影片連結上按右鍵，選擇「Send YouTube link to Whisper Summary」
+- 成功/失敗會顯示通知訊息
+
 > 注意：若要寫入 Notion，必須在 `.env` 中設定 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`，缺漏時 API 會回傳 400 錯誤。若希望 Discord 通知附上 Notion 頁面連結，請額外設定 `NOTION_URL`（例如 `https://www.notion.so/your-workspace`）。
 
 3. 觸發背景處理流程：
