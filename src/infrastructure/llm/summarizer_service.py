@@ -82,6 +82,7 @@ class Summarizer:
                 selected_model = choose_weighted_model(GEMINI_WEIGHTED_MODELS, rng=random)
             except ValueError:
                 selected_model = GEMINI_MODEL
+        logger.info(f"[Gemini] Selected model: {selected_model}")
         return selected_model
 
     def _is_test_mode(self, text):

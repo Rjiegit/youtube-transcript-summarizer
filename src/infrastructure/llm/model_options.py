@@ -24,7 +24,7 @@ OLLAMA_MODEL = OllamaModel.LLAMA_3_2.value
 
 # Weighted Gemini model selection (code-defined).
 GEMINI_WEIGHTED_MODELS: list[WeightedModel] = [
-    WeightedModel(model=GeminiModel.GEMINI_2_5_FLASH.value, weight=5),
-    WeightedModel(model=GeminiModel.GEMINI_3_FLASH_PREVIEW.value, weight=5),
-    WeightedModel(model=GeminiModel.GEMINI_2_5_FLASH_LITE.value, weight=10),
+    WeightedModel(model=GeminiModel.GEMINI_3_FLASH_PREVIEW.value, weight=10),
+    WeightedModel(model=GeminiModel.GEMINI_2_5_FLASH.value, weight=40),
+    WeightedModel(model=GeminiModel.GEMINI_2_5_FLASH_LITE.value, weight=50),
 ]
