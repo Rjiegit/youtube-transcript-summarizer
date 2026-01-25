@@ -24,6 +24,8 @@ class YouTubeDownloader:
         # Prefer deterministic filename by video id and read back via --print
         video_id = extract_video_id(self.url)
         template = os.path.join(output_dir, "%(id)s.%(ext)s")
+        path_prefix = "__YT_DLP_PATH__="
+        title_prefix = "__YT_DLP_TITLE__="
 
         def _truncate(text: Optional[str], limit: int = 800) -> str:
             if not text:
@@ -33,6 +35,29 @@ class YouTubeDownloader:
                 return normalized
             return normalized[:limit] + "...(truncated)"
 
+        def _parse_print_lines(lines: list[str]) -> tuple[Optional[str], Optional[str]]:
+            found_path = None
+            found_title = None
+            for line in lines:
+                if line.startswith(path_prefix):
+                    found_path = line[len(path_prefix):].strip()
+                elif line.startswith(title_prefix):
+                    found_title = line[len(title_prefix):].strip()
+            if found_path is not None or found_title is not None:
+                return found_path, found_title
+            fallback_path = lines[0] if len(lines) >= 1 else None
+            fallback_title = lines[1] if len(lines) >= 2 else None
+            return fallback_path, fallback_title
+
+        def _looks_like_filepath(value: str, expected_path: Optional[str]) -> bool:
+            if not value:
+                return False
+            if expected_path and os.path.normpath(value) == os.path.normpath(expected_path):
+                return True
+            if os.path.isabs(value) and os.path.splitext(value)[1]:
+                return True
+            return os.path.isfile(value)
+
         cmd = [
             "yt-dlp",
             "--no-overwrites",
@@ -41,9 +66,9 @@ class YouTubeDownloader:
             "-o",
             template,
             "--print",
-            "after_move:filepath",
+            f"after_move:{path_prefix}%(filepath)s",
             "--print",
-            "title",
+            f"{title_prefix}%(title)s",
             self.url,
         ]
         logger.info(
@@ -60,13 +85,16 @@ class YouTubeDownloader:
                 logger.warning(f"yt-dlp stderr: {_truncate(proc.stderr.strip())}")
 
             lines = [l.strip() for l in proc.stdout.splitlines() if l.strip()]
-            if len(lines) >= 1:
-                path = lines[0]
+            path, title = _parse_print_lines(lines)
+            if path:
                 logger.info(f"yt-dlp returned path={path}")
-            if len(lines) >= 2:
-                title = lines[1]
+            if title:
                 logger.info(f"yt-dlp returned title={title}")
-            if len(lines) > 2:
+            if any(
+                line
+                for line in lines
+                if not line.startswith(path_prefix) and not line.startswith(title_prefix)
+            ):
                 logger.warning(
                     f"yt-dlp returned unexpected extra stdout lines: count={len(lines)} preview={_truncate(proc.stdout)}"
                 )
@@ -78,11 +106,12 @@ class YouTubeDownloader:
                 f"stderr={_truncate(e.stderr)}"
             )
             lines = [l.strip() for l in (e.stdout or "").splitlines() if l.strip()]
-            if len(lines) >= 1 and not path:
-                path = lines[0]
+            parsed_path, parsed_title = _parse_print_lines(lines)
+            if parsed_path and not path:
+                path = parsed_path
                 logger.info(f"yt-dlp (error) still returned path={path}")
-            if len(lines) >= 2 and not title:
-                title = lines[1]
+            if parsed_title and not title:
+                title = parsed_title
                 logger.info(f"yt-dlp (error) still returned title={title}")
         except Exception as e:
             logger.warning(f"yt-dlp --print parsing failed, will fallback. err={e}")
@@ -98,6 +127,12 @@ class YouTubeDownloader:
         if not path or not os.path.isfile(path):
             # As a last resort, error out clearly
             raise Exception("yt-dlp did not produce an output file for this URL")
+
+        if title and _looks_like_filepath(title, path):
+            logger.warning(
+                f"yt-dlp title looked like a filepath, ignoring it. title={title}"
+            )
+            title = None
 
         if not title:
             # Fallback: query the title independently (may require network access).
