@@ -238,7 +238,11 @@ class ProcessingWorker:
             downloader = self.downloader_factory(task.url, self.config.data_dir)
             download_result = downloader.download()
             file_path = download_result["path"]
+            previous_title = task.title
             task.title = download_result.get("title") or task.title or task.url
+            logger.info(
+                f"Resolved task title={task.title} (download_title={download_result.get('title')}, previous_title={previous_title})"
+            )
 
             # Persist the resolved title while keeping status in Processing.
             self.db.update_task_status(task.id, "Processing", title=task.title)

@@ -1,7 +1,7 @@
 import glob
 import os
 import subprocess
-from typing import Any, Dict
+from typing import Optional
 
 from src.core.logger import logger
 from src.core.utils.url import extract_video_id
@@ -25,6 +25,14 @@ class YouTubeDownloader:
         video_id = extract_video_id(self.url)
         template = os.path.join(output_dir, "%(id)s.%(ext)s")
 
+        def _truncate(text: Optional[str], limit: int = 800) -> str:
+            if not text:
+                return ""
+            normalized = str(text).replace("\r", "")
+            if len(normalized) <= limit:
+                return normalized
+            return normalized[:limit] + "...(truncated)"
+
         cmd = [
             "yt-dlp",
             "--no-overwrites",
@@ -43,15 +51,39 @@ class YouTubeDownloader:
         )
 
         path = None
-        title = None
+        title: Optional[str] = None
         try:
             proc = subprocess.run(
                 cmd, check=True, capture_output=True, text=True
             )
+            if (proc.stderr or "").strip():
+                logger.warning(f"yt-dlp stderr: {_truncate(proc.stderr.strip())}")
+
             lines = [l.strip() for l in proc.stdout.splitlines() if l.strip()]
             if len(lines) >= 1:
                 path = lines[0]
                 logger.info(f"yt-dlp returned path={path}")
+            if len(lines) >= 2:
+                title = lines[1]
+                logger.info(f"yt-dlp returned title={title}")
+            if len(lines) > 2:
+                logger.warning(
+                    f"yt-dlp returned unexpected extra stdout lines: count={len(lines)} preview={_truncate(proc.stdout)}"
+                )
+        except subprocess.CalledProcessError as e:
+            logger.error(
+                "yt-dlp failed. "
+                f"returncode={e.returncode} "
+                f"stdout={_truncate(e.stdout)} "
+                f"stderr={_truncate(e.stderr)}"
+            )
+            lines = [l.strip() for l in (e.stdout or "").splitlines() if l.strip()]
+            if len(lines) >= 1 and not path:
+                path = lines[0]
+                logger.info(f"yt-dlp (error) still returned path={path}")
+            if len(lines) >= 2 and not title:
+                title = lines[1]
+                logger.info(f"yt-dlp (error) still returned title={title}")
         except Exception as e:
             logger.warning(f"yt-dlp --print parsing failed, will fallback. err={e}")
 
@@ -67,17 +99,30 @@ class YouTubeDownloader:
             # As a last resort, error out clearly
             raise Exception("yt-dlp did not produce an output file for this URL")
 
-        # Always query the title independently to avoid mixing with filepath output
-        try:
-            tproc = subprocess.run(
-                ["yt-dlp", "-O", "%(title)s", self.url],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-            title = (tproc.stdout or "").strip()
-            logger.info(f"Resolved title via -O: {title}")
-        except Exception:
-            title = "(unknown title)"
+        if not title:
+            # Fallback: query the title independently (may require network access).
+            try:
+                tproc = subprocess.run(
+                    ["yt-dlp", "-O", "%(title)s", self.url],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                if (tproc.stderr or "").strip():
+                    logger.warning(f"yt-dlp -O stderr: {_truncate(tproc.stderr.strip())}")
+                title = (tproc.stdout or "").strip()
+                logger.info(f"Resolved title via -O: {title}")
+            except subprocess.CalledProcessError as e:
+                logger.error(
+                    "yt-dlp -O title lookup failed. "
+                    f"returncode={e.returncode} "
+                    f"stdout={_truncate(e.stdout)} "
+                    f"stderr={_truncate(e.stderr)}"
+                )
+                title = "(unknown title)"
+            except Exception as e:
+                logger.error(f"yt-dlp -O title lookup errored: {e}")
+                title = "(unknown title)"
 
+        logger.info(f"Download result: path={path}, title={title}")
         return {"path": path, "title": title}
