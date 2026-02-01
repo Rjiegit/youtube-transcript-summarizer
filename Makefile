@@ -1,4 +1,6 @@
-.PHONY: install run yt-dlp auto test streamlit api docker-build docker-up docker-down clear-processing-lock
+.PHONY: install run yt-dlp yt-dlp-update auto test streamlit api docker-build docker-up docker-down clear-processing-lock
+
+YTDLP_AUTO_UPDATE ?= 1
 
 PROCESSING_LOCK_HOST ?= http://localhost:8080
 PROCESSING_LOCK_PAYLOAD ?= {"force":true,"force_threshold_seconds":0,"reason":"manual release via make clear-processing-lock"}
@@ -35,6 +37,12 @@ docker-down:
 
 yt-dlp:
 	yt-dlp -S "res:360" -o "data/videos/%(title)s.%(ext)s" $(url)
+
+yt-dlp-update:
+	@if [ "$(YTDLP_AUTO_UPDATE)" != "1" ]; then echo "Skip yt-dlp update (YTDLP_AUTO_UPDATE=$(YTDLP_AUTO_UPDATE))"; exit 0; fi
+	curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
+	chmod a+rx /usr/local/bin/yt-dlp
+	yt-dlp --version
 
 auto: yt-dlp run
 

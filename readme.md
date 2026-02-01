@@ -86,18 +86,31 @@ PROCESSING_LOCK_ADMIN_TOKEN=your_admin_token
 docker compose up -d
 ```
 
-此指令會啟動 Docker 容器，包括主要的應用服務 (app service)。
+此指令會啟動 Docker Compose 服務。
 - 預設對外開放 8501（Streamlit）與 8080（FastAPI）。
+- `api` 服務啟動時會自動更新 `yt-dlp`（可用 `YTDLP_AUTO_UPDATE=0` 關閉）。
 
-### 3. 進入應用服務
+此指令會啟動兩個服務：
+- `streamlit`：Streamlit UI（8501）
+- `api`：FastAPI（8080）
 
-```bash
-docker compose exec app bash
-```
+### 3. 進入服務容器
+
+- 進入 Streamlit 容器：
+
+  ```bash
+  docker compose exec streamlit bash
+  ```
+
+- 進入 API 容器：
+
+  ```bash
+  docker compose exec api bash
+  ```
 
 ### 4. 安裝依賴
 
-進入 app 服務後，安裝所需的依賴項：
+進入任一服務容器後，安裝所需的依賴項：
 
 ```bash
 make install
@@ -292,7 +305,7 @@ curl -X POST http://localhost:8080/processing-jobs \
 
 請將 `PROCESSING_LOCK_ADMIN_TOKEN` 設定在 `.env` 中，此值即為上述 `X-Maintainer-Token` 的內容，僅限內部維運人員使用；Streamlit 維運介面會自動套用該設定，不需額外輸入。
 
-若想於 Docker 環境啟動，可先進入 `app` 服務：`docker compose exec app bash -lc "make api"`，API 會同樣綁定宿主機的 8080 連接埠。
+若想於 Docker 環境啟動 API，可直接執行 `docker compose up -d api`（或在 `api` 容器內跑 `make api`），API 會綁定宿主機的 8080 連接埠。
 
 ## 使用 Ollama (本地模型)
 

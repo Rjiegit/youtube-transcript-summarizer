@@ -22,7 +22,7 @@ RUN apt update && \
 WORKDIR /usr/src/app
 
 # 先複製 requirements.txt（單獨一層，便於 cache）
-COPY ../requirements.txt /usr/src/app/requirements.txt
+COPY requirements.txt /usr/src/app/requirements.txt
 
 # 安裝 Python 套件（不執行應用程式）
 RUN --mount=type=cache,target=/root/.cache/pip \

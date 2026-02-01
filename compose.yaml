@@ -1,14 +1,31 @@
+x-python-app: &python-app
+  build:
+    context: .
+    dockerfile: .docker/Dockerfile
+  working_dir: /usr/src/app
+  volumes:
+    - ./:/usr/src/app
+  tty: true
+  restart: unless-stopped
+  env_file:
+    - .env
+
 services:
-  app:
-    build:
-        context: .
-        dockerfile: .docker/Dockerfile
-    volumes:
-      - ./:/usr/src/app
-    tty: true
+  api:
+    <<: *python-app
+    command: ["bash", "-lc", "make yt-dlp-update && make api"]
+    ports:
+      - "8080:8080"
+
+  streamlit:
+    <<: *python-app
+    command:
+      [
+        "bash",
+        "-lc",
+        "streamlit run src/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
+      ]
+    environment:
+      TASK_API_BASE_URL: "http://api:8080"
     ports:
       - "8501:8501"
-      - "8080:8080"
-    restart: unless-stopped
-    env_file:
-      - .env
