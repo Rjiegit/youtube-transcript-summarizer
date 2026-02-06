@@ -137,6 +137,29 @@ class NotionDB(BaseDB):
 
         self.notion.pages.update(page_id=task_id, properties=properties)
 
+    def find_recent_task_by_url(self, url: str) -> Optional[Task]:
+        """Find the most recent non-failed task for the given URL."""
+        self._ensure_configuration()
+        response = self.notion.databases.query(
+            database_id=self.database_id,
+            filter={
+                "and": [
+                    {"property": "URL", "url": {"equals": url}},
+                    {
+                        "or": [
+                            {"property": "Status", "select": {"equals": "Pending"}},
+                            {"property": "Status", "select": {"equals": "Processing"}},
+                            {"property": "Status", "select": {"equals": "Completed"}},
+                        ]
+                    },
+                ]
+            },
+            sorts=[{"timestamp": "created_time", "direction": "descending"}],
+            page_size=1,
+        )
+        results = response.get("results", [])
+        return self.adapter.to_task(results[0]) if results else None
+
     def create_retry_task(
         self, source_task: Task, retry_reason: Optional[str] = None
     ) -> Task:

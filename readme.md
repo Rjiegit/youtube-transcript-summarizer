@@ -214,9 +214,20 @@ curl -X POST http://localhost:8080/tasks \
   "db_type": "sqlite",
   "message": "Task queued successfully. Processing worker scheduled (worker: api-worker-123456).",
   "processing_started": true,
-  "processing_worker_id": "api-worker-123456"
+  "processing_worker_id": "api-worker-123456",
+  "cached": false
 }
 ```
+
+#### 重複提交行為
+
+API 會自動對同一 URL 進行去重：
+
+- **已完成且在 TTL 內**（預設 1 小時）：回傳 `200 OK`，`cached: true`，直接返回先前的處理結果。
+- **正在處理中或排隊中**（Pending / Processing）：回傳 `409 Conflict`。
+- **無紀錄 / 已過期 / 曾失敗**：正常建立新 Task，回傳 `201 Created`。
+
+TTL 可透過環境變數 `TASK_CACHE_TTL_SECONDS` 調整（預設 3600 秒）。
 
 ## 瀏覽器外掛（Chrome/Edge）
 

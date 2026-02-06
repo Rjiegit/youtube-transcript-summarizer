@@ -59,6 +59,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_default_sqlite(self) -> None:
         mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(
             id="42",
             url=self.normalized_url,
@@ -137,6 +138,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_notion_success_when_env_present(self) -> None:
         mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(
             id="abc",
             url=self.normalized_url,
@@ -220,6 +222,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_database_failure(self) -> None:
         mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.side_effect = RuntimeError("boom")
 
         with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
@@ -230,6 +233,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_returns_message_when_processing_locked(self) -> None:
         mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
         mock_db.acquire_processing_lock.return_value = False
 
@@ -246,6 +250,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_handles_scheduling_http_exception(self) -> None:
         mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
 
         with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
@@ -326,6 +331,91 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.json()["detail"], "Processing already running.")
         mock_db.release_processing_lock.assert_not_called()
+
+    def test_create_task_cached_completed_within_ttl(self) -> None:
+        """A completed task younger than TTL returns 200 with cached=True."""
+        cached_task = Task(
+            id="99",
+            url=self.normalized_url,
+            status="Completed",
+            created_at=datetime.utcnow() - timedelta(seconds=600),
+            summary="cached summary",
+        )
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = cached_task
+
+        with patch("src.apps.api.main.TASK_CACHE_TTL_SECONDS", 3600):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+                response = self.client.post("/tasks", json={"url": self.valid_url})
+
+        self.assertEqual(response.status_code, 200)
+        payload = response.json()
+        self.assertEqual(payload["task_id"], "99")
+        self.assertEqual(payload["status"], "Completed")
+        self.assertTrue(payload["cached"])
+        self.assertIn("cached result", payload["message"])
+        mock_db.add_task.assert_not_called()
+
+    def test_create_task_conflict_when_processing(self) -> None:
+        """A processing task for the same URL returns 409."""
+        processing_task = Task(
+            id="50",
+            url=self.normalized_url,
+            status="Processing",
+            created_at=datetime.utcnow(),
+        )
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = processing_task
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            response = self.client.post("/tasks", json={"url": self.valid_url})
+
+        self.assertEqual(response.status_code, 409)
+        self.assertIn("already processing", response.json()["detail"])
+        mock_db.add_task.assert_not_called()
+
+    def test_create_task_conflict_when_pending(self) -> None:
+        """A pending task for the same URL returns 409."""
+        pending_task = Task(
+            id="51",
+            url=self.normalized_url,
+            status="Pending",
+            created_at=datetime.utcnow(),
+        )
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = pending_task
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            response = self.client.post("/tasks", json={"url": self.valid_url})
+
+        self.assertEqual(response.status_code, 409)
+        self.assertIn("already pending", response.json()["detail"])
+        mock_db.add_task.assert_not_called()
+
+    def test_create_task_expired_cache_creates_new_task(self) -> None:
+        """A completed task older than TTL does NOT hit cache — new task created."""
+        old_task = Task(
+            id="80",
+            url=self.normalized_url,
+            status="Completed",
+            created_at=datetime.utcnow() - timedelta(seconds=7200),
+        )
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = old_task
+        mock_db.add_task.return_value = Task(
+            id="81", url=self.normalized_url, status="Pending"
+        )
+        mock_db.acquire_processing_lock.return_value = False
+
+        with patch("src.apps.api.main.TASK_CACHE_TTL_SECONDS", 3600):
+            with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+                response = self.client.post("/tasks", json={"url": self.valid_url})
+
+        self.assertEqual(response.status_code, 201)
+        payload = response.json()
+        self.assertEqual(payload["task_id"], "81")
+        self.assertFalse(payload["cached"])
+        mock_db.add_task.assert_called_once()
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")

@@ -8,7 +8,7 @@ import uuid
 from contextlib import suppress
 from dataclasses import dataclass
 from datetime import datetime
-from fastapi import FastAPI, Header, HTTPException, status
+from fastapi import FastAPI, Header, HTTPException, Response, status
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.core.logger import logger
@@ -23,6 +23,9 @@ from src.services.pipeline.processing_runner import (
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
 REQUIRED_NOTION_ENV_VARS: tuple[str, ...] = ("NOTION_API_KEY", "NOTION_DATABASE_ID")
 FAILED_RETRY_CREATED_STATUS = "Failed Retry Created"
+TASK_CACHE_TTL_SECONDS: int = int(
+    os.environ.get("TASK_CACHE_TTL_SECONDS", "3600")
+)
 
 
 def _normalize_db_type(value: str) -> str:
@@ -73,6 +76,10 @@ class TaskCreateResponse(BaseModel):
     processing_worker_id: str | None = Field(
         default=None,
         description="Worker identifier if background processing was scheduled.",
+    )
+    cached: bool = Field(
+        default=False,
+        description="True when the response was served from a recent completed task.",
     )
 
 
@@ -388,8 +395,14 @@ def _schedule_processing_job(
 
 
 @app.post("/tasks", response_model=TaskCreateResponse, status_code=status.HTTP_201_CREATED)
-def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
-    """Create a new task and persist it in the selected backend."""
+def create_task(payload: TaskCreateRequest, response: Response):
+    """Create a new task and persist it in the selected backend.
+
+    Deduplication rules (based on normalised URL):
+    * **Completed within TTL** → 200 with cached result.
+    * **Pending / Processing** → 409 Conflict.
+    * Otherwise → 201 new task.
+    """
 
     normalized_url = normalize_youtube_url(payload.url)
     if not normalized_url or not is_valid_youtube_url(normalized_url):
@@ -401,6 +414,38 @@ def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
     _ensure_db_configuration(payload.db_type)
     db = _get_database(payload.db_type)
 
+    # --- Dedup: check for recent task with the same URL ---
+    existing_task = db.find_recent_task_by_url(normalized_url)
+    if existing_task is not None:
+        if existing_task.status in ("Pending", "Processing"):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=(
+                    f"A task for this URL is already {existing_task.status.lower()} "
+                    f"(task_id={existing_task.id})."
+                ),
+            )
+
+        if existing_task.status == "Completed" and existing_task.created_at:
+            age_seconds = (
+                datetime.utcnow() - existing_task.created_at
+            ).total_seconds()
+            if age_seconds < TASK_CACHE_TTL_SECONDS:
+                response.status_code = status.HTTP_200_OK
+                return TaskCreateResponse(
+                    task_id=str(existing_task.id),
+                    status=existing_task.status,
+                    db_type=payload.db_type,
+                    message=(
+                        f"Returning cached result (age={int(age_seconds)}s, "
+                        f"ttl={TASK_CACHE_TTL_SECONDS}s)."
+                    ),
+                    processing_started=False,
+                    processing_worker_id=None,
+                    cached=True,
+                )
+
+    # --- No usable cache hit → create a new task ---
     try:
         task = db.add_task(normalized_url)
     except RuntimeError as exc:
@@ -454,6 +499,7 @@ def create_task(payload: TaskCreateRequest) -> TaskCreateResponse:
         message=message,
         processing_started=scheduling_result.accepted,
         processing_worker_id=scheduling_result.worker_id,
+        cached=False,
     )
 
 

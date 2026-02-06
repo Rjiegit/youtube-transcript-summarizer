@@ -434,6 +434,24 @@ class SQLiteDB(BaseDB):
         conn.commit()
         conn.close()
 
+    def find_recent_task_by_url(self, url: str) -> Optional[Task]:
+        """Find the most recent non-failed task for the given URL."""
+        conn = self._get_connection()
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            SELECT * FROM tasks
+            WHERE url = ? AND status NOT IN ('Failed', 'Failed Retry Created')
+            ORDER BY created_at DESC
+            LIMIT 1
+            """,
+            (url,),
+        )
+        row = cursor.fetchone()
+        conn.close()
+        return self.adapter.to_task(dict(row)) if row else None
+
     def create_retry_task(
         self, source_task: Task, retry_reason: Optional[str] = None
     ) -> Task:

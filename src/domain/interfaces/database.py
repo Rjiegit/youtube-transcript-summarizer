@@ -133,6 +133,22 @@ class BaseDB(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    def find_recent_task_by_url(self, url: str) -> Optional[Task]:
+        """Find the most recent non-failed task for the given URL.
+
+        Returns the newest task whose status is *not* ``Failed`` and
+        whose URL matches exactly.  The caller decides whether the
+        returned task is still within an acceptable cache window.
+
+        Args:
+            url: The normalised YouTube URL to look up.
+
+        Returns:
+            The most recent matching task, or ``None``.
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def create_retry_task(
         self,
         source_task: Task,
