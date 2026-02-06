@@ -39,6 +39,7 @@
 ## 環境需求
 
 - Docker 與 Docker Compose
+- （若不使用 Docker）Python 3.11 + `uv`
 - 以下至少需要一個 API Key 或服務：
   - OpenAI API Key (可選)
   - Google Gemini API Key (可選)
@@ -119,7 +120,7 @@ make install
 此指令會：
 - 下載並安裝最新版本的 yt-dlp 到 /usr/local/bin/
 - 設置 yt-dlp 的執行權限
-- 安裝 requirements.txt 中列出的 Python 依賴
+- 以 `uv` 同步並安裝 Python 依賴（`uv sync --frozen`）
 
 ## 使用方法
 
@@ -140,7 +141,7 @@ make run
 ```
 或直接呼叫 CLI 入口：
 ```bash
-python -m src.apps.workers.cli --db-type sqlite --worker-id local-run
+uv run python -m src.apps.workers.cli --db-type sqlite --worker-id local-run
 ```
 （`--db-type notion` 亦支援，適合 Notion 佇列；`--worker-id` 可選，用於鎖狀態追蹤。）
 
@@ -159,7 +160,7 @@ make auto url="YOUR_YOUTUBE_URL"
 1. 啟動 Streamlit 應用：
 
 ```bash
-streamlit run src/apps/ui/streamlit_app.py
+make streamlit
 ```
 
 2. 在瀏覽器中打開顯示的 URL（通常是 http://localhost:8501）
@@ -375,8 +376,8 @@ self.transcription_model_size = "base"  # 可選: tiny, base, small, medium, lar
 
 ### 開發指令
 
-- **執行測試**: `python -m unittest -v`
-- **Lint**: `flake8 .`
+- **執行測試**: `make test`
+- **Lint**: `uv run flake8 .`
 - **格式化**: `ruff format .`（若需）
 - **啟動 REST API**: `make api`（啟動 `src/apps/api/main.py` 內的 FastAPI）
 
@@ -386,8 +387,8 @@ CODEX_HOME="$PWD/.codex" codex
 
 ### 更新依賴
 
-若新增或更新依賴項，請執行以下指令來更新 `requirements.txt`：
+若新增或更新依賴項，請更新 `pyproject.toml` 後鎖定版本：
 
 ```bash
-pip freeze > requirements.txt
+uv lock
 ```

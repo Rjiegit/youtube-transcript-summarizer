@@ -21,13 +21,20 @@ RUN apt update && \
 # 設置工作目錄
 WORKDIR /usr/src/app
 
-# 先複製 requirements.txt（單獨一層，便於 cache）
-COPY requirements.txt /usr/src/app/requirements.txt
+# uv 在 bind-mount 下使用固定 venv 路徑，避免被 /usr/src/app 覆蓋
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 先複製 lock 相關檔案（單獨一層，便於 cache）
+COPY pyproject.toml uv.lock /usr/src/app/
 
 # 安裝 Python 套件（不執行應用程式）
 RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip && \
-    pip install --retries 5 --timeout 120 -r requirements.txt
+    pip install --retries 5 --timeout 120 uv
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --no-dev
 
 # 設置預設指令
 # CMD ["python", "main.py"]

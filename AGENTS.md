@@ -30,7 +30,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
   - `infrastructure/storage/summary_storage.py`
   - `core/config.py`
 - Data & storage: `data/` (inputs/outputs), `src/infrastructure/persistence/` (Notion/SQLite adapters), `src/domain/interfaces/` (typed interfaces).
-- Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `requirements.txt`, `Makefile`.
+- Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`.
 
 ## Build, Test, and Development Commands
 - Install deps and yt-dlp: `make install`
@@ -40,7 +40,7 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`
 - One-shot download+process: `make auto url="<YOUTUBE_URL>"`
 - Tests (unittest discovery): `make test` or `python -m unittest discover -s . -p "test*.py" -v`
-- Lint (CI parity): `flake8 .`
+- Lint (CI parity): `uv run flake8 .`
 
 ## Coding Style & Naming Conventions
 - Follow PEP 8; 4-space indentation; prefer type hints.

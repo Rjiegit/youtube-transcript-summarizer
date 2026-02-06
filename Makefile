@@ -8,22 +8,22 @@ PROCESSING_LOCK_PAYLOAD ?= {"force":true,"force_threshold_seconds":0,"reason":"m
 install:
 	curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 	chmod a+rx /usr/local/bin/yt-dlp
-	pip install -r requirements.txt
+	uv sync --frozen --no-install-project
 
 freeze:
-	pip freeze > requirements.txt
+	uv lock
 
 run:
-	python -m src.apps.workers.cli --db-type sqlite
+	uv run python -m src.apps.workers.cli --db-type sqlite
 
 streamlit:
-	streamlit run src/apps/ui/streamlit_app.py
+	uv run streamlit run src/apps/ui/streamlit_app.py
 
 api:
-	uvicorn src.apps.api.main:app --reload --reload-dir /usr/src/app/src --host 0.0.0.0 --port 8080
+	uv run uvicorn src.apps.api.main:app --reload --reload-dir /usr/src/app/src --host 0.0.0.0 --port 8080
 
 test:
-	python -m unittest discover -s . -p "test*.py" -v
+	uv run python -m unittest discover -s . -p "test*.py" -v
 
 # Docker 相關命令
 docker-build:

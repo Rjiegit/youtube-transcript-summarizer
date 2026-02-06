@@ -12,15 +12,14 @@ This project is a Python-based application that downloads YouTube video transcri
   - `fastapi`: For building the API.
   - `pytube`: For downloading YouTube videos.
   - `openai`: For accessing summarization models.
-  - `pytest`: For unit testing.
-- **Dependency Management:** `pip` with `requirements.txt`.
+- **Dependency Management:** `uv` with `pyproject.toml` + `uv.lock`.
 
 ## 3. Key Commands
 
-- **Install Dependencies:** `pip install -r requirements.txt`
-- **Run the App:** `streamlit run src/apps/ui/streamlit_app.py`
+- **Install Dependencies:** `uv sync --frozen --no-install-project`
+- **Run the App:** `uv run streamlit run src/apps/ui/streamlit_app.py`
 - **Run Tests:** `python -m unittest -v`
-- **Check Style:** `flake8 .`
+- **Check Style:** `uv run flake8 .`
 - **Format Code:** `ruff format .`
 
 ## 4. Coding Conventions
@@ -43,4 +42,4 @@ This project is a Python-based application that downloads YouTube video transcri
 
 - Do not commit secrets or API keys to the repository. Use environment variables loaded from a `.env` file.
 - All user-facing text in the Streamlit app should be clear and concise.
-- When adding new dependencies, update `requirements.txt` and `docker-compose.yaml` accordingly.
+- When adding new dependencies, update `pyproject.toml` and regenerate `uv.lock` accordingly.

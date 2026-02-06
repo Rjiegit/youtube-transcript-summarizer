@@ -31,8 +31,8 @@
 
 ### 建構與部署
 - **Makefile**: 自動化建構腳本
-- **pip**: Python 套件管理
-- **requirements.txt**: 依賴管理
+- **uv**: Python 環境與套件管理
+- **pyproject.toml / uv.lock**: 依賴來源與鎖檔
 
 ### 測試框架
 - **unittest**: Python 標準測試框架
@@ -52,7 +52,7 @@
 apt install ffmpeg git make curl pkg-config build-essential
 
 # Python 依賴
-pip install -r requirements.txt
+uv sync --frozen --no-install-project
 
 # yt-dlp 安裝
 curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
