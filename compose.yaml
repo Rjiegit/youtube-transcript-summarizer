@@ -23,7 +23,7 @@ services:
       [
         "bash",
         "-lc",
-        "streamlit run src/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
+        "uv run streamlit run src/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
       ]
     environment:
       TASK_API_BASE_URL: "http://api:8080"
