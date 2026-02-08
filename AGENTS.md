@@ -42,8 +42,8 @@ Keep this managed block so 'openspec update' can refresh the instructions.
 - 在 container 中執行指令：`docker compose exec streamlit bash -lc "<COMMAND>"` 或 `docker compose exec api bash -lc "<COMMAND>"`（依要操作的 service 選擇）
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`
 - One-shot download+process: `make auto url="<YOUTUBE_URL>"`
-- Tests (unittest discovery): `make test` or `python -m unittest discover -s . -p "test*.py" -v`
-- Lint (CI parity): `uv run flake8 .`
+- Tests (unittest discovery): `make test` 或 `uv run python -m unittest discover -s . -p "test*.py" -v`（避免使用 `python`，有些環境只有 `python3`）
+- Lint (CI parity): `uv run flake8 .`（避免直接跑 `flake8 .`，可能不在 PATH）
 
 ## Coding Style & Naming Conventions
 - Follow PEP 8; 4-space indentation; prefer type hints.
