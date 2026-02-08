@@ -1,10 +1,11 @@
 import os
 import tempfile
 import unittest
-from datetime import datetime, timedelta
+from datetime import timedelta
 from types import SimpleNamespace
 from unittest import mock
 
+from src.core.time_utils import utc_now_naive
 from src.apps.ui.streamlit_app import _build_recent_task_entry, _prune_recent_history
 from src.apps.ui.ui_config import RECENT_TASK_HISTORY_TTL_DAYS
 from src.infrastructure.persistence.sqlite.client import SQLiteDB
@@ -30,7 +31,7 @@ class RecentTaskHistoryTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             db_path = os.path.join(temp_dir, "test_tasks.db")
             db = SQLiteDB(db_path=db_path)
-            now = datetime.utcnow()
+            now = utc_now_naive()
             db.record_recent_task_view(
                 "recent",
                 now - timedelta(days=1),

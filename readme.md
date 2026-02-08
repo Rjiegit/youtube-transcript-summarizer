@@ -39,7 +39,7 @@
 ## 環境需求
 
 - Docker 與 Docker Compose
-- （若不使用 Docker）Python 3.11 + `uv`
+- （若不使用 Docker）Python 3.14 + `uv`
 - 以下至少需要一個 API Key 或服務：
   - OpenAI API Key (可選)
   - Google Gemini API Key (可選)

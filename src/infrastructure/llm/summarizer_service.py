@@ -1,8 +1,8 @@
 import os
-from openai import OpenAI
 import requests
 from dotenv import load_dotenv
 import google.generativeai as genai
+from openai import OpenAI
 from src.core import prompt
 from src.core.logger import logger
 from src.infrastructure.llm.model_options import (

@@ -12,6 +12,7 @@ from fastapi import FastAPI, Header, HTTPException, Response, status
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.core.logger import logger
+from src.core.time_utils import as_utc, utc_now
 from src.core.utils.url import normalize_youtube_url, is_valid_youtube_url
 from src.domain.interfaces.database import ProcessingLockInfo
 from src.infrastructure.persistence.factory import DBFactory
@@ -305,16 +306,18 @@ def _ensure_maintainer_token(token: str | None) -> None:
 
 
 def _build_lock_snapshot(info: ProcessingLockInfo) -> ProcessingLockSnapshot:
-    now = datetime.utcnow()
+    now = utc_now()
     age_seconds: float | None = None
+    locked_at = None
     if info.locked_at:
-        age_seconds = max(0.0, (now - info.locked_at).total_seconds())
+        locked_at = as_utc(info.locked_at)
+        age_seconds = max(0.0, (now - locked_at).total_seconds())
     stale = (
         age_seconds is not None and age_seconds >= PROCESSING_LOCK_TIMEOUT_SECONDS
     )
     return ProcessingLockSnapshot(
         worker_id=info.worker_id,
-        locked_at=info.locked_at,
+        locked_at=locked_at,
         age_seconds=age_seconds,
         stale=stale,
     )
@@ -427,9 +430,7 @@ def create_task(payload: TaskCreateRequest, response: Response):
             )
 
         if existing_task.status == "Completed" and existing_task.created_at:
-            age_seconds = (
-                datetime.utcnow() - existing_task.created_at
-            ).total_seconds()
+            age_seconds = (utc_now() - as_utc(existing_task.created_at)).total_seconds()
             if age_seconds < TASK_CACHE_TTL_SECONDS:
                 response.status_code = status.HTTP_200_OK
                 return TaskCreateResponse(

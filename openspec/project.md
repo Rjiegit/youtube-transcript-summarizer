@@ -6,7 +6,7 @@
 - 透過 Markdown 與 Notion 整合將摘要結果結構化保存，方便後續整理與分享。
 
 ## Tech Stack
-- Python 3.11（Docker `python:3.11-slim` 基底映像）
+- Python 3.14（Docker `python:3.14-slim` 基底映像）
 - Streamlit 作為前端介面
 - FastAPI 建置 HTTP API 與背景任務入口
 - `faster-whisper`/CT2 執行 Whisper 推論

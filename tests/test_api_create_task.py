@@ -3,8 +3,10 @@ import os
 import sys
 import types
 import unittest
-from datetime import datetime, timedelta
+from datetime import timedelta
 from unittest.mock import MagicMock, patch
+
+from src.core.time_utils import utc_now
 
 # Provide lightweight stubs for optional dependencies when running in minimal envs.
 if "pytz" not in sys.modules:  # pragma: no cover - testing scaffold
@@ -338,7 +340,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             id="99",
             url=self.normalized_url,
             status="Completed",
-            created_at=datetime.utcnow() - timedelta(seconds=600),
+            created_at=utc_now() - timedelta(seconds=600),
             summary="cached summary",
         )
         mock_db = MagicMock()
@@ -362,7 +364,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             id="50",
             url=self.normalized_url,
             status="Processing",
-            created_at=datetime.utcnow(),
+            created_at=utc_now(),
         )
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = processing_task
@@ -380,7 +382,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             id="51",
             url=self.normalized_url,
             status="Pending",
-            created_at=datetime.utcnow(),
+            created_at=utc_now(),
         )
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = pending_task
@@ -398,7 +400,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             id="80",
             url=self.normalized_url,
             status="Completed",
-            created_at=datetime.utcnow() - timedelta(seconds=7200),
+            created_at=utc_now() - timedelta(seconds=7200),
         )
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = old_task
@@ -521,7 +523,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         self.assertEqual(response.json()["detail"], "Missing maintainer token.")
 
     def test_processing_lock_status_returns_snapshot(self) -> None:
-        locked_at = datetime.utcnow() - timedelta(seconds=PROCESSING_LOCK_TIMEOUT_SECONDS + 60)
+        locked_at = utc_now() - timedelta(seconds=PROCESSING_LOCK_TIMEOUT_SECONDS + 60)
         lock_info = ProcessingLockInfo(worker_id="api-worker-xyz", locked_at=locked_at)
         mock_db = MagicMock()
         mock_db.read_processing_lock.return_value = lock_info
@@ -541,7 +543,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
     def test_processing_lock_delete_dry_run(self) -> None:
         lock_info = ProcessingLockInfo(
             worker_id="api-worker-lock",
-            locked_at=datetime.utcnow() - timedelta(seconds=30),
+            locked_at=utc_now() - timedelta(seconds=30),
         )
         mock_db = MagicMock()
         mock_db.read_processing_lock.return_value = lock_info
@@ -566,7 +568,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
     def test_processing_lock_delete_with_expected_worker(self) -> None:
         before = ProcessingLockInfo(
             worker_id="api-worker-sanity",
-            locked_at=datetime.utcnow() - timedelta(seconds=120),
+            locked_at=utc_now() - timedelta(seconds=120),
         )
         after = ProcessingLockInfo(worker_id=None, locked_at=None)
         mock_db = MagicMock()
@@ -596,7 +598,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
     def test_processing_lock_force_threshold_conflict(self) -> None:
         lock_info = ProcessingLockInfo(
             worker_id="api-worker-force",
-            locked_at=datetime.utcnow(),
+            locked_at=utc_now(),
         )
         mock_db = MagicMock()
         mock_db.read_processing_lock.return_value = lock_info
@@ -620,7 +622,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
     def test_processing_lock_force_successful_release(self) -> None:
         before = ProcessingLockInfo(
             worker_id="api-worker-forceable",
-            locked_at=datetime.utcnow() - timedelta(seconds=3_600),
+            locked_at=utc_now() - timedelta(seconds=3_600),
         )
         after = ProcessingLockInfo(worker_id=None, locked_at=None)
         mock_db = MagicMock()

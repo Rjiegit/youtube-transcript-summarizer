@@ -2,6 +2,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from typing import Optional
 
+from src.core.time_utils import utc_now_naive
 from src.domain.interfaces.database import BaseDB, ProcessingLockInfo
 from src.domain.tasks.models import Task
 from src.infrastructure.persistence.sqlite.task_adapter import SQLiteTaskAdapter
@@ -88,7 +89,7 @@ class SQLiteDB(BaseDB):
         if not task_id:
             return
 
-        viewed_time = viewed_at or datetime.utcnow()
+        viewed_time = viewed_at or utc_now_naive()
         viewed_at_str = viewed_time.isoformat()
 
         conn = self._get_connection()
@@ -193,7 +194,7 @@ class SQLiteDB(BaseDB):
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA busy_timeout = 3000")
         cursor = conn.cursor()
-        now = datetime.utcnow()
+        now = utc_now_naive()
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         stale_cutoff = (now - timedelta(seconds=lock_timeout_seconds)).strftime(
             "%Y-%m-%d %H:%M:%S"
@@ -261,7 +262,7 @@ class SQLiteDB(BaseDB):
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA busy_timeout = 3000")
         cursor = conn.cursor()
-        now = datetime.utcnow()
+        now = utc_now_naive()
         now_str = now.strftime("%Y-%m-%d %H:%M:%S")
         stale_cutoff = now - timedelta(seconds=lock_timeout_seconds)
 
@@ -310,7 +311,7 @@ class SQLiteDB(BaseDB):
         """Refresh the processing lock if the worker still owns it."""
         conn = self._get_connection()
         cursor = conn.cursor()
-        now_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        now_str = utc_now_naive().strftime("%Y-%m-%d %H:%M:%S")
         cursor.execute(
             """
             UPDATE processing_lock
@@ -357,7 +358,7 @@ class SQLiteDB(BaseDB):
         try:
             locked_at = datetime.fromisoformat(locked_at_raw)
         except ValueError:
-            locked_at = datetime.utcnow()
+            locked_at = utc_now_naive()
 
         return ProcessingLockInfo(worker_id=row["worker_id"], locked_at=locked_at)
 
@@ -396,7 +397,7 @@ class SQLiteDB(BaseDB):
         """Updates the status and other fields of a task."""
         conn = self._get_connection()
         cursor = conn.cursor()
-        now = datetime.now()
+        now = utc_now_naive()
 
         set_clauses = ["status = ?", "updated_at = ?"]
         params: list[object] = [status, now]

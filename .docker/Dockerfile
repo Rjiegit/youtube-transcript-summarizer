@@ -1,5 +1,5 @@
 # 選擇基礎映像
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 # 安裝必要的程式和 pip cache 優化
 RUN apt update && \

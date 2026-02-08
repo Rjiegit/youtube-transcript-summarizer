@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime, timedelta
+from datetime import timedelta
 from typing import Any
 
 from src.apps.ui.ui_config import RECENT_TASK_HISTORY_KEY, RECENT_TASK_HISTORY_TTL_DAYS
 from src.apps.ui.ui_runtime import require_streamlit, st
+from src.core.time_utils import utc_now_naive
 from src.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
@@ -14,7 +15,7 @@ def _get_history_db() -> SQLiteDB:
 
 
 def prune_recent_history() -> None:
-    cutoff = datetime.utcnow() - timedelta(days=RECENT_TASK_HISTORY_TTL_DAYS)
+    cutoff = utc_now_naive() - timedelta(days=RECENT_TASK_HISTORY_TTL_DAYS)
     _get_history_db().prune_recent_task_history(cutoff)
 
 
@@ -29,7 +30,7 @@ def get_recent_task_history() -> list[dict[str, Any]]:
 def build_recent_task_entry(task: Any, _notion_base_url: str | None) -> dict[str, Any]:
     return {
         "id": str(getattr(task, "id", "")),
-        "viewed_at": datetime.utcnow().isoformat(),
+        "viewed_at": utc_now_naive().isoformat(),
     }
 
 
