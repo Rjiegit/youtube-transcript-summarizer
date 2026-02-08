@@ -5,6 +5,8 @@ YTDLP_AUTO_UPDATE ?= 1
 PROCESSING_LOCK_HOST ?= http://localhost:8080
 PROCESSING_LOCK_PAYLOAD ?= {"force":true,"force_threshold_seconds":0,"reason":"manual release via make clear-processing-lock"}
 
+DOCKER_COMPOSE ?= $(shell if command -v docker-compose >/dev/null 2>&1; then echo docker-compose; else echo "docker compose"; fi)
+
 install:
 	curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 	chmod a+rx /usr/local/bin/yt-dlp
@@ -27,13 +29,13 @@ test:
 
 # Docker 相關命令
 docker-build:
-	DOCKER_BUILDKIT=1 docker-compose build
+	DOCKER_BUILDKIT=1 $(DOCKER_COMPOSE) build
 
 docker-up:
-	DOCKER_BUILDKIT=1 docker-compose up --build
+	DOCKER_BUILDKIT=1 $(DOCKER_COMPOSE) up --build
 
 docker-down:
-	docker-compose down
+	$(DOCKER_COMPOSE) down
 
 yt-dlp:
 	yt-dlp -S "res:360" -o "data/videos/%(title)s.%(ext)s" $(url)
