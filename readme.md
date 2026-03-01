@@ -206,6 +206,8 @@ curl -X POST http://localhost:8080/tasks \
   -d '{"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "db_type": "sqlite"}'
 ```
 
+支援的 YouTube URL 格式包含：`watch?v=...`、`youtu.be/...`、`embed/...`、`shorts/...`（會自動正規化成 `watch?v=...` 以利去重）。
+
 成功回應範例：
 
 ```json

@@ -11,6 +11,9 @@ class TestURLValidator(unittest.TestCase):
             f"http://youtube.com/watch?v={vid}",
             f"https://youtu.be/{vid}",
             f"https://www.youtube.com/embed/{vid}",
+            f"https://www.youtube.com/shorts/{vid}",
+            f"https://www.youtube.com/shorts/{vid}?feature=share",
+            f"https://m.youtube.com/shorts/{vid}?si=abc123",
             f"  https://youtu.be/{vid}  ",
         ]
         for url in cases:
