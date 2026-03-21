@@ -133,7 +133,7 @@ class Summarizer:
         return summary
 
     def get_prompt(self, title, text):
-        return prompt.PROMPT_3.format(title=title, text=text)
+        return prompt.PROMPT_DECISION_BRIEF.format(title=title, text=text)
 
     def summarize_with_openai(self, title, text):
         if not self.openai_api_key:
