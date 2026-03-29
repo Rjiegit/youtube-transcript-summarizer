@@ -36,5 +36,5 @@ services:
       [
         "bash",
         "-lc",
-        "uv run python -m src.apps.workers.rss_monitor",
+        "bash .docker/start-rss-monitor-cron.sh",
       ]

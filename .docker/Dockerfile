@@ -7,6 +7,7 @@ RUN apt update && \
     apt install -y git && \
     apt install -y make && \
     apt install -y curl && \
+    apt install -y cron && \
     apt install -y pkg-config && \
     apt install -y build-essential && \
     apt install -y libavformat-dev && \

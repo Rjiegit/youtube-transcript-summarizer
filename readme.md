@@ -82,6 +82,8 @@ PROCESSING_LOCK_ADMIN_TOKEN=your_admin_token
 RSS_MONITOR_ENABLED=false
 RSS_MONITOR_POLL_INTERVAL_SECONDS=3600
 RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS=300
+RSS_MONITOR_CRON_SCHEDULE=0 * * * *
+RSS_MONITOR_JITTER_SECONDS=600
 ```
 
 ### 2. 啟動 Docker 服務
@@ -99,7 +101,7 @@ docker compose up -d
 此指令會啟動三個服務：
 - `streamlit`：Streamlit UI（8501）
 - `api`：FastAPI（8080）
-- `rss-monitor`：YouTube RSS 常駐輪詢程序（不對外開 port）
+- `rss-monitor`：YouTube RSS cron service（不對外開 port）
 
 ### 3. 進入服務容器
 
@@ -165,12 +167,14 @@ make rss-monitor
 uv run python -m src.apps.workers.rss_monitor
 ```
 
-若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service，持續常駐輪詢。
+若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service。它會在 container 內以 `cron` 形式定期執行 `--once`，預設排程是每小時一次，可用 `RSS_MONITOR_CRON_SCHEDULE` 調整，並可用 `RSS_MONITOR_JITTER_SECONDS` 在每次實際執行前加入隨機延遲。
 
 說明：
 - 第一次輪詢會先寫入 watermark，不會把歷史影片整批灌入 queue。
 - 偵測到新影片後，會自動建立 SQLite task，並沿用既有 background processing flow。
 - RSS monitor 目前僅支援 SQLite queue。
+- Docker 預設 cron schedule：`0 * * * *`
+- Docker 可選 jitter：`RSS_MONITOR_JITTER_SECONDS=600` 代表每次觸發前隨機延遲 0 到 600 秒
 
 ### 一鍵完成整個流程
 
