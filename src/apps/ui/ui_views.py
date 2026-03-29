@@ -19,6 +19,12 @@ from src.apps.ui.ui_history import (
     open_notion_link,
     record_recent_task,
 )
+from src.apps.ui.ui_rss import (
+    add_rss_subscription,
+    format_rss_poll_results,
+    trigger_rss_poll_once,
+    update_rss_subscription,
+)
 from src.apps.ui.ui_notion import get_notion_display
 from src.apps.ui.ui_runtime import RequestException, require_streamlit, st
 from src.apps.ui.ui_tasks import (
@@ -28,6 +34,10 @@ from src.apps.ui.ui_tasks import (
 )
 from src.core.utils.url import is_valid_youtube_url, normalize_youtube_url
 from src.infrastructure.persistence.factory import DBFactory
+from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
+    SQLiteRSSSubscriptionRepository,
+)
 
 
 def trigger_processing_via_api(db_choice: str) -> None:
@@ -196,6 +206,121 @@ def add_url_callback(db_choice: str) -> None:
         st.toast("Please enter a URL", icon="❌")
 
 
+def render_rss_management(db) -> None:
+    require_streamlit()
+    st.header("RSS Channel Management")
+    if not isinstance(db, SQLiteDB):
+        st.caption("RSS monitor 目前僅支援 SQLite。")
+        return
+
+    st.caption(
+        "首次新增或首次啟用 RSS 訂閱時，系統只會從當下開始建立監控基準，"
+        "不會自動補抓該 channel 既有的歷史影片。"
+    )
+
+    repository = SQLiteRSSSubscriptionRepository(db.db_path)
+
+    manual_poll_col, _ = st.columns([2, 5])
+    if manual_poll_col.button(
+        "手動執行一次 RSS 監控",
+        key="rss_poll_once_button",
+        type="primary",
+        use_container_width=True,
+    ):
+        try:
+            with st.spinner("正在執行 RSS 輪詢..."):
+                results = trigger_rss_poll_once(db.db_path)
+            summary_lines = format_rss_poll_results(results)
+            if summary_lines:
+                st.session_state.rss_poll_summary = summary_lines
+                st.toast("RSS 輪詢完成。", icon="✅")
+            else:
+                st.session_state.rss_poll_summary = ["沒有啟用中的 RSS 訂閱。"]
+                st.toast("沒有啟用中的 RSS 訂閱。", icon="ℹ️")
+            st.rerun()
+        except Exception as exc:
+            st.error(f"RSS 輪詢失敗：{exc}")
+
+    summary_lines = st.session_state.get("rss_poll_summary")
+    if summary_lines:
+        st.info("\n".join(summary_lines))
+
+    with st.form("rss_add_form", clear_on_submit=True):
+        rss_input = st.text_input("Channel ID 或 Feed URL", key="rss_add_input")
+        rss_title = st.text_input("顯示名稱（可選）", key="rss_add_title")
+        rss_enabled = st.checkbox("新增後啟用", value=True, key="rss_add_enabled")
+        submitted = st.form_submit_button("新增 RSS 訂閱")
+        if submitted:
+            try:
+                add_rss_subscription(
+                    repository,
+                    rss_input,
+                    title=rss_title,
+                    enabled=rss_enabled,
+                )
+                st.toast(
+                    "RSS 訂閱已新增。首次啟用只會從目前時間點後開始監控，不會補抓舊影片。",
+                    icon="✅",
+                )
+                st.rerun()
+            except ValueError as exc:
+                st.error(str(exc))
+
+    subscriptions = repository.list_subscriptions()
+    if not subscriptions:
+        st.caption("目前尚無 RSS 訂閱。")
+        return
+
+    for subscription in subscriptions:
+        label = subscription.title or subscription.channel_id
+        with st.expander(f"{label} | {'Enabled' if subscription.enabled else 'Disabled'}"):
+            st.write(f"Feed URL: {subscription.feed_url}")
+            st.write(f"Last Checked: {subscription.last_checked_at or '-'}")
+            st.write(f"Last Status: {subscription.last_status or '-'}")
+            st.write(f"Last Error: {subscription.last_error or '-'}")
+
+            edit_key = f"rss_edit_{subscription.id}"
+            with st.form(edit_key):
+                raw_value = st.text_input(
+                    "Channel ID 或 Feed URL",
+                    value=subscription.feed_url,
+                    key=f"{edit_key}_value",
+                )
+                title = st.text_input(
+                    "顯示名稱",
+                    value=subscription.title,
+                    key=f"{edit_key}_title",
+                )
+                enabled = st.checkbox(
+                    "啟用",
+                    value=subscription.enabled,
+                    key=f"{edit_key}_enabled",
+                )
+                save_clicked = st.form_submit_button("儲存變更")
+                if save_clicked:
+                    try:
+                        update_rss_subscription(
+                            repository,
+                            subscription.id,
+                            raw_value,
+                            title=title,
+                            enabled=enabled,
+                        )
+                        st.toast("RSS 訂閱已更新。", icon="✅")
+                        st.rerun()
+                    except ValueError as exc:
+                        st.error(str(exc))
+
+            action_cols = st.columns(2)
+            toggle_label = "停用" if subscription.enabled else "啟用"
+            if action_cols[0].button(toggle_label, key=f"rss_toggle_{subscription.id}"):
+                repository.set_enabled(subscription.id, not subscription.enabled)
+                st.rerun()
+            if action_cols[1].button("刪除", key=f"rss_delete_{subscription.id}"):
+                repository.delete_subscription(subscription.id)
+                st.rerun()
+
+
 def main_view() -> None:
     require_streamlit()
     st.title("YouTube Transcript Summarizer")
@@ -280,6 +405,8 @@ def main_view() -> None:
             )
 
     db = DBFactory.get_db(db_choice)
+
+    render_rss_management(db)
 
     get_recent_task_history()
 

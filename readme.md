@@ -77,6 +77,11 @@ DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/......
 
 # Processing lock 管理
 PROCESSING_LOCK_ADMIN_TOKEN=your_admin_token
+
+# RSS monitor（預設關閉）
+RSS_MONITOR_ENABLED=false
+RSS_MONITOR_POLL_INTERVAL_SECONDS=3600
+RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS=300
 ```
 
 ### 2. 啟動 Docker 服務
@@ -91,9 +96,10 @@ docker compose up -d
 - 預設對外開放 8501（Streamlit）與 8080（FastAPI）。
 - `api` 服務啟動時會自動更新 `yt-dlp`（可用 `YTDLP_AUTO_UPDATE=0` 關閉）。
 
-此指令會啟動兩個服務：
+此指令會啟動三個服務：
 - `streamlit`：Streamlit UI（8501）
 - `api`：FastAPI（8080）
+- `rss-monitor`：YouTube RSS 常駐輪詢程序（不對外開 port）
 
 ### 3. 進入服務容器
 
@@ -144,6 +150,27 @@ make run
 uv run python -m src.apps.workers.cli --db-type sqlite --worker-id local-run
 ```
 （`--db-type notion` 亦支援，適合 Notion 佇列；`--worker-id` 可選，用於鎖狀態追蹤。）
+
+### 執行 RSS 監控
+
+先在 Streamlit 的 `RSS Channel Management` 區塊新增 YouTube channel 訂閱，然後啟用 monitor：
+
+```bash
+make rss-monitor
+```
+
+若要持續輪詢，可直接執行：
+
+```bash
+uv run python -m src.apps.workers.rss_monitor
+```
+
+若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service，持續常駐輪詢。
+
+說明：
+- 第一次輪詢會先寫入 watermark，不會把歷史影片整批灌入 queue。
+- 偵測到新影片後，會自動建立 SQLite task，並沿用既有 background processing flow。
+- RSS monitor 目前僅支援 SQLite queue。
 
 ### 一鍵完成整個流程
 

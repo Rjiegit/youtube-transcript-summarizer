@@ -25,7 +25,13 @@ class NotionDB(BaseDB):
         if not self.database_id:
             raise RuntimeError("NOTION_DATABASE_ID is not configured.")
 
-    def add_task(self, url: str, status: str = "Pending") -> Task:
+    def add_task(
+        self,
+        url: str,
+        status: str = "Pending",
+        source_type: str = "manual",
+        source_channel_id: str | None = None,
+    ) -> Task:
         """Adds a new task to the Notion database."""
         self._ensure_configuration()
         name_text = build_rich_text_array(url or "") or [

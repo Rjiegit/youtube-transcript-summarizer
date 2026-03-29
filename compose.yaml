@@ -29,3 +29,12 @@ services:
       TASK_API_BASE_URL: "http://api:8080"
     ports:
       - "8501:8501"
+
+  rss-monitor:
+    <<: *python-app
+    command:
+      [
+        "bash",
+        "-lc",
+        "uv run python -m src.apps.workers.rss_monitor",
+      ]

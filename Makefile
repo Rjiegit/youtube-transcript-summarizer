@@ -1,4 +1,4 @@
-.PHONY: install run yt-dlp yt-dlp-update auto test streamlit api docker-build docker-up docker-down clear-processing-lock
+.PHONY: install run rss-monitor yt-dlp yt-dlp-update auto test streamlit api docker-build docker-up docker-down clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 
@@ -17,6 +17,9 @@ freeze:
 
 run:
 	uv run python -m src.apps.workers.cli --db-type sqlite
+
+rss-monitor:
+	uv run python -m src.apps.workers.rss_monitor --once
 
 streamlit:
 	uv run streamlit run src/apps/ui/streamlit_app.py

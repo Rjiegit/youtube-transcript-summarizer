@@ -22,7 +22,7 @@ class SQLiteDB(BaseDB):
         return sqlite3.connect(self.db_path)
 
     def _create_table(self) -> None:
-        """Creates the tasks table if it doesn't exist and ensures required columns."""
+        """Creates the application tables if they don't exist and ensures required columns."""
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(
@@ -41,7 +41,9 @@ class SQLiteDB(BaseDB):
                 retry_reason TEXT,
                 locked_at TIMESTAMP,
                 worker_id TEXT,
-                notion_page_id TEXT
+                notion_page_id TEXT,
+                source_type TEXT DEFAULT 'manual',
+                source_channel_id TEXT
             )
             """
         )
@@ -62,6 +64,29 @@ class SQLiteDB(BaseDB):
             )
             """
         )
+        cursor.execute(
+            """
+            CREATE TABLE IF NOT EXISTS rss_channel_subscriptions (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                channel_id TEXT NOT NULL UNIQUE,
+                feed_url TEXT NOT NULL,
+                title TEXT,
+                enabled INTEGER NOT NULL DEFAULT 1,
+                last_processed_published_at TIMESTAMP,
+                last_checked_at TIMESTAMP,
+                last_status TEXT,
+                last_error TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+            """
+        )
+        cursor.execute(
+            """
+            CREATE INDEX IF NOT EXISTS idx_rss_channel_subscriptions_enabled
+            ON rss_channel_subscriptions (enabled, channel_id)
+            """
+        )
 
         # Ensure legacy databases get the new columns.
         cursor.execute("PRAGMA table_info(tasks)")
@@ -76,6 +101,10 @@ class SQLiteDB(BaseDB):
             cursor.execute("ALTER TABLE tasks ADD COLUMN worker_id TEXT")
         if "notion_page_id" not in existing_columns:
             cursor.execute("ALTER TABLE tasks ADD COLUMN notion_page_id TEXT")
+        if "source_type" not in existing_columns:
+            cursor.execute("ALTER TABLE tasks ADD COLUMN source_type TEXT DEFAULT 'manual'")
+        if "source_channel_id" not in existing_columns:
+            cursor.execute("ALTER TABLE tasks ADD COLUMN source_channel_id TEXT")
 
         conn.commit()
         conn.close()
@@ -134,14 +163,23 @@ class SQLiteDB(BaseDB):
             for task_id, viewed_at in rows
         ]
 
-    def add_task(self, url: str, status: str = "Pending") -> Task:
+    def add_task(
+        self,
+        url: str,
+        status: str = "Pending",
+        source_type: str = "manual",
+        source_channel_id: str | None = None,
+    ) -> Task:
         """Adds a new task to the database and returns the stored record."""
         conn = self._get_connection()
         try:
             cursor = conn.cursor()
             cursor.execute(
-                "INSERT INTO tasks (url, status, title) VALUES (?, ?, ?)",
-                (url, status, url),
+                """
+                INSERT INTO tasks (url, status, title, source_type, source_channel_id)
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (url, status, url, source_type, source_channel_id),
             )
             new_id = cursor.lastrowid
             conn.commit()

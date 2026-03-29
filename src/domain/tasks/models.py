@@ -19,3 +19,5 @@ class Task:
     worker_id: Optional[str] = None
     notion_page_id: Optional[str] = None
     notion_url: Optional[str] = None
+    source_type: str = "manual"
+    source_channel_id: Optional[str] = None

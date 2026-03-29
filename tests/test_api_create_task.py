@@ -1,4 +1,3 @@
-import json
 import os
 import sys
 import types
@@ -44,10 +43,8 @@ except ModuleNotFoundError:  # pragma: no cover - testing scaffold
 
 from src.domain.interfaces.database import ProcessingLockInfo
 from src.domain.tasks.models import Task
-from src.services.pipeline.processing_runner import (
-    PROCESSING_LOCK_TIMEOUT_SECONDS,
-    ProcessingSummary,
-)
+from src.services.pipeline.processing_runner import PROCESSING_LOCK_TIMEOUT_SECONDS
+from src.services.tasks.processing_scheduler import SchedulingResult
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")
@@ -67,36 +64,17 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             url=self.normalized_url,
             status="Pending",
         )
-        mock_db.acquire_processing_lock.return_value = True
-
-        def _fake_process_pending_tasks(*, db, worker_id, **_):
-            return ProcessingSummary(
-                worker_id=worker_id,
-                processed_tasks=0,
-                failed_tasks=0,
-                acquired_lock=True,
-            )
-
-        def _thread_stub(target, args=(), kwargs=None, daemon=None):
-            if kwargs is None:
-                kwargs = {}
-
-            class _ImmediateThread:
-                def __init__(self):
-                    self.daemon = daemon
-
-                def start(self_inner):
-                    target(*args, **kwargs)
-
-            return _ImmediateThread()
 
         with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db) as mock_get_db:
             with patch(
-                "src.apps.api.main.process_pending_tasks",
-                side_effect=_fake_process_pending_tasks,
-            ):
-                with patch("src.apps.api.main.threading.Thread", side_effect=_thread_stub) as mock_thread:
-                    response = self.client.post("/tasks", json={"url": self.valid_url})
+                "src.apps.api.main.schedule_processing_job",
+                return_value=SchedulingResult(
+                    accepted=True,
+                    worker_id="api-worker-123",
+                    message="Processing worker scheduled.",
+                ),
+            ) as mock_schedule:
+                response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 201)
         payload = response.json()
@@ -104,15 +82,16 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertEqual(payload["status"], "Pending")
         self.assertEqual(payload["db_type"], "sqlite")
         self.assertTrue(payload["processing_started"])
-        worker_id_used = mock_db.acquire_processing_lock.call_args[0][0]
-        self.assertEqual(payload["processing_worker_id"], worker_id_used)
+        self.assertEqual(payload["processing_worker_id"], "api-worker-123")
         self.assertIn("Processing worker scheduled", payload["message"])
-        self.assertEqual(mock_get_db.call_count, 2)
-        mock_get_db.assert_any_call("sqlite")
-        mock_db.add_task.assert_called_once_with(self.normalized_url)
-        mock_db.acquire_processing_lock.assert_called_once()
-        mock_db.release_processing_lock.assert_called_once_with(worker_id_used)
-        mock_thread.assert_called_once()
+        self.assertEqual(mock_get_db.call_count, 1)
+        mock_get_db.assert_called_once_with("sqlite")
+        mock_db.add_task.assert_called_once_with(
+            self.normalized_url,
+            source_type="manual",
+            source_channel_id=None,
+        )
+        mock_schedule.assert_called_once_with(db_type="sqlite", db=mock_db, worker_id=None)
 
     def test_create_task_invalid_url(self) -> None:
         with patch("src.apps.api.main.DBFactory.get_db") as mock_get_db:
@@ -146,28 +125,6 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             url=self.normalized_url,
             status="Pending",
         )
-        mock_db.acquire_processing_lock.return_value = True
-
-        def _fake_process_pending_tasks(*, db, worker_id, **_):
-            return ProcessingSummary(
-                worker_id=worker_id,
-                processed_tasks=0,
-                failed_tasks=0,
-                acquired_lock=True,
-            )
-
-        def _thread_stub(target, args=(), kwargs=None, daemon=None):
-            if kwargs is None:
-                kwargs = {}
-
-            class _ImmediateThread:
-                def __init__(self):
-                    self.daemon = daemon
-
-                def start(self_inner):
-                    target(*args, **kwargs)
-
-            return _ImmediateThread()
 
         with patch.dict(
             os.environ,
@@ -176,31 +133,33 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         ):
             with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db) as mock_get_db:
                 with patch(
-                    "src.apps.api.main.process_pending_tasks",
-                    side_effect=_fake_process_pending_tasks,
-                ):
-                    with patch(
-                        "src.apps.api.main.threading.Thread",
-                        side_effect=_thread_stub,
-                    ) as mock_thread:
-                        response = self.client.post(
-                            "/tasks",
-                            json={"url": self.valid_url, "db_type": "notion"},
-                        )
+                    "src.apps.api.main.schedule_processing_job",
+                    return_value=SchedulingResult(
+                        accepted=True,
+                        worker_id="api-worker-notion",
+                        message="Processing worker scheduled.",
+                    ),
+                ) as mock_schedule:
+                    response = self.client.post(
+                        "/tasks",
+                        json={"url": self.valid_url, "db_type": "notion"},
+                    )
 
         self.assertEqual(response.status_code, 201)
         payload = response.json()
         self.assertEqual(payload["db_type"], "notion")
         self.assertEqual(payload["task_id"], "abc")
         self.assertTrue(payload["processing_started"])
-        worker_id_used = mock_db.acquire_processing_lock.call_args[0][0]
-        self.assertEqual(payload["processing_worker_id"], worker_id_used)
+        self.assertEqual(payload["processing_worker_id"], "api-worker-notion")
         self.assertIn("Processing worker scheduled", payload["message"])
-        self.assertEqual(mock_get_db.call_count, 2)
-        mock_get_db.assert_any_call("notion")
-        mock_db.add_task.assert_called_once_with(self.normalized_url)
-        mock_db.release_processing_lock.assert_called_once_with(worker_id_used)
-        mock_thread.assert_called_once()
+        self.assertEqual(mock_get_db.call_count, 1)
+        mock_get_db.assert_called_once_with("notion")
+        mock_db.add_task.assert_called_once_with(
+            self.normalized_url,
+            source_type="manual",
+            source_channel_id=None,
+        )
+        mock_schedule.assert_called_once_with(db_type="notion", db=mock_db, worker_id=None)
 
     def test_create_task_db_factory_error(self) -> None:
         with patch(
@@ -237,10 +196,16 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
-        mock_db.acquire_processing_lock.return_value = False
 
         with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
-            with patch("src.apps.api.main.threading.Thread") as mock_thread:
+            with patch(
+                "src.apps.api.main.schedule_processing_job",
+                return_value=SchedulingResult(
+                    accepted=False,
+                    worker_id=None,
+                    message="Processing already running.",
+                ),
+            ) as mock_schedule:
                 response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 201)
@@ -248,7 +213,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertFalse(payload["processing_started"])
         self.assertIsNone(payload["processing_worker_id"])
         self.assertIn("Processing already running", payload["message"])
-        mock_thread.assert_not_called()
+        mock_schedule.assert_called_once()
 
     def test_create_task_handles_scheduling_http_exception(self) -> None:
         mock_db = MagicMock()
@@ -273,36 +238,20 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_run_processing_endpoint_schedules_worker(self) -> None:
         mock_db = MagicMock()
-        mock_db.acquire_processing_lock.return_value = True
-        mock_summary = ProcessingSummary(
-            worker_id="api-worker-123",
-            processed_tasks=0,
-            failed_tasks=0,
-            acquired_lock=True,
-        )
-
-        def _thread_stub(target, args=(), kwargs=None, daemon=None):
-            if kwargs is None:
-                kwargs = {}
-
-            class _ImmediateThread:
-                def __init__(self):
-                    self.daemon = daemon
-
-                def start(self_inner):
-                    target(*args, **kwargs)
-
-            return _ImmediateThread()
 
         with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db) as mock_get_db:
             with patch(
-                "src.apps.api.main.process_pending_tasks", return_value=mock_summary
-            ) as mock_process:
-                with patch("src.apps.api.main.threading.Thread", side_effect=_thread_stub):
-                    response = self.client.post(
-                        "/processing-jobs",
-                        json={"db_type": "sqlite", "worker_id": "api-worker-123"},
-                    )
+                "src.apps.api.main.schedule_processing_job",
+                return_value=SchedulingResult(
+                    accepted=True,
+                    worker_id="api-worker-123",
+                    message="Processing worker scheduled.",
+                ),
+            ) as mock_schedule:
+                response = self.client.post(
+                    "/processing-jobs",
+                    json={"db_type": "sqlite", "worker_id": "api-worker-123"},
+                )
 
         self.assertEqual(response.status_code, 202)
         payload = response.json()
@@ -310,25 +259,29 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertEqual(payload["worker_id"], "api-worker-123")
         self.assertEqual(payload["db_type"], "sqlite")
 
-        mock_get_db.assert_any_call("sqlite")
-        mock_db.acquire_processing_lock.assert_called_once_with(
-            "api-worker-123", PROCESSING_LOCK_TIMEOUT_SECONDS
-        )
-        mock_process.assert_called_once_with(
+        mock_get_db.assert_called_once_with("sqlite")
+        mock_schedule.assert_called_once_with(
+            db_type="sqlite",
             db=mock_db,
             worker_id="api-worker-123",
         )
-        mock_db.release_processing_lock.assert_called_once_with("api-worker-123")
 
     def test_run_processing_endpoint_conflict_when_locked(self) -> None:
         mock_db = MagicMock()
-        mock_db.acquire_processing_lock.return_value = False
 
         with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
-            response = self.client.post(
-                "/processing-jobs",
-                json={"db_type": "sqlite"},
-            )
+            with patch(
+                "src.apps.api.main.schedule_processing_job",
+                return_value=SchedulingResult(
+                    accepted=False,
+                    worker_id=None,
+                    message="Processing already running.",
+                ),
+            ):
+                response = self.client.post(
+                    "/processing-jobs",
+                    json={"db_type": "sqlite"},
+                )
 
         self.assertEqual(response.status_code, 409)
         self.assertEqual(response.json()["detail"], "Processing already running.")
@@ -407,17 +360,28 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.add_task.return_value = Task(
             id="81", url=self.normalized_url, status="Pending"
         )
-        mock_db.acquire_processing_lock.return_value = False
 
         with patch("src.apps.api.main.TASK_CACHE_TTL_SECONDS", 3600):
             with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
-                response = self.client.post("/tasks", json={"url": self.valid_url})
+                with patch(
+                    "src.apps.api.main.schedule_processing_job",
+                    return_value=SchedulingResult(
+                        accepted=False,
+                        worker_id=None,
+                        message="Processing already running.",
+                    ),
+                ):
+                    response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 201)
         payload = response.json()
         self.assertEqual(payload["task_id"], "81")
         self.assertFalse(payload["cached"])
-        mock_db.add_task.assert_called_once()
+        mock_db.add_task.assert_called_once_with(
+            self.normalized_url,
+            source_type="manual",
+            source_channel_id=None,
+        )
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")

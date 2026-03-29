@@ -3,10 +3,6 @@
 from __future__ import annotations
 
 import os
-import threading
-import uuid
-from contextlib import suppress
-from dataclasses import dataclass
 from datetime import datetime
 from fastapi import FastAPI, Header, HTTPException, Response, status
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -16,10 +12,12 @@ from src.core.time_utils import as_utc, utc_now
 from src.core.utils.url import normalize_youtube_url, is_valid_youtube_url
 from src.domain.interfaces.database import ProcessingLockInfo
 from src.infrastructure.persistence.factory import DBFactory
-from src.services.pipeline.processing_runner import (
-    PROCESSING_LOCK_TIMEOUT_SECONDS,
-    process_pending_tasks,
+from src.services.pipeline.processing_runner import PROCESSING_LOCK_TIMEOUT_SECONDS
+from src.services.tasks.processing_scheduler import (
+    SchedulingResult,
+    schedule_processing_job,
 )
+from src.services.tasks.task_creation import create_task_record
 
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
 REQUIRED_NOTION_ENV_VARS: tuple[str, ...] = ("NOTION_API_KEY", "NOTION_DATABASE_ID")
@@ -322,31 +320,6 @@ def _build_lock_snapshot(info: ProcessingLockInfo) -> ProcessingLockSnapshot:
         stale=stale,
     )
 
-
-def _run_processing_worker(db_type: str, worker_id: str) -> None:
-    """Background task that drains the queue and guarantees lock release."""
-    db = DBFactory.get_db(db_type)
-    try:
-        result = process_pending_tasks(db=db, worker_id=worker_id)
-        logger.info(
-            f"Processing worker {result.worker_id} finished (processed={result.processed_tasks}, failed={result.failed_tasks})"
-        )
-    except Exception as exc:  # pragma: no cover - defensive guard
-        logger.error(
-            f"Processing worker {worker_id} crashed for database {db_type}: {exc}"
-        )
-    finally:
-        with suppress(Exception):
-            db.release_processing_lock(worker_id)
-
-
-@dataclass
-class SchedulingResult:
-    accepted: bool
-    worker_id: str | None
-    message: str
-
-
 def _schedule_processing_job(
     *,
     db_type: str,
@@ -354,47 +327,17 @@ def _schedule_processing_job(
     worker_id: str | None = None,
 ) -> SchedulingResult:
     """Shared helper to schedule the background worker with locking semantics."""
-
-    assigned_worker_id = worker_id or f"api-worker-{uuid.uuid4().hex}"
-
     try:
-        lock_acquired = db.acquire_processing_lock(
-            assigned_worker_id, PROCESSING_LOCK_TIMEOUT_SECONDS
+        return schedule_processing_job(
+            db_type=db_type,
+            db=db,
+            worker_id=worker_id,
         )
-    except NotImplementedError:  # pragma: no cover - for non-locking backends
-        lock_acquired = True
-
-    if not lock_acquired:
-        return SchedulingResult(
-            accepted=False,
-            worker_id=None,
-            message="Processing already running.",
-        )
-
-    try:
-        worker_thread = threading.Thread(
-            target=_run_processing_worker,
-            args=(db_type, assigned_worker_id),
-            daemon=True,
-        )
-        worker_thread.start()
-    except Exception as exc:  # pragma: no cover - defensive guard
-        with suppress(Exception):
-            db.release_processing_lock(assigned_worker_id)
+    except RuntimeError as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to schedule processing worker.",
+            detail=str(exc),
         ) from exc
-
-    logger.info(
-        f"Scheduled processing worker {assigned_worker_id} for backend {db_type}"
-    )
-
-    return SchedulingResult(
-        accepted=True,
-        worker_id=assigned_worker_id,
-        message="Processing worker scheduled.",
-    )
 
 
 @app.post("/tasks", response_model=TaskCreateResponse, status_code=status.HTTP_201_CREATED)
@@ -417,38 +360,14 @@ def create_task(payload: TaskCreateRequest, response: Response):
     _ensure_db_configuration(payload.db_type)
     db = _get_database(payload.db_type)
 
-    # --- Dedup: check for recent task with the same URL ---
-    existing_task = db.find_recent_task_by_url(normalized_url)
-    if existing_task is not None:
-        if existing_task.status in ("Pending", "Processing"):
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail=(
-                    f"A task for this URL is already {existing_task.status.lower()} "
-                    f"(task_id={existing_task.id})."
-                ),
-            )
-
-        if existing_task.status == "Completed" and existing_task.created_at:
-            age_seconds = (utc_now() - as_utc(existing_task.created_at)).total_seconds()
-            if age_seconds < TASK_CACHE_TTL_SECONDS:
-                response.status_code = status.HTTP_200_OK
-                return TaskCreateResponse(
-                    task_id=str(existing_task.id),
-                    status=existing_task.status,
-                    db_type=payload.db_type,
-                    message=(
-                        f"Returning cached result (age={int(age_seconds)}s, "
-                        f"ttl={TASK_CACHE_TTL_SECONDS}s)."
-                    ),
-                    processing_started=False,
-                    processing_worker_id=None,
-                    cached=True,
-                )
-
-    # --- No usable cache hit → create a new task ---
     try:
-        task = db.add_task(normalized_url)
+        creation = create_task_record(
+            db=db,
+            url=normalized_url,
+            source_type="manual",
+            cache_ttl_seconds=TASK_CACHE_TTL_SECONDS,
+            completed_task_policy="cache_ttl",
+        )
     except RuntimeError as exc:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -459,6 +378,31 @@ def create_task(payload: TaskCreateRequest, response: Response):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to create task.",
         ) from exc
+
+    if creation.outcome == "duplicate_active":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=creation.message,
+        )
+
+    if creation.cached and creation.task is not None:
+        response.status_code = status.HTTP_200_OK
+        return TaskCreateResponse(
+            task_id=str(creation.task.id),
+            status=creation.task.status,
+            db_type=payload.db_type,
+            message=creation.message,
+            processing_started=False,
+            processing_worker_id=None,
+            cached=True,
+        )
+
+    task = creation.task
+    if task is None:  # pragma: no cover - defensive guard
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Task creation returned no task.",
+        )
 
     try:
         scheduling_result = _schedule_processing_job(
@@ -484,7 +428,7 @@ def create_task(payload: TaskCreateRequest, response: Response):
             message="Task queued, but failed to schedule processing worker.",
         )
 
-    message = "Task queued successfully."
+    message = creation.message
     if scheduling_result.accepted:
         worker_note = (
             f" Processing worker scheduled (worker: {scheduling_result.worker_id})."

@@ -20,12 +20,20 @@ class BaseDB(ABC):
     """Abstract base class for a database interface."""
 
     @abstractmethod
-    def add_task(self, url: str, status: str = "Pending") -> Task:
+    def add_task(
+        self,
+        url: str,
+        status: str = "Pending",
+        source_type: str = "manual",
+        source_channel_id: str | None = None,
+    ) -> Task:
         """Adds a new task to the database and returns its representation.
 
         Args:
             url: The URL of the YouTube video.
             status: The initial status of the task.
+            source_type: Origin of the task creation request.
+            source_channel_id: Optional source channel identifier for RSS-created tasks.
 
         Returns:
             The persisted task instance, including the generated identifier.

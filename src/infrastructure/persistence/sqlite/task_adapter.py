@@ -109,4 +109,6 @@ class SQLiteTaskAdapter(TaskAdapter):
             worker_id=data.get("worker_id"),
             notion_page_id=notion_page_id,
             notion_url=notion_url,
+            source_type=(data.get("source_type") or "manual"),
+            source_channel_id=data.get("source_channel_id"),
         )

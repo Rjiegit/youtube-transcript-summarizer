@@ -62,6 +62,22 @@ class Config:
             os.path.join(self.videos_dir, "*.webm"),
         ]
 
+        # RSS monitoring settings
+        self.rss_monitor_enabled = os.getenv("RSS_MONITOR_ENABLED", "false").lower() in {
+            "1",
+            "true",
+            "yes",
+            "on",
+        }
+        self.rss_monitor_poll_interval_seconds = max(
+            int(os.getenv("RSS_MONITOR_POLL_INTERVAL_SECONDS", "3600")),
+            1,
+        )
+        self.rss_monitor_min_poll_interval_seconds = max(
+            int(os.getenv("RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS", "300")),
+            1,
+        )
+
     def _ensure_directories_exist(self):
         """Ensure that required directories exist."""
         os.makedirs(self.data_dir, exist_ok=True)
