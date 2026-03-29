@@ -1,4 +1,4 @@
-.PHONY: install run rss-monitor yt-dlp yt-dlp-update auto test streamlit api docker-build docker-up docker-down clear-processing-lock
+.PHONY: install run rss-monitor yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase showcase-test docker-build docker-up docker-down clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 
@@ -26,6 +26,15 @@ streamlit:
 
 api:
 	uv run uvicorn src.apps.api.main:app --reload --reload-dir /usr/src/app/src --host 0.0.0.0 --port 8080
+
+showcase-install:
+	npm --prefix frontend/nuxt-showcase install
+
+showcase:
+	npm --prefix frontend/nuxt-showcase run dev
+
+showcase-test:
+	npm --prefix frontend/nuxt-showcase run test
 
 test:
 	uv run python -m unittest discover -s . -p "test*.py" -v

@@ -239,6 +239,13 @@ modules.xml
 .AppleDouble
 .LSOverride
 
+# Node / Nuxt
+frontend/nuxt-showcase/node_modules/
+frontend/nuxt-showcase/.nuxt/
+frontend/nuxt-showcase/.output/
+frontend/nuxt-showcase/.vercel/
+frontend/nuxt-showcase/coverage/
+
 # Icon must end with two \r
 Icon
 

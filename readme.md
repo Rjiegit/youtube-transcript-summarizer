@@ -35,6 +35,7 @@
 - 自動處理 YouTube 影片下載、轉錄與摘要的完整工作流程
 - 以 Markdown 格式輸出結構化摘要
 - Docker 容器化部署，確保環境一致性
+- 獨立 Nuxt 展示頁，可部署到 Vercel 顯示最近 100 筆 Notion 成果
 
 ## 環境需求
 
@@ -71,6 +72,7 @@ GOOGLE_GEMINI_API_KEY=your_gemini_api_key
 NOTION_API_KEY=your_notion_api_key
 NOTION_DATABASE_ID=your_notion_database_id
 NOTION_URL=https://www.notion.so/your-workspace
+SHOWCASE_CACHE_TTL_SECONDS=3600
 
 # Discord 通知（可選）
 DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/......
@@ -254,6 +256,32 @@ curl -X POST http://localhost:8080/tasks \
   "cached": false
 }
 ```
+
+### 啟動 Nuxt Showcase
+
+展示頁位於 `frontend/nuxt-showcase`，適合部署到 Vercel，會由 Nuxt server 直接讀取 Notion database 中最近 100 筆 `Completed` 結果。
+
+本機開發：
+
+```bash
+make showcase-install
+make showcase
+```
+
+執行測試：
+
+```bash
+make showcase-test
+```
+
+Vercel 相關設定：
+
+- Root Directory: `frontend/nuxt-showcase`
+- Framework Preset: `Nuxt.js`
+- Environment Variables: `NOTION_API_KEY`、`NOTION_DATABASE_ID`、`NOTION_URL`
+- 選填 `SHOWCASE_CACHE_TTL_SECONDS`，預設為 `3600`
+
+展示頁 API route 會回傳 `Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600`，讓 Vercel CDN 做簡易 SWR 快取；server process 內也會保留最後一次成功的資料快照，當 Notion 暫時失敗時優先回退可用資料。
 
 #### 重複提交行為
 
