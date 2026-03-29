@@ -36,9 +36,9 @@ const lastUpdatedLabel = computed(() => {
   <main class="showcase-shell">
     <section class="hero">
       <p class="hero__eyebrow">YouTube Whisper Showcase</p>
-      <h1 class="hero__title">最近 100 筆完成的轉錄與摘要成果</h1>
+      <h1 class="hero__title">最近 100 筆 YouTube 轉錄與摘要</h1>
       <p class="hero__body">
-        這個頁面從 Notion 讀取已完成的處理結果，展示這個 side project 如何把 YouTube 影片轉成可快速瀏覽的摘要知識庫。
+        這裡收錄最近公開的 YouTube 摘要內容，展示我如何把長影片整理成可快速閱讀、分享與回頭查找的知識資產。
       </p>
       <div class="hero__stats">
         <div>
