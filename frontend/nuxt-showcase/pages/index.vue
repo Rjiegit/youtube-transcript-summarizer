@@ -36,9 +36,9 @@ const lastUpdatedLabel = computed(() => {
   <main class="showcase-shell">
     <section class="hero">
       <p class="hero__eyebrow">YouTube Whisper Showcase</p>
-      <h1 class="hero__title">最新的 YouTube 重點摘要</h1>
+      <h1 class="hero__title">YouTube 知識摘要</h1>
       <p class="hero__body">
-        這裡收錄最近公開的 YouTube 摘要內容，展示我如何把長影片整理成可快速閱讀、分享與回頭查找的知識資產。
+        收錄 YouTube 影片的重點整理，讓內容更容易快速瀏覽與查找。
       </p>
       <div class="hero__stats">
         <div>
