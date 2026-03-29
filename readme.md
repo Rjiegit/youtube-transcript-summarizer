@@ -268,6 +268,9 @@ make showcase-install
 make showcase
 ```
 
+`make showcase` 會優先載入 `frontend/nuxt-showcase/.env`，若不存在才 fallback 到 repo 根目錄 `.env`，再啟動 Nuxt dev server。
+展示頁開發預設使用 `http://localhost:3100`，避免與其他本機服務的 `3000` 衝突。
+
 執行測試：
 
 ```bash

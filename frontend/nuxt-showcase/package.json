@@ -2,11 +2,15 @@
   "name": "nuxt-showcase",
   "private": true,
   "type": "module",
+  "imports": {
+    "#internal/nuxt/paths": "./.nuxt/paths.mjs"
+  },
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
-    "preview": "nuxt preview",
-    "test": "vitest run"
+    "dev": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt dev --port 3100",
+    "build": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt build",
+    "preview": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt preview",
+    "test": "vitest run",
+    "check-env": "node ./scripts/check-env.mjs"
   },
   "dependencies": {
     "nuxt": "^3.17.7"

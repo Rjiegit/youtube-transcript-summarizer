@@ -1,4 +1,4 @@
-.PHONY: install run rss-monitor yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase showcase-test docker-build docker-up docker-down clear-processing-lock
+.PHONY: install run rss-monitor yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 
@@ -30,7 +30,22 @@ api:
 showcase-install:
 	npm --prefix frontend/nuxt-showcase install
 
+showcase-check:
+	npm --prefix frontend/nuxt-showcase run check-env
+
 showcase:
+	@env_file="frontend/nuxt-showcase/.env"; \
+	if [ ! -f "$$env_file" ] && [ -f .env ]; then \
+		env_file=".env"; \
+	fi; \
+	if [ -f "$$env_file" ]; then \
+		while IFS= read -r line || [ -n "$$line" ]; do \
+			case "$$line" in \
+				''|\#*) continue ;; \
+				*=*) export "$$line" ;; \
+			esac; \
+		done < "$$env_file"; \
+	fi; \
 	npm --prefix frontend/nuxt-showcase run dev
 
 showcase-test:

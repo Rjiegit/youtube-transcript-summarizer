@@ -12,6 +12,12 @@ const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showc
 });
 
 const items = computed(() => data.value?.items ?? []);
+const errorMessage = computed(() => {
+  if (!error.value) {
+    return "";
+  }
+  return error.value.statusMessage || error.value.message || "請稍後再試。";
+});
 const lastUpdatedLabel = computed(() => {
   if (!data.value?.generated_at) {
     return "";
@@ -58,7 +64,14 @@ const lastUpdatedLabel = computed(() => {
     <section v-else-if="error" class="state-panel state-panel--error">
       <p class="state-panel__title">目前無法載入展示資料</p>
       <p class="state-panel__body">
-        {{ error.statusMessage || "請稍後再試，或檢查 Vercel / Notion 環境變數設定。" }}
+        {{ errorMessage }}
+      </p>
+      <p class="state-panel__body">
+        可直接檢查
+        <a href="/api/showcase/diagnostics" target="_blank" rel="noreferrer">/api/showcase/diagnostics</a>
+        確認 server 端實際讀到哪些 env，或打開
+        <a href="/api/showcase/health" target="_blank" rel="noreferrer">/api/showcase/health</a>
+        直接驗證 Notion 查詢。
       </p>
     </section>
 
