@@ -2,6 +2,8 @@ x-python-app: &python-app
   build:
     context: .
     dockerfile: .docker/Dockerfile
+  environment:
+    TZ: Asia/Taipei
   working_dir: /usr/src/app
   volumes:
     - ./:/usr/src/app
@@ -26,6 +28,7 @@ services:
         "uv run streamlit run src/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
       ]
     environment:
+      TZ: Asia/Taipei
       TASK_API_BASE_URL: "http://api:8080"
     ports:
       - "8501:8501"

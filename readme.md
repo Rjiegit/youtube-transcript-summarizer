@@ -84,6 +84,7 @@ RSS_MONITOR_POLL_INTERVAL_SECONDS=3600
 RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS=300
 RSS_MONITOR_CRON_SCHEDULE=0 * * * *
 RSS_MONITOR_JITTER_SECONDS=600
+TZ=Asia/Taipei
 ```
 
 ### 2. 啟動 Docker 服務
@@ -167,7 +168,7 @@ make rss-monitor
 uv run python -m src.apps.workers.rss_monitor
 ```
 
-若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service。它會在 container 內以 `cron` 形式定期執行 `--once`，預設排程是每小時一次，可用 `RSS_MONITOR_CRON_SCHEDULE` 調整，並可用 `RSS_MONITOR_JITTER_SECONDS` 在每次實際執行前加入隨機延遲。
+若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service。它會在 container 內以 `cron` 形式定期執行 `--once`，預設以 `Asia/Taipei` 解讀 cron schedule，可用 `RSS_MONITOR_CRON_SCHEDULE` 調整，並可用 `RSS_MONITOR_JITTER_SECONDS` 在每次實際執行前加入隨機延遲。
 
 說明：
 - 第一次輪詢會先寫入 watermark，不會把歷史影片整批灌入 queue。
@@ -175,6 +176,7 @@ uv run python -m src.apps.workers.rss_monitor
 - RSS monitor 目前僅支援 SQLite queue。
 - Docker 預設 cron schedule：`0 * * * *`
 - Docker 可選 jitter：`RSS_MONITOR_JITTER_SECONDS=600` 代表每次觸發前隨機延遲 0 到 600 秒
+- Docker 預設時區：`TZ=Asia/Taipei`
 
 ### 一鍵完成整個流程
 

@@ -8,6 +8,7 @@ RUN apt update && \
     apt install -y make && \
     apt install -y curl && \
     apt install -y cron && \
+    apt install -y tzdata && \
     apt install -y pkg-config && \
     apt install -y build-essential && \
     apt install -y libavformat-dev && \
@@ -23,6 +24,10 @@ RUN apt update && \
 WORKDIR /usr/src/app
 
 # uv 在 bind-mount 下使用固定 venv 路徑，避免被 /usr/src/app 覆蓋
+ENV TZ=Asia/Taipei
+RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && \
+    echo ${TZ} > /etc/timezone
+
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
