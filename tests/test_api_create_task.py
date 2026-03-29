@@ -385,6 +385,62 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")
+class TestRSSSubscriptionEndpoint(unittest.TestCase):
+    def setUp(self) -> None:
+        self.client = TestClient(app)
+
+    def test_create_rss_subscription_success(self) -> None:
+        mock_repo = MagicMock()
+
+        with patch("src.apps.api.main._get_rss_repository", return_value=mock_repo):
+            with patch(
+                "src.apps.api.main.create_rss_subscription",
+                return_value=types.SimpleNamespace(
+                    subscription_id="1",
+                    channel_id="UC1234567890123456789012",
+                    feed_url="https://www.youtube.com/feeds/videos.xml?channel_id=UC1234567890123456789012",
+                    title="Demo Channel",
+                    enabled=True,
+                    message="RSS subscription created.",
+                ),
+            ) as mock_create:
+                response = self.client.post(
+                    "/rss/subscriptions",
+                    json={"channel_id": "UC1234567890123456789012"},
+                )
+
+        self.assertEqual(response.status_code, 201)
+        payload = response.json()
+        self.assertEqual(payload["subscription_id"], "1")
+        self.assertEqual(payload["channel_id"], "UC1234567890123456789012")
+        self.assertEqual(payload["title"], "Demo Channel")
+        self.assertTrue(payload["enabled"])
+        mock_create.assert_called_once()
+
+    def test_create_rss_subscription_conflict(self) -> None:
+        with patch("src.apps.api.main._get_rss_repository", return_value=MagicMock()):
+            with patch(
+                "src.apps.api.main.create_rss_subscription",
+                side_effect=ValueError("此 channel 已存在。"),
+            ):
+                response = self.client.post(
+                    "/rss/subscriptions",
+                    json={"channel_id": "UC1234567890123456789012"},
+                )
+
+        self.assertEqual(response.status_code, 409)
+        self.assertEqual(response.json()["detail"], "此 channel 已存在。")
+
+    def test_create_rss_subscription_invalid_channel_id(self) -> None:
+        response = self.client.post(
+            "/rss/subscriptions",
+            json={"channel_id": "not-a-channel"},
+        )
+
+        self.assertEqual(response.status_code, 422)
+
+
+@unittest.skipIf(TestClient is None, "fastapi is not installed")
 class TestRetryTaskEndpoint(unittest.TestCase):
     """Tests for the POST /tasks/{task_id}/retry endpoint."""
 

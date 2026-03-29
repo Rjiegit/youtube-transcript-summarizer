@@ -9,6 +9,19 @@
   "background": {
     "service_worker": "service_worker.js"
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/watch*",
+        "*://*.youtube.com/shorts/*",
+        "*://*.youtube.com/live/*",
+        "*://*.youtube.com/channel/*",
+        "*://*.youtube.com/@*"
+      ],
+      "js": ["content_script.js"],
+      "run_at": "document_idle"
+    }
+  ],
   "options_page": "options.html",
   "permissions": [
     "storage",

@@ -1,21 +1,15 @@
 from __future__ import annotations
 
-import sqlite3
-
-from src.core.utils.url import extract_youtube_channel_id, normalize_youtube_feed_url
 from src.infrastructure.persistence.sqlite.client import SQLiteDB
 from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
     SQLiteRSSSubscriptionRepository,
 )
 from src.services.rss.channel_monitor import RSSChannelMonitor
-
-
-def normalize_rss_subscription_input(raw_value: str) -> tuple[str, str]:
-    channel_id = extract_youtube_channel_id(raw_value)
-    feed_url = normalize_youtube_feed_url(raw_value)
-    if not channel_id or not feed_url:
-        raise ValueError("請輸入有效的 YouTube channel_id 或 feed URL。")
-    return channel_id, feed_url
+from src.services.rss.subscription_service import (
+    create_rss_subscription,
+    normalize_rss_subscription_input,
+    update_rss_subscription as update_rss_subscription_record,
+)
 
 
 def add_rss_subscription(
@@ -25,15 +19,13 @@ def add_rss_subscription(
     enabled: bool = True,
 ):
     channel_id, feed_url = normalize_rss_subscription_input(raw_value)
-    try:
-        return repository.add_subscription(
-            channel_id=channel_id,
-            feed_url=feed_url,
-            title=title,
-            enabled=enabled,
-        )
-    except sqlite3.IntegrityError as exc:
-        raise ValueError("此 channel 已存在。") from exc
+    return create_rss_subscription(
+        repository,
+        channel_id=channel_id,
+        feed_url=feed_url,
+        title=title,
+        enabled=enabled,
+    )
 
 
 def update_rss_subscription(
@@ -43,17 +35,13 @@ def update_rss_subscription(
     title: str = "",
     enabled: bool = True,
 ) -> None:
-    channel_id, feed_url = normalize_rss_subscription_input(raw_value)
-    try:
-        repository.update_subscription(
-            subscription_id,
-            channel_id=channel_id,
-            feed_url=feed_url,
-            title=title,
-            enabled=enabled,
-        )
-    except sqlite3.IntegrityError as exc:
-        raise ValueError("更新後的 channel 與既有訂閱衝突。") from exc
+    update_rss_subscription_record(
+        repository,
+        subscription_id,
+        raw_value,
+        title=title,
+        enabled=enabled,
+    )
 
 
 def trigger_rss_poll_once(

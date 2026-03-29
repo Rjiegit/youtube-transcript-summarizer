@@ -9,14 +9,23 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from src.core.logger import logger
 from src.core.time_utils import as_utc, utc_now
-from src.core.utils.url import normalize_youtube_url, is_valid_youtube_url
+from src.core.utils.url import (
+    build_youtube_channel_feed_url,
+    is_valid_youtube_channel_id,
+    is_valid_youtube_url,
+    normalize_youtube_url,
+)
 from src.domain.interfaces.database import ProcessingLockInfo
 from src.infrastructure.persistence.factory import DBFactory
+from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
+    SQLiteRSSSubscriptionRepository,
+)
 from src.services.pipeline.processing_runner import PROCESSING_LOCK_TIMEOUT_SECONDS
 from src.services.tasks.processing_scheduler import (
     SchedulingResult,
     schedule_processing_job,
 )
+from src.services.rss.subscription_service import create_rss_subscription
 from src.services.tasks.task_creation import create_task_record
 
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
@@ -112,6 +121,44 @@ class TaskRetryResponse(BaseModel):
     source_task_id: str = Field(..., description="Identifier of the failed task being retried.")
     status: str = Field(..., description="Current status of the retry task.")
     db_type: str = Field(..., description="Database backend used to persist the retry task.")
+    message: str = Field(..., description="Human readable status message.")
+
+
+class RSSSubscriptionCreateRequest(BaseModel):
+    """Incoming payload for creating an RSS channel subscription."""
+
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    channel_id: str = Field(..., description="YouTube channel id.")
+    feed_url: str | None = Field(
+        default=None,
+        description="Optional canonical YouTube feed URL for the channel.",
+    )
+    title: str | None = Field(
+        default="",
+        description="Optional display title for the subscription.",
+    )
+    enabled: bool = Field(
+        default=True,
+        description="Whether the subscription should be enabled immediately.",
+    )
+
+    @field_validator("channel_id")
+    @classmethod
+    def validate_channel_id(cls, value: str) -> str:
+        if not is_valid_youtube_channel_id(value):
+            raise ValueError("channel_id must be a valid YouTube channel id.")
+        return value
+
+
+class RSSSubscriptionCreateResponse(BaseModel):
+    """Response payload after creating an RSS subscription."""
+
+    subscription_id: str = Field(..., description="Identifier of the subscription.")
+    channel_id: str = Field(..., description="YouTube channel id.")
+    feed_url: str = Field(..., description="Canonical YouTube feed URL.")
+    title: str = Field(..., description="Display title for the subscription.")
+    enabled: bool = Field(..., description="Whether the subscription is enabled.")
     message: str = Field(..., description="Human readable status message.")
 
 
@@ -284,6 +331,12 @@ def _get_database(db_type: str):
         ) from exc
 
 
+def _get_rss_repository() -> SQLiteRSSSubscriptionRepository:
+    db = DBFactory.get_db("sqlite")
+    db_path = getattr(db, "db_path", "data/tasks.db")
+    return SQLiteRSSSubscriptionRepository(db_path=db_path)
+
+
 def _ensure_maintainer_token(token: str | None) -> None:
     admin_token = os.environ.get("PROCESSING_LOCK_ADMIN_TOKEN")
     if not admin_token:
@@ -445,6 +498,51 @@ def create_task(payload: TaskCreateRequest, response: Response):
         processing_started=scheduling_result.accepted,
         processing_worker_id=scheduling_result.worker_id,
         cached=False,
+    )
+
+
+@app.post(
+    "/rss/subscriptions",
+    response_model=RSSSubscriptionCreateResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_rss_subscription_endpoint(
+    payload: RSSSubscriptionCreateRequest,
+) -> RSSSubscriptionCreateResponse:
+    """Create a YouTube RSS channel subscription in SQLite."""
+
+    repository = _get_rss_repository()
+    feed_url = payload.feed_url or build_youtube_channel_feed_url(payload.channel_id)
+    try:
+        result = create_rss_subscription(
+            repository,
+            channel_id=payload.channel_id,
+            feed_url=feed_url,
+            title=payload.title or "",
+            enabled=payload.enabled,
+        )
+    except ValueError as exc:
+        detail = str(exc)
+        status_code = status.HTTP_409_CONFLICT if "已存在" in detail else status.HTTP_400_BAD_REQUEST
+        raise HTTPException(status_code=status_code, detail=detail) from exc
+    except RuntimeError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc),
+        ) from exc
+    except Exception as exc:  # pragma: no cover - defensive guard
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create RSS subscription.",
+        ) from exc
+
+    return RSSSubscriptionCreateResponse(
+        subscription_id=result.subscription_id or "",
+        channel_id=result.channel_id,
+        feed_url=result.feed_url,
+        title=result.title,
+        enabled=result.enabled,
+        message=result.message,
     )
 
 
