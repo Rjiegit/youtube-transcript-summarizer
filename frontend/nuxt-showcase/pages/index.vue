@@ -36,7 +36,7 @@ const lastUpdatedLabel = computed(() => {
   <main class="showcase-shell">
     <section class="hero">
       <p class="hero__eyebrow">YouTube Whisper Showcase</p>
-      <h1 class="hero__title">最近 100 筆 YouTube 轉錄與摘要</h1>
+      <h1 class="hero__title">最新的 YouTube 重點摘要</h1>
       <p class="hero__body">
         這裡收錄最近公開的 YouTube 摘要內容，展示我如何把長影片整理成可快速閱讀、分享與回頭查找的知識資產。
       </p>
@@ -44,10 +44,6 @@ const lastUpdatedLabel = computed(() => {
         <div>
           <span class="hero__stat-label">Results</span>
           <strong class="hero__stat-value">{{ items.length }}</strong>
-        </div>
-        <div>
-          <span class="hero__stat-label">Cache</span>
-          <strong class="hero__stat-value">{{ data?.cache_ttl_seconds ?? 3600 }}s</strong>
         </div>
         <div v-if="lastUpdatedLabel">
           <span class="hero__stat-label">Updated</span>

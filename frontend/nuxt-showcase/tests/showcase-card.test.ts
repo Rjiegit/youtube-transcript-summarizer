@@ -5,7 +5,7 @@ import ShowcaseCard from "../components/ShowcaseCard.vue";
 import type { ShowcaseResult } from "../types/showcase";
 
 describe("ShowcaseCard", () => {
-  it("renders title, links, and fallback summary", () => {
+  it("renders title and links without showing summary fallback text", () => {
     const item: ShowcaseResult = {
       id: "abc",
       title: "A showcase entry",
@@ -21,7 +21,7 @@ describe("ShowcaseCard", () => {
     });
 
     expect(wrapper.text()).toContain("A showcase entry");
-    expect(wrapper.text()).toContain("這筆結果尚未提供摘要內容。");
+    expect(wrapper.text()).not.toContain("這筆結果尚未提供摘要內容。");
     expect(wrapper.find('a[href="https://youtube.com/watch?v=abc"]').exists()).toBe(true);
     expect(wrapper.find('a[href="https://www.notion.so/workspace/abc"]').exists()).toBe(true);
   });

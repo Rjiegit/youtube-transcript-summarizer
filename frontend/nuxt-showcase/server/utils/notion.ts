@@ -4,7 +4,6 @@ export const DEFAULT_CACHE_TTL_SECONDS = 3600;
 export const MAX_SHOWCASE_RESULTS = 100;
 export const NOTION_VERSION = "2022-06-28";
 const STATUS_PROPERTY_CANDIDATES = ["Status", "status", "狀態", "状态", "State", "state"];
-const VISIBILITY_PROPERTY_CANDIDATES = ["Public", "public", "公開", "公开", "Visible", "visible"];
 const TITLE_PROPERTY_CANDIDATES = ["Title", "title", "Name", "name", "標題", "标题"];
 const SUMMARY_PROPERTY_CANDIDATES = ["Summary", "summary", "Prompt", "prompt", "Description", "description", "摘要"];
 const URL_PROPERTY_CANDIDATES = ["URL", "Url", "url", "Link", "link"];
@@ -68,6 +67,9 @@ interface PropertyDescriptor {
 
 export interface ResolvedNotionQueryConfig {
   filter:
+    | {
+        kind: "none";
+      }
     | {
         kind: "checkbox";
         propertyName: string;
@@ -256,25 +258,6 @@ export function resolveStatusConfig(
   const findByName = (name: string, allowedTypes?: string[]) =>
     findPropertyByCandidates(properties, [name], allowedTypes);
 
-  let checkboxMatch: [string, NotionDatabaseProperty] | undefined;
-  for (const candidate of VISIBILITY_PROPERTY_CANDIDATES) {
-    checkboxMatch = findByName(candidate, ["checkbox"]);
-    if (checkboxMatch) {
-      break;
-    }
-  }
-
-  if (checkboxMatch) {
-    return {
-      filter: {
-        kind: "checkbox",
-        propertyName: checkboxMatch[0],
-        equals: true,
-      },
-      availableProperties,
-    };
-  }
-
   let statusMatch: [string, NotionDatabaseProperty] | undefined;
   if (preferredPropertyName) {
     statusMatch = findByName(preferredPropertyName);
@@ -296,9 +279,12 @@ export function resolveStatusConfig(
   }
 
   if (!statusMatch) {
-    throw new Error(
-      `Unable to find a status-like property in the Notion database. Available properties: ${availableProperties.map((item) => `${item.name}(${item.type})`).join(", ")}`,
-    );
+    return {
+      filter: {
+        kind: "none",
+      },
+      availableProperties,
+    };
   }
 
   const [propertyName, property] = statusMatch;
@@ -328,22 +314,19 @@ export async function fetchLatestCompletedResults(
     options.completedStatusValue || "Completed",
   );
   const fieldMapping = resolveFieldMapping(schema);
-  const queryFilter = queryConfig.filter.kind === "checkbox"
+  const queryFilter = queryConfig.filter.kind === "status"
     ? {
-        property: queryConfig.filter.propertyName,
-        checkbox: { equals: queryConfig.filter.equals },
-      }
-    : {
         property: queryConfig.filter.propertyName,
         [queryConfig.filter.propertyType]: {
           equals: queryConfig.filter.completedValue,
         },
-      };
+      }
+    : null;
   const response = await fetchImpl("https://api.notion.com/v1/databases/" + options.databaseId + "/query", {
     method: "POST",
     headers: buildNotionHeaders(options.apiKey),
     body: JSON.stringify({
-      filter: queryFilter,
+      ...(queryFilter ? { filter: queryFilter } : {}),
       sorts: [
         {
           timestamp: "created_time",

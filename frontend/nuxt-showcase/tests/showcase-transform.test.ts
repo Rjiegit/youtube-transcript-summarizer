@@ -36,7 +36,6 @@ describe("showcase Notion mapping", () => {
         ok: true,
         json: async () => ({
           properties: {
-            Public: { type: "checkbox" },
             Title: { type: "title" },
             Prompt: { type: "rich_text" },
             URL: { type: "url" },
@@ -62,10 +61,6 @@ describe("showcase Notion mapping", () => {
     const [, request] = fetchImpl.mock.calls[1];
     expect(JSON.parse(String(request.body))).toMatchObject({
       page_size: MAX_SHOWCASE_RESULTS,
-      filter: {
-        property: "Public",
-        checkbox: { equals: true },
-      },
       sorts: [
         {
           timestamp: "created_time",
@@ -83,7 +78,6 @@ describe("showcase Notion mapping", () => {
         ok: true,
         json: async () => ({
           properties: {
-            Public: { type: "checkbox" },
             Title: { type: "title" },
           },
         }),
@@ -107,16 +101,11 @@ describe("showcase Notion mapping", () => {
   it("resolves a status-like property from database schema", () => {
     const statusConfig = resolveStatusConfig({
       properties: {
-        Public: { type: "checkbox" },
         標題: { type: "title" },
       },
     });
 
-    expect(statusConfig.filter.kind).toBe("checkbox");
-    if (statusConfig.filter.kind === "checkbox") {
-      expect(statusConfig.filter.propertyName).toBe("Public");
-      expect(statusConfig.filter.equals).toBe(true);
-    }
+    expect(statusConfig.filter.kind).toBe("none");
   });
 
   it("prefers the configured property name when provided", () => {

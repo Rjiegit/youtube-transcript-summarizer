@@ -19,17 +19,6 @@ const durationLabel = computed(() => {
   }
   return `${props.item.processing_duration.toFixed(1)}s`;
 });
-
-const summaryPreview = computed(() => {
-  const summary = (props.item.summary || "").trim();
-  if (!summary) {
-    return "這筆結果尚未提供摘要內容。";
-  }
-  if (summary.length <= 180) {
-    return summary;
-  }
-  return `${summary.slice(0, 180).trim()}...`;
-});
 </script>
 
 <template>
@@ -39,7 +28,6 @@ const summaryPreview = computed(() => {
       <span v-if="durationLabel">{{ durationLabel }}</span>
     </div>
     <h2 class="showcase-card__title">{{ item.title }}</h2>
-    <p class="showcase-card__summary">{{ summaryPreview }}</p>
     <div class="showcase-card__links">
       <a
         v-if="item.source_url"
