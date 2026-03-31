@@ -1,7 +1,9 @@
 import unittest
 
-from src.infrastructure.llm.gemini_model_selection import (
+from src.infrastructure.llm.weighted_selection import (
+    WeightedBackendModel,
     WeightedModel,
+    choose_weighted_backend_model,
     choose_weighted_model,
 )
 
@@ -17,7 +19,7 @@ class _FixedRng:
         return value
 
 
-class TestGeminiModelSelection(unittest.TestCase):
+class TestWeightedSelection(unittest.TestCase):
     def test_choose_weighted_model_deterministic(self):
         candidates = [
             WeightedModel("a", 5),
@@ -33,3 +35,24 @@ class TestGeminiModelSelection(unittest.TestCase):
     def test_choose_weighted_model_rejects_empty(self):
         with self.assertRaises(ValueError):
             choose_weighted_model([], rng=_FixedRng([0.5]))
+
+    def test_choose_weighted_backend_model_deterministic(self):
+        candidates = [
+            WeightedBackendModel("gemini", "a", 5),
+            WeightedBackendModel("ollama", "b", 5),
+            WeightedBackendModel("gemini", "c", 10),
+        ]
+
+        rng = _FixedRng([0.0, 0.26, 0.8])
+        self.assertEqual(
+            choose_weighted_backend_model(candidates, rng=rng),
+            WeightedBackendModel("gemini", "a", 5),
+        )
+        self.assertEqual(
+            choose_weighted_backend_model(candidates, rng=rng),
+            WeightedBackendModel("ollama", "b", 5),
+        )
+        self.assertEqual(
+            choose_weighted_backend_model(candidates, rng=rng),
+            WeightedBackendModel("gemini", "c", 10),
+        )

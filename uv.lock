@@ -929,6 +929,19 @@ wheels = [
 ]
 
 [[package]]
+name = "ollama"
+version = "0.6.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "httpx" },
+    { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d6/47/f9ee32467fe92744474a8c72e138113f3b529fc266eea76abfdec9a33f3b/ollama-0.6.0.tar.gz", hash = "sha256:da2b2d846b5944cfbcee1ca1e6ee0585f6c9d45a2fe9467cbcd096a37383da2f", size = 50811, upload-time = "2025-09-24T22:46:02.417Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b5/c1/edc9f41b425ca40b26b7c104c5f6841a4537bb2552bfa6ca66e81405bb95/ollama-0.6.0-py3-none-any.whl", hash = "sha256:534511b3ccea2dff419ae06c3b58d7f217c55be7897c8ce5868dfb6b219cf7a0", size = 14130, upload-time = "2025-09-24T22:46:01.19Z" },
+]
+
+[[package]]
 name = "onnxruntime"
 version = "1.24.1"
 source = { registry = "https://pypi.org/simple" }
@@ -976,6 +989,7 @@ dependencies = [
     { name = "faster-whisper" },
     { name = "google-generativeai" },
     { name = "notion-client" },
+    { name = "ollama" },
     { name = "openai" },
     { name = "python-dotenv" },
     { name = "pytubefix" },
@@ -997,6 +1011,7 @@ requires-dist = [
     { name = "faster-whisper", specifier = "==1.2.0" },
     { name = "google-generativeai", specifier = "==0.8.5" },
     { name = "notion-client", specifier = "==2.4.0" },
+    { name = "ollama", specifier = "==0.6.0" },
     { name = "openai", specifier = "==1.109.1" },
     { name = "python-dotenv", specifier = "==1.1.1" },
     { name = "pytubefix", specifier = "==9.4.1" },

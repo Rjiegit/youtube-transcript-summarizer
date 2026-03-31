@@ -38,11 +38,15 @@ class Config:
         # API keys
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.google_gemini_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
+        self.ollama_api_key = os.getenv("OLLAMA_API_KEY")
         self.notion_api_key = os.getenv("NOTION_API_KEY")
         self.notion_database_id = os.getenv("NOTION_DATABASE_ID")
         self.notion_url = os.getenv("NOTION_URL")
         self.discord_webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
-        self.task_api_base_url = os.getenv("TASK_API_BASE_URL", "http://localhost:8080")
+        self.task_api_base_url = os.getenv(
+            "TASK_API_BASE_URL",
+            "http://localhost:8080",
+        )
 
         # File paths
         self.data_dir = "data"
@@ -64,12 +68,10 @@ class Config:
         ]
 
         # RSS monitoring settings
-        self.rss_monitor_enabled = os.getenv("RSS_MONITOR_ENABLED", "false").lower() in {
-            "1",
-            "true",
-            "yes",
-            "on",
-        }
+        self.rss_monitor_enabled = (
+            os.getenv("RSS_MONITOR_ENABLED", "false").lower()
+            in {"1", "true", "yes", "on"}
+        )
         self.rss_monitor_poll_interval_seconds = max(
             int(os.getenv("RSS_MONITOR_POLL_INTERVAL_SECONDS", "3600")),
             1,
@@ -95,13 +97,19 @@ class Config:
         Raises ValueError if validation fails.
         """
         # Check that at least one API key is set for summarization
-        if not self.openai_api_key and not self.google_gemini_api_key:
+        if (
+            not self.openai_api_key
+            and not self.google_gemini_api_key
+            and not self.ollama_api_key
+        ):
             raise ValueError(
-                "At least one of OPENAI_API_KEY or GOOGLE_GEMINI_API_KEY must be set"
+                "At least one of OPENAI_API_KEY, "
+                "GOOGLE_GEMINI_API_KEY, or OLLAMA_API_KEY must be set"
             )
 
         # Check Notion API key and database ID if using Notion storage
         if self.notion_api_key and not self.notion_database_id:
             raise ValueError(
-                "NOTION_DATABASE_ID must be set when NOTION_API_KEY is provided"
+                "NOTION_DATABASE_ID must be set when "
+                "NOTION_API_KEY is provided"
             )

@@ -67,7 +67,9 @@ OPENAI_API_KEY=your_openai_api_key
 # Google Gemini API (可選)
 GOOGLE_GEMINI_API_KEY=your_gemini_api_key
 
-> 註：Gemini 摘要模型目前採「加權隨機」挑選以降低單一模型遇到 rate limit 的機率；可在 `src/infrastructure/llm/model_options.py` 調整 `GEMINI_WEIGHTED_MODELS`（model/weight）。
+# Ollama Cloud API (可選)
+OLLAMA_API_KEY=your_ollama_api_key
+OLLAMA_HOST=https://ollama.com
 
 # Notion 儲存與通知（可選）
 NOTION_API_KEY=your_notion_api_key
@@ -89,6 +91,10 @@ RSS_MONITOR_TASK_TIMEOUT_SECONDS=15
 TASK_API_BASE_URL=http://localhost:8080
 TZ=Asia/Taipei
 ```
+
+註：
+- 若同時設定多組 LLM API key，摘要會依 `auto` 模型池做加權隨機挑選，並把實際使用的 `provider:model` 寫入 log 與儲存欄位。
+- 目前 `auto` 池為 `gemini-3-flash-preview` 10%、`gemini-2.5-flash` 40%、`gemini-2.5-flash-lite` 40%、`kimi-k2.5:cloud` 10%；可在 `src/infrastructure/llm/model_options.py` 調整。
 
 ### 2. 啟動 Docker 服務
 
@@ -387,30 +393,24 @@ curl -X POST http://localhost:8080/processing-jobs \
 
 若想於 Docker 環境啟動 API，可直接執行 `docker compose up -d api`（或在 `api` 容器內跑 `make api`），API 會綁定宿主機的 8080 連接埠。
 
-## 使用 Ollama (本地模型)
+## 使用 Ollama Cloud
 
-如果您想使用 Ollama 進行本地摘要處理，請先設置 Ollama：
+如果您想使用 Ollama Cloud 進行摘要處理，請先準備 API key：
 
-1. 下載並安裝 Ollama：https://github.com/ollama/ollama
-
-2. 啟動 Ollama 服務：
+1. 取得 Ollama API key，並設定：
 
 ```bash
-ollama serve
+export OLLAMA_API_KEY=your_ollama_api_key
+export OLLAMA_HOST=https://ollama.com
 ```
 
-3. 拉取 Llama 3.2 模型：
+2. 安裝 Python client（專案依賴已包含 `ollama`）：
 
 ```bash
-ollama pull llama3.2
+uv sync --frozen --no-install-project
 ```
 
-4. 在 `src/infrastructure/llm/summarizer_service.py` 中調整 `summarize` 方法即可強制改用 Ollama：
-
-```python
-def summarize(self, title, text):
-    return self.summarize_with_ollama(title, text)
-```
+3. 若同時有多個 provider key，系統會在 auto 模式中將 Ollama Cloud 納入加權隨機選模。
 
 ## 輸出結果
 

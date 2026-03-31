@@ -14,6 +14,14 @@ class WeightedModel:
     model: str
     weight: int
 
+
+@dataclass(frozen=True)
+class WeightedBackendModel:
+    backend: str
+    model: str
+    weight: int
+
+
 def choose_weighted_model(
     candidates: Iterable[WeightedModel],
     *,
@@ -36,3 +44,26 @@ def choose_weighted_model(
 
     # Floating point edge case: fall back to last item.
     return weighted[-1].model
+
+
+def choose_weighted_backend_model(
+    candidates: Iterable[WeightedBackendModel],
+    *,
+    rng: _RandomLike,
+) -> WeightedBackendModel:
+    weighted = list(candidates)
+    if not weighted:
+        raise ValueError("No weighted backend model candidates provided")
+
+    total_weight = sum(item.weight for item in weighted)
+    if total_weight <= 0:
+        raise ValueError("Total weight must be positive")
+
+    pick = rng.random() * total_weight
+    running = 0.0
+    for item in weighted:
+        running += item.weight
+        if pick < running:
+            return item
+
+    return weighted[-1]
