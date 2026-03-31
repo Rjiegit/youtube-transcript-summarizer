@@ -438,7 +438,7 @@ self.transcription_model_size = "base"  # 可選: tiny, base, small, medium, lar
 
 ### 修改摘要提示詞
 
-在 `src/core/prompt.py` 中自定義摘要提示詞模板（`PROMPT_3`）。
+在 `src/core/prompt.py` 中自定義摘要提示詞模板（目前預設為 `PROMPT_VIDEO_SUMMARY`）。
 
 ## 開發相關
 
