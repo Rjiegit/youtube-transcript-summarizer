@@ -12,9 +12,10 @@
 - **`src/apps/ui/streamlit_app.py`**：Streamlit UI。
 - **`src/infrastructure/media/downloader.py`**：以 yt-dlp 管理影片與音訊下載。
 - **`src/services/pipeline/processing_runner.py`**：`ProcessingWorker` orchestration，負責任務鎖、轉錄、摘要與儲存。
+- **`src/services/rss/channel_monitor.py`**：RSS monitor，專責輪詢 feed、去重與呼叫 API 建立任務。
 - **`src/infrastructure/storage/file_storage.py`**：負責 Markdown 檔案輸出及檔名清理。
 - **`src/infrastructure/storage/summary_storage.py`**：將摘要同步到 Notion；可依需求替換其他儲存後端。
-- **`src/apps/workers/cli.py`**：CLI/排程入口，方便 `make run` 與 Docker scheduler 呼叫。
+- **`src/apps/workers/cli.py`**：CLI 入口，方便 `make run` 與背景 worker 處理佇列。
 
 > 註：請直接 import `src.*` 內的模組，實際邏輯皆位於 `src/`。
 
@@ -80,12 +81,12 @@ DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/......
 # Processing lock 管理
 PROCESSING_LOCK_ADMIN_TOKEN=your_admin_token
 
-# RSS monitor（預設關閉）
+# RSS monitor
 RSS_MONITOR_ENABLED=false
 RSS_MONITOR_POLL_INTERVAL_SECONDS=3600
 RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS=300
-RSS_MONITOR_CRON_SCHEDULE=0 * * * *
-RSS_MONITOR_JITTER_SECONDS=600
+RSS_MONITOR_TASK_TIMEOUT_SECONDS=15
+TASK_API_BASE_URL=http://localhost:8080
 TZ=Asia/Taipei
 ```
 
@@ -104,7 +105,7 @@ docker compose up -d
 此指令會啟動三個服務：
 - `streamlit`：Streamlit UI（8501）
 - `api`：FastAPI（8080）
-- `rss-monitor`：YouTube RSS cron service（不對外開 port）
+- `rss-monitor`：YouTube RSS monitor（不對外開 port）
 
 ### 3. 進入服務容器
 
@@ -164,20 +165,21 @@ uv run python -m src.apps.workers.cli --db-type sqlite --worker-id local-run
 make rss-monitor
 ```
 
-若要持續輪詢，可直接執行：
+若只想手動輪詢一次，可執行：
 
 ```bash
-uv run python -m src.apps.workers.rss_monitor
+make rss-monitor-once
 ```
 
-若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service。它會在 container 內以 `cron` 形式定期執行 `--once`，預設以 `Asia/Taipei` 解讀 cron schedule，可用 `RSS_MONITOR_CRON_SCHEDULE` 調整，並可用 `RSS_MONITOR_JITTER_SECONDS` 在每次實際執行前加入隨機延遲。
+若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service。它會在 container 內以長駐 Python process 執行，依 `RSS_MONITOR_POLL_INTERVAL_SECONDS` 定期輪詢。
 
 說明：
 - 第一次輪詢會先寫入 watermark，不會把歷史影片整批灌入 queue。
-- 偵測到新影片後，會自動建立 SQLite task，並沿用既有 background processing flow。
+- 偵測到新影片後，`rss-monitor` 只會呼叫 API 建立 SQLite task，不直接執行下載或摘要。
+- 任務建立後，會由 API 端沿用既有 background processing flow 啟動 worker。
 - RSS monitor 目前僅支援 SQLite queue。
-- Docker 預設 cron schedule：`0 * * * *`
-- Docker 可選 jitter：`RSS_MONITOR_JITTER_SECONDS=600` 代表每次觸發前隨機延遲 0 到 600 秒
+- `TASK_API_BASE_URL` 預設為 `http://localhost:8080`；在 Docker Compose 內部會使用 `http://api:8080`
+- `RSS_MONITOR_TASK_TIMEOUT_SECONDS` 用於控制 monitor 呼叫 API 的 request timeout
 - Docker 預設時區：`TZ=Asia/Taipei`
 
 ### 一鍵完成整個流程

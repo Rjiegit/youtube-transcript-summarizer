@@ -1,4 +1,4 @@
-.PHONY: install run rss-monitor yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down clear-processing-lock
+.PHONY: install run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 
@@ -19,6 +19,9 @@ run:
 	uv run python -m src.apps.workers.cli --db-type sqlite
 
 rss-monitor:
+	uv run python -m src.apps.workers.rss_monitor
+
+rss-monitor-once:
 	uv run python -m src.apps.workers.rss_monitor --once
 
 streamlit:
