@@ -111,14 +111,7 @@ class Summarizer:
         selection_mode: str,
     ) -> tuple[str, str]:
         if selection_mode == "auto":
-            available_backends = set(self._available_backends())
-            candidates = [
-                candidate
-                for candidate in AUTO_SUMMARIZER_MODELS
-                if candidate.backend in available_backends
-            ]
-            selected = choose_weighted_backend_model(candidates, rng=random)
-            return selected.backend, selected.model
+            return self._choose_auto_backend_and_model()
 
         if selection_mode == "gemini":
             return "gemini", self._choose_gemini_model()
@@ -128,6 +121,19 @@ class Summarizer:
             return "ollama", self._choose_ollama_model()
 
         raise ValueError(f"Unsupported selection mode: {selection_mode}")
+
+    def _choose_auto_backend_and_model(self) -> tuple[str, str]:
+        available_backends = set(self._available_backends())
+        candidates = [
+            candidate
+            for candidate in AUTO_SUMMARIZER_MODELS
+            if candidate.backend in available_backends
+        ]
+        selected = choose_weighted_backend_model(candidates, rng=random)
+        logger.info(
+            f"[Auto] Selected backend={selected.backend} model={selected.model}"
+        )
+        return selected.backend, selected.model
 
     def _choose_gemini_model(self) -> str:
         selected_model = GEMINI_MODEL
