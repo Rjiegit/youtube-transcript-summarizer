@@ -42,6 +42,7 @@ class Config:
         self.notion_database_id = os.getenv("NOTION_DATABASE_ID")
         self.notion_url = os.getenv("NOTION_URL")
         self.discord_webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+        self.task_api_base_url = os.getenv("TASK_API_BASE_URL", "http://localhost:8080")
 
         # File paths
         self.data_dir = "data"
@@ -75,6 +76,10 @@ class Config:
         )
         self.rss_monitor_min_poll_interval_seconds = max(
             int(os.getenv("RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS", "300")),
+            1,
+        )
+        self.rss_monitor_task_timeout_seconds = max(
+            int(os.getenv("RSS_MONITOR_TASK_TIMEOUT_SECONDS", "15")),
             1,
         )
 

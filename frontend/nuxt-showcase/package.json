@@ -6,7 +6,7 @@
     "#internal/nuxt/paths": "./.nuxt/paths.mjs"
   },
   "scripts": {
-    "dev": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt dev --port 3100",
+    "dev": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt dev --port 3000",
     "build": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt build",
     "preview": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt preview",
     "test": "vitest run",

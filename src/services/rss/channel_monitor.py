@@ -14,8 +14,6 @@ from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
     SQLiteRSSSubscriptionRepository,
 )
 from src.infrastructure.persistence.sqlite.client import SQLiteDB
-from src.services.tasks.processing_scheduler import schedule_processing_job
-from src.services.tasks.task_creation import create_task_record
 
 try:  # pragma: no cover - optional in minimal environments
     import requests
@@ -33,6 +31,12 @@ class YouTubeFeedEntry:
     url: str
     published_at: datetime
     updated_at: datetime | None = None
+
+
+@dataclass
+class TaskEnqueueResult:
+    created: bool
+    message: str = ""
 
 
 class YouTubeRSSFeedClient:
@@ -85,33 +89,66 @@ class YouTubeRSSFeedClient:
         return entries
 
 
+class TaskAPIClient:
+    def __init__(self, api_base_url: str, timeout_seconds: int = 15):
+        self.api_base_url = api_base_url.rstrip("/")
+        self.timeout_seconds = timeout_seconds
+
+    def enqueue_task(self, url: str, channel_id: str) -> TaskEnqueueResult:
+        if requests is None:
+            raise RuntimeError("requests is required for RSS monitoring.")
+
+        response = requests.post(
+            f"{self.api_base_url}/tasks",
+            json={
+                "url": url,
+                "db_type": "sqlite",
+                "source_type": "rss",
+                "source_channel_id": channel_id,
+                "completed_task_policy": "block_existing",
+            },
+            timeout=self.timeout_seconds,
+        )
+
+        detail = ""
+        try:
+            payload = response.json()
+            detail = str(payload.get("detail") or payload.get("message") or "")
+        except ValueError:
+            detail = (response.text or "").strip()
+
+        if response.status_code == 201:
+            return TaskEnqueueResult(created=True, message=detail)
+        if response.status_code == 409:
+            return TaskEnqueueResult(created=False, message=detail)
+        raise RuntimeError(
+            f"Task API request failed ({response.status_code}): {detail or 'unknown error'}"
+        )
+
+
 class RSSChannelMonitor:
     def __init__(
         self,
         db: SQLiteDB | None = None,
         repository: SQLiteRSSSubscriptionRepository | None = None,
         feed_client: YouTubeRSSFeedClient | None = None,
+        task_client: TaskAPIClient | None = None,
         config: Config | None = None,
     ):
         self.db = db or SQLiteDB()
         self.repository = repository or SQLiteRSSSubscriptionRepository(self.db.db_path)
         self.feed_client = feed_client or YouTubeRSSFeedClient()
         self.config = config or Config()
+        self.task_client = task_client or TaskAPIClient(
+            api_base_url=self.config.task_api_base_url,
+            timeout_seconds=self.config.rss_monitor_task_timeout_seconds,
+        )
 
     def poll_once(self) -> list[RSSPollResult]:
         results: list[RSSPollResult] = []
-        created_any = False
         for subscription in self.repository.list_subscriptions(enabled_only=True):
             result = self._poll_subscription(subscription)
             results.append(result)
-            if result.new_tasks > 0:
-                created_any = True
-
-        if created_any:
-            schedule_result = schedule_processing_job(db_type="sqlite", db=self.db)
-            logger.info(
-                f"RSS monitor scheduled processing accepted={schedule_result.accepted} worker={schedule_result.worker_id}"
-            )
         return results
 
     def run_forever(self, stop_event: threading.Event | None = None) -> None:
@@ -153,14 +190,8 @@ class RSSChannelMonitor:
             ]
 
             for entry in new_entries:
-                creation = create_task_record(
-                    db=self.db,
-                    url=entry.url,
-                    source_type="rss",
-                    source_channel_id=subscription.channel_id,
-                    completed_task_policy="block_existing",
-                )
-                if creation.created:
+                enqueue_result = self.task_client.enqueue_task(entry.url, subscription.channel_id)
+                if enqueue_result.created:
                     result.new_tasks += 1
                 else:
                     result.duplicates += 1

@@ -101,6 +101,68 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertEqual(response.json()["detail"], "Invalid YouTube URL.")
         mock_get_db.assert_not_called()
 
+    def test_create_task_accepts_rss_source_fields(self) -> None:
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
+        mock_db.add_task.return_value = Task(
+            id="77",
+            url=self.normalized_url,
+            status="Pending",
+            source_type="rss",
+            source_channel_id="UC1234567890123456789012",
+        )
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            with patch(
+                "src.apps.api.main.schedule_processing_job",
+                return_value=SchedulingResult(
+                    accepted=True,
+                    worker_id="api-worker-rss",
+                    message="Processing worker scheduled.",
+                ),
+            ):
+                response = self.client.post(
+                    "/tasks",
+                    json={
+                        "url": self.valid_url,
+                        "db_type": "sqlite",
+                        "source_type": "rss",
+                        "source_channel_id": "UC1234567890123456789012",
+                        "completed_task_policy": "block_existing",
+                    },
+                )
+
+        self.assertEqual(response.status_code, 201)
+        mock_db.add_task.assert_called_once_with(
+            self.normalized_url,
+            source_type="rss",
+            source_channel_id="UC1234567890123456789012",
+        )
+
+    def test_create_task_returns_conflict_for_block_existing_completed_task(self) -> None:
+        completed_task = Task(
+            id="66",
+            url=self.normalized_url,
+            status="Completed",
+            created_at=utc_now(),
+        )
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = completed_task
+
+        with patch("src.apps.api.main.DBFactory.get_db", return_value=mock_db):
+            response = self.client.post(
+                "/tasks",
+                json={
+                    "url": self.valid_url,
+                    "source_type": "rss",
+                    "completed_task_policy": "block_existing",
+                },
+            )
+
+        self.assertEqual(response.status_code, 409)
+        self.assertIn("completed task already exists", response.json()["detail"])
+        mock_db.add_task.assert_not_called()
+
     def test_create_task_requires_notion_env(self) -> None:
         with patch.dict(
             os.environ,

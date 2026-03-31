@@ -35,9 +35,7 @@ services:
 
   rss-monitor:
     <<: *python-app
-    command:
-      [
-        "bash",
-        "-lc",
-        "bash .docker/start-rss-monitor-cron.sh",
-      ]
+    command: ["bash", "-lc", "uv run python -m src.apps.workers.rss_monitor"]
+    environment:
+      TZ: Asia/Taipei
+      TASK_API_BASE_URL: "http://api:8080"

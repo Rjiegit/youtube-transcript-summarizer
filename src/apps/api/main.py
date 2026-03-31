@@ -53,6 +53,18 @@ class TaskCreateRequest(BaseModel):
         default="sqlite",
         description="Database backend to persist the task (sqlite|notion).",
     )
+    source_type: str = Field(
+        default="manual",
+        description="Origin of the task creation request (manual|rss).",
+    )
+    source_channel_id: str | None = Field(
+        default=None,
+        description="Optional source channel identifier when the task was created from RSS.",
+    )
+    completed_task_policy: str = Field(
+        default="cache_ttl",
+        description="Completed-task dedup policy (cache_ttl|block_existing).",
+    )
 
     @field_validator("url")
     @classmethod
@@ -67,6 +79,24 @@ class TaskCreateRequest(BaseModel):
         normalized = (value or "").lower()
         if normalized not in SUPPORTED_DB_TYPES:
             raise ValueError("db_type must be either 'sqlite' or 'notion'.")
+        return normalized
+
+    @field_validator("source_type")
+    @classmethod
+    def normalize_source_type(cls, value: str) -> str:
+        normalized = (value or "").lower()
+        if normalized not in {"manual", "rss"}:
+            raise ValueError("source_type must be either 'manual' or 'rss'.")
+        return normalized
+
+    @field_validator("completed_task_policy")
+    @classmethod
+    def normalize_completed_task_policy(cls, value: str) -> str:
+        normalized = (value or "").lower()
+        if normalized not in {"cache_ttl", "block_existing"}:
+            raise ValueError(
+                "completed_task_policy must be either 'cache_ttl' or 'block_existing'."
+            )
         return normalized
 
 
@@ -417,9 +447,10 @@ def create_task(payload: TaskCreateRequest, response: Response):
         creation = create_task_record(
             db=db,
             url=normalized_url,
-            source_type="manual",
+            source_type=payload.source_type,
+            source_channel_id=payload.source_channel_id,
             cache_ttl_seconds=TASK_CACHE_TTL_SECONDS,
-            completed_task_policy="cache_ttl",
+            completed_task_policy=payload.completed_task_policy,
         )
     except RuntimeError as exc:
         raise HTTPException(
@@ -432,7 +463,7 @@ def create_task(payload: TaskCreateRequest, response: Response):
             detail="Failed to create task.",
         ) from exc
 
-    if creation.outcome == "duplicate_active":
+    if creation.outcome in {"duplicate_active", "duplicate_completed"}:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail=creation.message,

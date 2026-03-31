@@ -8,6 +8,7 @@ CONTAINER_TZ="${TZ:-Asia/Taipei}"
 LOG_TAG="[rss-monitor-cron]"
 
 mkdir -p /var/log
+mkdir -p /etc/cron.d
 
 if [ "${RSS_MONITOR_ENABLED:-false}" != "true" ]; then
   echo "$LOG_TAG RSS_MONITOR_ENABLED is not true; cron job will not be registered."

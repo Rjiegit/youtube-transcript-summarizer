@@ -3,7 +3,11 @@ from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 from src.domain.rss.models import RSSChannelSubscription
-from src.services.rss.channel_monitor import RSSChannelMonitor, YouTubeRSSFeedClient
+from src.services.rss.channel_monitor import (
+    RSSChannelMonitor,
+    TaskEnqueueResult,
+    YouTubeRSSFeedClient,
+)
 
 
 SAMPLE_FEED = """<?xml version="1.0" encoding="UTF-8"?>
@@ -41,6 +45,7 @@ class TestRSSChannelMonitor(unittest.TestCase):
     def test_first_poll_seeds_without_creating_tasks(self) -> None:
         db = MagicMock()
         repository = MagicMock()
+        task_client = MagicMock()
         subscription = RSSChannelSubscription(
             id="1",
             channel_id="UC1234567890123456789012",
@@ -49,20 +54,24 @@ class TestRSSChannelMonitor(unittest.TestCase):
         repository.list_subscriptions.return_value = [subscription]
         feed_client = MagicMock()
         feed_client.fetch_entries.return_value = YouTubeRSSFeedClient().parse_entries(SAMPLE_FEED)
-        monitor = RSSChannelMonitor(db=db, repository=repository, feed_client=feed_client)
+        monitor = RSSChannelMonitor(
+            db=db,
+            repository=repository,
+            feed_client=feed_client,
+            task_client=task_client,
+        )
 
-        with patch("src.services.rss.channel_monitor.schedule_processing_job") as mock_schedule:
-            results = monitor.poll_once()
+        results = monitor.poll_once()
 
         self.assertEqual(len(results), 1)
         self.assertTrue(results[0].seeded)
-        db.add_task.assert_not_called()
-        mock_schedule.assert_not_called()
+        task_client.enqueue_task.assert_not_called()
         repository.update_monitor_state.assert_called_once()
 
-    def test_poll_creates_only_new_entries_and_schedules_processing(self) -> None:
+    def test_poll_creates_only_new_entries_via_api(self) -> None:
         db = MagicMock()
         repository = MagicMock()
+        task_client = MagicMock()
         subscription = RSSChannelSubscription(
             id="1",
             channel_id="UC1234567890123456789012",
@@ -72,28 +81,51 @@ class TestRSSChannelMonitor(unittest.TestCase):
         repository.list_subscriptions.return_value = [subscription]
         feed_client = MagicMock()
         feed_client.fetch_entries.return_value = YouTubeRSSFeedClient().parse_entries(SAMPLE_FEED)
-        monitor = RSSChannelMonitor(db=db, repository=repository, feed_client=feed_client)
+        task_client.enqueue_task.return_value = TaskEnqueueResult(created=True)
+        monitor = RSSChannelMonitor(
+            db=db,
+            repository=repository,
+            feed_client=feed_client,
+            task_client=task_client,
+        )
 
-        with patch(
-            "src.services.rss.channel_monitor.create_task_record",
-            return_value=MagicMock(created=True),
-        ) as mock_create:
-            with patch(
-                "src.services.rss.channel_monitor.schedule_processing_job",
-                return_value=MagicMock(accepted=True, worker_id="rss-worker"),
-            ) as mock_schedule:
-                results = monitor.poll_once()
+        results = monitor.poll_once()
 
         self.assertEqual(results[0].new_tasks, 1)
         self.assertEqual(results[0].duplicates, 0)
-        mock_create.assert_called_once_with(
-            db=db,
-            url="https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
-            source_type="rss",
-            source_channel_id="UC1234567890123456789012",
-            completed_task_policy="block_existing",
+        task_client.enqueue_task.assert_called_once_with(
+            "https://www.youtube.com/watch?v=3JZ_D3ELwOQ",
+            "UC1234567890123456789012",
         )
-        mock_schedule.assert_called_once()
+
+    def test_poll_counts_api_duplicates(self) -> None:
+        db = MagicMock()
+        repository = MagicMock()
+        task_client = MagicMock()
+        subscription = RSSChannelSubscription(
+            id="1",
+            channel_id="UC1234567890123456789012",
+            feed_url="https://www.youtube.com/feeds/videos.xml?channel_id=UC1234567890123456789012",
+            last_processed_published_at=datetime(2026, 3, 29, 0, 30, tzinfo=timezone.utc),
+        )
+        repository.list_subscriptions.return_value = [subscription]
+        feed_client = MagicMock()
+        feed_client.fetch_entries.return_value = YouTubeRSSFeedClient().parse_entries(SAMPLE_FEED)
+        task_client.enqueue_task.return_value = TaskEnqueueResult(
+            created=False,
+            message="A completed task already exists for this URL.",
+        )
+        monitor = RSSChannelMonitor(
+            db=db,
+            repository=repository,
+            feed_client=feed_client,
+            task_client=task_client,
+        )
+
+        results = monitor.poll_once()
+
+        self.assertEqual(results[0].new_tasks, 0)
+        self.assertEqual(results[0].duplicates, 1)
 
     def test_poll_records_error_per_subscription(self) -> None:
         db = MagicMock()
