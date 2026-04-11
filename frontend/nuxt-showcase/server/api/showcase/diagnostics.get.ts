@@ -1,10 +1,10 @@
 import { defineEventHandler } from "h3";
 
-import { getShowcaseRuntimeSnapshot, resolveShowcaseConfig } from "./results.get";
+import { getShowcaseRuntimeSnapshot, resolveShowcaseConfig } from "../../utils/config";
 
 export default defineEventHandler((event) => {
-  const config = useRuntimeConfig(event);
-  const resolved = resolveShowcaseConfig(config);
+  const runtimeConfig = useRuntimeConfig(event);
+  const resolved = resolveShowcaseConfig({ runtimeConfig });
 
   return {
     ok: Boolean(
@@ -15,6 +15,6 @@ export default defineEventHandler((event) => {
       notionDatabaseId: Boolean(resolved.notionDatabaseId),
       cacheTtlSeconds: resolved.cacheTtlSeconds,
     },
-    diagnostic: getShowcaseRuntimeSnapshot(config),
+    diagnostic: getShowcaseRuntimeSnapshot(runtimeConfig),
   };
 });

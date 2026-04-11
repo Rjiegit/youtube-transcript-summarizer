@@ -6,11 +6,11 @@ import {
   resolveFieldMapping,
   resolveStatusConfig,
 } from "../../utils/notion";
-import { resolveShowcaseConfig } from "./results.get";
+import { resolveShowcaseConfig } from "../../utils/config";
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event);
-  const resolved = resolveShowcaseConfig(config);
+  const runtimeConfig = useRuntimeConfig(event);
+  const resolved = resolveShowcaseConfig({ runtimeConfig });
 
   if (!resolved.notionApiKey || !resolved.notionDatabaseId) {
     return {

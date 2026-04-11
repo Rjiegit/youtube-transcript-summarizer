@@ -3,8 +3,12 @@ import { createError, defineEventHandler, setHeader } from "h3";
 import { fetchLatestCompletedResults } from "../../utils/notion";
 import { createSWRCache } from "../../utils/swr-cache";
 import type { ShowcaseApiResponse } from "../../../types/showcase";
-
-const DEFAULT_CACHE_TTL_SECONDS = 3600;
+import {
+  DEFAULT_CACHE_TTL_SECONDS,
+  getShowcaseCacheControlValue,
+  getShowcaseRuntimeSnapshot,
+  resolveShowcaseConfig,
+} from "../../utils/config";
 let showcaseCache = createSWRCache<ShowcaseApiResponse>({
   ttlMs: DEFAULT_CACHE_TTL_SECONDS * 1000,
 });
@@ -19,87 +23,17 @@ function getShowcaseCache(cacheTtlSeconds: number) {
   return showcaseCache;
 }
 
-function firstNonEmptyValue(...values: Array<unknown>): string {
-  for (const value of values) {
-    if (typeof value === "string" && value.trim()) {
-      return value.trim();
-    }
-  }
-  return "";
-}
-
-function hasNonEmptyValue(value: unknown): boolean {
-  return typeof value === "string" && value.trim().length > 0;
-}
-
-export function getShowcaseRuntimeSnapshot(config: Record<string, unknown>) {
-  return {
-    runtimeConfig: {
-      notionApiKey: hasNonEmptyValue(config.notionApiKey),
-      notionDatabaseId: hasNonEmptyValue(config.notionDatabaseId),
-      showcaseCacheTtlSeconds: config.showcaseCacheTtlSeconds ?? null,
-    },
-    processEnv: {
-      NOTION_API_KEY: hasNonEmptyValue(process.env.NOTION_API_KEY),
-      NOTION_DATABASE_ID: hasNonEmptyValue(process.env.NOTION_DATABASE_ID),
-      NUXT_NOTION_API_KEY: hasNonEmptyValue(process.env.NUXT_NOTION_API_KEY),
-      NUXT_NOTION_DATABASE_ID: hasNonEmptyValue(process.env.NUXT_NOTION_DATABASE_ID),
-      SHOWCASE_CACHE_TTL_SECONDS: hasNonEmptyValue(process.env.SHOWCASE_CACHE_TTL_SECONDS),
-      NUXT_SHOWCASE_CACHE_TTL_SECONDS: hasNonEmptyValue(process.env.NUXT_SHOWCASE_CACHE_TTL_SECONDS),
-    },
-  };
-}
-
-export function resolveShowcaseConfig(config: Record<string, unknown>) {
-  const notionApiKey = firstNonEmptyValue(
-    config.notionApiKey,
-    process.env.NOTION_API_KEY,
-    process.env.NUXT_NOTION_API_KEY,
-  );
-  const notionDatabaseId = firstNonEmptyValue(
-    config.notionDatabaseId,
-    process.env.NOTION_DATABASE_ID,
-    process.env.NUXT_NOTION_DATABASE_ID,
-  );
-  const cacheTtlSeconds = Number(
-    firstNonEmptyValue(
-      config.showcaseCacheTtlSeconds,
-      process.env.SHOWCASE_CACHE_TTL_SECONDS,
-      process.env.NUXT_SHOWCASE_CACHE_TTL_SECONDS,
-    ) || DEFAULT_CACHE_TTL_SECONDS,
-  );
-  const statusPropertyName = firstNonEmptyValue(
-    config.statusPropertyName,
-    process.env.NOTION_STATUS_PROPERTY,
-    process.env.NUXT_NOTION_STATUS_PROPERTY,
-  );
-  const completedStatusValue = firstNonEmptyValue(
-    config.completedStatusValue,
-    process.env.NOTION_COMPLETED_STATUS,
-    process.env.NUXT_NOTION_COMPLETED_STATUS,
-  ) || "Completed";
-
-  return {
-    notionApiKey,
-    notionDatabaseId,
-    cacheTtlSeconds,
-    statusPropertyName,
-    completedStatusValue,
-    diagnostic: getShowcaseRuntimeSnapshot(config),
-  };
-}
-
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event);
+  const runtimeConfig = useRuntimeConfig(event);
   const {
     notionApiKey,
     notionDatabaseId,
     cacheTtlSeconds,
     statusPropertyName,
     completedStatusValue,
-    diagnostic,
-  } = resolveShowcaseConfig(config);
-  const cacheControlValue = `public, s-maxage=${cacheTtlSeconds}, stale-while-revalidate=${cacheTtlSeconds}`;
+  } = resolveShowcaseConfig({ runtimeConfig });
+  const diagnostic = getShowcaseRuntimeSnapshot(runtimeConfig);
+  const cacheControlValue = getShowcaseCacheControlValue(cacheTtlSeconds);
   const cache = getShowcaseCache(cacheTtlSeconds);
 
   setHeader(event, "Cache-Control", cacheControlValue);

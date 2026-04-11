@@ -3,9 +3,11 @@ import { createError, defineEventHandler, setHeader } from "h3";
 import { fetchShowcaseDetail } from "../../../utils/notion";
 import { createSWRCache } from "../../../utils/swr-cache";
 import type { ShowcaseDetailResult } from "../../../types/showcase";
-import { resolveShowcaseConfig } from "../results.get";
-
-const DEFAULT_CACHE_TTL_SECONDS = 3600;
+import {
+  DEFAULT_CACHE_TTL_SECONDS,
+  getShowcaseCacheControlValue,
+  resolveShowcaseConfig,
+} from "../../../utils/config";
 let detailCaches = new Map<string, ReturnType<typeof createSWRCache<ShowcaseDetailResult>>>();
 let detailCacheTtlMs = DEFAULT_CACHE_TTL_SECONDS * 1000;
 
@@ -27,10 +29,10 @@ function getDetailCache(pageId: string, cacheTtlSeconds: number) {
 }
 
 export default defineEventHandler(async (event) => {
-  const config = useRuntimeConfig(event);
-  const { notionApiKey, notionDatabaseId, cacheTtlSeconds } = resolveShowcaseConfig(config);
+  const runtimeConfig = useRuntimeConfig(event);
+  const { notionApiKey, notionDatabaseId, cacheTtlSeconds } = resolveShowcaseConfig({ runtimeConfig });
   const pageId = String(event.context.params?.id || "").trim();
-  const cacheControlValue = `public, s-maxage=${cacheTtlSeconds}, stale-while-revalidate=${cacheTtlSeconds}`;
+  const cacheControlValue = getShowcaseCacheControlValue(cacheTtlSeconds);
 
   if (!notionApiKey || !notionDatabaseId) {
     throw createError({

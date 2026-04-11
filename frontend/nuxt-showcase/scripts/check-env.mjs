@@ -29,15 +29,37 @@ const workspaceRoot = path.resolve(process.cwd(), "..", "..");
 const localEnv = path.join(process.cwd(), ".env");
 const rootEnv = path.join(workspaceRoot, ".env");
 const loadedFrom = loadDotEnv(localEnv) ?? loadDotEnv(rootEnv);
+const firstNonEmptyEnvValue = (...keys) => {
+  for (const key of keys) {
+    const value = process.env[key];
+    if (typeof value === "string" && value.trim()) {
+      return value.trim();
+    }
+  }
+  return "";
+};
 
 const snapshot = {
   loadedFrom,
-  NOTION_API_KEY: Boolean(process.env.NOTION_API_KEY || process.env.NUXT_NOTION_API_KEY),
-  NOTION_DATABASE_ID: Boolean(process.env.NOTION_DATABASE_ID || process.env.NUXT_NOTION_DATABASE_ID),
-  SHOWCASE_CACHE_TTL_SECONDS:
-    process.env.SHOWCASE_CACHE_TTL_SECONDS ||
-    process.env.NUXT_SHOWCASE_CACHE_TTL_SECONDS ||
-    "3600",
+  resolved: {
+    notionApiKey: Boolean(firstNonEmptyEnvValue("NOTION_API_KEY", "NUXT_NOTION_API_KEY")),
+    notionDatabaseId: Boolean(firstNonEmptyEnvValue("NOTION_DATABASE_ID", "NUXT_NOTION_DATABASE_ID")),
+    statusPropertyName: Boolean(firstNonEmptyEnvValue("NOTION_STATUS_PROPERTY", "NUXT_NOTION_STATUS_PROPERTY")),
+    completedStatusValue: firstNonEmptyEnvValue("NOTION_COMPLETED_STATUS", "NUXT_NOTION_COMPLETED_STATUS") || "Completed",
+    cacheTtlSeconds: firstNonEmptyEnvValue("SHOWCASE_CACHE_TTL_SECONDS", "NUXT_SHOWCASE_CACHE_TTL_SECONDS") || "3600",
+  },
+  processEnv: {
+    NOTION_API_KEY: Boolean(firstNonEmptyEnvValue("NOTION_API_KEY")),
+    NOTION_DATABASE_ID: Boolean(firstNonEmptyEnvValue("NOTION_DATABASE_ID")),
+    NOTION_STATUS_PROPERTY: Boolean(firstNonEmptyEnvValue("NOTION_STATUS_PROPERTY")),
+    NOTION_COMPLETED_STATUS: Boolean(firstNonEmptyEnvValue("NOTION_COMPLETED_STATUS")),
+    SHOWCASE_CACHE_TTL_SECONDS: Boolean(firstNonEmptyEnvValue("SHOWCASE_CACHE_TTL_SECONDS")),
+    NUXT_NOTION_API_KEY: Boolean(firstNonEmptyEnvValue("NUXT_NOTION_API_KEY")),
+    NUXT_NOTION_DATABASE_ID: Boolean(firstNonEmptyEnvValue("NUXT_NOTION_DATABASE_ID")),
+    NUXT_NOTION_STATUS_PROPERTY: Boolean(firstNonEmptyEnvValue("NUXT_NOTION_STATUS_PROPERTY")),
+    NUXT_NOTION_COMPLETED_STATUS: Boolean(firstNonEmptyEnvValue("NUXT_NOTION_COMPLETED_STATUS")),
+    NUXT_SHOWCASE_CACHE_TTL_SECONDS: Boolean(firstNonEmptyEnvValue("NUXT_SHOWCASE_CACHE_TTL_SECONDS")),
+  },
 };
 
 console.log(JSON.stringify(snapshot, null, 2));
