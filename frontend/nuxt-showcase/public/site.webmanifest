@@ -1,0 +1,20 @@
+{
+  "name": "影片知識庫",
+  "short_name": "影片知識庫",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "theme_color": "#f6efe2",
+  "background_color": "#f6efe2",
+  "display": "standalone"
+}

@@ -42,6 +42,12 @@ describe("showcase head metadata", () => {
     expect(headArg.titleTemplate()).toBe("影片知識庫");
     expect(headArg.titleTemplate("影片知識庫")).toBe("影片知識庫");
     expect(headArg.titleTemplate("Second result")).toBe("Second result | 影片知識庫");
+    expect(headArg.link).toEqual(expect.arrayContaining([
+      expect.objectContaining({ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }),
+      expect.objectContaining({ rel: "shortcut icon", type: "image/x-icon", href: "/favicon.ico" }),
+      expect.objectContaining({ rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" }),
+      expect.objectContaining({ rel: "manifest", href: "/site.webmanifest" }),
+    ]));
   });
 
   it("sets the home page title", async () => {
