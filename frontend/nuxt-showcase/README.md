@@ -21,13 +21,13 @@ npm run build
 
 ## Cache
 
-Server API route 會回傳：
+`SHOWCASE_CACHE_TTL_SECONDS` 目前會同時控制列表與詳細 API 的 server / CDN cache。Server API route 會回傳：
 
 ```txt
 Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600
 ```
 
-搭配 Vercel CDN 做簡易 SWR 快取；server process 內也保留最後成功的資料快照，當 Notion 暫時失敗時可優先回退。
+搭配 Vercel CDN 做簡易 SWR 快取；server process 內也保留最後成功的資料快照，當 Notion 暫時失敗時可優先回退。這個 TTL 不影響前端 local state，例如已讀標記仍由瀏覽器端自行管理。
 
 ## Diagnostics
 

@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { resolveShowcaseConfig } from "../server/api/showcase/results.get";
 
@@ -37,5 +37,21 @@ describe("showcase env resolution", () => {
     expect(resolved.cacheTtlSeconds).toBe(600);
     expect(resolved.statusPropertyName).toBe("狀態");
     expect(resolved.completedStatusValue).toBe("已完成");
+  });
+
+  it("uses SHOWCASE_CACHE_TTL_SECONDS in Nuxt route rules", async () => {
+    process.env.SHOWCASE_CACHE_TTL_SECONDS = "900";
+    process.env.NODE_ENV = "production";
+
+    const defineNuxtConfig = vi.fn((config) => config);
+    vi.stubGlobal("defineNuxtConfig", defineNuxtConfig);
+
+    const module = await import("../nuxt.config.ts?t=" + Date.now());
+    const config = module.default;
+
+    expect(config.runtimeConfig.showcaseCacheTtlSeconds).toBe(900);
+    expect(config.routeRules["/"].swr).toBe(900);
+    expect(config.routeRules["/api/showcase/results"].swr).toBe(900);
+    expect(config.routeRules["/"].headers["cache-control"]).toBe("public, s-maxage=900, stale-while-revalidate=900");
   });
 });

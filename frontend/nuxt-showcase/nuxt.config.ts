@@ -1,4 +1,4 @@
-const CACHE_TTL_SECONDS = 3600;
+const CACHE_TTL_SECONDS = Number(process.env.SHOWCASE_CACHE_TTL_SECONDS || 3600);
 const CACHE_CONTROL_VALUE = `public, s-maxage=${CACHE_TTL_SECONDS}, stale-while-revalidate=${CACHE_TTL_SECONDS}`;
 const isProduction = process.env.NODE_ENV === "production";
 
