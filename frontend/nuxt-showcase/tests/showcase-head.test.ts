@@ -55,7 +55,7 @@ describe("showcase head metadata", () => {
     await wrapper.vm.$nextTick();
 
     expect(useHeadMock).toHaveBeenCalledWith(expect.objectContaining({
-      title: "YouTube 知識摘要",
+      title: "影片知識庫",
     }));
   });
 

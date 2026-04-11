@@ -2,14 +2,14 @@
 useHead({
   titleTemplate: (titleChunk) => {
     if (!titleChunk) {
-      return "YouTube 知識摘要 | nuxt-showcase";
+      return "影片知識庫 | nuxt-showcase";
     }
 
-    if (titleChunk === "YouTube 知識摘要") {
+    if (titleChunk === "影片知識庫") {
       return `${titleChunk} | nuxt-showcase`;
     }
 
-    return `${titleChunk} | YouTube 知識摘要`;
+    return `${titleChunk} | 影片知識庫`;
   },
 });
 </script>

@@ -15,7 +15,7 @@ const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showc
 });
 
 useHead({
-  title: "YouTube 知識摘要",
+  title: "影片知識庫",
 });
 
 const items = computed(() => data.value?.items ?? []);
@@ -43,10 +43,10 @@ const lastUpdatedLabel = computed(() => {
 <template>
   <main class="showcase-shell">
     <section class="hero">
-      <p class="hero__eyebrow">YouTube Whisper Showcase</p>
-      <h1 class="hero__title">YouTube 知識摘要</h1>
+      <p class="hero__eyebrow">Video Knowledge Index</p>
+      <h1 class="hero__title">影片知識庫</h1>
       <p class="hero__body">
-        收錄 YouTube 影片的重點整理，讓內容更容易快速瀏覽與查找。
+        把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
       </p>
       <div class="hero__stats">
         <div v-if="lastUpdatedLabel">
