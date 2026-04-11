@@ -34,7 +34,6 @@ const snapshot = {
   loadedFrom,
   NOTION_API_KEY: Boolean(process.env.NOTION_API_KEY || process.env.NUXT_NOTION_API_KEY),
   NOTION_DATABASE_ID: Boolean(process.env.NOTION_DATABASE_ID || process.env.NUXT_NOTION_DATABASE_ID),
-  NOTION_URL: Boolean(process.env.NOTION_URL || process.env.NUXT_NOTION_URL),
   SHOWCASE_CACHE_TTL_SECONDS:
     process.env.SHOWCASE_CACHE_TTL_SECONDS ||
     process.env.NUXT_SHOWCASE_CACHE_TTL_SECONDS ||
