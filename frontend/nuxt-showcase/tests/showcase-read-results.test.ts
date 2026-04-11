@@ -2,6 +2,18 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 type ReadMap = Record<string, { readAt: string }>;
+const MAX_READ_RESULTS = 100;
+
+function createReadMap(size: number): ReadMap {
+  const entries = Array.from({ length: size }, (_, index) => {
+    const id = `result-${index + 1}`;
+    const readAt = new Date(Date.UTC(2026, 3, 11, 0, 0, index)).toISOString();
+
+    return [id, { readAt }] as const;
+  });
+
+  return Object.fromEntries(entries);
+}
 
 describe("useReadResults", () => {
   beforeEach(() => {
@@ -71,6 +83,23 @@ describe("useReadResults", () => {
     expect(readIds.value).toEqual(["result-9"]);
   });
 
+  it("trims hydrated localStorage data to the most recent 100 items", async () => {
+    stubNuxtState();
+    const sourceMap = createReadMap(MAX_READ_RESULTS + 5);
+    stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify(sourceMap),
+    });
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, readIds, readMap } = useReadResults();
+
+    expect(readIds.value).toHaveLength(MAX_READ_RESULTS);
+    expect(Object.keys(readMap.value)).toHaveLength(MAX_READ_RESULTS);
+    expect(isRead("result-1")).toBe(false);
+    expect(isRead("result-6")).toBe(true);
+    expect(readIds.value[0]).toBe(`result-${MAX_READ_RESULTS + 5}`);
+  });
+
   it("marks an item as read and persists it to localStorage", async () => {
     stubNuxtState();
     const storage = stubLocalStorage();
@@ -86,6 +115,46 @@ describe("useReadResults", () => {
     expect(readMap.value["result-1"]).toBeDefined();
     expect(storage.localStorageMock.setItem).toHaveBeenCalled();
     expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-1");
+  });
+
+  it("keeps only the latest 100 read items when new items are added", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify(createReadMap(MAX_READ_RESULTS)),
+    });
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, markAsRead, readIds, readMap } = useReadResults();
+
+    markAsRead("result-101");
+
+    expect(readIds.value).toHaveLength(MAX_READ_RESULTS);
+    expect(Object.keys(readMap.value)).toHaveLength(MAX_READ_RESULTS);
+    expect(isRead("result-1")).toBe(false);
+    expect(isRead("result-101")).toBe(true);
+
+    const persisted = JSON.parse(storage.readRaw("nuxt-showcase-read-results") || "{}") as ReadMap;
+    expect(Object.keys(persisted)).toHaveLength(MAX_READ_RESULTS);
+    expect(persisted["result-1"]).toBeUndefined();
+    expect(persisted["result-101"]).toBeDefined();
+  });
+
+  it("refreshes an existing item without increasing the stored read count", async () => {
+    stubNuxtState();
+    stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify(createReadMap(MAX_READ_RESULTS)),
+    });
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { markAsRead, readIds, readMap } = useReadResults();
+    const previousReadAt = readMap.value["result-1"]?.readAt;
+
+    markAsRead("result-1");
+
+    expect(readIds.value).toHaveLength(MAX_READ_RESULTS);
+    expect(readMap.value["result-1"]?.readAt).toBeDefined();
+    expect(readMap.value["result-1"]?.readAt).not.toBe(previousReadAt);
+    expect(readIds.value[0]).toBe("result-1");
   });
 
   it("removes an item when marked unread and updates localStorage", async () => {

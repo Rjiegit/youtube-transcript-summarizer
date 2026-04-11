@@ -3,6 +3,7 @@ import { computed } from "vue";
 const STORAGE_KEY = "nuxt-showcase-read-results";
 const READ_RESULTS_STATE_KEY = "showcase-read-results";
 const READ_RESULTS_READY_STATE_KEY = "showcase-read-results-ready";
+const MAX_READ_RESULTS = 100;
 
 type ReadEntry = {
   readAt: string;
@@ -25,6 +26,16 @@ function normalizeReadMap(rawValue: unknown): ReadMap {
   );
 }
 
+function trimReadMap(rawValue: unknown): ReadMap {
+  const normalizedValue = normalizeReadMap(rawValue);
+
+  return Object.fromEntries(
+    Object.entries(normalizedValue)
+      .sort(([, leftEntry], [, rightEntry]) => rightEntry.readAt.localeCompare(leftEntry.readAt))
+      .slice(0, MAX_READ_RESULTS),
+  );
+}
+
 function canUseLocalStorage(): boolean {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
 }
@@ -39,7 +50,7 @@ function readStoredReadMap(): ReadMap {
     if (!rawValue) {
       return {};
     }
-    return normalizeReadMap(JSON.parse(rawValue));
+    return trimReadMap(JSON.parse(rawValue));
   } catch {
     return {};
   }
@@ -76,7 +87,7 @@ export function useReadResults() {
       return state.value;
     },
     set(value) {
-      const normalizedValue = normalizeReadMap(value);
+      const normalizedValue = trimReadMap(value);
       state.value = normalizedValue;
       persistReadMap(normalizedValue);
     },
