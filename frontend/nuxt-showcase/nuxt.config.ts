@@ -8,7 +8,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     notionApiKey: process.env.NOTION_API_KEY || "",
     notionDatabaseId: process.env.NOTION_DATABASE_ID || "",
-    notionUrl: process.env.NOTION_URL || "",
     statusPropertyName: process.env.NOTION_STATUS_PROPERTY || "",
     completedStatusValue: process.env.NOTION_COMPLETED_STATUS || "Completed",
     showcaseCacheTtlSeconds: Number(process.env.SHOWCASE_CACHE_TTL_SECONDS || CACHE_TTL_SECONDS),

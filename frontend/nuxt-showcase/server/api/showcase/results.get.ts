@@ -37,16 +37,13 @@ export function getShowcaseRuntimeSnapshot(config: Record<string, unknown>) {
     runtimeConfig: {
       notionApiKey: hasNonEmptyValue(config.notionApiKey),
       notionDatabaseId: hasNonEmptyValue(config.notionDatabaseId),
-      notionUrl: hasNonEmptyValue(config.notionUrl),
       showcaseCacheTtlSeconds: config.showcaseCacheTtlSeconds ?? null,
     },
     processEnv: {
       NOTION_API_KEY: hasNonEmptyValue(process.env.NOTION_API_KEY),
       NOTION_DATABASE_ID: hasNonEmptyValue(process.env.NOTION_DATABASE_ID),
-      NOTION_URL: hasNonEmptyValue(process.env.NOTION_URL),
       NUXT_NOTION_API_KEY: hasNonEmptyValue(process.env.NUXT_NOTION_API_KEY),
       NUXT_NOTION_DATABASE_ID: hasNonEmptyValue(process.env.NUXT_NOTION_DATABASE_ID),
-      NUXT_NOTION_URL: hasNonEmptyValue(process.env.NUXT_NOTION_URL),
       SHOWCASE_CACHE_TTL_SECONDS: hasNonEmptyValue(process.env.SHOWCASE_CACHE_TTL_SECONDS),
       NUXT_SHOWCASE_CACHE_TTL_SECONDS: hasNonEmptyValue(process.env.NUXT_SHOWCASE_CACHE_TTL_SECONDS),
     },
@@ -63,11 +60,6 @@ export function resolveShowcaseConfig(config: Record<string, unknown>) {
     config.notionDatabaseId,
     process.env.NOTION_DATABASE_ID,
     process.env.NUXT_NOTION_DATABASE_ID,
-  );
-  const notionUrl = firstNonEmptyValue(
-    config.notionUrl,
-    process.env.NOTION_URL,
-    process.env.NUXT_NOTION_URL,
   );
   const cacheTtlSeconds = Number(
     firstNonEmptyValue(
@@ -90,7 +82,6 @@ export function resolveShowcaseConfig(config: Record<string, unknown>) {
   return {
     notionApiKey,
     notionDatabaseId,
-    notionUrl,
     cacheTtlSeconds,
     statusPropertyName,
     completedStatusValue,
@@ -103,7 +94,6 @@ export default defineEventHandler(async (event) => {
   const {
     notionApiKey,
     notionDatabaseId,
-    notionUrl,
     cacheTtlSeconds,
     statusPropertyName,
     completedStatusValue,
@@ -117,7 +107,6 @@ export default defineEventHandler(async (event) => {
   const missingEnvVars = [
     !notionApiKey ? "NOTION_API_KEY" : null,
     !notionDatabaseId ? "NOTION_DATABASE_ID" : null,
-    !notionUrl ? "NOTION_URL" : null,
   ].filter(Boolean);
 
   if (missingEnvVars.length > 0) {
@@ -132,7 +121,6 @@ export default defineEventHandler(async (event) => {
       fetchLatestCompletedResults({
         apiKey: notionApiKey,
         databaseId: notionDatabaseId,
-        notionBaseUrl: notionUrl,
         cacheTtlSeconds,
         statusPropertyName,
         completedStatusValue,

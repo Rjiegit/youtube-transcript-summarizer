@@ -5,24 +5,32 @@ import ShowcaseCard from "../components/ShowcaseCard.vue";
 import type { ShowcaseResult } from "../types/showcase";
 
 describe("ShowcaseCard", () => {
-  it("renders title and links without showing summary fallback text", () => {
+  it("renders a detail link, summary preview, and original video link", () => {
     const item: ShowcaseResult = {
       id: "abc",
-      title: "A showcase entry",
-      summary: "",
+      title: "A showcase entry with detail page",
+      summary: "A concise summary preview for the showcase card.",
       source_url: "https://youtube.com/watch?v=abc",
-      notion_url: "https://www.notion.so/workspace/abc",
       created_at: "2026-03-29T00:00:00.000Z",
       processing_duration: 4.2,
     };
 
     const wrapper = mount(ShowcaseCard, {
       props: { item },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a :href=\"to\"><slot /></a>",
+            props: ["to"],
+          },
+        },
+      },
     });
 
-    expect(wrapper.text()).toContain("A showcase entry");
-    expect(wrapper.text()).not.toContain("這筆結果尚未提供摘要內容。");
+    expect(wrapper.text()).toContain("A showcase entry with detail page");
+    expect(wrapper.text()).toContain("A concise summary preview for the showcase card.");
+    expect(wrapper.find('a[href="/results/abc"]').exists()).toBe(true);
     expect(wrapper.find('a[href="https://youtube.com/watch?v=abc"]').exists()).toBe(true);
-    expect(wrapper.find('a[href="https://www.notion.so/workspace/abc"]').exists()).toBe(true);
+    expect(wrapper.text()).not.toContain("Open in Notion");
   });
 });

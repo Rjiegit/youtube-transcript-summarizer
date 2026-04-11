@@ -1,0 +1,152 @@
+import { mount } from "@vue/test-utils";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { computed, ref } from "vue";
+
+import type { ShowcaseDetailResult } from "../types/showcase";
+
+const useFetchMock = vi.fn();
+const useRouteMock = vi.fn();
+
+vi.stubGlobal("useFetch", useFetchMock);
+vi.stubGlobal("useRoute", useRouteMock);
+vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string }) => {
+  const error = new Error(input.statusMessage);
+  return Object.assign(error, input);
+});
+vi.stubGlobal("showError", vi.fn((error: unknown) => error));
+
+const detailResponse: ShowcaseDetailResult = {
+  id: "result-2-page-id",
+  title: "Second result",
+  summary: "A concise summary of the second result.",
+  content: "Detailed paragraph one.\n\nDetailed paragraph two.",
+  source_url: "https://www.youtube.com/watch?v=second",
+  created_at: "2026-03-28T12:00:00.000Z",
+  processing_duration: 12.4,
+};
+
+describe("Showcase detail page", () => {
+  beforeEach(() => {
+    useFetchMock.mockReset();
+    useRouteMock.mockReset();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  function loadPageModule() {
+    return import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
+  }
+
+  it("renders the selected showcase item without exposing a Notion link", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: { value: detailResponse },
+      pending: { value: false },
+      error: { value: null },
+    });
+
+    const pageModule = await loadPageModule();
+    const wrapper = mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a :href=\"to\"><slot /></a>",
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    expect(wrapper.text()).toContain("Second result");
+    expect(wrapper.text()).toContain("Detailed paragraph one.");
+    expect(wrapper.text()).toContain("Detailed paragraph two.");
+    expect(wrapper.find('a[href="/"]').exists()).toBe(true);
+    expect(wrapper.find('a[href="https://www.youtube.com/watch?v=second"]').exists()).toBe(true);
+    expect(wrapper.text()).not.toContain("Notion");
+  });
+
+  it("shows loading state before the fetch resolves", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: ref(null),
+      pending: ref(true),
+      error: ref(null),
+    });
+
+    const pageModule = await loadPageModule();
+    const wrapper = mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: true,
+        },
+      },
+    });
+
+    expect(wrapper.text()).toContain("載入展示資料中");
+    expect(wrapper.text()).not.toContain("Second result");
+  });
+
+  it("renders an error state when fetch fails", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: ref(null),
+      pending: ref(false),
+      error: ref({
+        statusMessage: "Fetch failed",
+        message: "Fetch failed",
+      }),
+    });
+
+    const pageModule = await loadPageModule();
+    const wrapper = mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: true,
+        },
+      },
+    });
+
+    expect(wrapper.text()).toContain("目前無法載入展示內容");
+    expect(wrapper.text()).toContain("Fetch failed");
+  });
+
+  it("throws a 404 error only after fetch resolves and the item is still missing", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "missing-id" },
+    });
+    const data = ref(null);
+    const pending = ref(false);
+    const error = ref(null);
+    useFetchMock.mockReturnValue({
+      data,
+      pending,
+      error,
+    });
+
+    const pageModule = await loadPageModule();
+
+    try {
+      mount(pageModule.default, {
+        global: {
+          stubs: {
+            NuxtLink: true,
+          },
+        },
+      });
+      throw new Error("Expected mount to throw a 404 error.");
+    } catch (error) {
+      expect(error).toMatchObject({
+        statusCode: 404,
+        statusMessage: "Showcase result not found.",
+      });
+    }
+  });
+});

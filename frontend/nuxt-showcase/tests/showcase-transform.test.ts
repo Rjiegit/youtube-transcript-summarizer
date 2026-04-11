@@ -1,31 +1,26 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { sampleNotionPages } from "../test-data/notion";
+import { sampleNotionBlocks } from "../test-data/notion";
 import {
   MAX_SHOWCASE_RESULTS,
-  buildNotionPageUrl,
+  fetchShowcaseDetail,
   fetchLatestCompletedResults,
   mapNotionPageToResult,
+  renderNotionBlocks,
   resolveFieldMapping,
   resolveStatusConfig,
 } from "../server/utils/notion";
 
 describe("showcase Notion mapping", () => {
-  it("builds a Notion page URL from base url and page id", () => {
-    expect(buildNotionPageUrl("https://www.notion.so/workspace", "abcd-1234")).toBe(
-      "https://www.notion.so/workspace/abcd1234",
-    );
-  });
-
   it("maps a Notion page to the public showcase shape", () => {
-    const result = mapNotionPageToResult(sampleNotionPages[0], "https://www.notion.so/workspace");
+    const result = mapNotionPageToResult(sampleNotionPages[0]);
 
     expect(result).toMatchObject({
       id: "result-2-page-id",
       title: "Second result",
       summary: "A concise summary of the second result.",
       source_url: "https://www.youtube.com/watch?v=second",
-      notion_url: "https://www.notion.so/workspace/result2pageid",
       processing_duration: 12.4,
     });
   });
@@ -52,7 +47,6 @@ describe("showcase Notion mapping", () => {
     const response = await fetchLatestCompletedResults({
       apiKey: "secret",
       databaseId: "database-id",
-      notionBaseUrl: "https://www.notion.so/workspace",
       cacheTtlSeconds: 3600,
       fetchImpl,
     });
@@ -70,6 +64,47 @@ describe("showcase Notion mapping", () => {
     });
     expect(response.items).toHaveLength(2);
     expect(response.cache_ttl_seconds).toBe(3600);
+  });
+
+  it("renders Notion blocks into detailed content", () => {
+    expect(renderNotionBlocks(sampleNotionBlocks)).toBe("Detailed paragraph one.\n\nDetailed paragraph two.");
+  });
+
+  it("fetches showcase detail content from Notion page blocks", async () => {
+    const fetchImpl = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          properties: {
+            Name: { type: "title" },
+            Summary: { type: "rich_text" },
+            URL: { type: "url" },
+            "Created time": { type: "created_time" },
+          },
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => sampleNotionPages[0],
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          results: sampleNotionBlocks,
+          has_more: false,
+          next_cursor: null,
+        }),
+      });
+
+    const result = await fetchShowcaseDetail({
+      apiKey: "secret",
+      databaseId: "database-id",
+      pageId: "result-2-page-id",
+      fetchImpl,
+    });
+
+    expect(result.title).toBe("Second result");
+    expect(result.content).toBe("Detailed paragraph one.\n\nDetailed paragraph two.");
   });
 
   it("surfaces compact Notion API error details when the query fails", async () => {
@@ -92,7 +127,6 @@ describe("showcase Notion mapping", () => {
       fetchLatestCompletedResults({
         apiKey: "secret",
         databaseId: "database-id",
-        notionBaseUrl: "https://www.notion.so/workspace",
         fetchImpl,
       }),
     ).rejects.toThrow('Failed to query Notion (404): {"object":"error","message":"Could not find database with ID: demo"}');

@@ -23,29 +23,22 @@ const durationLabel = computed(() => {
 
 <template>
   <article class="showcase-card">
-    <div class="showcase-card__meta">
-      <span>{{ createdAtLabel }}</span>
-      <span v-if="durationLabel">{{ durationLabel }}</span>
-    </div>
-    <h2 class="showcase-card__title">{{ item.title }}</h2>
-    <div class="showcase-card__links">
+    <NuxtLink :to="`/results/${item.id}`" class="showcase-card__main-link">
+      <div class="showcase-card__meta">
+        <span>{{ createdAtLabel }}</span>
+        <span v-if="durationLabel">{{ durationLabel }}</span>
+      </div>
+      <h2 class="showcase-card__title">{{ item.title }}</h2>
+      <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
+    </NuxtLink>
+    <div v-if="item.source_url" class="showcase-card__links">
       <a
-        v-if="item.source_url"
         :href="item.source_url"
         target="_blank"
         rel="noreferrer"
         class="showcase-card__link"
       >
         Original Video
-      </a>
-      <a
-        v-if="item.notion_url"
-        :href="item.notion_url"
-        target="_blank"
-        rel="noreferrer"
-        class="showcase-card__link"
-      >
-        Open in Notion
       </a>
     </div>
   </article>

@@ -1,4 +1,4 @@
-import type { ShowcaseApiResponse, ShowcaseResult } from "../../types/showcase";
+import type { ShowcaseApiResponse, ShowcaseDetailResult, ShowcaseResult } from "../../types/showcase";
 
 export const DEFAULT_CACHE_TTL_SECONDS = 3600;
 export const MAX_SHOWCASE_RESULTS = 100;
@@ -38,6 +38,26 @@ export interface NotionPage {
   properties: Record<string, NotionPageProperty>;
 }
 
+interface NotionBlockRichTextContainer {
+  rich_text?: NotionRichTextItem[];
+}
+
+export interface NotionBlock {
+  id: string;
+  type: string;
+  paragraph?: NotionBlockRichTextContainer;
+  heading_1?: NotionBlockRichTextContainer;
+  heading_2?: NotionBlockRichTextContainer;
+  heading_3?: NotionBlockRichTextContainer;
+  bulleted_list_item?: NotionBlockRichTextContainer;
+  numbered_list_item?: NotionBlockRichTextContainer;
+  to_do?: NotionBlockRichTextContainer;
+  quote?: NotionBlockRichTextContainer;
+  callout?: NotionBlockRichTextContainer;
+  toggle?: NotionBlockRichTextContainer;
+  code?: NotionBlockRichTextContainer;
+}
+
 interface NotionDatabaseProperty {
   id?: string;
   name?: string;
@@ -52,9 +72,17 @@ export interface NotionDatabaseSchema {
 interface FetchNotionResultsOptions {
   apiKey: string;
   databaseId: string;
-  notionBaseUrl: string;
   cacheTtlSeconds?: number;
   visibilityPropertyName?: string;
+  statusPropertyName?: string;
+  completedStatusValue?: string;
+  fetchImpl?: typeof fetch;
+}
+
+interface FetchShowcaseDetailOptions {
+  apiKey: string;
+  databaseId: string;
+  pageId: string;
   statusPropertyName?: string;
   completedStatusValue?: string;
   fetchImpl?: typeof fetch;
@@ -91,17 +119,6 @@ export interface ResolvedNotionFieldMapping {
   createdTimePropertyName: string | null;
   datePropertyName: string | null;
   processingDurationPropertyName: string | null;
-}
-
-export function buildNotionPageUrl(baseUrl: string, pageId: string): string | null {
-  const normalizedBaseUrl = (baseUrl || "").trim().replace(/\/+$/, "");
-  const normalizedPageId = (pageId || "").trim().replace(/-/g, "");
-
-  if (!normalizedBaseUrl || !normalizedPageId) {
-    return null;
-  }
-
-  return `${normalizedBaseUrl}/${normalizedPageId}`;
 }
 
 export function readRichText(items?: NotionRichTextItem[]): string {
@@ -163,7 +180,6 @@ export function resolveFieldMapping(schema: NotionDatabaseSchema): ResolvedNotio
 
 export function mapNotionPageToResult(
   page: NotionPage,
-  notionBaseUrl: string,
   fieldMapping?: ResolvedNotionFieldMapping,
 ): ShowcaseResult {
   const properties = page.properties || {};
@@ -199,7 +215,6 @@ export function mapNotionPageToResult(
     title: title || "Untitled result",
     summary,
     source_url: sourceUrl,
-    notion_url: buildNotionPageUrl(notionBaseUrl, page.id),
     created_at: createdAt,
     processing_duration: processingDuration,
   };
@@ -215,6 +230,19 @@ export function buildResultsResponse(
     generated_at: generatedAt,
     cache_ttl_seconds: cacheTtlSeconds,
   };
+}
+
+function getBlockRichText(block: NotionBlock): string {
+  const blockContent = block[block.type as keyof NotionBlock] as NotionBlockRichTextContainer | undefined;
+  return readRichText(blockContent?.rich_text);
+}
+
+export function renderNotionBlocks(blocks: NotionBlock[]): string {
+  return blocks
+    .map((block) => getBlockRichText(block))
+    .filter((content) => content.length > 0)
+    .join("\n\n")
+    .trim();
 }
 
 function buildNotionHeaders(apiKey: string): Record<string, string> {
@@ -243,6 +271,68 @@ export async function fetchDatabaseSchema(
   }
 
   return await response.json() as NotionDatabaseSchema;
+}
+
+export async function fetchPage(
+  apiKey: string,
+  pageId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<NotionPage> {
+  const response = await fetchImpl(`https://api.notion.com/v1/pages/${pageId}`, {
+    method: "GET",
+    headers: buildNotionHeaders(apiKey),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    const compactErrorText = errorText.replace(/\s+/g, " ").trim();
+    const detail = compactErrorText ? `: ${compactErrorText.slice(0, 300)}` : "";
+    throw new Error(`Failed to read Notion page (${response.status})${detail}`);
+  }
+
+  return await response.json() as NotionPage;
+}
+
+export async function fetchPageBlocks(
+  apiKey: string,
+  pageId: string,
+  fetchImpl: typeof fetch = fetch,
+): Promise<NotionBlock[]> {
+  const blocks: NotionBlock[] = [];
+  let cursor: string | undefined;
+
+  while (true) {
+    const query = new URLSearchParams({ page_size: "100" });
+    if (cursor) {
+      query.set("start_cursor", cursor);
+    }
+
+    const response = await fetchImpl(`https://api.notion.com/v1/blocks/${pageId}/children?${query.toString()}`, {
+      method: "GET",
+      headers: buildNotionHeaders(apiKey),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      const compactErrorText = errorText.replace(/\s+/g, " ").trim();
+      const detail = compactErrorText ? `: ${compactErrorText.slice(0, 300)}` : "";
+      throw new Error(`Failed to read Notion page blocks (${response.status})${detail}`);
+    }
+
+    const payload = await response.json() as {
+      results?: NotionBlock[];
+      has_more?: boolean;
+      next_cursor?: string | null;
+    };
+    blocks.push(...(Array.isArray(payload.results) ? payload.results : []));
+
+    if (!payload.has_more || !payload.next_cursor) {
+      break;
+    }
+    cursor = payload.next_cursor;
+  }
+
+  return blocks;
 }
 
 export function resolveStatusConfig(
@@ -346,7 +436,24 @@ export async function fetchLatestCompletedResults(
 
   const payload = await response.json() as { results?: NotionPage[] };
   const pages = Array.isArray(payload.results) ? payload.results : [];
-  const items = pages.map((page) => mapNotionPageToResult(page, options.notionBaseUrl, fieldMapping));
+  const items = pages.map((page) => mapNotionPageToResult(page, fieldMapping));
 
   return buildResultsResponse(items, options.cacheTtlSeconds ?? DEFAULT_CACHE_TTL_SECONDS);
+}
+
+export async function fetchShowcaseDetail(
+  options: FetchShowcaseDetailOptions,
+): Promise<ShowcaseDetailResult> {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const schema = await fetchDatabaseSchema(options.apiKey, options.databaseId, fetchImpl);
+  const fieldMapping = resolveFieldMapping(schema);
+  const page = await fetchPage(options.apiKey, options.pageId, fetchImpl);
+  const blocks = await fetchPageBlocks(options.apiKey, options.pageId, fetchImpl);
+  const baseResult = mapNotionPageToResult(page, fieldMapping);
+  const content = renderNotionBlocks(blocks) || baseResult.summary;
+
+  return {
+    ...baseResult,
+    content,
+  };
 }

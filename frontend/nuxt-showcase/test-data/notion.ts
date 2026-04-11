@@ -1,4 +1,5 @@
 import type { NotionPage } from "../server/utils/notion";
+import type { NotionBlock } from "../server/utils/notion";
 
 export const sampleNotionPages: NotionPage[] = [
   {
@@ -45,6 +46,23 @@ export const sampleNotionPages: NotionPage[] = [
           name: "Completed",
         },
       },
+    },
+  },
+];
+
+export const sampleNotionBlocks: NotionBlock[] = [
+  {
+    id: "block-1",
+    type: "paragraph",
+    paragraph: {
+      rich_text: [{ plain_text: "Detailed paragraph one." }],
+    },
+  },
+  {
+    id: "block-2",
+    type: "paragraph",
+    paragraph: {
+      rich_text: [{ plain_text: "Detailed paragraph two." }],
     },
   },
 ];

@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig(event);
   const resolved = resolveShowcaseConfig(config);
 
-  if (!resolved.notionApiKey || !resolved.notionDatabaseId || !resolved.notionUrl) {
+  if (!resolved.notionApiKey || !resolved.notionDatabaseId) {
     return {
       ok: false,
       stage: "configuration",
@@ -20,7 +20,6 @@ export default defineEventHandler(async (event) => {
       resolved: {
         notionApiKey: Boolean(resolved.notionApiKey),
         notionDatabaseId: Boolean(resolved.notionDatabaseId),
-        notionUrl: Boolean(resolved.notionUrl),
       },
     };
   }
@@ -39,7 +38,6 @@ export default defineEventHandler(async (event) => {
     const response = await fetchLatestCompletedResults({
       apiKey: resolved.notionApiKey,
       databaseId: resolved.notionDatabaseId,
-      notionBaseUrl: resolved.notionUrl,
       cacheTtlSeconds: resolved.cacheTtlSeconds,
       statusPropertyName: resolved.statusPropertyName,
       completedStatusValue: resolved.completedStatusValue,

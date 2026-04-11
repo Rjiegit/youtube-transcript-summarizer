@@ -8,12 +8,11 @@ export default defineEventHandler((event) => {
 
   return {
     ok: Boolean(
-      resolved.notionApiKey && resolved.notionDatabaseId && resolved.notionUrl,
+      resolved.notionApiKey && resolved.notionDatabaseId,
     ),
     resolved: {
       notionApiKey: Boolean(resolved.notionApiKey),
       notionDatabaseId: Boolean(resolved.notionDatabaseId),
-      notionUrl: Boolean(resolved.notionUrl),
       cacheTtlSeconds: resolved.cacheTtlSeconds,
     },
     diagnostic: getShowcaseRuntimeSnapshot(config),
