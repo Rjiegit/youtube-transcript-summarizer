@@ -94,4 +94,40 @@ describe("ShowcaseCard", () => {
     expect(badge.attributes("aria-hidden")).toBe("true");
     expect(badge.text()).toBe("Read");
   });
+
+  it("keeps the read badge inside the title row for long titles", () => {
+    const item: ShowcaseResult = {
+      id: "long-title",
+      title: "限制AI自由 | AI編程的正確姿勢 | Superpowers | gstack | OpenSpec | ExtremelyLongEnglishSegmentWithoutNaturalBreakpoints",
+      summary: "Summary preview.",
+      source_url: null,
+      created_at: "2026-03-31T00:00:00.000Z",
+      processing_duration: 8.4,
+    };
+
+    const wrapper = mount(ShowcaseCard, {
+      props: {
+        item,
+        isRead: true,
+      },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a :href=\"to\"><slot /></a>",
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    const titleRow = wrapper.find(".showcase-card__title-row");
+    const title = wrapper.find(".showcase-card__title");
+    const badge = wrapper.find(".showcase-card__read-badge");
+
+    expect(titleRow.exists()).toBe(true);
+    expect(title.exists()).toBe(true);
+    expect(badge.exists()).toBe(true);
+    expect(titleRow.element.contains(title.element)).toBe(true);
+    expect(titleRow.element.contains(badge.element)).toBe(true);
+  });
 });
