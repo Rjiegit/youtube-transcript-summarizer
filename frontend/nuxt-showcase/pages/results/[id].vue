@@ -3,6 +3,7 @@ import { computed, watchEffect } from "vue";
 
 import { useReadResults } from "../../composables/useReadResults";
 import type { ShowcaseDetailResult } from "../../types/showcase";
+import { formatTaipeiDateTime } from "../../utils/datetime";
 
 const route = useRoute();
 const resultId = String(route.params.id || "");
@@ -61,16 +62,7 @@ useHead({
 });
 
 const createdAtLabel = computed(() => {
-  if (!item.value) {
-    return "";
-  }
-  return new Date(item.value.created_at).toLocaleString("zh-TW", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatTaipeiDateTime(item.value?.created_at);
 });
 
 const durationLabel = computed(() => {

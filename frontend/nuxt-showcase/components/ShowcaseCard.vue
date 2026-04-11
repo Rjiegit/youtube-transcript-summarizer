@@ -2,6 +2,7 @@
 import { computed } from "vue";
 
 import type { ShowcaseResult } from "../types/showcase";
+import { formatTaipeiDate } from "../utils/datetime";
 
 const props = withDefaults(defineProps<{
   item: ShowcaseResult;
@@ -19,11 +20,7 @@ function handleMainClick(navigate: (event?: MouseEvent) => Promise<void> | void,
   void navigate(event);
 }
 
-const createdAtLabel = computed(() => new Date(props.item.created_at).toLocaleDateString("zh-TW", {
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-}));
+const createdAtLabel = computed(() => formatTaipeiDate(props.item.created_at));
 
 const durationLabel = computed(() => {
   if (props.item.processing_duration == null) {

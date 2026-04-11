@@ -4,6 +4,7 @@ import { computed } from "vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
+import { formatTaipeiDateTime } from "../utils/datetime";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -28,16 +29,7 @@ const errorMessage = computed(() => {
   return error.value.statusMessage || error.value.message || "請稍後再試。";
 });
 const lastUpdatedLabel = computed(() => {
-  if (!data.value?.generated_at) {
-    return "";
-  }
-  return new Date(data.value.generated_at).toLocaleString("zh-TW", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatTaipeiDateTime(data.value?.generated_at);
 });
 </script>
 
