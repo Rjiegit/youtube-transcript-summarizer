@@ -5,6 +5,7 @@ import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
 import { formatTaipeiDateTime } from "../utils/datetime";
+import { getLatestResultCreatedAt } from "../utils/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -29,7 +30,7 @@ const errorMessage = computed(() => {
   return error.value.statusMessage || error.value.message || "請稍後再試。";
 });
 const lastUpdatedLabel = computed(() => {
-  return formatTaipeiDateTime(data.value?.generated_at);
+  return formatTaipeiDateTime(getLatestResultCreatedAt(items.value));
 });
 </script>
 

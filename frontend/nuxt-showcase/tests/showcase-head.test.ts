@@ -29,10 +29,23 @@ vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string
 
 describe("showcase head metadata", () => {
   it("sets the home page title", async () => {
-    useFetchMock.mockResolvedValue({
-      data: { value: { items: [], generated_at: "", cache_ttl_seconds: 3600 } },
-      pending: { value: false },
-      error: { value: null },
+    useFetchMock.mockReturnValue({
+      data: ref({
+        items: [
+          {
+            id: "result-2-page-id",
+            title: "Second result",
+            summary: "Summary",
+            source_url: null,
+            created_at: "2026-04-11T10:53:00.000Z",
+            processing_duration: 12.4,
+          },
+        ],
+        generated_at: "2026-04-11T12:00:00.000Z",
+        cache_ttl_seconds: 3600,
+      }),
+      pending: ref(false),
+      error: ref(null),
     });
 
     const pageModule = await import("../pages/index.vue?t=" + Date.now());
