@@ -1,6 +1,8 @@
 import { computed } from "vue";
 
-const COOKIE_KEY = "nuxt-showcase-read-results";
+const STORAGE_KEY = "nuxt-showcase-read-results";
+const READ_RESULTS_STATE_KEY = "showcase-read-results";
+const READ_RESULTS_READY_STATE_KEY = "showcase-read-results-ready";
 
 type ReadEntry = {
   readAt: string;
@@ -23,18 +25,60 @@ function normalizeReadMap(rawValue: unknown): ReadMap {
   );
 }
 
+function canUseLocalStorage(): boolean {
+  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+}
+
+function readStoredReadMap(): ReadMap {
+  if (!canUseLocalStorage()) {
+    return {};
+  }
+
+  try {
+    const rawValue = window.localStorage.getItem(STORAGE_KEY);
+    if (!rawValue) {
+      return {};
+    }
+    return normalizeReadMap(JSON.parse(rawValue));
+  } catch {
+    return {};
+  }
+}
+
+function persistReadMap(value: ReadMap): void {
+  if (!canUseLocalStorage()) {
+    return;
+  }
+
+  try {
+    if (Object.keys(value).length === 0) {
+      window.localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+  } catch {
+    // Ignore storage quota and privacy mode failures; in-memory state still works for this session.
+  }
+}
+
 export function useReadResults() {
-  const cookie = useCookie<ReadMap | string | null>(COOKIE_KEY, {
-    default: () => ({}),
-    sameSite: "lax",
-  });
+  const state = useState<ReadMap>(READ_RESULTS_STATE_KEY, () => ({}));
+  const isReady = useState<boolean>(READ_RESULTS_READY_STATE_KEY, () => false);
+
+  if (!isReady.value && canUseLocalStorage()) {
+    state.value = readStoredReadMap();
+    isReady.value = true;
+  }
 
   const readMap = computed<ReadMap>({
     get() {
-      return normalizeReadMap(cookie.value);
+      return state.value;
     },
     set(value) {
-      cookie.value = value;
+      const normalizedValue = normalizeReadMap(value);
+      state.value = normalizedValue;
+      persistReadMap(normalizedValue);
     },
   });
 
@@ -49,12 +93,17 @@ export function useReadResults() {
       return;
     }
 
-    readMap.value = {
+    const nextValue = {
       ...readMap.value,
       [id]: {
         readAt: new Date().toISOString(),
       },
     };
+
+    readMap.value = nextValue;
+    if (canUseLocalStorage()) {
+      isReady.value = true;
+    }
   }
 
   function markAsUnread(id: string): void {
@@ -65,9 +114,13 @@ export function useReadResults() {
     const nextMap = { ...readMap.value };
     delete nextMap[id];
     readMap.value = nextMap;
+    if (canUseLocalStorage()) {
+      isReady.value = true;
+    }
   }
 
   return {
+    isReady: computed(() => isReady.value),
     readIds,
     readMap: computed(() => readMap.value),
     isRead,

@@ -1,8 +1,38 @@
 import { mount } from "@vue/test-utils";
+import { defineComponent } from "vue";
 import { describe, expect, it } from "vitest";
 
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import type { ShowcaseResult } from "../types/showcase";
+
+const nuxtLinkStub = defineComponent({
+  props: {
+    to: {
+      type: String,
+      required: true,
+    },
+    custom: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props) {
+    function navigate() {
+      return Promise.resolve();
+    }
+
+    return {
+      navigate,
+      href: props.to,
+    };
+  },
+  template: `
+    <template v-if="custom">
+      <slot :href="href" :navigate="navigate"></slot>
+    </template>
+    <a v-else :href="to"><slot /></a>
+  `,
+});
 
 describe("ShowcaseCard", () => {
   it("renders a detail link, summary preview, and original video link", () => {
@@ -19,10 +49,7 @@ describe("ShowcaseCard", () => {
       props: { item },
       global: {
         stubs: {
-          NuxtLink: {
-            template: "<a :href=\"to\"><slot /></a>",
-            props: ["to"],
-          },
+          NuxtLink: nuxtLinkStub,
         },
       },
     });
@@ -51,10 +78,7 @@ describe("ShowcaseCard", () => {
       },
       global: {
         stubs: {
-          NuxtLink: {
-            template: "<a :href=\"to\"><slot /></a>",
-            props: ["to"],
-          },
+          NuxtLink: nuxtLinkStub,
         },
       },
     });
@@ -81,10 +105,7 @@ describe("ShowcaseCard", () => {
       },
       global: {
         stubs: {
-          NuxtLink: {
-            template: "<a :href=\"to\"><slot /></a>",
-            props: ["to"],
-          },
+          NuxtLink: nuxtLinkStub,
         },
       },
     });
@@ -93,6 +114,30 @@ describe("ShowcaseCard", () => {
     expect(badge.exists()).toBe(true);
     expect(badge.attributes("aria-hidden")).toBe("true");
     expect(badge.text()).toBe("Read");
+  });
+
+  it("emits mark-read when the main card link is clicked", async () => {
+    const item: ShowcaseResult = {
+      id: "abc",
+      title: "A showcase entry with detail page",
+      summary: "A concise summary preview for the showcase card.",
+      source_url: "https://youtube.com/watch?v=abc",
+      created_at: "2026-03-29T00:00:00.000Z",
+      processing_duration: 4.2,
+    };
+
+    const wrapper = mount(ShowcaseCard, {
+      props: { item },
+      global: {
+        stubs: {
+          NuxtLink: nuxtLinkStub,
+        },
+      },
+    });
+
+    await wrapper.find('a[href="/results/abc"]').trigger("click");
+
+    expect(wrapper.emitted("mark-read")?.length ?? 0).toBeGreaterThan(0);
   });
 
   it("keeps the read badge inside the title row for long titles", () => {
@@ -112,10 +157,7 @@ describe("ShowcaseCard", () => {
       },
       global: {
         stubs: {
-          NuxtLink: {
-            template: "<a :href=\"to\"><slot /></a>",
-            props: ["to"],
-          },
+          NuxtLink: nuxtLinkStub,
         },
       },
     });

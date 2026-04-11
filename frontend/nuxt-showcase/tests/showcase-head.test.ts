@@ -11,6 +11,7 @@ const markAsReadMock = vi.fn();
 vi.mock("../composables/useReadResults", () => ({
   useReadResults: () => ({
     isRead: vi.fn(() => false),
+    isReady: { value: true },
     readIds: { value: [] },
     readMap: { value: {} },
     markAsRead: markAsReadMock,
@@ -47,6 +48,9 @@ describe("showcase head metadata", () => {
     }), {
       global: {
         stubs: {
+          ClientOnly: {
+            template: "<div><slot /><slot name=\"fallback\" /></div>",
+          },
           ShowcaseCard: true,
         },
       },

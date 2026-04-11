@@ -10,6 +10,15 @@ const props = withDefaults(defineProps<{
   isRead: false,
 });
 
+const emit = defineEmits<{
+  (event: "mark-read"): void;
+}>();
+
+function handleMainClick(navigate: (event?: MouseEvent) => Promise<void> | void, event: MouseEvent) {
+  emit("mark-read");
+  void navigate(event);
+}
+
 const createdAtLabel = computed(() => new Date(props.item.created_at).toLocaleDateString("zh-TW", {
   year: "numeric",
   month: "short",
@@ -26,22 +35,32 @@ const durationLabel = computed(() => {
 
 <template>
   <article class="showcase-card" :class="{ 'showcase-card--read': isRead }">
-    <NuxtLink :to="`/results/${item.id}`" class="showcase-card__main-link">
-      <div class="showcase-card__meta">
-        <span>{{ createdAtLabel }}</span>
-        <span v-if="durationLabel">{{ durationLabel }}</span>
-      </div>
-      <div class="showcase-card__title-row">
-        <h2 class="showcase-card__title">{{ item.title }}</h2>
-        <span
-          class="showcase-card__read-badge"
-          :class="{ 'showcase-card__read-badge--visible': isRead }"
-          :aria-hidden="isRead ? 'false' : 'true'"
-        >
-          Read
-        </span>
-      </div>
-      <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
+    <NuxtLink
+      :to="`/results/${item.id}`"
+      custom
+      v-slot="{ href, navigate }"
+    >
+      <a
+        :href="href"
+        class="showcase-card__main-link"
+        @click="handleMainClick(navigate, $event)"
+      >
+        <div class="showcase-card__meta">
+          <span>{{ createdAtLabel }}</span>
+          <span v-if="durationLabel">{{ durationLabel }}</span>
+        </div>
+        <div class="showcase-card__title-row">
+          <h2 class="showcase-card__title">{{ item.title }}</h2>
+          <span
+            class="showcase-card__read-badge"
+            :class="{ 'showcase-card__read-badge--visible': isRead }"
+            :aria-hidden="isRead ? 'false' : 'true'"
+          >
+            Read
+          </span>
+        </div>
+        <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
+      </a>
     </NuxtLink>
     <div v-if="item.source_url" class="showcase-card__links">
       <a

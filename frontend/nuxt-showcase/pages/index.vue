@@ -19,7 +19,8 @@ useHead({
 });
 
 const items = computed(() => data.value?.items ?? []);
-const { isRead } = useReadResults();
+const { isRead, isReady, markAsRead } = useReadResults();
+const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const errorMessage = computed(() => {
   if (!error.value) {
     return "";
@@ -80,13 +81,46 @@ const lastUpdatedLabel = computed(() => {
       <p class="state-panel__body">Notion database 目前沒有 `Completed` 項目。</p>
     </section>
 
-    <section v-else class="showcase-grid">
-      <ShowcaseCard
-        v-for="item in items"
-        :key="item.id"
-        :item="item"
-        :is-read="isRead(item.id)"
-      />
-    </section>
+    <ClientOnly v-else>
+      <section v-if="!isReady" class="showcase-grid showcase-grid--skeleton" aria-label="同步已讀狀態中">
+        <article
+          v-for="index in skeletonItems"
+          :key="`skeleton-${index}`"
+          class="showcase-skeleton-card"
+          aria-hidden="true"
+        >
+          <div class="showcase-skeleton-card__meta"></div>
+          <div class="showcase-skeleton-card__title"></div>
+          <div class="showcase-skeleton-card__summary"></div>
+          <div class="showcase-skeleton-card__summary showcase-skeleton-card__summary--short"></div>
+        </article>
+      </section>
+
+      <section v-else class="showcase-grid">
+        <ShowcaseCard
+          v-for="item in items"
+          :key="item.id"
+          :item="item"
+          :is-read="isRead(item.id)"
+          @mark-read="markAsRead(item.id)"
+        />
+      </section>
+
+      <template #fallback>
+        <section class="showcase-grid showcase-grid--skeleton" aria-label="同步已讀狀態中">
+          <article
+            v-for="index in skeletonItems"
+            :key="`fallback-skeleton-${index}`"
+            class="showcase-skeleton-card"
+            aria-hidden="true"
+          >
+            <div class="showcase-skeleton-card__meta"></div>
+            <div class="showcase-skeleton-card__title"></div>
+            <div class="showcase-skeleton-card__summary"></div>
+            <div class="showcase-skeleton-card__summary showcase-skeleton-card__summary--short"></div>
+          </article>
+        </section>
+      </template>
+    </ClientOnly>
   </main>
 </template>
