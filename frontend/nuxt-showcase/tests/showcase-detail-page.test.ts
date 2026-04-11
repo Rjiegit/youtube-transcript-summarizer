@@ -20,6 +20,7 @@ vi.mock("../composables/useReadResults", () => ({
 
 vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useRoute", useRouteMock);
+vi.stubGlobal("useHead", vi.fn());
 vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string }) => {
   const error = new Error(input.statusMessage);
   return Object.assign(error, input);

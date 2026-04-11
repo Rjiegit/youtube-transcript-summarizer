@@ -61,5 +61,37 @@ describe("ShowcaseCard", () => {
 
     expect(wrapper.classes()).toContain("showcase-card--read");
     expect(wrapper.text()).toContain("Read");
+    expect(wrapper.find(".showcase-card__read-badge").exists()).toBe(true);
+  });
+
+  it("keeps the badge slot rendered even when the item is unread", () => {
+    const item: ShowcaseResult = {
+      id: "abc",
+      title: "A showcase entry with detail page",
+      summary: "A concise summary preview for the showcase card.",
+      source_url: "https://youtube.com/watch?v=abc",
+      created_at: "2026-03-29T00:00:00.000Z",
+      processing_duration: 4.2,
+    };
+
+    const wrapper = mount(ShowcaseCard, {
+      props: {
+        item,
+        isRead: false,
+      },
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a :href=\"to\"><slot /></a>",
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    const badge = wrapper.find(".showcase-card__read-badge");
+    expect(badge.exists()).toBe(true);
+    expect(badge.attributes("aria-hidden")).toBe("true");
+    expect(badge.text()).toBe("Read");
   });
 });

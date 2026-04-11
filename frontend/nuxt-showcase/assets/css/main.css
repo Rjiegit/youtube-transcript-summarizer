@@ -193,6 +193,7 @@ a {
 
 .showcase-card__read-badge {
   flex-shrink: 0;
+  width: 52px;
   padding: 4px 10px;
   border-radius: 999px;
   background: rgba(111, 98, 84, 0.12);
@@ -201,6 +202,12 @@ a {
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  text-align: center;
+  visibility: hidden;
+}
+
+.showcase-card__read-badge--visible {
+  visibility: visible;
 }
 
 .showcase-card__summary {

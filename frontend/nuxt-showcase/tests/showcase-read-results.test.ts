@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ref } from "vue";
 
 describe("useReadResults", () => {
   beforeEach(() => {
     vi.resetModules();
-    window.localStorage.clear();
   });
 
-  it("returns unread when localStorage is empty", async () => {
+  it("returns unread when cookie state is empty", async () => {
+    vi.stubGlobal("useCookie", vi.fn(() => ref({})));
+
     const { useReadResults } = await import("../composables/useReadResults");
     const { isRead, readIds } = useReadResults();
 
@@ -14,7 +16,10 @@ describe("useReadResults", () => {
     expect(readIds.value).toEqual([]);
   });
 
-  it("marks an item as read and persists it", async () => {
+  it("marks an item as read and persists it to cookie state", async () => {
+    const cookieRef = ref({});
+    vi.stubGlobal("useCookie", vi.fn(() => cookieRef));
+
     const { useReadResults } = await import("../composables/useReadResults");
     const { isRead, markAsRead, readMap } = useReadResults();
 
@@ -22,13 +27,14 @@ describe("useReadResults", () => {
 
     expect(isRead("result-1")).toBe(true);
     expect(readMap.value["result-1"]).toBeDefined();
-    expect(window.localStorage.getItem("nuxt-showcase:read-results")).toContain("result-1");
+    expect(cookieRef.value).toHaveProperty("result-1");
   });
 
   it("removes an item when marked unread", async () => {
-    window.localStorage.setItem("nuxt-showcase:read-results", JSON.stringify({
+    const cookieRef = ref({
       "result-1": { readAt: "2026-04-11T00:00:00.000Z" },
-    }));
+    });
+    vi.stubGlobal("useCookie", vi.fn(() => cookieRef));
 
     const { useReadResults } = await import("../composables/useReadResults");
     const { isRead, markAsUnread } = useReadResults();
@@ -36,11 +42,11 @@ describe("useReadResults", () => {
     markAsUnread("result-1");
 
     expect(isRead("result-1")).toBe(false);
-    expect(window.localStorage.getItem("nuxt-showcase:read-results")).toBe("{}");
+    expect(cookieRef.value).toEqual({});
   });
 
-  it("falls back safely when localStorage contains invalid JSON", async () => {
-    window.localStorage.setItem("nuxt-showcase:read-results", "{invalid-json");
+  it("falls back safely when cookie state is invalid", async () => {
+    vi.stubGlobal("useCookie", vi.fn(() => ref("invalid-cookie-value")));
 
     const { useReadResults } = await import("../composables/useReadResults");
     const { isRead, readIds } = useReadResults();

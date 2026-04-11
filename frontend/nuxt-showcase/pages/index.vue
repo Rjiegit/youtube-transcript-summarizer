@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
@@ -10,6 +12,10 @@ const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showc
     generated_at: "",
     cache_ttl_seconds: 3600,
   }),
+});
+
+useHead({
+  title: "YouTube 知識摘要",
 });
 
 const items = computed(() => data.value?.items ?? []);

@@ -33,7 +33,13 @@ const durationLabel = computed(() => {
       </div>
       <div class="showcase-card__title-row">
         <h2 class="showcase-card__title">{{ item.title }}</h2>
-        <span v-if="isRead" class="showcase-card__read-badge">Read</span>
+        <span
+          class="showcase-card__read-badge"
+          :class="{ 'showcase-card__read-badge--visible': isRead }"
+          :aria-hidden="isRead ? 'false' : 'true'"
+        >
+          Read
+        </span>
       </div>
       <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
     </NuxtLink>

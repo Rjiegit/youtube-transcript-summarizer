@@ -40,6 +40,26 @@ const errorMessage = computed(() => {
   return fetchError.value.statusMessage || fetchError.value.message || "請稍後再試。";
 });
 
+const pageTitle = computed(() => {
+  if (isLoading.value) {
+    return "載入中…";
+  }
+
+  if (fetchError.value) {
+    return "載入失敗";
+  }
+
+  if (item.value?.title) {
+    return item.value.title;
+  }
+
+  return "找不到內容";
+});
+
+useHead({
+  title: pageTitle,
+});
+
 const createdAtLabel = computed(() => {
   if (!item.value) {
     return "";
