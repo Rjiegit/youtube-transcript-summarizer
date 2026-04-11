@@ -1,11 +1,22 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 import type { ShowcaseDetailResult } from "../types/showcase";
 
 const useFetchMock = vi.fn();
 const useRouteMock = vi.fn();
+const markAsReadMock = vi.fn();
+
+vi.mock("../composables/useReadResults", () => ({
+  useReadResults: () => ({
+    isRead: vi.fn(() => false),
+    readIds: { value: [] },
+    readMap: { value: {} },
+    markAsRead: markAsReadMock,
+    markAsUnread: vi.fn(),
+  }),
+}));
 
 vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useRoute", useRouteMock);
@@ -29,6 +40,7 @@ describe("Showcase detail page", () => {
   beforeEach(() => {
     useFetchMock.mockReset();
     useRouteMock.mockReset();
+    markAsReadMock.mockReset();
   });
 
   afterEach(() => {
@@ -67,6 +79,7 @@ describe("Showcase detail page", () => {
     expect(wrapper.find('a[href="/"]').exists()).toBe(true);
     expect(wrapper.find('a[href="https://www.youtube.com/watch?v=second"]').exists()).toBe(true);
     expect(wrapper.text()).not.toContain("Notion");
+    expect(markAsReadMock).toHaveBeenCalledWith("result-2-page-id");
   });
 
   it("shows loading state before the fetch resolves", async () => {
@@ -90,6 +103,7 @@ describe("Showcase detail page", () => {
 
     expect(wrapper.text()).toContain("載入展示資料中");
     expect(wrapper.text()).not.toContain("Second result");
+    expect(markAsReadMock).not.toHaveBeenCalled();
   });
 
   it("renders an error state when fetch fails", async () => {
@@ -116,6 +130,7 @@ describe("Showcase detail page", () => {
 
     expect(wrapper.text()).toContain("目前無法載入展示內容");
     expect(wrapper.text()).toContain("Fetch failed");
+    expect(markAsReadMock).not.toHaveBeenCalled();
   });
 
   it("throws a 404 error only after fetch resolves and the item is still missing", async () => {

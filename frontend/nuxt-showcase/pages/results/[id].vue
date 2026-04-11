@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 
+import { useReadResults } from "../../composables/useReadResults";
 import type { ShowcaseDetailResult } from "../../types/showcase";
 
 const route = useRoute();
@@ -12,6 +13,7 @@ const { data, error, pending } = useFetch<ShowcaseDetailResult>(`/api/showcase/r
 });
 
 const item = computed<ShowcaseDetailResult | null>(() => data.value ?? null);
+const { markAsRead } = useReadResults();
 const isLoading = computed(() => pending.value);
 const fetchError = computed(() => error.value);
 const isNotFound = computed(() => !isLoading.value && !fetchError.value && !item.value);
@@ -22,6 +24,12 @@ watchEffect(() => {
       statusCode: 404,
       statusMessage: "Showcase result not found.",
     });
+  }
+});
+
+watchEffect(() => {
+  if (!isLoading.value && !fetchError.value && item.value?.id) {
+    markAsRead(item.value.id);
   }
 });
 

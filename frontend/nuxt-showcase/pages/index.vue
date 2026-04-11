@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ShowcaseCard from "../components/ShowcaseCard.vue";
+import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
@@ -12,6 +13,7 @@ const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showc
 });
 
 const items = computed(() => data.value?.items ?? []);
+const { isRead } = useReadResults();
 const errorMessage = computed(() => {
   if (!error.value) {
     return "";
@@ -81,6 +83,7 @@ const lastUpdatedLabel = computed(() => {
         v-for="item in items"
         :key="item.id"
         :item="item"
+        :is-read="isRead(item.id)"
       />
     </section>
   </main>

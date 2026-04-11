@@ -3,9 +3,12 @@ import { computed } from "vue";
 
 import type { ShowcaseResult } from "../types/showcase";
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   item: ShowcaseResult;
-}>();
+  isRead?: boolean;
+}>(), {
+  isRead: false,
+});
 
 const createdAtLabel = computed(() => new Date(props.item.created_at).toLocaleDateString("zh-TW", {
   year: "numeric",
@@ -22,13 +25,16 @@ const durationLabel = computed(() => {
 </script>
 
 <template>
-  <article class="showcase-card">
+  <article class="showcase-card" :class="{ 'showcase-card--read': isRead }">
     <NuxtLink :to="`/results/${item.id}`" class="showcase-card__main-link">
       <div class="showcase-card__meta">
         <span>{{ createdAtLabel }}</span>
         <span v-if="durationLabel">{{ durationLabel }}</span>
       </div>
-      <h2 class="showcase-card__title">{{ item.title }}</h2>
+      <div class="showcase-card__title-row">
+        <h2 class="showcase-card__title">{{ item.title }}</h2>
+        <span v-if="isRead" class="showcase-card__read-badge">Read</span>
+      </div>
       <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
     </NuxtLink>
     <div v-if="item.source_url" class="showcase-card__links">
