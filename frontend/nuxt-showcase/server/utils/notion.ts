@@ -1,6 +1,6 @@
 import type { ShowcaseApiResponse, ShowcaseDetailResult, ShowcaseResult } from "../../types/showcase";
+import { DEFAULT_CACHE_TTL_SECONDS } from "./config";
 
-export const DEFAULT_CACHE_TTL_SECONDS = 3600;
 export const MAX_SHOWCASE_RESULTS = 100;
 export const NOTION_VERSION = "2022-06-28";
 const STATUS_PROPERTY_CANDIDATES = ["Status", "status", "狀態", "状态", "State", "state"];
