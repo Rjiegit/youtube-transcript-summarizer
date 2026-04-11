@@ -49,10 +49,6 @@ const lastUpdatedLabel = computed(() => {
         收錄 YouTube 影片的重點整理，讓內容更容易快速瀏覽與查找。
       </p>
       <div class="hero__stats">
-        <div>
-          <span class="hero__stat-label">Results</span>
-          <strong class="hero__stat-value">{{ items.length }}</strong>
-        </div>
         <div v-if="lastUpdatedLabel">
           <span class="hero__stat-label">Updated</span>
           <strong class="hero__stat-value">{{ lastUpdatedLabel }}</strong>
