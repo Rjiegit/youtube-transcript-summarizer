@@ -28,6 +28,22 @@ vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string
 });
 
 describe("showcase head metadata", () => {
+  it("uses the global title template without the nuxt-showcase suffix", async () => {
+    const appModule = await import("../app.vue?t=" + Date.now());
+    mount(appModule.default, {
+      global: {
+        stubs: {
+          NuxtPage: true,
+        },
+      },
+    });
+
+    const headArg = useHeadMock.mock.calls[0]?.[0];
+    expect(headArg.titleTemplate()).toBe("影片知識庫");
+    expect(headArg.titleTemplate("影片知識庫")).toBe("影片知識庫");
+    expect(headArg.titleTemplate("Second result")).toBe("Second result | 影片知識庫");
+  });
+
   it("sets the home page title", async () => {
     useFetchMock.mockReturnValue({
       data: ref({
