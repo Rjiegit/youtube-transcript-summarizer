@@ -4,8 +4,6 @@ import { computed } from "vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
-import { formatTaipeiDateTime } from "../utils/datetime";
-import { getLatestResultCreatedAt } from "../utils/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -29,9 +27,6 @@ const errorMessage = computed(() => {
   }
   return error.value.statusMessage || error.value.message || "請稍後再試。";
 });
-const lastUpdatedLabel = computed(() => {
-  return formatTaipeiDateTime(getLatestResultCreatedAt(items.value));
-});
 </script>
 
 <template>
@@ -42,12 +37,6 @@ const lastUpdatedLabel = computed(() => {
       <p class="hero__body">
         把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
       </p>
-      <div class="hero__stats">
-        <div v-if="lastUpdatedLabel">
-          <span class="hero__stat-label">Updated</span>
-          <strong class="hero__stat-value">{{ lastUpdatedLabel }}</strong>
-        </div>
-      </div>
     </section>
 
     <section v-if="pending" class="state-panel">
