@@ -321,6 +321,39 @@ a {
   white-space: pre-wrap;
 }
 
+.detail-panel__video {
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.detail-panel__section-title {
+  margin: 0 0 16px;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  color: var(--accent);
+  font-family: "IBM Plex Mono", "SFMono-Regular", "Menlo", monospace;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.detail-panel__video-frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(42, 33, 24, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+}
+
+.detail-panel__video-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 @media (max-width: 980px) {
   .showcase-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

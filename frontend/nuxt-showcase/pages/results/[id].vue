@@ -71,6 +71,40 @@ const durationLabel = computed(() => {
   }
   return `${item.value.processing_duration.toFixed(1)}s`;
 });
+
+function getYoutubeVideoId(sourceUrl: string | null | undefined): string | null {
+  if (!sourceUrl) {
+    return null;
+  }
+
+  try {
+    const url = new URL(sourceUrl);
+    const hostname = url.hostname.toLowerCase();
+
+    if (hostname === "youtu.be") {
+      const videoId = url.pathname.split("/").filter(Boolean)[0];
+      return videoId || null;
+    }
+
+    if (hostname === "www.youtube.com" || hostname === "youtube.com" || hostname === "m.youtube.com") {
+      const videoId = url.searchParams.get("v");
+      return videoId || null;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+const youtubeVideoId = computed(() => getYoutubeVideoId(item.value?.source_url));
+const youtubeEmbedUrl = computed(() => {
+  if (!youtubeVideoId.value) {
+    return "";
+  }
+
+  return `https://www.youtube-nocookie.com/embed/${youtubeVideoId.value}`;
+});
 </script>
 
 <template>
@@ -110,9 +144,27 @@ const durationLabel = computed(() => {
         </a>
       </div>
 
-      <div class="detail-panel__summary">
+      <div class="detail-panel__summary" data-testid="detail-summary">
         <p>{{ item?.content || item?.summary }}</p>
       </div>
+
+      <section
+        v-if="youtubeEmbedUrl"
+        class="detail-panel__video"
+        data-testid="detail-video"
+      >
+        <h2 class="detail-panel__section-title">Watch the original video</h2>
+        <div class="detail-panel__video-frame">
+          <iframe
+            :src="youtubeEmbedUrl"
+            :title="`${item?.title} YouTube video`"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+          />
+        </div>
+      </section>
     </article>
   </main>
 </template>

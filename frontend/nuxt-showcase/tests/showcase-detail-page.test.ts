@@ -37,6 +37,11 @@ const detailResponse: ShowcaseDetailResult = {
   processing_duration: 12.4,
 };
 
+const nonYoutubeDetailResponse: ShowcaseDetailResult = {
+  ...detailResponse,
+  source_url: "https://example.com/video/second",
+};
+
 describe("Showcase detail page", () => {
   beforeEach(() => {
     useFetchMock.mockReset();
@@ -52,7 +57,7 @@ describe("Showcase detail page", () => {
     return import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
   }
 
-  it("renders the selected showcase item without exposing a Notion link", async () => {
+  it("renders the selected showcase item with a YouTube embed and without exposing a Notion link", async () => {
     useRouteMock.mockReturnValue({
       params: { id: "result-2-page-id" },
     });
@@ -79,8 +84,42 @@ describe("Showcase detail page", () => {
     expect(wrapper.text()).toContain("Detailed paragraph two.");
     expect(wrapper.find('a[href="/"]').exists()).toBe(true);
     expect(wrapper.find('a[href="https://www.youtube.com/watch?v=second"]').exists()).toBe(true);
+    const embed = wrapper.find('iframe[src="https://www.youtube-nocookie.com/embed/second"]');
+    expect(embed.exists()).toBe(true);
+    expect(wrapper.find('[data-testid="detail-video"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="detail-summary"]').exists()).toBe(true);
+    const summaryNode = wrapper.get('[data-testid="detail-summary"]').element;
+    const videoNode = wrapper.get('[data-testid="detail-video"]').element;
+    expect(summaryNode.compareDocumentPosition(videoNode) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(wrapper.text()).not.toContain("Notion");
     expect(markAsReadMock).toHaveBeenCalledWith("result-2-page-id");
+  });
+
+  it("keeps the original video link without embedding non-YouTube sources", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: { value: nonYoutubeDetailResponse },
+      pending: { value: false },
+      error: { value: null },
+    });
+
+    const pageModule = await loadPageModule();
+    const wrapper = mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a :href=\"to\"><slot /></a>",
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    expect(wrapper.find('a[href="https://example.com/video/second"]').exists()).toBe(true);
+    expect(wrapper.find("iframe").exists()).toBe(false);
+    expect(wrapper.find('[data-testid="detail-video"]').exists()).toBe(false);
   });
 
   it("shows loading state before the fetch resolves", async () => {
