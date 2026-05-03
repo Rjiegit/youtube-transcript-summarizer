@@ -72,6 +72,20 @@ from src.infrastructure.llm.summarizer_service import Summarizer
 
 
 class TestSummarizerService(unittest.TestCase):
+    def test_get_prompt_uses_learning_notes_template(self):
+        summarizer = Summarizer()
+
+        result = summarizer.get_prompt("測試影片", "這是逐字稿")
+
+        self.assertIn("# 學習筆記", result)
+        self.assertIn("## 一句話總結", result)
+        self.assertIn("## 知識架構", result)
+        self.assertIn("## 複習問題", result)
+        self.assertIn("測試影片", result)
+        self.assertIn("這是逐字稿", result)
+        self.assertNotIn("{title}", result)
+        self.assertNotIn("{text}", result)
+
     def test_auto_selects_kimi_cloud_and_records_label(self):
         with patch.dict(
             os.environ,
