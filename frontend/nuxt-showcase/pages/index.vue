@@ -22,6 +22,8 @@ useHead({
 const items = computed(() => data.value?.items ?? []);
 const { isRead, isReady, markAsRead } = useReadResults();
 const displayItems = computed(() => sortUnreadResultsFirst(items.value, isRead));
+const totalCount = computed(() => items.value.length);
+const unreadCount = computed(() => items.value.filter((item) => !isRead(item.id)).length);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const errorMessage = computed(() => {
   if (!error.value) {
@@ -39,6 +41,23 @@ const errorMessage = computed(() => {
       <p class="hero__body">
         把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
       </p>
+      <ClientOnly>
+        <div v-if="isReady" class="hero__stats" aria-label="閱讀狀態統計">
+          <div class="hero__stat" data-testid="unread-count">
+            <span class="hero__stat-label">未讀</span>
+            <strong class="hero__stat-value">{{ unreadCount }} 篇</strong>
+          </div>
+          <div class="hero__stat" data-testid="total-count">
+            <span class="hero__stat-label">全部</span>
+            <strong class="hero__stat-value">{{ totalCount }} 篇</strong>
+          </div>
+        </div>
+        <p v-else class="hero__sync-state">同步已讀狀態中</p>
+
+        <template #fallback>
+          <p class="hero__sync-state">同步已讀狀態中</p>
+        </template>
+      </ClientOnly>
     </section>
 
     <section v-if="pending" class="state-panel">

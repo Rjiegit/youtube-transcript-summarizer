@@ -1,16 +1,17 @@
 import { defineComponent, h, Suspense } from "vue";
-import { describe, expect, it, vi } from "vitest";
-import { mount } from "@vue/test-utils";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { flushPromises, mount } from "@vue/test-utils";
 import { ref } from "vue";
 
 const useFetchMock = vi.fn();
 const useRouteMock = vi.fn();
 const useHeadMock = vi.fn();
 const markAsReadMock = vi.fn();
+let readResultIds = new Set<string>();
 
 vi.mock("../composables/useReadResults", () => ({
   useReadResults: () => ({
-    isRead: vi.fn(() => false),
+    isRead: vi.fn((id: string) => readResultIds.has(id)),
     isReady: { value: true },
     readIds: { value: [] },
     readMap: { value: {} },
@@ -28,6 +29,11 @@ vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string
 });
 
 describe("showcase head metadata", () => {
+  beforeEach(() => {
+    readResultIds = new Set<string>();
+    vi.clearAllMocks();
+  });
+
   it("uses the global title template without the nuxt-showcase suffix", async () => {
     const appModule = await import("../app.vue?t=" + Date.now());
     mount(appModule.default, {
@@ -90,12 +96,76 @@ describe("showcase head metadata", () => {
         },
       },
     });
-    await Promise.resolve();
+    await flushPromises();
     await wrapper.vm.$nextTick();
 
     expect(useHeadMock).toHaveBeenCalledWith(expect.objectContaining({
       title: "影片知識庫",
     }));
+  });
+
+  it("shows unread and total counts on the home page", async () => {
+    readResultIds = new Set(["result-2"]);
+    useFetchMock.mockReturnValue({
+      data: ref({
+        items: [
+          {
+            id: "result-1",
+            title: "First result",
+            summary: "Summary",
+            source_url: null,
+            created_at: "2026-04-12T10:53:00.000Z",
+            processing_duration: 10,
+          },
+          {
+            id: "result-2",
+            title: "Second result",
+            summary: "Summary",
+            source_url: null,
+            created_at: "2026-04-11T10:53:00.000Z",
+            processing_duration: 12.4,
+          },
+          {
+            id: "result-3",
+            title: "Third result",
+            summary: "Summary",
+            source_url: null,
+            created_at: "2026-04-10T10:53:00.000Z",
+            processing_duration: 9.6,
+          },
+        ],
+        generated_at: "2026-04-12T12:00:00.000Z",
+        cache_ttl_seconds: 3600,
+      }),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await import("../pages/index.vue?t=" + Date.now() + Math.random());
+    const wrapper = mount(defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      render() {
+        return h(Suspense, null, {
+          default: () => h(pageModule.default),
+        });
+      },
+    }), {
+      global: {
+        stubs: {
+          ClientOnly: {
+            template: "<div><slot /><slot name=\"fallback\" /></div>",
+          },
+          ShowcaseCard: true,
+        },
+      },
+    });
+    await flushPromises();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.get('[data-testid="unread-count"]').text()).toContain("2 篇");
+    expect(wrapper.get('[data-testid="total-count"]').text()).toContain("3 篇");
   });
 
   it("sets the detail title from the loaded item", async () => {
