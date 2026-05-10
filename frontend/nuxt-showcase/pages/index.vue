@@ -4,6 +4,7 @@ import { computed } from "vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
+import { sortUnreadResultsFirst } from "../utils/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -20,6 +21,7 @@ useHead({
 
 const items = computed(() => data.value?.items ?? []);
 const { isRead, isReady, markAsRead } = useReadResults();
+const displayItems = computed(() => sortUnreadResultsFirst(items.value, isRead));
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const errorMessage = computed(() => {
   if (!error.value) {
@@ -80,7 +82,7 @@ const errorMessage = computed(() => {
 
       <section v-else class="showcase-grid">
         <ShowcaseCard
-          v-for="item in items"
+          v-for="item in displayItems"
           :key="item.id"
           :item="item"
           :is-read="isRead(item.id)"
