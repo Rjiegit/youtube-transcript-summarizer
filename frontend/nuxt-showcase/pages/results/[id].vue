@@ -57,8 +57,28 @@ const pageTitle = computed(() => {
   return "找不到內容";
 });
 
+function compactMetaDescription(value: string | null | undefined): string {
+  const compactedValue = (value || "").replace(/\s+/g, " ").trim();
+  if (!compactedValue) {
+    return "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。";
+  }
+
+  return compactedValue.length > 160 ? `${compactedValue.slice(0, 157)}...` : compactedValue;
+}
+
+const pageDescription = computed(() => compactMetaDescription(item.value?.summary || item.value?.content));
+
 useHead({
   title: pageTitle,
+  meta: [
+    { name: "description", content: pageDescription.value },
+    { property: "og:title", content: pageTitle.value },
+    { property: "og:description", content: pageDescription.value },
+    { property: "og:type", content: "article" },
+    { name: "twitter:card", content: "summary" },
+    { name: "twitter:title", content: pageTitle.value },
+    { name: "twitter:description", content: pageDescription.value },
+  ],
 });
 
 const createdAtLabel = computed(() => {

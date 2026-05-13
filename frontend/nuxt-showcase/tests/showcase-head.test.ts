@@ -101,7 +101,20 @@ describe("showcase head metadata", () => {
 
     expect(useHeadMock).toHaveBeenCalledWith(expect.objectContaining({
       title: "影片知識庫",
+      meta: expect.arrayContaining([
+        expect.objectContaining({ name: "description" }),
+        expect.objectContaining({ property: "og:title", content: "影片知識庫" }),
+        expect.objectContaining({ property: "og:description" }),
+        expect.objectContaining({ name: "twitter:card", content: "summary" }),
+        expect.objectContaining({ name: "twitter:title", content: "影片知識庫" }),
+        expect.objectContaining({ name: "twitter:description" }),
+      ]),
     }));
+    const homeHeadArg = useHeadMock.mock.calls.find(([arg]) => arg?.title === "影片知識庫")?.[0];
+    expect(homeHeadArg?.meta).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ property: "og:image" }),
+      expect.objectContaining({ name: "twitter:image" }),
+    ]));
   });
 
   it("shows unread and total counts on the home page", async () => {
@@ -197,5 +210,17 @@ describe("showcase head metadata", () => {
 
     const lastCall = useHeadMock.mock.calls.at(-1)?.[0];
     expect(lastCall?.title?.value ?? lastCall?.title).toBe("Second result");
+    expect(lastCall?.meta).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: "description", content: "Summary" }),
+      expect.objectContaining({ property: "og:title", content: "Second result" }),
+      expect.objectContaining({ property: "og:description", content: "Summary" }),
+      expect.objectContaining({ name: "twitter:card", content: "summary" }),
+      expect.objectContaining({ name: "twitter:title", content: "Second result" }),
+      expect.objectContaining({ name: "twitter:description", content: "Summary" }),
+    ]));
+    expect(lastCall?.meta).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ property: "og:image" }),
+      expect.objectContaining({ name: "twitter:image" }),
+    ]));
   });
 });

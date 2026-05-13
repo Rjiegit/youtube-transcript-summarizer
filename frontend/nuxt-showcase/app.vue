@@ -17,6 +17,15 @@ useHead({
     { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
     { rel: "manifest", href: "/site.webmanifest" },
   ],
+  meta: [
+    {
+      name: "description",
+      content: "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。",
+    },
+    { property: "og:site_name", content: "影片知識庫" },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ],
 });
 </script>
 
