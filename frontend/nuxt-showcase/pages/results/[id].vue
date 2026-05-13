@@ -142,7 +142,7 @@ const youtubeEmbedUrl = computed(() => {
     <article v-else-if="item" class="detail-panel">
       <div class="detail-panel__nav">
         <NuxtLink to="/" class="detail-panel__back-link">
-          Back to Showcase
+          返回列表
         </NuxtLink>
       </div>
 
@@ -160,7 +160,7 @@ const youtubeEmbedUrl = computed(() => {
           rel="noreferrer"
           class="showcase-card__link"
         >
-          Original Video
+          原始影片
         </a>
       </div>
 
@@ -173,7 +173,7 @@ const youtubeEmbedUrl = computed(() => {
         class="detail-panel__video"
         data-testid="detail-video"
       >
-        <h2 class="detail-panel__section-title">Watch the original video</h2>
+        <h2 class="detail-panel__section-title">觀看原始影片</h2>
         <div class="detail-panel__video-frame">
           <iframe
             :src="youtubeEmbedUrl"

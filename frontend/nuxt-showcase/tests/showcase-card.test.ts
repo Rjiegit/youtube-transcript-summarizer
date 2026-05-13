@@ -84,7 +84,7 @@ describe("ShowcaseCard", () => {
     });
 
     expect(wrapper.classes()).toContain("showcase-card--read");
-    expect(wrapper.text()).toContain("Read");
+    expect(wrapper.text()).toContain("已讀");
     expect(wrapper.find(".showcase-card__read-badge").exists()).toBe(true);
   });
 
@@ -113,7 +113,7 @@ describe("ShowcaseCard", () => {
     const badge = wrapper.find(".showcase-card__read-badge");
     expect(badge.exists()).toBe(true);
     expect(badge.attributes("aria-hidden")).toBe("true");
-    expect(badge.text()).toBe("Read");
+    expect(badge.text()).toBe("已讀");
   });
 
   it("emits mark-read when the main card link is clicked", async () => {

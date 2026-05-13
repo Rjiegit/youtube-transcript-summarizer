@@ -64,11 +64,13 @@ const errorMessage = computed(() => {
 <template>
   <main class="showcase-shell">
     <section class="hero">
-      <p class="hero__eyebrow">Video Knowledge Index</p>
-      <h1 class="hero__title">影片知識庫</h1>
-      <p class="hero__body">
-        把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
-      </p>
+      <div class="hero__content">
+        <p class="hero__eyebrow">Video Knowledge Index</p>
+        <h1 class="hero__title">影片知識庫</h1>
+        <p class="hero__body">
+          把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
+        </p>
+      </div>
       <ClientOnly>
         <div v-if="isReady" class="hero__stats" aria-label="閱讀狀態統計">
           <div class="hero__stat" data-testid="unread-count">

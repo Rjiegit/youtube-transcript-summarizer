@@ -53,7 +53,7 @@ const durationLabel = computed(() => {
             :class="{ 'showcase-card__read-badge--visible': isRead }"
             :aria-hidden="isRead ? 'false' : 'true'"
           >
-            Read
+            已讀
           </span>
         </div>
         <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
@@ -66,7 +66,7 @@ const durationLabel = computed(() => {
         rel="noreferrer"
         class="showcase-card__link"
       >
-        Original Video
+        原始影片
       </a>
     </div>
   </article>
