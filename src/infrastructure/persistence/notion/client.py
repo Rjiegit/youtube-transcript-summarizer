@@ -64,7 +64,11 @@ class NotionDB(BaseDB):
     def get_all_tasks(self) -> list[Task]:
         """Gets all tasks from the Notion database."""
         self._ensure_configuration()
-        response = self.notion.databases.query(database_id=self.database_id)
+        response = self.notion.databases.query(
+            database_id=self.database_id,
+            sorts=[{"timestamp": "created_time", "direction": "descending"}],
+            page_size=100,
+        )
         results = response.get("results", [])
         return [self.adapter.to_task(item) for item in results]
 
