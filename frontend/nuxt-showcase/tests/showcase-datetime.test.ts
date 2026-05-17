@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { formatTaipeiDate, formatTaipeiDateTime } from "../utils/datetime";
-import { getLatestResultCreatedAt, sortUnreadResultsFirst } from "../utils/showcase";
+import { getLatestResultCreatedAt, getReadStats, sortUnreadResultsFirst } from "../utils/showcase";
 import type { ShowcaseResult } from "../types/showcase";
 
 function createResult(id: string): ShowcaseResult {
@@ -75,5 +75,28 @@ describe("showcase datetime formatting", () => {
 
   it("returns an empty result list when sorting an empty list", () => {
     expect(sortUnreadResultsFirst([], () => false)).toEqual([]);
+  });
+
+  it("counts unread items from the current result list only", () => {
+    expect(getReadStats([
+      createResult("result-1"),
+      createResult("result-2"),
+      createResult("result-3"),
+    ], {
+      "result-2": { readAt: "2026-04-11T00:00:00.000Z" },
+      "stale-result": { readAt: "2026-04-10T00:00:00.000Z" },
+    })).toEqual({
+      totalCount: 3,
+      unreadCount: 2,
+    });
+  });
+
+  it("treats an empty result list as zero read stats", () => {
+    expect(getReadStats([], {
+      "stale-result": { readAt: "2026-04-10T00:00:00.000Z" },
+    })).toEqual({
+      totalCount: 0,
+      unreadCount: 0,
+    });
   });
 });

@@ -14,7 +14,11 @@ vi.mock("../composables/useReadResults", () => ({
     isRead: vi.fn((id: string) => readResultIds.has(id)),
     isReady: { value: true },
     readIds: { value: [] },
-    readMap: { value: {} },
+    readMap: {
+      value: Object.fromEntries(
+        [...readResultIds].map((id) => [id, { readAt: "2026-04-11T00:00:00.000Z" }]),
+      ),
+    },
     markAsRead: markAsReadMock,
     markAsUnread: vi.fn(),
   }),

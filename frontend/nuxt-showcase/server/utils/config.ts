@@ -126,10 +126,6 @@ export function getShowcaseRouteRules(cacheTtlSeconds: number, isProduction: boo
   };
 
   return {
-    "/": {
-      swr: ttl,
-      headers,
-    },
     [SHOWCASE_RESULTS_ROUTE]: {
       swr: ttl,
       headers,

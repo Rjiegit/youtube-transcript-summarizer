@@ -1,7 +1,22 @@
 import type { ShowcaseResult } from "../types/showcase";
 
+type ReadMap = Record<string, { readAt: string }>;
+
 export function getLatestResultCreatedAt(items: ShowcaseResult[] = []): string {
   return items[0]?.created_at ?? "";
+}
+
+export function getReadStats(
+  items: ShowcaseResult[] = [],
+  readMap: ReadMap = {},
+) {
+  const totalCount = items.length;
+  const unreadCount = items.filter((item) => !readMap[item.id]).length;
+
+  return {
+    totalCount,
+    unreadCount,
+  };
 }
 
 export function sortUnreadResultsFirst(

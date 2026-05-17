@@ -108,7 +108,7 @@ describe("showcase env resolution", () => {
     expect(snapshot.processEnv.NUXT_NOTION_DATABASE_ID).toBe(true);
   });
 
-  it("uses SHOWCASE_CACHE_TTL_SECONDS in Nuxt route rules", async () => {
+  it("uses SHOWCASE_CACHE_TTL_SECONDS for API route rules without caching the home page", async () => {
     process.env.SHOWCASE_CACHE_TTL_SECONDS = "900";
     process.env.NODE_ENV = "production";
 
@@ -119,8 +119,10 @@ describe("showcase env resolution", () => {
     const config = module.default;
 
     expect(config.runtimeConfig.showcaseCacheTtlSeconds).toBe(900);
-    expect(config.routeRules["/"].swr).toBe(900);
+    expect(config.routeRules["/"]).toBeUndefined();
     expect(config.routeRules["/api/showcase/results"].swr).toBe(900);
-    expect(config.routeRules["/"].headers["cache-control"]).toBe("public, s-maxage=900, stale-while-revalidate=900");
+    expect(config.routeRules["/api/showcase/results"].headers["cache-control"]).toBe(
+      "public, s-maxage=900, stale-while-revalidate=900",
+    );
   });
 });

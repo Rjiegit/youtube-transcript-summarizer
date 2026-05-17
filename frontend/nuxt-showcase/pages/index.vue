@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
-import { sortUnreadResultsFirst } from "../utils/showcase";
+import { getReadStats, sortUnreadResultsFirst } from "../utils/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -38,7 +38,7 @@ useHead({
 });
 
 const items = computed(() => data.value?.items ?? []);
-const { isRead, isReady, markAsRead } = useReadResults();
+const { isRead, isReady, markAsRead, readMap } = useReadResults();
 const titleSearchQuery = ref("");
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
@@ -49,8 +49,9 @@ const filteredItems = computed(() => {
   return items.value.filter((item) => item.title.toLowerCase().includes(normalizedTitleSearchQuery.value));
 });
 const displayItems = computed(() => sortUnreadResultsFirst(filteredItems.value, isRead));
-const totalCount = computed(() => items.value.length);
-const unreadCount = computed(() => items.value.filter((item) => !isRead(item.id)).length);
+const readStats = computed(() => getReadStats(items.value, readMap.value));
+const totalCount = computed(() => readStats.value.totalCount);
+const unreadCount = computed(() => readStats.value.unreadCount);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const hasTitleSearchQuery = computed(() => normalizedTitleSearchQuery.value.length > 0);
 const errorMessage = computed(() => {
