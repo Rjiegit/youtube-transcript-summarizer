@@ -29,7 +29,7 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-  if (!isLoading.value && !fetchError.value && item.value?.id) {
+  if (typeof window !== "undefined" && !isLoading.value && !fetchError.value && item.value?.id) {
     markAsRead(item.value.id);
   }
 });

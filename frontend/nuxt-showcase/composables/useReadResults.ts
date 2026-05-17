@@ -73,12 +73,20 @@ function persistReadMap(value: ReadMap): void {
   }
 }
 
+function mergeReadMaps(left: ReadMap, right: ReadMap): ReadMap {
+  return trimReadMap({
+    ...left,
+    ...right,
+  });
+}
+
 export function useReadResults() {
   const state = useState<ReadMap>(READ_RESULTS_STATE_KEY, () => ({}));
   const isReady = useState<boolean>(READ_RESULTS_READY_STATE_KEY, () => false);
 
   if (!isReady.value && canUseLocalStorage()) {
-    state.value = readStoredReadMap();
+    state.value = mergeReadMaps(readStoredReadMap(), state.value);
+    persistReadMap(state.value);
     isReady.value = true;
   }
 

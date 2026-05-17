@@ -204,4 +204,26 @@ describe("useReadResults", () => {
     expect(second.readIds.value).toEqual(["result-2"]);
     expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-2");
   });
+
+  it("keeps in-memory read state when client storage hydrates later", async () => {
+    stubNuxtState();
+    vi.stubGlobal("window", undefined);
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const first = useReadResults();
+
+    first.markAsRead("result-from-detail");
+    expect(first.isRead("result-from-detail")).toBe(true);
+
+    const storage = stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify({
+        "result-from-storage": { readAt: "2026-04-11T00:00:00.000Z" },
+      }),
+    });
+    const second = useReadResults();
+
+    expect(second.isRead("result-from-detail")).toBe(true);
+    expect(second.isRead("result-from-storage")).toBe(true);
+    expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-from-detail");
+  });
 });
