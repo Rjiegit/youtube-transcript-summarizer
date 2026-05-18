@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
-import { getReadStats, sortUnreadResultsFirst } from "../utils/showcase";
+import { dedupeShowcaseResults, getReadStats, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -38,18 +38,20 @@ useHead({
 });
 
 const items = computed(() => data.value?.items ?? []);
-const { isRead, isReady, markAsRead, readMap } = useReadResults();
+const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
+const { isReady, markAsRead, readMap } = useReadResults();
 const titleSearchQuery = ref("");
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
   if (!normalizedTitleSearchQuery.value) {
-    return items.value;
+    return dedupedItems.value;
   }
 
-  return items.value.filter((item) => item.title.toLowerCase().includes(normalizedTitleSearchQuery.value));
+  return dedupedItems.value.filter((item) => item.title.toLowerCase().includes(normalizedTitleSearchQuery.value));
 });
-const displayItems = computed(() => sortUnreadResultsFirst(filteredItems.value, isRead));
-const readStats = computed(() => getReadStats(items.value, readMap.value));
+const displayItems = computed(() =>
+  sortUnreadResultsFirst(filteredItems.value, (item) => isResultRead(item, readMap.value)));
+const readStats = computed(() => getReadStats(dedupedItems.value, readMap.value));
 const totalCount = computed(() => readStats.value.totalCount);
 const unreadCount = computed(() => readStats.value.unreadCount);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
@@ -75,11 +77,11 @@ const errorMessage = computed(() => {
       <ClientOnly>
         <div v-if="isReady" class="hero__stats" aria-label="閱讀狀態統計">
           <div class="hero__stat" data-testid="unread-count">
-            <span class="hero__stat-label">未讀</span>
+            <span class="hero__stat-label">未讀文章</span>
             <strong class="hero__stat-value">{{ unreadCount }} 篇</strong>
           </div>
           <div class="hero__stat" data-testid="total-count">
-            <span class="hero__stat-label">全部</span>
+            <span class="hero__stat-label">全部文章</span>
             <strong class="hero__stat-value">{{ totalCount }} 篇</strong>
           </div>
         </div>
@@ -154,8 +156,8 @@ const errorMessage = computed(() => {
           v-for="item in displayItems"
           :key="item.id"
           :item="item"
-          :is-read="isRead(item.id)"
-          @mark-read="markAsRead(item.id)"
+          :is-read="isResultRead(item, readMap)"
+          @mark-read="markAsRead(item.readKey)"
         />
       </section>
 

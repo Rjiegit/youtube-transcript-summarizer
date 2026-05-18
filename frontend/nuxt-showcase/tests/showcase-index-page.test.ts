@@ -20,6 +20,14 @@ const response: ShowcaseApiResponse = {
       processing_duration: 4.2,
     },
     {
+      id: "result-1-duplicate",
+      title: "First result duplicate",
+      summary: "First summary again.",
+      source_url: "https://www.youtube.com/watch?v=first#duplicate",
+      created_at: "2026-03-28T12:00:00.000Z",
+      processing_duration: 4.8,
+    },
+    {
       id: "result-2",
       title: "Second result",
       summary: "Second summary.",
@@ -122,6 +130,7 @@ describe("showcase index page", () => {
     await flushPromises();
 
     expect(wrapper.get('[data-testid="unread-count"]').text()).toContain("2 篇");
+    expect(wrapper.find('[data-testid="card-result-1-duplicate"]').exists()).toBe(false);
 
     await wrapper.get('[data-testid="card-result-1"]').trigger("click");
 

@@ -1,7 +1,14 @@
 import { describe, expect, it } from "vitest";
 
 import { formatTaipeiDate, formatTaipeiDateTime } from "../utils/datetime";
-import { getLatestResultCreatedAt, getReadStats, sortUnreadResultsFirst } from "../utils/showcase";
+import {
+  dedupeShowcaseResults,
+  getLatestResultCreatedAt,
+  getReadStats,
+  getResultReadKey,
+  isResultRead,
+  sortUnreadResultsFirst,
+} from "../utils/showcase";
 import type { ShowcaseResult } from "../types/showcase";
 
 function createResult(id: string): ShowcaseResult {
@@ -12,6 +19,13 @@ function createResult(id: string): ShowcaseResult {
     source_url: null,
     created_at: "2026-04-11T10:53:00.000Z",
     processing_duration: null,
+  };
+}
+
+function createResultWithUrl(id: string, sourceUrl: string): ShowcaseResult {
+  return {
+    ...createResult(id),
+    source_url: sourceUrl,
   };
 }
 
@@ -59,7 +73,9 @@ describe("showcase datetime formatting", () => {
       createResult("unread-2"),
     ];
 
-    expect(sortUnreadResultsFirst(items, (id) => id.startsWith("read")).map((item) => item.id)).toEqual([
+    const displayItems = dedupeShowcaseResults(items);
+
+    expect(sortUnreadResultsFirst(displayItems, (item) => item.id.startsWith("read")).map((item) => item.id)).toEqual([
       "unread-1",
       "unread-2",
       "read-1",
@@ -77,17 +93,53 @@ describe("showcase datetime formatting", () => {
     expect(sortUnreadResultsFirst([], () => false)).toEqual([]);
   });
 
+  it("uses normalized source URLs as article-level read keys", () => {
+    expect(getResultReadKey(createResultWithUrl(
+      "result-1",
+      "HTTP://Example.com/Article/?b=2&a=1&utm_source=newsletter#section",
+    ))).toBe("url:https://example.com/Article?a=1&b=2");
+    expect(getResultReadKey(createResult("result-2"))).toBe("result-2");
+  });
+
+  it("deduplicates repeated source URLs while preserving the newest representative", () => {
+    const items = [
+      createResultWithUrl("result-1", "https://example.com/article/?b=2&a=1"),
+      createResultWithUrl("result-2", "https://example.com/article?a=1&b=2#comments"),
+      createResultWithUrl("result-3", "https://example.com/other"),
+    ];
+
+    const dedupedItems = dedupeShowcaseResults(items);
+
+    expect(dedupedItems.map((item) => item.id)).toEqual(["result-1", "result-3"]);
+    expect(dedupedItems[0].readKey).toBe("url:https://example.com/article?a=1&b=2");
+    expect(dedupedItems[0].readCandidateIds).toEqual(["result-1", "result-2"]);
+  });
+
+  it("treats a duplicated article as read when its article key or legacy page ID is read", () => {
+    const [dedupedItem] = dedupeShowcaseResults([
+      createResultWithUrl("result-1", "https://example.com/article"),
+      createResultWithUrl("result-2", "https://example.com/article/"),
+    ]);
+
+    expect(isResultRead(dedupedItem, {
+      "result-2": { readAt: "2026-04-11T00:00:00.000Z" },
+    })).toBe(true);
+    expect(isResultRead(dedupedItem, {
+      [dedupedItem.readKey]: { readAt: "2026-04-11T00:00:00.000Z" },
+    })).toBe(true);
+  });
+
   it("counts unread items from the current result list only", () => {
-    expect(getReadStats([
-      createResult("result-1"),
-      createResult("result-2"),
+    expect(getReadStats(dedupeShowcaseResults([
+      createResultWithUrl("result-1", "https://example.com/article"),
+      createResultWithUrl("result-2", "https://example.com/article/"),
       createResult("result-3"),
-    ], {
+    ]), {
       "result-2": { readAt: "2026-04-11T00:00:00.000Z" },
       "stale-result": { readAt: "2026-04-10T00:00:00.000Z" },
     })).toEqual({
-      totalCount: 3,
-      unreadCount: 2,
+      totalCount: 2,
+      unreadCount: 1,
     });
   });
 
