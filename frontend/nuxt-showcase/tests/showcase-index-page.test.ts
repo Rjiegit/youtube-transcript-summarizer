@@ -82,7 +82,7 @@ describe("showcase index page", () => {
     return import("../pages/index.vue?t=" + Date.now() + Math.random());
   }
 
-  it("updates the unread count when a card is marked as read", async () => {
+  it("keeps read state updates and duplicate filtering without article counts", async () => {
     useFetchMock.mockResolvedValue({
       data: ref(response),
       pending: ref(false),
@@ -129,11 +129,13 @@ describe("showcase index page", () => {
     });
     await flushPromises();
 
-    expect(wrapper.get('[data-testid="unread-count"]').text()).toContain("2 篇");
+    expect(wrapper.find('[data-testid="unread-count"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="total-count"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="card-result-1-duplicate"]').exists()).toBe(false);
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("unread");
 
     await wrapper.get('[data-testid="card-result-1"]').trigger("click");
 
-    expect(wrapper.get('[data-testid="unread-count"]').text()).toContain("1 篇");
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
   });
 });

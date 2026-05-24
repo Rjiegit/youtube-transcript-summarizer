@@ -4,7 +4,7 @@ import { computed, ref } from "vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
-import { dedupeShowcaseResults, getReadStats, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
+import { dedupeShowcaseResults, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
 
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
@@ -51,9 +51,6 @@ const filteredItems = computed(() => {
 });
 const displayItems = computed(() =>
   sortUnreadResultsFirst(filteredItems.value, (item) => isResultRead(item, readMap.value)));
-const readStats = computed(() => getReadStats(dedupedItems.value, readMap.value));
-const totalCount = computed(() => readStats.value.totalCount);
-const unreadCount = computed(() => readStats.value.unreadCount);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const hasTitleSearchQuery = computed(() => normalizedTitleSearchQuery.value.length > 0);
 const errorMessage = computed(() => {
@@ -74,23 +71,6 @@ const errorMessage = computed(() => {
           把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
         </p>
       </div>
-      <ClientOnly>
-        <div v-if="isReady" class="hero__stats" aria-label="閱讀狀態統計">
-          <div class="hero__stat" data-testid="unread-count">
-            <span class="hero__stat-label">未讀文章</span>
-            <strong class="hero__stat-value">{{ unreadCount }} 篇</strong>
-          </div>
-          <div class="hero__stat" data-testid="total-count">
-            <span class="hero__stat-label">全部文章</span>
-            <strong class="hero__stat-value">{{ totalCount }} 篇</strong>
-          </div>
-        </div>
-        <p v-else class="hero__sync-state">同步已讀狀態中</p>
-
-        <template #fallback>
-          <p class="hero__sync-state">同步已讀狀態中</p>
-        </template>
-      </ClientOnly>
     </section>
 
     <section v-if="!pending && !error && items.length > 0" class="showcase-toolbar" aria-label="展示內容工具列">

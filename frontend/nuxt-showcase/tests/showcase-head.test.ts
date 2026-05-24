@@ -121,7 +121,7 @@ describe("showcase head metadata", () => {
     ]));
   });
 
-  it("shows unread and total counts on the home page", async () => {
+  it("does not show unread and total counts on the home page", async () => {
     readResultIds = new Set(["result-2"]);
     useFetchMock.mockReturnValue({
       data: ref({
@@ -181,8 +181,8 @@ describe("showcase head metadata", () => {
     await flushPromises();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.get('[data-testid="unread-count"]').text()).toContain("2 篇");
-    expect(wrapper.get('[data-testid="total-count"]').text()).toContain("3 篇");
+    expect(wrapper.find('[data-testid="unread-count"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="total-count"]').exists()).toBe(false);
   });
 
   it("sets the detail title from the loaded item", async () => {
