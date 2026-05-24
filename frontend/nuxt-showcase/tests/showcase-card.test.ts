@@ -17,7 +17,8 @@ const nuxtLinkStub = defineComponent({
     },
   },
   setup(props) {
-    function navigate() {
+    function navigate(event?: MouseEvent) {
+      event?.preventDefault();
       return Promise.resolve();
     }
 
@@ -114,6 +115,57 @@ describe("ShowcaseCard", () => {
     expect(badge.exists()).toBe(true);
     expect(badge.attributes("aria-hidden")).toBe("true");
     expect(badge.text()).toBe("已讀");
+    expect(wrapper.get('[data-testid="quick-mark-read"]').text()).toBe("標記已讀");
+  });
+
+  it("emits mark-read when the quick read button is clicked", async () => {
+    const item: ShowcaseResult = {
+      id: "abc",
+      title: "A showcase entry with detail page",
+      summary: "A concise summary preview for the showcase card.",
+      source_url: "https://youtube.com/watch?v=abc",
+      created_at: "2026-03-29T00:00:00.000Z",
+      processing_duration: 4.2,
+    };
+
+    const wrapper = mount(ShowcaseCard, {
+      props: { item },
+      global: {
+        stubs: {
+          NuxtLink: nuxtLinkStub,
+        },
+      },
+    });
+
+    await wrapper.get('[data-testid="quick-mark-read"]').trigger("click");
+
+    expect(wrapper.emitted("mark-read")?.length ?? 0).toBe(1);
+  });
+
+  it("hides the quick read button when the item is marked as read", () => {
+    const item: ShowcaseResult = {
+      id: "abc",
+      title: "A showcase entry with detail page",
+      summary: "A concise summary preview for the showcase card.",
+      source_url: "https://youtube.com/watch?v=abc",
+      created_at: "2026-03-29T00:00:00.000Z",
+      processing_duration: 4.2,
+    };
+
+    const wrapper = mount(ShowcaseCard, {
+      props: {
+        item,
+        isRead: true,
+      },
+      global: {
+        stubs: {
+          NuxtLink: nuxtLinkStub,
+        },
+      },
+    });
+
+    expect(wrapper.find('[data-testid="quick-mark-read"]').exists()).toBe(false);
+    expect(wrapper.find(".showcase-card__read-badge").exists()).toBe(true);
   });
 
   it("emits mark-read when the main card link is clicked", async () => {

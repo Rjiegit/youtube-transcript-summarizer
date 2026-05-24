@@ -115,13 +115,17 @@ describe("showcase index page", () => {
             },
             emits: ["mark-read"],
             template: `
-              <button
-                type="button"
-                :data-testid="'card-' + item.id"
-                @click="$emit('mark-read')"
-              >
-                {{ item.title }} {{ isRead ? 'read' : 'unread' }}
-              </button>
+              <article :data-testid="'card-' + item.id">
+                <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
+                <button
+                  v-if="!isRead"
+                  type="button"
+                  :data-testid="'quick-read-' + item.id"
+                  @click="$emit('mark-read')"
+                >
+                  quick read
+                </button>
+              </article>
             `,
           }),
         },
@@ -134,8 +138,9 @@ describe("showcase index page", () => {
     expect(wrapper.find('[data-testid="card-result-1-duplicate"]').exists()).toBe(false);
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("unread");
 
-    await wrapper.get('[data-testid="card-result-1"]').trigger("click");
+    await wrapper.get('[data-testid="quick-read-result-1"]').trigger("click");
 
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
+    expect(wrapper.find('[data-testid="quick-read-result-1"]').exists()).toBe(false);
   });
 });

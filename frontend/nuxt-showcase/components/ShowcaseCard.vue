@@ -20,6 +20,10 @@ function handleMainClick(navigate: (event?: MouseEvent) => Promise<void> | void,
   void navigate(event);
 }
 
+function handleQuickMarkRead() {
+  emit("mark-read");
+}
+
 const createdAtLabel = computed(() => formatTaipeiDate(props.item.created_at));
 
 const durationLabel = computed(() => {
@@ -59,8 +63,18 @@ const durationLabel = computed(() => {
         <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
       </a>
     </NuxtLink>
-    <div v-if="item.source_url" class="showcase-card__links">
+    <div v-if="item.source_url || !isRead" class="showcase-card__links">
+      <button
+        v-if="!isRead"
+        type="button"
+        class="showcase-card__link showcase-card__quick-read"
+        data-testid="quick-mark-read"
+        @click="handleQuickMarkRead"
+      >
+        標記已讀
+      </button>
       <a
+        v-if="item.source_url"
         :href="item.source_url"
         target="_blank"
         rel="noreferrer"
