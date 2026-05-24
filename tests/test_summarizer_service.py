@@ -78,7 +78,7 @@ class TestSummarizerService(unittest.TestCase):
         result = summarizer.get_prompt("測試影片", "這是逐字稿")
 
         self.assertIn("# 學習筆記", result)
-        self.assertIn("## 一句話結論", result)
+        self.assertIn("## TL;DR", result)
         self.assertIn("## 快速結論", result)
         self.assertIn("## 這支影片在說什麼", result)
         self.assertIn("## 最重要的 3-5 個重點", result)
