@@ -93,6 +93,7 @@ describe("Showcase detail page", () => {
     expect(summaryNode.compareDocumentPosition(videoNode) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(wrapper.text()).not.toContain("Notion");
     expect(markAsReadMock).toHaveBeenCalledWith("result-2-page-id");
+    expect(markAsReadMock).toHaveBeenCalledWith("url:https://www.youtube.com/watch?v=second");
   });
 
   it("keeps the original video link without embedding non-YouTube sources", async () => {

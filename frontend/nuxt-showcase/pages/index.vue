@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
@@ -39,7 +39,7 @@ useHead({
 
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
-const { isReady, markAsRead, markManyAsRead, readMap } = useReadResults();
+const { isReady, markAsRead, markManyAsRead, readMap, refreshReadState } = useReadResults();
 const titleSearchQuery = ref("");
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
@@ -70,6 +70,25 @@ function markCurrentListAsRead(): void {
 
   markManyAsRead(unreadDisplayReadKeys.value);
 }
+
+function handleVisibilityChange(): void {
+  if (document.visibilityState === "visible") {
+    refreshReadState();
+  }
+}
+
+onMounted(() => {
+  refreshReadState();
+  window.addEventListener("pageshow", refreshReadState);
+  window.addEventListener("focus", refreshReadState);
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("pageshow", refreshReadState);
+  window.removeEventListener("focus", refreshReadState);
+  document.removeEventListener("visibilitychange", handleVisibilityChange);
+});
 </script>
 
 <template>

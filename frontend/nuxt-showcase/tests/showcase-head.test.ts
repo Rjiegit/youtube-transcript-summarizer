@@ -20,7 +20,9 @@ vi.mock("../composables/useReadResults", () => ({
       ),
     },
     markAsRead: markAsReadMock,
+    markManyAsRead: vi.fn(),
     markAsUnread: vi.fn(),
+    refreshReadState: vi.fn(),
   }),
 }));
 

@@ -52,13 +52,13 @@ function stubNuxtState() {
   }));
 }
 
-function stubLocalStorage() {
-  const store = new Map<string, string>();
+  function stubLocalStorage() {
+    const store = new Map<string, string>();
   const localStorageMock = {
     getItem: vi.fn((key: string) => store.get(key) ?? null),
-    setItem: vi.fn((key: string, value: string) => {
-      store.set(key, value);
-    }),
+      setItem: vi.fn((key: string, value: string) => {
+        store.set(key, value);
+      }),
     removeItem: vi.fn((key: string) => {
       store.delete(key);
     }),
@@ -69,6 +69,12 @@ function stubLocalStorage() {
     value: localStorageMock,
     configurable: true,
   });
+
+  return {
+    setRaw(key: string, value: string) {
+      store.set(key, value);
+    },
+  };
 }
 
 describe("showcase index page", () => {
@@ -76,7 +82,6 @@ describe("showcase index page", () => {
     vi.resetModules();
     useFetchMock.mockReset();
     stubNuxtState();
-    stubLocalStorage();
   });
 
   function loadPageModule() {
@@ -84,6 +89,7 @@ describe("showcase index page", () => {
   }
 
   it("keeps read state updates and duplicate filtering without article counts", async () => {
+    stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
       pending: ref(false),
@@ -146,6 +152,7 @@ describe("showcase index page", () => {
   });
 
   it("marks the current list as read from the toolbar button", async () => {
+    stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
       pending: ref(false),
@@ -201,6 +208,7 @@ describe("showcase index page", () => {
   });
 
   it("marks only filtered results as read from the toolbar button", async () => {
+    stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
       pending: ref(false),
@@ -253,6 +261,7 @@ describe("showcase index page", () => {
   });
 
   it("does not server-render the mark all read button with stale disabled state", async () => {
+    stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
       pending: ref(false),
@@ -276,5 +285,119 @@ describe("showcase index page", () => {
     const html = await renderToString(TestHost);
 
     expect(html).not.toContain('data-testid="mark-all-read-button"');
+  });
+
+  it("refreshes read state from localStorage when returning to the page", async () => {
+    const storage = stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({
+            template: "<slot />",
+          }),
+          ShowcaseCard: defineComponent({
+            props: {
+              item: {
+                type: Object,
+                required: true,
+              },
+              isRead: {
+                type: Boolean,
+                default: false,
+              },
+            },
+            emits: ["mark-read"],
+            template: `
+              <article :data-testid="'card-' + item.id">
+                <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
+              </article>
+            `,
+          }),
+        },
+      },
+    });
+    await flushPromises();
+
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("unread");
+
+    storage.setRaw("nuxt-showcase-read-results", JSON.stringify({
+      "url:https://www.youtube.com/watch?v=first": { readAt: "2026-04-12T00:00:00.000Z" },
+    }));
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
+  });
+
+  it("refreshes read state when the page becomes visible again", async () => {
+    const storage = stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({
+            template: "<slot />",
+          }),
+          ShowcaseCard: defineComponent({
+            props: {
+              item: {
+                type: Object,
+                required: true,
+              },
+              isRead: {
+                type: Boolean,
+                default: false,
+              },
+            },
+            emits: ["mark-read"],
+            template: `
+              <article :data-testid="'card-' + item.id">
+                <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
+              </article>
+            `,
+          }),
+        },
+      },
+    });
+    await flushPromises();
+
+    expect(wrapper.get('[data-testid="card-result-2"]').text()).toContain("unread");
+
+    storage.setRaw("nuxt-showcase-read-results", JSON.stringify({
+      "url:https://www.youtube.com/watch?v=second": { readAt: "2026-04-12T00:00:00.000Z" },
+    }));
+    Object.defineProperty(document, "visibilityState", {
+      value: "visible",
+      configurable: true,
+    });
+    document.dispatchEvent(new Event("visibilitychange"));
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.get('[data-testid="card-result-2"]').text()).toContain("read");
   });
 });

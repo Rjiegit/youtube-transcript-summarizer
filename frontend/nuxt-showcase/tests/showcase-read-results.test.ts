@@ -52,6 +52,9 @@ describe("useReadResults", () => {
       readRaw(key: string) {
         return store.get(key) ?? null;
       },
+      setRaw(key: string, value: string) {
+        store.set(key, value);
+      },
     };
   }
 
@@ -242,6 +245,61 @@ describe("useReadResults", () => {
     expect(isReady.value).toBe(true);
     expect(isRead("result-1")).toBe(false);
     expect(readIds.value).toEqual([]);
+  });
+
+  it("refreshes ready state from localStorage without dropping in-memory reads", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify({
+        "result-from-storage": { readAt: "2026-04-11T00:00:00.000Z" },
+      }),
+    });
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, markAsRead, refreshReadState } = useReadResults();
+
+    markAsRead("result-from-memory");
+    storage.setRaw("nuxt-showcase-read-results", JSON.stringify({
+      "result-from-storage": { readAt: "2026-04-11T00:00:00.000Z" },
+      "result-from-external": { readAt: "2026-04-12T00:00:00.000Z" },
+    }));
+
+    refreshReadState();
+
+    expect(isRead("result-from-memory")).toBe(true);
+    expect(isRead("result-from-storage")).toBe(true);
+    expect(isRead("result-from-external")).toBe(true);
+  });
+
+  it("keeps in-memory reads when refreshing invalid localStorage", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage();
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, markAsRead, refreshReadState } = useReadResults();
+
+    markAsRead("result-from-memory");
+    storage.setRaw("nuxt-showcase-read-results", "invalid-json");
+
+    refreshReadState();
+
+    expect(isRead("result-from-memory")).toBe(true);
+  });
+
+  it("trims refreshed localStorage data to the most recent 100 items", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage();
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, readIds, refreshReadState } = useReadResults();
+
+    storage.setRaw("nuxt-showcase-read-results", JSON.stringify(createReadMap(MAX_READ_RESULTS + 5)));
+
+    refreshReadState();
+
+    expect(readIds.value).toHaveLength(MAX_READ_RESULTS);
+    expect(isRead("result-1")).toBe(false);
+    expect(isRead(`result-${MAX_READ_RESULTS + 5}`)).toBe(true);
   });
 
   it("shares read state across multiple composable calls and persists it to localStorage", async () => {

@@ -84,12 +84,6 @@ export function useReadResults() {
   const state = useState<ReadMap>(READ_RESULTS_STATE_KEY, () => ({}));
   const isReady = useState<boolean>(READ_RESULTS_READY_STATE_KEY, () => false);
 
-  if (!isReady.value && canUseLocalStorage()) {
-    state.value = mergeReadMaps(readStoredReadMap(), state.value);
-    persistReadMap(state.value);
-    isReady.value = true;
-  }
-
   const readMap = computed<ReadMap>({
     get() {
       return state.value;
@@ -102,6 +96,19 @@ export function useReadResults() {
   });
 
   const readIds = computed(() => Object.keys(readMap.value));
+
+  function refreshReadState(): void {
+    if (!canUseLocalStorage()) {
+      return;
+    }
+
+    readMap.value = mergeReadMaps(readStoredReadMap(), readMap.value);
+    isReady.value = true;
+  }
+
+  if (!isReady.value) {
+    refreshReadState();
+  }
 
   function isRead(id: string): boolean {
     return Boolean(id && readMap.value[id]);
@@ -170,5 +177,6 @@ export function useReadResults() {
     markAsRead,
     markManyAsRead,
     markAsUnread,
+    refreshReadState,
   };
 }

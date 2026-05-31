@@ -4,6 +4,7 @@ import { computed, watchEffect } from "vue";
 import { useReadResults } from "../../composables/useReadResults";
 import type { ShowcaseDetailResult } from "../../types/showcase";
 import { formatTaipeiDateTime } from "../../utils/datetime";
+import { getResultReadKey } from "../../utils/showcase";
 
 const route = useRoute();
 const resultId = String(route.params.id || "");
@@ -31,6 +32,7 @@ watchEffect(() => {
 watchEffect(() => {
   if (typeof window !== "undefined" && !isLoading.value && !fetchError.value && item.value?.id) {
     markAsRead(item.value.id);
+    markAsRead(getResultReadKey(item.value));
   }
 });
 

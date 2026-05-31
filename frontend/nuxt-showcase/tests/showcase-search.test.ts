@@ -13,7 +13,9 @@ vi.mock("../composables/useReadResults", () => ({
     readIds: { value: [] },
     readMap: { value: {} },
     markAsRead: vi.fn(),
+    markManyAsRead: vi.fn(),
     markAsUnread: vi.fn(),
+    refreshReadState: vi.fn(),
   }),
 }));
 
