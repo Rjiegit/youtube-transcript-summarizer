@@ -39,7 +39,7 @@ useHead({
 
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
-const { isReady, markAsRead, readMap } = useReadResults();
+const { isReady, markAsRead, markManyAsRead, readMap } = useReadResults();
 const titleSearchQuery = ref("");
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
@@ -51,6 +51,9 @@ const filteredItems = computed(() => {
 });
 const displayItems = computed(() =>
   sortUnreadResultsFirst(filteredItems.value, (item) => isResultRead(item, readMap.value)));
+const unreadDisplayItems = computed(() => filteredItems.value.filter((item) => !isResultRead(item, readMap.value)));
+const unreadDisplayReadKeys = computed(() => unreadDisplayItems.value.map((item) => item.readKey));
+const canMarkAllRead = computed(() => isReady.value && unreadDisplayReadKeys.value.length > 0);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const hasTitleSearchQuery = computed(() => normalizedTitleSearchQuery.value.length > 0);
 const errorMessage = computed(() => {
@@ -59,6 +62,14 @@ const errorMessage = computed(() => {
   }
   return error.value.statusMessage || error.value.message || "請稍後再試。";
 });
+
+function markCurrentListAsRead(): void {
+  if (!canMarkAllRead.value) {
+    return;
+  }
+
+  markManyAsRead(unreadDisplayReadKeys.value);
+}
 </script>
 
 <template>
@@ -74,6 +85,23 @@ const errorMessage = computed(() => {
     </section>
 
     <section v-if="!pending && !error && items.length > 0" class="showcase-toolbar" aria-label="展示內容工具列">
+      <div class="showcase-toolbar__actions">
+        <ClientOnly>
+          <button
+            type="button"
+            class="showcase-toolbar__button"
+            data-testid="mark-all-read-button"
+            :disabled="!canMarkAllRead"
+            @click="markCurrentListAsRead"
+          >
+            全部標記已讀
+          </button>
+
+          <template #fallback>
+            <button type="button" class="showcase-toolbar__button" disabled>全部標記已讀</button>
+          </template>
+        </ClientOnly>
+      </div>
       <label class="showcase-search">
         <span class="showcase-search__label">搜尋標題</span>
         <input

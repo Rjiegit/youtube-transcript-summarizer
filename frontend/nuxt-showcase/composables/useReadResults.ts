@@ -125,6 +125,30 @@ export function useReadResults() {
     }
   }
 
+  function markManyAsRead(ids: string[]): void {
+    const unreadIds = Array.from(new Set(ids.map((id) => id.trim()).filter((id) => id && !readMap.value[id])));
+
+    if (unreadIds.length === 0) {
+      return;
+    }
+
+    const readAt = new Date().toISOString();
+    const nextValue = {
+      ...readMap.value,
+    };
+
+    for (const id of unreadIds) {
+      nextValue[id] = {
+        readAt,
+      };
+    }
+
+    readMap.value = nextValue;
+    if (canUseLocalStorage()) {
+      isReady.value = true;
+    }
+  }
+
   function markAsUnread(id: string): void {
     if (!id || !readMap.value[id]) {
       return;
@@ -144,6 +168,7 @@ export function useReadResults() {
     readMap: computed(() => readMap.value),
     isRead,
     markAsRead,
+    markManyAsRead,
     markAsUnread,
   };
 }

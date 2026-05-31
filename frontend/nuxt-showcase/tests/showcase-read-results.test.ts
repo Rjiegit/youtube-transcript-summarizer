@@ -117,6 +117,36 @@ describe("useReadResults", () => {
     expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-1");
   });
 
+  it("marks many items as read and persists once", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage();
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, markManyAsRead, readMap } = useReadResults();
+
+    markManyAsRead(["result-1", "result-2"]);
+
+    expect(isRead("result-1")).toBe(true);
+    expect(isRead("result-2")).toBe(true);
+    expect(Object.keys(readMap.value)).toEqual(["result-1", "result-2"]);
+    expect(storage.localStorageMock.setItem).toHaveBeenCalledTimes(1);
+    expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-1");
+    expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-2");
+  });
+
+  it("ignores empty values when marking many items as read", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage();
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { markManyAsRead, readIds } = useReadResults();
+
+    markManyAsRead(["", "   "]);
+
+    expect(readIds.value).toEqual([]);
+    expect(storage.localStorageMock.setItem).not.toHaveBeenCalled();
+  });
+
   it("keeps only the latest 100 read items when new items are added", async () => {
     stubNuxtState();
     const storage = stubLocalStorage({
@@ -137,6 +167,31 @@ describe("useReadResults", () => {
     expect(Object.keys(persisted)).toHaveLength(MAX_READ_RESULTS);
     expect(persisted["result-1"]).toBeUndefined();
     expect(persisted["result-101"]).toBeDefined();
+  });
+
+  it("keeps only the latest 100 read items when many new items are added", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify(createReadMap(MAX_READ_RESULTS)),
+    });
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead, markManyAsRead, readIds } = useReadResults();
+
+    markManyAsRead(["result-101", "result-102"]);
+
+    expect(readIds.value).toHaveLength(MAX_READ_RESULTS);
+    expect(isRead("result-1")).toBe(false);
+    expect(isRead("result-2")).toBe(false);
+    expect(isRead("result-101")).toBe(true);
+    expect(isRead("result-102")).toBe(true);
+
+    const persisted = JSON.parse(storage.readRaw("nuxt-showcase-read-results") || "{}") as ReadMap;
+    expect(Object.keys(persisted)).toHaveLength(MAX_READ_RESULTS);
+    expect(persisted["result-1"]).toBeUndefined();
+    expect(persisted["result-2"]).toBeUndefined();
+    expect(persisted["result-101"]).toBeDefined();
+    expect(persisted["result-102"]).toBeDefined();
   });
 
   it("refreshes an existing item without increasing the stored read count", async () => {

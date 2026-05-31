@@ -102,8 +102,15 @@ a {
 
 .showcase-toolbar {
   display: flex;
-  justify-content: flex-end;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 18px;
+}
+
+.showcase-toolbar__actions {
+  display: flex;
+  align-items: center;
 }
 
 .showcase-search {
@@ -137,6 +144,41 @@ a {
 .showcase-search__input:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+
+.showcase-toolbar__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 16px;
+  border: 1px solid rgba(15, 118, 110, 0.28);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  outline: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.showcase-toolbar__button:hover:not(:disabled) {
+  border-color: rgba(15, 118, 110, 0.42);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.showcase-toolbar__button:focus-visible {
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.16);
+}
+
+.showcase-toolbar__button:disabled {
+  border-color: var(--line);
+  background: #f0f2f5;
+  color: var(--muted);
+  cursor: not-allowed;
+  opacity: 0.76;
 }
 
 .state-panel--error {
@@ -452,7 +494,22 @@ a {
   }
 
   .showcase-toolbar {
+    flex-direction: column;
+    align-items: stretch;
     justify-content: stretch;
+  }
+
+  .showcase-toolbar__actions {
+    order: 2;
+  }
+
+  .showcase-toolbar__button {
+    width: 100%;
+  }
+
+  .showcase-search {
+    order: 1;
+    max-width: none;
   }
 
   .showcase-grid {
