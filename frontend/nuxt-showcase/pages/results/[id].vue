@@ -15,7 +15,7 @@ const { data, error, pending } = useFetch<ShowcaseDetailResult>(`/api/showcase/r
 });
 
 const item = computed<ShowcaseDetailResult | null>(() => data.value ?? null);
-const { markAsRead } = useReadResults();
+const { markManyAsRead } = useReadResults();
 const isLoading = computed(() => pending.value);
 const fetchError = computed(() => error.value);
 const isNotFound = computed(() => !isLoading.value && !fetchError.value && !item.value);
@@ -31,8 +31,7 @@ watchEffect(() => {
 
 watchEffect(() => {
   if (typeof window !== "undefined" && !isLoading.value && !fetchError.value && item.value?.id) {
-    markAsRead(item.value.id);
-    markAsRead(getResultReadKey(item.value));
+    markManyAsRead([item.value.id, getResultReadKey(item.value)]);
   }
 });
 

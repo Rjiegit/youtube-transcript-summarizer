@@ -3,7 +3,8 @@ import { computed } from "vue";
 const STORAGE_KEY = "nuxt-showcase-read-results";
 const READ_RESULTS_STATE_KEY = "showcase-read-results";
 const READ_RESULTS_READY_STATE_KEY = "showcase-read-results-ready";
-const MAX_READ_RESULTS = 100;
+const READ_RESULTS_REVISION_STATE_KEY = "showcase-read-results-revision";
+const MAX_READ_ENTRIES = 500;
 
 type ReadEntry = {
   readAt: string;
@@ -32,8 +33,19 @@ function trimReadMap(rawValue: unknown): ReadMap {
   return Object.fromEntries(
     Object.entries(normalizedValue)
       .sort(([, leftEntry], [, rightEntry]) => rightEntry.readAt.localeCompare(leftEntry.readAt))
-      .slice(0, MAX_READ_RESULTS),
+      .slice(0, MAX_READ_ENTRIES),
   );
+}
+
+function areReadMapsEqual(left: ReadMap, right: ReadMap): boolean {
+  const leftEntries = Object.entries(left);
+  const rightEntries = Object.entries(right);
+
+  if (leftEntries.length !== rightEntries.length) {
+    return false;
+  }
+
+  return leftEntries.every(([id, entry]) => right[id]?.readAt === entry.readAt);
 }
 
 function canUseLocalStorage(): boolean {
@@ -83,26 +95,39 @@ function mergeReadMaps(left: ReadMap, right: ReadMap): ReadMap {
 export function useReadResults() {
   const state = useState<ReadMap>(READ_RESULTS_STATE_KEY, () => ({}));
   const isReady = useState<boolean>(READ_RESULTS_READY_STATE_KEY, () => false);
+  const revision = useState<number>(READ_RESULTS_REVISION_STATE_KEY, () => 0);
+
+  function setReadMapValue(value: unknown, options: { forceRevision?: boolean } = {}): void {
+    const normalizedValue = trimReadMap(value);
+    const changed = !areReadMapsEqual(state.value, normalizedValue);
+
+    state.value = normalizedValue;
+    persistReadMap(normalizedValue);
+
+    if (changed || options.forceRevision) {
+      revision.value += 1;
+    }
+  }
 
   const readMap = computed<ReadMap>({
     get() {
       return state.value;
     },
     set(value) {
-      const normalizedValue = trimReadMap(value);
-      state.value = normalizedValue;
-      persistReadMap(normalizedValue);
+      setReadMapValue(value);
     },
   });
 
   const readIds = computed(() => Object.keys(readMap.value));
 
-  function refreshReadState(): void {
+  function refreshReadState(options: { forceRender?: boolean } = {}): void {
     if (!canUseLocalStorage()) {
       return;
     }
 
-    readMap.value = mergeReadMaps(readStoredReadMap(), readMap.value);
+    setReadMapValue(mergeReadMaps(readStoredReadMap(), readMap.value), {
+      forceRevision: options.forceRender,
+    });
     isReady.value = true;
   }
 
@@ -173,6 +198,7 @@ export function useReadResults() {
     isReady: computed(() => isReady.value),
     readIds,
     readMap: computed(() => readMap.value),
+    readRevision: computed(() => revision.value),
     isRead,
     markAsRead,
     markManyAsRead,

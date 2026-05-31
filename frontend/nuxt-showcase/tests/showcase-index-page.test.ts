@@ -342,6 +342,60 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
   });
 
+  it("forces the list to rerender after a persisted browser history restore", async () => {
+    stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+    let mountedCards = 0;
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({
+            template: "<slot />",
+          }),
+          ShowcaseCard: defineComponent({
+            props: {
+              item: {
+                type: Object,
+                required: true,
+              },
+              isRead: {
+                type: Boolean,
+                default: false,
+              },
+            },
+            setup() {
+              mountedCards += 1;
+            },
+            template: `
+              <article>
+                <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
+              </article>
+            `,
+          }),
+        },
+      },
+    });
+    await flushPromises();
+    const initialMountedCards = mountedCards;
+
+    window.dispatchEvent(new PageTransitionEvent("pageshow", { persisted: true }));
+    await wrapper.vm.$nextTick();
+
+    expect(mountedCards).toBeGreaterThan(initialMountedCards);
+  });
+
   it("refreshes read state when the page becomes visible again", async () => {
     const storage = stubLocalStorage();
     useFetchMock.mockResolvedValue({

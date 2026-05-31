@@ -7,6 +7,7 @@ import type { ShowcaseDetailResult } from "../types/showcase";
 const useFetchMock = vi.fn();
 const useRouteMock = vi.fn();
 const markAsReadMock = vi.fn();
+const markManyAsReadMock = vi.fn();
 
 vi.mock("../composables/useReadResults", () => ({
   useReadResults: () => ({
@@ -14,7 +15,9 @@ vi.mock("../composables/useReadResults", () => ({
     readIds: { value: [] },
     readMap: { value: {} },
     markAsRead: markAsReadMock,
+    markManyAsRead: markManyAsReadMock,
     markAsUnread: vi.fn(),
+    refreshReadState: vi.fn(),
   }),
 }));
 
@@ -47,6 +50,7 @@ describe("Showcase detail page", () => {
     useFetchMock.mockReset();
     useRouteMock.mockReset();
     markAsReadMock.mockReset();
+    markManyAsReadMock.mockReset();
   });
 
   afterEach(() => {
@@ -92,8 +96,11 @@ describe("Showcase detail page", () => {
     const videoNode = wrapper.get('[data-testid="detail-video"]').element;
     expect(summaryNode.compareDocumentPosition(videoNode) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(wrapper.text()).not.toContain("Notion");
-    expect(markAsReadMock).toHaveBeenCalledWith("result-2-page-id");
-    expect(markAsReadMock).toHaveBeenCalledWith("url:https://www.youtube.com/watch?v=second");
+    expect(markManyAsReadMock).toHaveBeenCalledWith([
+      "result-2-page-id",
+      "url:https://www.youtube.com/watch?v=second",
+    ]);
+    expect(markAsReadMock).not.toHaveBeenCalled();
   });
 
   it("keeps the original video link without embedding non-YouTube sources", async () => {
@@ -145,6 +152,7 @@ describe("Showcase detail page", () => {
     expect(wrapper.text()).toContain("載入展示資料中");
     expect(wrapper.text()).not.toContain("Second result");
     expect(markAsReadMock).not.toHaveBeenCalled();
+    expect(markManyAsReadMock).not.toHaveBeenCalled();
   });
 
   it("renders an error state when fetch fails", async () => {
@@ -172,6 +180,7 @@ describe("Showcase detail page", () => {
     expect(wrapper.text()).toContain("目前無法載入展示內容");
     expect(wrapper.text()).toContain("Fetch failed");
     expect(markAsReadMock).not.toHaveBeenCalled();
+    expect(markManyAsReadMock).not.toHaveBeenCalled();
   });
 
   it("throws a 404 error only after fetch resolves and the item is still missing", async () => {

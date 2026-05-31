@@ -39,7 +39,7 @@ useHead({
 
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
-const { isReady, markAsRead, markManyAsRead, readMap, refreshReadState } = useReadResults();
+const { isReady, markAsRead, markManyAsRead, readMap, readRevision, refreshReadState } = useReadResults();
 const titleSearchQuery = ref("");
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
@@ -77,15 +77,21 @@ function handleVisibilityChange(): void {
   }
 }
 
+function handlePageShow(event: PageTransitionEvent): void {
+  refreshReadState({
+    forceRender: event.persisted,
+  });
+}
+
 onMounted(() => {
   refreshReadState();
-  window.addEventListener("pageshow", refreshReadState);
+  window.addEventListener("pageshow", handlePageShow);
   window.addEventListener("focus", refreshReadState);
   document.addEventListener("visibilitychange", handleVisibilityChange);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener("pageshow", refreshReadState);
+  window.removeEventListener("pageshow", handlePageShow);
   window.removeEventListener("focus", refreshReadState);
   document.removeEventListener("visibilitychange", handleVisibilityChange);
 });
@@ -178,7 +184,7 @@ onBeforeUnmount(() => {
         </article>
       </section>
 
-      <section v-else class="showcase-grid">
+      <section v-else :key="`showcase-grid-${readRevision}`" class="showcase-grid">
         <ShowcaseCard
           v-for="item in displayItems"
           :key="item.id"
