@@ -85,6 +85,14 @@ export function isResultRead(
   return Boolean(readMap[item.readKey] || item.readCandidateIds.some((id) => readMap[id]));
 }
 
+export function getResultReadKeys(item: ShowcaseDisplayResult): string[] {
+  return Array.from(new Set([
+    item.readKey,
+    item.id,
+    ...item.readCandidateIds,
+  ].map((id) => id.trim()).filter(Boolean)));
+}
+
 export function getReadStats(
   items: ShowcaseDisplayResult[] = [],
   readMap: ReadMap = {},

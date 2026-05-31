@@ -19,6 +19,7 @@ vi.mock("../composables/useReadResults", () => ({
         [...readResultIds].map((id) => [id, { readAt: "2026-04-11T00:00:00.000Z" }]),
       ),
     },
+    readRevision: { value: 0 },
     markAsRead: markAsReadMock,
     markManyAsRead: vi.fn(),
     markAsUnread: vi.fn(),
@@ -38,6 +39,9 @@ describe("showcase head metadata", () => {
   beforeEach(() => {
     readResultIds = new Set<string>();
     vi.clearAllMocks();
+    useRouteMock.mockReturnValue({
+      fullPath: "/",
+    });
   });
 
   it("uses the global title template without the nuxt-showcase suffix", async () => {

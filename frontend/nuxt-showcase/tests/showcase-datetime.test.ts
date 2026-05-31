@@ -4,6 +4,7 @@ import { formatTaipeiDate, formatTaipeiDateTime } from "../utils/datetime";
 import {
   dedupeShowcaseResults,
   getLatestResultCreatedAt,
+  getResultReadKeys,
   getReadStats,
   getResultReadKey,
   isResultRead,
@@ -127,6 +128,19 @@ describe("showcase datetime formatting", () => {
     expect(isResultRead(dedupedItem, {
       [dedupedItem.readKey]: { readAt: "2026-04-11T00:00:00.000Z" },
     })).toBe(true);
+  });
+
+  it("returns all stable read keys for a deduplicated article", () => {
+    const [dedupedItem] = dedupeShowcaseResults([
+      createResultWithUrl("result-1", "https://example.com/article?utm_source=newsletter"),
+      createResultWithUrl("result-2", "https://example.com/article/"),
+    ]);
+
+    expect(getResultReadKeys(dedupedItem)).toEqual([
+      "url:https://example.com/article",
+      "result-1",
+      "result-2",
+    ]);
   });
 
   it("counts unread items from the current result list only", () => {

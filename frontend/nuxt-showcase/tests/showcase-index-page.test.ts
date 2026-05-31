@@ -1,14 +1,18 @@
 import { flushPromises, mount } from "@vue/test-utils";
 import { renderToString } from "vue/server-renderer";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { createSSRApp, defineComponent, h, ref, Suspense } from "vue";
+import { createSSRApp, defineComponent, h, reactive, ref, Suspense } from "vue";
 
 import type { ShowcaseApiResponse } from "../types/showcase";
 
 const useFetchMock = vi.fn();
+const route = reactive({
+  fullPath: "/",
+});
 
 vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useHead", vi.fn());
+vi.stubGlobal("useRoute", () => route);
 
 const response: ShowcaseApiResponse = {
   items: [
@@ -81,6 +85,7 @@ describe("showcase index page", () => {
   beforeEach(() => {
     vi.resetModules();
     useFetchMock.mockReset();
+    route.fullPath = "/";
     stubNuxtState();
   });
 
@@ -149,6 +154,11 @@ describe("showcase index page", () => {
 
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
     expect(wrapper.find('[data-testid="quick-read-result-1"]').exists()).toBe(false);
+    expect(JSON.parse(window.localStorage.getItem("nuxt-showcase-read-results") || "{}")).toMatchObject({
+      "url:https://www.youtube.com/watch?v=first": expect.any(Object),
+      "result-1": expect.any(Object),
+      "result-1-duplicate": expect.any(Object),
+    });
   });
 
   it("marks the current list as read from the toolbar button", async () => {
@@ -453,5 +463,62 @@ describe("showcase index page", () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.get('[data-testid="card-result-2"]').text()).toContain("read");
+  });
+
+  it("refreshes read state when SPA history navigation returns to the list page", async () => {
+    const storage = stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({
+            template: "<slot />",
+          }),
+          ShowcaseCard: defineComponent({
+            props: {
+              item: {
+                type: Object,
+                required: true,
+              },
+              isRead: {
+                type: Boolean,
+                default: false,
+              },
+            },
+            template: `
+              <article :data-testid="'card-' + item.id">
+                <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
+              </article>
+            `,
+          }),
+        },
+      },
+    });
+    await flushPromises();
+
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("unread");
+
+    route.fullPath = "/results/result-1";
+    await wrapper.vm.$nextTick();
+    storage.setRaw("nuxt-showcase-read-results", JSON.stringify({
+      "url:https://www.youtube.com/watch?v=first": { readAt: "2026-04-12T00:00:00.000Z" },
+    }));
+    route.fullPath = "/";
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
   });
 });

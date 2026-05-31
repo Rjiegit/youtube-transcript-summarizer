@@ -5,6 +5,7 @@ import { flushPromises } from "@vue/test-utils";
 import { ref } from "vue";
 
 const useFetchMock = vi.fn();
+const useRouteMock = vi.fn();
 
 vi.mock("../composables/useReadResults", () => ({
   useReadResults: () => ({
@@ -12,6 +13,7 @@ vi.mock("../composables/useReadResults", () => ({
     isReady: { value: true },
     readIds: { value: [] },
     readMap: { value: {} },
+    readRevision: { value: 0 },
     markAsRead: vi.fn(),
     markManyAsRead: vi.fn(),
     markAsUnread: vi.fn(),
@@ -20,6 +22,7 @@ vi.mock("../composables/useReadResults", () => ({
 }));
 
 vi.stubGlobal("useFetch", useFetchMock);
+vi.stubGlobal("useRoute", useRouteMock);
 vi.stubGlobal("useHead", vi.fn());
 
 const nuxtLinkStub = defineComponent({
@@ -50,6 +53,9 @@ const nuxtLinkStub = defineComponent({
 describe("showcase title search", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    useRouteMock.mockReturnValue({
+      fullPath: "/",
+    });
     useFetchMock.mockReturnValue({
       data: ref({
         items: [

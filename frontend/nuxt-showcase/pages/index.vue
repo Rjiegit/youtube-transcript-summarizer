@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
-import { dedupeShowcaseResults, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
+import { dedupeShowcaseResults, getResultReadKeys, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
 
+const route = useRoute();
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
   server: true,
   default: () => ({
@@ -39,7 +40,7 @@ useHead({
 
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
-const { isReady, markAsRead, markManyAsRead, readMap, readRevision, refreshReadState } = useReadResults();
+const { isReady, markManyAsRead, readMap, readRevision, refreshReadState } = useReadResults();
 const titleSearchQuery = ref("");
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
@@ -52,7 +53,7 @@ const filteredItems = computed(() => {
 const displayItems = computed(() =>
   sortUnreadResultsFirst(filteredItems.value, (item) => isResultRead(item, readMap.value)));
 const unreadDisplayItems = computed(() => filteredItems.value.filter((item) => !isResultRead(item, readMap.value)));
-const unreadDisplayReadKeys = computed(() => unreadDisplayItems.value.map((item) => item.readKey));
+const unreadDisplayReadKeys = computed(() => unreadDisplayItems.value.flatMap((item) => getResultReadKeys(item)));
 const canMarkAllRead = computed(() => isReady.value && unreadDisplayReadKeys.value.length > 0);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const hasTitleSearchQuery = computed(() => normalizedTitleSearchQuery.value.length > 0);
@@ -82,6 +83,29 @@ function handlePageShow(event: PageTransitionEvent): void {
     forceRender: event.persisted,
   });
 }
+
+function isListRoute(path: string): boolean {
+  return path.split(/[?#]/, 1)[0] === "/";
+}
+
+function refreshVisibleListReadState(): void {
+  refreshReadState({ forceRender: true });
+}
+
+watch(
+  () => route.fullPath,
+  (nextPath, previousPath) => {
+    if (previousPath && nextPath !== previousPath && isListRoute(nextPath)) {
+      refreshVisibleListReadState();
+    }
+  },
+);
+
+onActivated(() => {
+  if (isListRoute(route.fullPath)) {
+    refreshVisibleListReadState();
+  }
+});
 
 onMounted(() => {
   refreshReadState();
@@ -190,7 +214,7 @@ onBeforeUnmount(() => {
           :key="item.id"
           :item="item"
           :is-read="isResultRead(item, readMap)"
-          @mark-read="markAsRead(item.readKey)"
+          @mark-read="markManyAsRead(getResultReadKeys(item))"
         />
       </section>
 
