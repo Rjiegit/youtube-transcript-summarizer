@@ -6,11 +6,13 @@ import { createSSRApp, defineComponent, h, reactive, ref, Suspense } from "vue";
 import type { ShowcaseApiResponse } from "../types/showcase";
 
 const useFetchMock = vi.fn();
+const fetchMock = vi.fn();
 const route = reactive({
   fullPath: "/",
 });
 
 vi.stubGlobal("useFetch", useFetchMock);
+vi.stubGlobal("$fetch", fetchMock);
 vi.stubGlobal("useHead", vi.fn());
 vi.stubGlobal("useRoute", () => route);
 
@@ -85,6 +87,7 @@ describe("showcase index page", () => {
   beforeEach(() => {
     vi.resetModules();
     useFetchMock.mockReset();
+    fetchMock.mockReset();
     route.fullPath = "/";
     stubNuxtState();
   });
@@ -520,5 +523,78 @@ describe("showcase index page", () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
+  });
+
+  it("force refreshes list data when SPA history navigation returns to the list page", async () => {
+    stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+    fetchMock.mockResolvedValue({
+      items: [
+        {
+          id: "result-new",
+          title: "Fresh result",
+          summary: "Fresh summary.",
+          source_url: "https://www.youtube.com/watch?v=fresh",
+          created_at: "2026-04-13T00:00:00.000Z",
+          processing_duration: 6.3,
+        },
+      ],
+      generated_at: "2026-04-13T00:00:00.000Z",
+      cache_ttl_seconds: 3600,
+    });
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({
+            template: "<slot />",
+          }),
+          ShowcaseCard: defineComponent({
+            props: {
+              item: {
+                type: Object,
+                required: true,
+              },
+              isRead: {
+                type: Boolean,
+                default: false,
+              },
+            },
+            template: `
+              <article :data-testid="'card-' + item.id">
+                <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
+              </article>
+            `,
+          }),
+        },
+      },
+    });
+    await flushPromises();
+
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("First result");
+
+    route.fullPath = "/results/result-1";
+    await wrapper.vm.$nextTick();
+    route.fullPath = "/";
+    await flushPromises();
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/showcase/results", {
+      query: {
+        refresh: "1",
+        ts: expect.any(String),
+      },
+    });
+    expect(wrapper.get('[data-testid="card-result-new"]').text()).toContain("Fresh result");
   });
 });

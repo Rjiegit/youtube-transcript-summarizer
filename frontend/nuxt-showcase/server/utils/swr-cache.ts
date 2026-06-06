@@ -5,6 +5,7 @@ export interface SWRCacheOptions {
 
 export interface SWRCache<T> {
   get(fetcher: () => Promise<T>): Promise<T>;
+  refresh(fetcher: () => Promise<T>): Promise<T>;
   peek(): T | null;
   ageMs(): number | null;
 }
@@ -50,6 +51,9 @@ export function createSWRCache<T>(options: SWRCacheOptions): SWRCache<T> {
         return snapshot.value;
       }
 
+      return startRefresh(fetcher, false);
+    },
+    refresh(fetcher: () => Promise<T>): Promise<T> {
       return startRefresh(fetcher, false);
     },
     peek(): T | null {

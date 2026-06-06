@@ -64,6 +64,22 @@ const errorMessage = computed(() => {
   return error.value.statusMessage || error.value.message || "請稍後再試。";
 });
 
+async function forceRefreshListData(): Promise<void> {
+  try {
+    const freshData = await $fetch<ShowcaseApiResponse>("/api/showcase/results", {
+      query: {
+        refresh: "1",
+        ts: String(Date.now()),
+      },
+    });
+    if (isListRoute(route.fullPath) && freshData && Array.isArray(freshData.items)) {
+      data.value = freshData;
+    }
+  } catch {
+    // Keep the current list visible if a forced refresh fails.
+  }
+}
+
 function markCurrentListAsRead(): void {
   if (!canMarkAllRead.value) {
     return;
@@ -82,6 +98,9 @@ function handlePageShow(event: PageTransitionEvent): void {
   refreshReadState({
     forceRender: event.persisted,
   });
+  if (event.persisted && isListRoute(route.fullPath)) {
+    void forceRefreshListData();
+  }
 }
 
 function isListRoute(path: string): boolean {
@@ -92,18 +111,23 @@ function refreshVisibleListReadState(): void {
   refreshReadState({ forceRender: true });
 }
 
+function refreshVisibleList(): void {
+  refreshVisibleListReadState();
+  void forceRefreshListData();
+}
+
 watch(
   () => route.fullPath,
   (nextPath, previousPath) => {
     if (previousPath && nextPath !== previousPath && isListRoute(nextPath)) {
-      refreshVisibleListReadState();
+      refreshVisibleList();
     }
   },
 );
 
 onActivated(() => {
   if (isListRoute(route.fullPath)) {
-    refreshVisibleListReadState();
+    refreshVisibleList();
   }
 });
 

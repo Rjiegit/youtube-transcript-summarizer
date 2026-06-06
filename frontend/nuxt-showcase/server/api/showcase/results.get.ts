@@ -1,4 +1,4 @@
-import { createError, defineEventHandler, setHeader } from "h3";
+import { createError, defineEventHandler, getQuery, setHeader } from "h3";
 
 import { fetchLatestCompletedResults } from "../../utils/notion";
 import { createSWRCache } from "../../utils/swr-cache";
@@ -14,6 +14,20 @@ let showcaseCache = createSWRCache<ShowcaseApiResponse>({
 });
 let showcaseCacheTtlMs = DEFAULT_CACHE_TTL_SECONDS * 1000;
 
+function hasRefreshQuery(event: { node?: { req?: { url?: string } } }): boolean {
+  const query = getQuery(event);
+  if (query.refresh === "1") {
+    return true;
+  }
+
+  const rawUrl = event.node?.req?.url;
+  if (!rawUrl) {
+    return false;
+  }
+
+  return new URL(rawUrl, "http://localhost").searchParams.get("refresh") === "1";
+}
+
 function getShowcaseCache(cacheTtlSeconds: number) {
   const ttlMs = cacheTtlSeconds * 1000;
   if (ttlMs !== showcaseCacheTtlMs) {
@@ -25,6 +39,7 @@ function getShowcaseCache(cacheTtlSeconds: number) {
 
 export default defineEventHandler(async (event) => {
   const runtimeConfig = useRuntimeConfig(event);
+  const shouldForceRefresh = hasRefreshQuery(event);
   const {
     notionApiKey,
     notionDatabaseId,
@@ -36,7 +51,7 @@ export default defineEventHandler(async (event) => {
   const cacheControlValue = getShowcaseCacheControlValue(cacheTtlSeconds);
   const cache = getShowcaseCache(cacheTtlSeconds);
 
-  setHeader(event, "Cache-Control", cacheControlValue);
+  setHeader(event, "Cache-Control", shouldForceRefresh ? "no-store" : cacheControlValue);
 
   const missingEnvVars = [
     !notionApiKey ? "NOTION_API_KEY" : null,
@@ -51,15 +66,16 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    return await cache.get(() =>
+    const fetchResults = () =>
       fetchLatestCompletedResults({
         apiKey: notionApiKey,
         databaseId: notionDatabaseId,
         cacheTtlSeconds,
         statusPropertyName,
         completedStatusValue,
-      }),
-    );
+      });
+
+    return shouldForceRefresh ? await cache.refresh(fetchResults) : await cache.get(fetchResults);
   } catch (error) {
     const fallback = cache.peek();
     if (fallback) {

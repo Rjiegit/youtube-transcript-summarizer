@@ -45,6 +45,22 @@ describe("SWR cache", () => {
     expect(await cache.get(fetcher)).toBe("beta");
   });
 
+  it("refreshes the snapshot immediately regardless of the TTL", async () => {
+    let now = 0;
+    const cache = createSWRCache<string>({ ttlMs: 1000, now: () => now });
+    const fetcher = vi.fn()
+      .mockResolvedValueOnce("alpha")
+      .mockResolvedValueOnce("beta");
+
+    expect(await cache.get(fetcher)).toBe("alpha");
+    now = 500;
+
+    expect(await cache.refresh(fetcher)).toBe("beta");
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(await cache.get(fetcher)).toBe("beta");
+    expect(fetcher).toHaveBeenCalledTimes(2);
+  });
+
   it("throws if the initial fetch fails and no snapshot exists", async () => {
     const cache = createSWRCache<string>({ ttlMs: 1000 });
     await expect(cache.get(async () => {
