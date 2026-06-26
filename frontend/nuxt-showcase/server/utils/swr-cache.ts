@@ -13,30 +13,43 @@ export interface SWRCache<T> {
 export function createSWRCache<T>(options: SWRCacheOptions): SWRCache<T> {
   let snapshot: { value: T; fetchedAt: number } | null = null;
   let refreshPromise: Promise<T> | null = null;
+  let latestRefreshId = 0;
   const now = options.now ?? (() => Date.now());
 
-  const startRefresh = (fetcher: () => Promise<T>, swallowError: boolean): Promise<T> => {
-    if (!refreshPromise) {
-      refreshPromise = fetcher()
-        .then((value) => {
+  const startRefresh = (
+    fetcher: () => Promise<T>,
+    options: { swallowError: boolean; reuseInFlight: boolean },
+  ): Promise<T> => {
+    if (options.reuseInFlight && refreshPromise) {
+      return refreshPromise;
+    }
+
+    const refreshId = latestRefreshId + 1;
+    latestRefreshId = refreshId;
+    const nextRefreshPromise = fetcher()
+      .then((value) => {
+        if (refreshId === latestRefreshId) {
           snapshot = {
             value,
             fetchedAt: now(),
           };
-          return value;
-        })
-        .catch((error) => {
-          if (swallowError && snapshot) {
-            return snapshot.value;
-          }
-          throw error;
-        })
-        .finally(() => {
+        }
+        return value;
+      })
+      .catch((error) => {
+        if (options.swallowError && snapshot) {
+          return snapshot.value;
+        }
+        throw error;
+      })
+      .finally(() => {
+        if (refreshPromise === nextRefreshPromise) {
           refreshPromise = null;
-        });
-    }
+        }
+      });
 
-    return refreshPromise;
+    refreshPromise = nextRefreshPromise;
+    return nextRefreshPromise;
   };
 
   return {
@@ -47,14 +60,14 @@ export function createSWRCache<T>(options: SWRCacheOptions): SWRCache<T> {
           return snapshot.value;
         }
 
-        void startRefresh(fetcher, true);
+        void startRefresh(fetcher, { swallowError: true, reuseInFlight: true });
         return snapshot.value;
       }
 
-      return startRefresh(fetcher, false);
+      return startRefresh(fetcher, { swallowError: false, reuseInFlight: true });
     },
     refresh(fetcher: () => Promise<T>): Promise<T> {
-      return startRefresh(fetcher, false);
+      return startRefresh(fetcher, { swallowError: false, reuseInFlight: false });
     },
     peek(): T | null {
       return snapshot?.value ?? null;
