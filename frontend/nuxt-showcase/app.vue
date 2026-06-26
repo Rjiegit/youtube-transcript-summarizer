@@ -1,4 +1,24 @@
 <script setup lang="ts">
+import { computed } from "vue";
+
+const runtimeConfig = useRuntimeConfig();
+const publicConfig = runtimeConfig.public || {};
+const buildDate = computed(() => normalizeVersionPart(publicConfig.buildDate) || "local");
+const commitSha = computed(() => normalizeVersionPart(publicConfig.commitSha));
+const shortCommitSha = computed(() => commitSha.value.slice(0, 7) || "local");
+const appVersionLabel = computed(() => `${buildDate.value} · ${shortCommitSha.value}`);
+const appVersionTitle = computed(() => {
+  if (!commitSha.value) {
+    return `建置版本：${buildDate.value}，本機或未提供 commit`;
+  }
+
+  return `建置版本：${buildDate.value}，commit ${commitSha.value}`;
+});
+
+function normalizeVersionPart(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
 useHead({
   titleTemplate: (titleChunk) => {
     if (!titleChunk) {
@@ -30,5 +50,16 @@ useHead({
 </script>
 
 <template>
-  <NuxtPage />
+  <div class="app-frame">
+    <NuxtPage />
+    <footer class="site-footer" aria-label="版本資訊">
+      <span
+        class="site-footer__version"
+        data-testid="app-version"
+        :title="appVersionTitle"
+      >
+        {{ appVersionLabel }}
+      </span>
+    </footer>
+  </div>
 </template>

@@ -6,6 +6,7 @@ import { ref } from "vue";
 const useFetchMock = vi.fn();
 const useRouteMock = vi.fn();
 const useHeadMock = vi.fn();
+const useRuntimeConfigMock = vi.fn();
 const markAsReadMock = vi.fn();
 let readResultIds = new Set<string>();
 
@@ -30,6 +31,7 @@ vi.mock("../composables/useReadResults", () => ({
 vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useRoute", useRouteMock);
 vi.stubGlobal("useHead", useHeadMock);
+vi.stubGlobal("useRuntimeConfig", useRuntimeConfigMock);
 vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string }) => {
   const error = new Error(input.statusMessage);
   return Object.assign(error, input);
@@ -41,6 +43,12 @@ describe("showcase head metadata", () => {
     vi.clearAllMocks();
     useRouteMock.mockReturnValue({
       fullPath: "/",
+    });
+    useRuntimeConfigMock.mockReturnValue({
+      public: {
+        buildDate: "2026.06.26",
+        commitSha: "abc123456789",
+      },
     });
   });
 

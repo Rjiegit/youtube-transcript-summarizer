@@ -7,6 +7,11 @@ import {
 
 const ORIGINAL_ENV = { ...process.env };
 
+function loadNuxtConfig() {
+  const cacheBuster = Date.now() + "-" + Math.random().toString(36).slice(2);
+  return import("../nuxt.config.ts?t=" + cacheBuster);
+}
+
 describe("showcase env resolution", () => {
   afterEach(() => {
     process.env = { ...ORIGINAL_ENV };
@@ -115,7 +120,7 @@ describe("showcase env resolution", () => {
     const defineNuxtConfig = vi.fn((config) => config);
     vi.stubGlobal("defineNuxtConfig", defineNuxtConfig);
 
-    const module = await import("../nuxt.config.ts?t=" + Date.now());
+    const module = await loadNuxtConfig();
     const config = module.default;
 
     expect(config.runtimeConfig.showcaseCacheTtlSeconds).toBe(900);
@@ -124,5 +129,19 @@ describe("showcase env resolution", () => {
     expect(config.routeRules["/api/showcase/results"].headers["cache-control"]).toBe(
       "public, s-maxage=900, stale-while-revalidate=900",
     );
+  });
+
+  it("injects public build metadata for the version footer", async () => {
+    process.env.SHOWCASE_BUILD_DATE = "2026.06.26";
+    process.env.VERCEL_GIT_COMMIT_SHA = "abc123456789";
+
+    const defineNuxtConfig = vi.fn((config) => config);
+    vi.stubGlobal("defineNuxtConfig", defineNuxtConfig);
+
+    const module = await loadNuxtConfig();
+    const config = module.default;
+
+    expect(config.runtimeConfig.public.buildDate).toBe("2026.06.26");
+    expect(config.runtimeConfig.public.commitSha).toBe("abc123456789");
   });
 });

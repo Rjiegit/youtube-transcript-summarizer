@@ -44,6 +44,24 @@ Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600
 
 搭配 Vercel CDN 做簡易 SWR 快取；server process 內也保留最後成功的資料快照，當 Notion 暫時失敗時可優先回退。這個 TTL 不影響前端 local state，例如已讀標記仍由瀏覽器端自行管理。
 
+## Version Footer
+
+頁尾右側會顯示目前部署版本，格式為：
+
+```txt
+YYYY.MM.DD · shortSha
+```
+
+例如 `2026.06.26 · ede74aa`。日期方便快速確認建置時間，commit short SHA 可用來比對 Git commit 或 Vercel deployment 是否已更新到預期版本。同一天多次部署時，請以 commit short SHA 為準。
+
+建置時會自動注入版本資訊：
+
+- `SHOWCASE_BUILD_DATE` / `NUXT_SHOWCASE_BUILD_DATE`：選填；未提供時會用建置當下的 Asia/Taipei 日期。
+- `VERCEL_GIT_COMMIT_SHA`：Vercel 部署時優先使用。
+- `SHOWCASE_COMMIT_SHA` / `NUXT_SHOWCASE_COMMIT_SHA` / `GITHUB_SHA` / `COMMIT_SHA`：其他 CI 或本機 build 可使用的 fallback。
+
+若沒有 commit SHA，頁尾會顯示 `local`，代表目前不是可精準對應部署 commit 的版本。
+
 ## Diagnostics
 
 若首頁顯示 `Missing Notion showcase configuration.`，可直接開：

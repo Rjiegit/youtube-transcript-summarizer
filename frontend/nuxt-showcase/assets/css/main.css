@@ -37,10 +37,36 @@ a {
   color: inherit;
 }
 
+.app-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-frame > .showcase-shell {
+  flex: 1;
+}
+
 .showcase-shell {
   width: min(1180px, calc(100vw - 32px));
   margin: 0 auto;
   padding: 36px 0 72px;
+}
+
+.site-footer {
+  display: flex;
+  justify-content: flex-end;
+  width: min(1180px, calc(100vw - 32px));
+  margin: 0 auto;
+  padding: 0 0 28px;
+}
+
+.site-footer__version {
+  color: var(--muted);
+  font-family: "SFMono-Regular", "Cascadia Code", "Menlo", monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .hero {
@@ -483,6 +509,12 @@ a {
   .showcase-shell {
     width: min(100vw - 20px, 100%);
     padding-top: 16px;
+  }
+
+  .site-footer {
+    justify-content: flex-start;
+    width: min(100vw - 20px, 100%);
+    padding-bottom: 20px;
   }
 
   .hero {
