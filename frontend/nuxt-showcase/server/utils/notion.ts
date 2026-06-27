@@ -12,8 +12,18 @@ const CREATED_TIME_PROPERTY_CANDIDATES = ["Created time", "created time", "Creat
 
 interface NotionRichTextItem {
   plain_text?: string;
+  href?: string | null;
+  annotations?: {
+    bold?: boolean;
+    italic?: boolean;
+    strikethrough?: boolean;
+    code?: boolean;
+  };
   text?: {
     content?: string;
+    link?: {
+      url?: string;
+    } | null;
   };
 }
 
@@ -40,6 +50,8 @@ export interface NotionPage {
 
 interface NotionBlockRichTextContainer {
   rich_text?: NotionRichTextItem[];
+  checked?: boolean;
+  language?: string;
 }
 
 export interface NotionBlock {
@@ -237,9 +249,123 @@ function getBlockRichText(block: NotionBlock): string {
   return readRichText(blockContent?.rich_text);
 }
 
+function getBlockRichTextContainer(block: NotionBlock): NotionBlockRichTextContainer | undefined {
+  return block[block.type as keyof NotionBlock] as NotionBlockRichTextContainer | undefined;
+}
+
+function escapeMarkdownText(value: string): string {
+  return value.replace(/([\\`*_{}[\]()#!|])/g, "\\$1");
+}
+
+function escapeMarkdownUrl(value: string): string {
+  return value.replace(/\)/g, "%29").replace(/\s/g, "%20");
+}
+
+function renderInlineCode(value: string): string {
+  const delimiter = value.includes("`") ? "``" : "`";
+  return `${delimiter}${value}${delimiter}`;
+}
+
+interface RenderRichTextOptions {
+  preserveMarkdown?: boolean;
+}
+
+function renderRichTextItem(item: NotionRichTextItem, options: RenderRichTextOptions = {}): string {
+  const rawText = item.plain_text ?? item.text?.content ?? "";
+  if (!rawText) {
+    return "";
+  }
+
+  const annotations = item.annotations ?? {};
+  let renderedText = annotations.code || options.preserveMarkdown
+    ? rawText
+    : escapeMarkdownText(rawText);
+
+  if (annotations.code) {
+    renderedText = renderInlineCode(renderedText);
+  } else {
+    if (annotations.bold) {
+      renderedText = `**${renderedText}**`;
+    }
+    if (annotations.italic) {
+      renderedText = `_${renderedText}_`;
+    }
+    if (annotations.strikethrough) {
+      renderedText = `~~${renderedText}~~`;
+    }
+  }
+
+  const href = item.href || item.text?.link?.url || "";
+  if (href) {
+    return `[${renderedText}](${escapeMarkdownUrl(href)})`;
+  }
+
+  return renderedText;
+}
+
+function renderRichTextMarkdown(items?: NotionRichTextItem[], options: RenderRichTextOptions = {}): string {
+  if (!items || items.length === 0) {
+    return "";
+  }
+
+  return items.map((item) => renderRichTextItem(item, options)).join("").trim();
+}
+
+function renderQuotedMarkdown(content: string): string {
+  return content
+    .split("\n")
+    .map((line) => `> ${line}`)
+    .join("\n");
+}
+
+function normalizeCodeLanguage(language: string | undefined): string {
+  const normalizedLanguage = (language || "").trim().toLowerCase().replace(/\s+/g, "-");
+  return /^[a-z0-9_-]+$/.test(normalizedLanguage) ? normalizedLanguage : "";
+}
+
+function renderNotionBlock(block: NotionBlock): string {
+  const container = getBlockRichTextContainer(block);
+  const content = renderRichTextMarkdown(container?.rich_text);
+
+  if (!content && block.type !== "code") {
+    return "";
+  }
+
+  switch (block.type) {
+    case "heading_1":
+      return `# ${content}`;
+    case "heading_2":
+      return `## ${content}`;
+    case "heading_3":
+      return `### ${content}`;
+    case "bulleted_list_item":
+      return `- ${content}`;
+    case "numbered_list_item":
+      return `1. ${content}`;
+    case "quote":
+    case "callout":
+      return renderQuotedMarkdown(content);
+    case "to_do":
+      return `- [${container?.checked ? "x" : " "}] ${content}`;
+    case "code": {
+      const rawCode = getBlockRichText(block);
+      if (!rawCode) {
+        return "";
+      }
+      const language = normalizeCodeLanguage(container?.language);
+      return `\`\`\`${language}\n${rawCode}\n\`\`\``;
+    }
+    case "paragraph":
+    case "toggle":
+      return renderRichTextMarkdown(container?.rich_text, { preserveMarkdown: true });
+    default:
+      return content;
+  }
+}
+
 export function renderNotionBlocks(blocks: NotionBlock[]): string {
   return blocks
-    .map((block) => getBlockRichText(block))
+    .map((block) => renderNotionBlock(block))
     .filter((content) => content.length > 0)
     .join("\n\n")
     .trim();

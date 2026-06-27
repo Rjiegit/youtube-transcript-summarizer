@@ -1,0 +1,72 @@
+<h2>版本號應該放在哪裡？</h2>
+<p class="subtitle">目標是讓你部署後可以快速確認目前網頁版本，同時不干擾「影片知識庫」的閱讀與操作。</p>
+
+<div class="cards">
+  <div class="card" data-choice="fixed-bottom-right" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="height: 260px; padding: 18px; background: linear-gradient(180deg, #eef3f7 0%, #f7f8fa 45%, #fff 100%); border-radius: 10px; position: relative; overflow: hidden;">
+        <div style="border-bottom: 1px solid #d9dee7; padding-bottom: 14px;">
+          <div style="font: 700 10px monospace; color: #0f766e; text-transform: uppercase;">Video Knowledge Index</div>
+          <div style="font-size: 34px; font-weight: 800; color: #172033;">影片知識庫</div>
+          <div style="width: 70%; height: 9px; margin-top: 10px; background: #d9dee7; border-radius: 999px;"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px;">
+          <div style="height: 82px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+          <div style="height: 82px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+          <div style="height: 82px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+        </div>
+        <div style="position: absolute; right: 14px; bottom: 14px; padding: 5px 9px; border: 1px solid rgba(100,112,132,.35); border-radius: 999px; background: rgba(255,255,255,.88); color: #647084; font: 700 11px monospace;">v2026.06.26</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. 固定右下角 badge（推薦）</h3>
+      <p>全站永遠可見，最適合部署驗證；低透明、細框、避開內容主視覺。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="footer-right" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="height: 260px; padding: 18px; background: linear-gradient(180deg, #eef3f7 0%, #f7f8fa 45%, #fff 100%); border-radius: 10px; position: relative; overflow: hidden;">
+        <div style="border-bottom: 1px solid #d9dee7; padding-bottom: 14px;">
+          <div style="font: 700 10px monospace; color: #0f766e; text-transform: uppercase;">Video Knowledge Index</div>
+          <div style="font-size: 34px; font-weight: 800; color: #172033;">影片知識庫</div>
+          <div style="width: 70%; height: 9px; margin-top: 10px; background: #d9dee7; border-radius: 999px;"></div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px;">
+          <div style="height: 66px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+          <div style="height: 66px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+          <div style="height: 66px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+        </div>
+        <div style="position: absolute; left: 18px; right: 18px; bottom: 14px; display: flex; justify-content: flex-end; border-top: 1px solid #d9dee7; padding-top: 10px; color: #647084; font: 700 11px monospace;">v2026.06.26</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. 頁尾右側</h3>
+      <p>最不打擾，但要捲到底才看得到；比較適合一般網站資訊，不適合快速部署確認。</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="hero-top-right" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="height: 260px; padding: 18px; background: linear-gradient(180deg, #eef3f7 0%, #f7f8fa 45%, #fff 100%); border-radius: 10px; position: relative; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 12px; border-bottom: 1px solid #d9dee7; padding-bottom: 14px; align-items: start;">
+          <div>
+            <div style="font: 700 10px monospace; color: #0f766e; text-transform: uppercase;">Video Knowledge Index</div>
+            <div style="font-size: 34px; font-weight: 800; color: #172033;">影片知識庫</div>
+            <div style="width: 70%; height: 9px; margin-top: 10px; background: #d9dee7; border-radius: 999px;"></div>
+          </div>
+          <div style="padding: 5px 9px; border: 1px solid rgba(15,118,110,.28); border-radius: 999px; background: #fff; color: #0f766e; font: 700 11px monospace;">v2026.06.26</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px;">
+          <div style="height: 82px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+          <div style="height: 82px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+          <div style="height: 82px; background: #fff; border: 1px solid #d9dee7; border-radius: 8px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C. Hero 區右上</h3>
+      <p>和頁面標題關聯清楚，但詳細頁或捲動後不一定可見；比較像內容 metadata。</p>
+    </div>
+  </div>
+</div>

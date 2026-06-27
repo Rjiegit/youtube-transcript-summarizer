@@ -67,6 +67,7 @@ describe("showcase head metadata", () => {
     expect(headArg.titleTemplate("影片知識庫")).toBe("影片知識庫");
     expect(headArg.titleTemplate("Second result")).toBe("Second result | 影片知識庫");
     expect(headArg.link).toEqual(expect.arrayContaining([
+      expect.objectContaining({ rel: "stylesheet", href: "/showcase.css" }),
       expect.objectContaining({ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }),
       expect.objectContaining({ rel: "shortcut icon", type: "image/x-icon", href: "/favicon.ico" }),
       expect.objectContaining({ rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" }),
@@ -239,6 +240,46 @@ describe("showcase head metadata", () => {
     expect(lastCall?.meta).not.toEqual(expect.arrayContaining([
       expect.objectContaining({ property: "og:image" }),
       expect.objectContaining({ name: "twitter:image" }),
+    ]));
+  });
+
+  it("strips markdown syntax from detail metadata descriptions", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: ref({
+        id: "result-2-page-id",
+        title: "Second result",
+        summary: "",
+        content: "## 重點整理\n\n這是一段包含 [參考連結](https://example.com/docs) 與 `inline_code()` 的內容。",
+        source_url: null,
+        created_at: "2026-03-28T12:00:00.000Z",
+        processing_duration: 12.4,
+      }),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
+    mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: true,
+        },
+      },
+    });
+
+    const lastCall = useHeadMock.mock.calls.at(-1)?.[0];
+    expect(lastCall?.meta).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        name: "description",
+        content: "重點整理 這是一段包含 參考連結 與 inline_code() 的內容。",
+      }),
+      expect.objectContaining({
+        property: "og:description",
+        content: "重點整理 這是一段包含 參考連結 與 inline_code() 的內容。",
+      }),
     ]));
   });
 });

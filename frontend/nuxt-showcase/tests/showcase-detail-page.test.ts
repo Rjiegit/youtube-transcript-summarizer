@@ -40,6 +40,23 @@ const detailResponse: ShowcaseDetailResult = {
   processing_duration: 12.4,
 };
 
+const markdownDetailResponse: ShowcaseDetailResult = {
+  ...detailResponse,
+  content: [
+    "## 重點整理",
+    "",
+    "這是一段包含 [參考連結](https://example.com/docs) 的內容。",
+    "",
+    "- 第一個重點",
+    "- 第二個重點",
+    "- [x] 完成待辦",
+    "",
+    "`inline_code()`",
+    "",
+    "<script>alert('xss')</script>",
+  ].join("\n"),
+};
+
 const nonYoutubeDetailResponse: ShowcaseDetailResult = {
   ...detailResponse,
   source_url: "https://example.com/video/second",
@@ -101,6 +118,41 @@ describe("Showcase detail page", () => {
       "url:https://www.youtube.com/watch?v=second",
     ]);
     expect(markAsReadMock).not.toHaveBeenCalled();
+  });
+
+  it("renders markdown content and keeps raw HTML escaped", async () => {
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: { value: markdownDetailResponse },
+      pending: { value: false },
+      error: { value: null },
+    });
+
+    const pageModule = await loadPageModule();
+    const wrapper = mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: {
+            template: "<a :href=\"to\"><slot /></a>",
+            props: ["to"],
+          },
+        },
+      },
+    });
+
+    const summary = wrapper.get('[data-testid="detail-summary"]');
+    expect(summary.find("h2").text()).toBe("重點整理");
+    expect(summary.findAll("li").map((item) => item.text())).toEqual(["第一個重點", "第二個重點", "完成待辦"]);
+    const checkbox = summary.find('input[type="checkbox"]');
+    expect(checkbox.exists()).toBe(true);
+    expect(checkbox.attributes("checked")).toBeDefined();
+    expect(checkbox.attributes("disabled")).toBeDefined();
+    expect(summary.find('a[href="https://example.com/docs"]').text()).toBe("參考連結");
+    expect(summary.find("code").text()).toBe("inline_code()");
+    expect(summary.find("script").exists()).toBe(false);
+    expect(summary.text()).toContain("<script>alert('xss')</script>");
   });
 
   it("keeps the original video link without embedding non-YouTube sources", async () => {

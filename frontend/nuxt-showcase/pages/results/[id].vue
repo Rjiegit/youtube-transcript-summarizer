@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, watchEffect } from "vue";
 
+import MarkdownContent from "../../components/MarkdownContent.vue";
 import { useReadResults } from "../../composables/useReadResults";
 import type { ShowcaseDetailResult } from "../../types/showcase";
 import { formatTaipeiDateTime } from "../../utils/datetime";
@@ -59,12 +60,27 @@ const pageTitle = computed(() => {
 });
 
 function compactMetaDescription(value: string | null | undefined): string {
-  const compactedValue = (value || "").replace(/\s+/g, " ").trim();
+  const compactedValue = stripMarkdownSyntax(value || "").replace(/\s+/g, " ").trim();
   if (!compactedValue) {
     return "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。";
   }
 
   return compactedValue.length > 160 ? `${compactedValue.slice(0, 157)}...` : compactedValue;
+}
+
+function stripMarkdownSyntax(value: string): string {
+  return value
+    .replace(/```[a-z0-9_-]*\n([\s\S]*?)```/gi, "$1")
+    .replace(/`([^`]+)`/g, "$1")
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s{0,3}>\s?/gm, "")
+    .replace(/^\s*[-*+]\s+\[[ xX]\]\s+/gm, "")
+    .replace(/^\s*[-*+]\s+/gm, "")
+    .replace(/^\s*\d+\.\s+/gm, "")
+    .replace(/[*~]+/g, "")
+    .replace(/\\([\\`*_{}[\]()#+.!|>-])/g, "$1");
 }
 
 const pageDescription = computed(() => compactMetaDescription(item.value?.summary || item.value?.content));
@@ -166,7 +182,7 @@ const youtubeEmbedUrl = computed(() => {
       </div>
 
       <div class="detail-panel__summary" data-testid="detail-summary">
-        <p>{{ item?.content || item?.summary }}</p>
+        <MarkdownContent :source="item?.content || item?.summary || ''" />
       </div>
 
       <section

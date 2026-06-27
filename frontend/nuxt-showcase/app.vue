@@ -32,6 +32,7 @@ useHead({
     return `${titleChunk} | 影片知識庫`;
   },
   link: [
+    { rel: "stylesheet", href: "/showcase.css" },
     { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
     { rel: "shortcut icon", type: "image/x-icon", href: "/favicon.ico" },
     { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },

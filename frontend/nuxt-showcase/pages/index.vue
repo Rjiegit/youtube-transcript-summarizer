@@ -4,6 +4,7 @@ import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from "v
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
+import { formatTaipeiDateTime } from "../utils/datetime";
 import { dedupeShowcaseResults, getResultReadKeys, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
 
 const route = useRoute();
@@ -243,17 +244,33 @@ onBeforeUnmount(() => {
       </section>
 
       <template #fallback>
-        <section class="showcase-grid showcase-grid--skeleton" aria-label="同步已讀狀態中">
+        <section class="showcase-grid" aria-label="展示內容列表">
           <article
-            v-for="index in skeletonItems"
-            :key="`fallback-skeleton-${index}`"
-            class="showcase-skeleton-card"
-            aria-hidden="true"
+            v-for="item in displayItems"
+            :key="`fallback-${item.id}`"
+            class="showcase-card showcase-card--fallback"
           >
-            <div class="showcase-skeleton-card__meta"></div>
-            <div class="showcase-skeleton-card__title"></div>
-            <div class="showcase-skeleton-card__summary"></div>
-            <div class="showcase-skeleton-card__summary showcase-skeleton-card__summary--short"></div>
+            <a :href="`/results/${item.id}`" class="showcase-card__main-link">
+              <div class="showcase-card__meta">
+                <span>{{ formatTaipeiDateTime(item.created_at) }}</span>
+                <span v-if="item.processing_duration != null">{{ item.processing_duration.toFixed(1) }}s</span>
+              </div>
+              <div class="showcase-card__title-row">
+                <h2 class="showcase-card__title">{{ item.title }}</h2>
+              </div>
+              <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
+            </a>
+
+            <div v-if="item.source_url" class="showcase-card__links">
+              <a
+                :href="item.source_url"
+                target="_blank"
+                rel="noreferrer"
+                class="showcase-card__link"
+              >
+                原始影片
+              </a>
+            </div>
           </article>
         </section>
       </template>

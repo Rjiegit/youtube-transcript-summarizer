@@ -273,7 +273,7 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="mark-all-read-button"]').attributes("disabled")).toBeUndefined();
   });
 
-  it("does not server-render the mark all read button with stale disabled state", async () => {
+  it("server-renders readable fallback cards without stale read controls", async () => {
     stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
@@ -298,6 +298,12 @@ describe("showcase index page", () => {
     const html = await renderToString(TestHost);
 
     expect(html).not.toContain('data-testid="mark-all-read-button"');
+    expect(html).toContain("First result");
+    expect(html).toContain("First summary.");
+    expect(html).toContain("Second result");
+    expect(html).toContain("Second summary.");
+    expect(html).toContain("https://www.youtube.com/watch?v=first");
+    expect(html).not.toContain("showcase-skeleton-card");
   });
 
   it("refreshes read state from localStorage when returning to the page", async () => {
