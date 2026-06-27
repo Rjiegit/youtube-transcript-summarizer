@@ -22,14 +22,14 @@ function normalizeVersionPart(value: unknown): string {
 useHead({
   titleTemplate: (titleChunk) => {
     if (!titleChunk) {
-      return "影片知識庫";
+      return "影片筆記庫";
     }
 
-    if (titleChunk === "影片知識庫") {
+    if (titleChunk === "影片筆記庫") {
       return titleChunk;
     }
 
-    return `${titleChunk} | 影片知識庫`;
+    return `${titleChunk} | 影片筆記庫`;
   },
   link: [
     { rel: "stylesheet", href: "/showcase.css" },
@@ -41,9 +41,9 @@ useHead({
   meta: [
     {
       name: "description",
-      content: "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。",
+      content: "收藏從影片整理出的重點筆記",
     },
-    { property: "og:site_name", content: "影片知識庫" },
+    { property: "og:site_name", content: "影片筆記庫" },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
   ],

@@ -62,7 +62,7 @@ const pageTitle = computed(() => {
 function compactMetaDescription(value: string | null | undefined): string {
   const compactedValue = stripMarkdownSyntax(value || "").replace(/\s+/g, " ").trim();
   if (!compactedValue) {
-    return "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。";
+    return "收藏從影片整理出的重點筆記";
   }
 
   return compactedValue.length > 160 ? `${compactedValue.slice(0, 157)}...` : compactedValue;

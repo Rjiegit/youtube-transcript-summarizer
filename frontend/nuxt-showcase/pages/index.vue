@@ -18,23 +18,23 @@ const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showc
 });
 
 useHead({
-  title: "影片知識庫",
+  title: "影片筆記庫",
   meta: [
     {
       name: "description",
-      content: "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。",
+      content: "收藏從影片整理出的重點筆記",
     },
-    { property: "og:title", content: "影片知識庫" },
+    { property: "og:title", content: "影片筆記庫" },
     {
       property: "og:description",
-      content: "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。",
+      content: "收藏從影片整理出的重點筆記",
     },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
-    { name: "twitter:title", content: "影片知識庫" },
+    { name: "twitter:title", content: "影片筆記庫" },
     {
       name: "twitter:description",
-      content: "把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。",
+      content: "收藏從影片整理出的重點筆記",
     },
   ],
 });
@@ -151,9 +151,9 @@ onBeforeUnmount(() => {
     <section class="hero">
       <div class="hero__content">
         <p class="hero__eyebrow">Video Knowledge Index</p>
-        <h1 class="hero__title">影片知識庫</h1>
+        <h1 class="hero__title">影片筆記庫</h1>
         <p class="hero__body">
-          把影片內容整理成更容易理解、快速吸收、方便搜尋，並能隨時回顧與再利用的知識資料。
+          收藏從影片整理出的重點筆記
         </p>
       </div>
     </section>
