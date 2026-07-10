@@ -47,8 +47,10 @@ useHead({
 
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
-const { isReady, markManyAsRead, readMap, readRevision, refreshReadState } = useReadResults();
+const { isReady, markManyAsRead, readMap, refreshReadState } = useReadResults();
 const titleSearchQuery = ref("");
+const isRefreshingList = ref(false);
+const listRenderRevision = ref(0);
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
   if (!normalizedTitleSearchQuery.value) {
@@ -97,9 +99,12 @@ function refreshListDataIfStale(): Promise<void> {
     return listRefreshPromise;
   }
 
-  listRefreshPromise = forceRefreshListData().finally(() => {
-    listRefreshPromise = null;
-  });
+  isRefreshingList.value = true;
+  listRefreshPromise = forceRefreshListData()
+    .finally(() => {
+      listRefreshPromise = null;
+      isRefreshingList.value = false;
+    });
   return listRefreshPromise;
 }
 
@@ -122,6 +127,7 @@ function handlePageShow(event: PageTransitionEvent): void {
     forceRender: event.persisted,
   });
   if (event.persisted && isListRoute(route.fullPath)) {
+    listRenderRevision.value += 1;
     void refreshListDataIfStale();
   }
 }
@@ -131,7 +137,7 @@ function isListRoute(path: string): boolean {
 }
 
 function refreshVisibleListReadState(): void {
-  refreshReadState({ forceRender: true });
+  refreshReadState();
 }
 
 function refreshVisibleList(): void {
@@ -209,6 +215,13 @@ onBeforeUnmount(() => {
           autocomplete="off"
         />
       </label>
+      <span
+        v-if="isRefreshingList"
+        class="showcase-toolbar__refresh-progress"
+        data-testid="showcase-refresh-progress"
+        role="status"
+        aria-label="更新中"
+      ></span>
     </section>
 
     <section v-if="pending" class="state-panel">
@@ -255,7 +268,13 @@ onBeforeUnmount(() => {
         </article>
       </section>
 
-      <section v-else :key="`showcase-grid-${readRevision}`" class="showcase-grid">
+      <TransitionGroup
+        v-else
+        :key="`showcase-grid-${listRenderRevision}`"
+        name="showcase-grid"
+        tag="section"
+        class="showcase-grid"
+      >
         <ShowcaseCard
           v-for="item in displayItems"
           :key="item.id"
@@ -263,7 +282,7 @@ onBeforeUnmount(() => {
           :is-read="isResultRead(item, readMap)"
           @mark-read="markManyAsRead(getResultReadKeys(item))"
         />
-      </section>
+      </TransitionGroup>
 
       <template #fallback>
         <section class="showcase-grid" aria-label="展示內容列表">

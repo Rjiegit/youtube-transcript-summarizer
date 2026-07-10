@@ -127,11 +127,32 @@ a {
 }
 
 .showcase-toolbar {
+  position: relative;
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 18px;
+  padding-bottom: 4px;
+}
+
+.showcase-toolbar__refresh-progress {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  overflow: hidden;
+  background: var(--line);
+}
+
+.showcase-toolbar__refresh-progress::before {
+  content: "";
+  display: block;
+  width: 36%;
+  height: 100%;
+  background: var(--accent);
+  animation: showcase-refresh-progress 900ms ease-in-out infinite;
 }
 
 .showcase-toolbar__actions {
@@ -288,6 +309,47 @@ a {
 
   100% {
     background-position: -200% 0;
+  }
+}
+
+@keyframes showcase-refresh-progress {
+  0% {
+    transform: translateX(-110%);
+  }
+
+  100% {
+    transform: translateX(290%);
+  }
+}
+
+.showcase-grid-move,
+.showcase-grid-enter-active,
+.showcase-grid-leave-active {
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.showcase-grid-enter-from,
+.showcase-grid-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.showcase-grid-leave-active {
+  position: absolute;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase-skeleton-card__meta,
+  .showcase-skeleton-card__title,
+  .showcase-skeleton-card__summary,
+  .showcase-toolbar__refresh-progress::before {
+    animation: none;
+  }
+
+  .showcase-grid-move,
+  .showcase-grid-enter-active,
+  .showcase-grid-leave-active {
+    transition: none;
   }
 }
 

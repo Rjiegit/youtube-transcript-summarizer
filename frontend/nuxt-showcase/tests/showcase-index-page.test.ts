@@ -105,6 +105,7 @@ describe("showcase index page", () => {
       error: ref(null),
     });
 
+    let mountedCards = 0;
     const pageModule = await loadPageModule();
     const TestHost = defineComponent({
       components: {
@@ -130,6 +131,9 @@ describe("showcase index page", () => {
               },
             },
             emits: ["mark-read"],
+            setup() {
+              mountedCards += 1;
+            },
             template: `
               <article :data-testid="'card-' + item.id">
                 <span>{{ item.title }} {{ isRead ? 'read' : 'unread' }}</span>
@@ -153,11 +157,13 @@ describe("showcase index page", () => {
     expect(wrapper.find('[data-testid="total-count"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="card-result-1-duplicate"]').exists()).toBe(false);
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("unread");
+    const initialMountedCards = mountedCards;
 
     await wrapper.get('[data-testid="quick-read-result-1"]').trigger("click");
 
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
     expect(wrapper.find('[data-testid="quick-read-result-1"]').exists()).toBe(false);
+    expect(mountedCards).toBe(initialMountedCards);
     expect(JSON.parse(window.localStorage.getItem("nuxt-showcase-read-results") || "{}")).toMatchObject({
       "url:https://www.youtube.com/watch?v=first": expect.any(Object),
       "result-1": expect.any(Object),
@@ -649,6 +655,7 @@ describe("showcase index page", () => {
     const wrapper = mount(TestHost, { global });
     await flushPromises();
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("First result");
+    expect(wrapper.find('[data-testid="showcase-refresh-progress"]').exists()).toBe(true);
 
     resolveRefresh?.({
       items: [
@@ -674,5 +681,6 @@ describe("showcase index page", () => {
       },
     });
     expect(wrapper.get('[data-testid="card-result-new"]').text()).toContain("Fresh result");
+    expect(wrapper.find('[data-testid="showcase-refresh-progress"]').exists()).toBe(false);
   });
 });
