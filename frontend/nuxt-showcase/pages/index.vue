@@ -5,7 +5,13 @@ import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
 import { formatTaipeiDateTime } from "../utils/datetime";
-import { dedupeShowcaseResults, getResultReadKeys, isResultRead, sortUnreadResultsFirst } from "../utils/showcase";
+import {
+  dedupeShowcaseResults,
+  getResultReadKeys,
+  isResultRead,
+  isShowcaseResponseStale,
+  sortUnreadResultsFirst,
+} from "../utils/showcase";
 
 const route = useRoute();
 const { data, pending, error } = await useFetch<ShowcaseApiResponse>("/api/showcase/results", {
@@ -58,6 +64,7 @@ const unreadDisplayReadKeys = computed(() => unreadDisplayItems.value.flatMap((i
 const canMarkAllRead = computed(() => isReady.value && unreadDisplayReadKeys.value.length > 0);
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const hasTitleSearchQuery = computed(() => normalizedTitleSearchQuery.value.length > 0);
+let listRefreshPromise: Promise<void> | null = null;
 const errorMessage = computed(() => {
   if (!error.value) {
     return "";
@@ -81,6 +88,21 @@ async function forceRefreshListData(): Promise<void> {
   }
 }
 
+function refreshListDataIfStale(): Promise<void> {
+  if (!isShowcaseResponseStale(data.value)) {
+    return Promise.resolve();
+  }
+
+  if (listRefreshPromise) {
+    return listRefreshPromise;
+  }
+
+  listRefreshPromise = forceRefreshListData().finally(() => {
+    listRefreshPromise = null;
+  });
+  return listRefreshPromise;
+}
+
 function markCurrentListAsRead(): void {
   if (!canMarkAllRead.value) {
     return;
@@ -91,7 +113,7 @@ function markCurrentListAsRead(): void {
 
 function handleVisibilityChange(): void {
   if (document.visibilityState === "visible") {
-    refreshReadState();
+    refreshVisibleList();
   }
 }
 
@@ -100,7 +122,7 @@ function handlePageShow(event: PageTransitionEvent): void {
     forceRender: event.persisted,
   });
   if (event.persisted && isListRoute(route.fullPath)) {
-    void forceRefreshListData();
+    void refreshListDataIfStale();
   }
 }
 
@@ -114,7 +136,7 @@ function refreshVisibleListReadState(): void {
 
 function refreshVisibleList(): void {
   refreshVisibleListReadState();
-  void forceRefreshListData();
+  void refreshListDataIfStale();
 }
 
 watch(
@@ -133,15 +155,15 @@ onActivated(() => {
 });
 
 onMounted(() => {
-  refreshReadState();
+  refreshVisibleList();
   window.addEventListener("pageshow", handlePageShow);
-  window.addEventListener("focus", refreshReadState);
+  window.addEventListener("focus", refreshVisibleList);
   document.addEventListener("visibilitychange", handleVisibilityChange);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("pageshow", handlePageShow);
-  window.removeEventListener("focus", refreshReadState);
+  window.removeEventListener("focus", refreshVisibleList);
   document.removeEventListener("visibilitychange", handleVisibilityChange);
 });
 </script>

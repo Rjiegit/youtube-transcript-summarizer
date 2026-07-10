@@ -1,4 +1,4 @@
-import type { ShowcaseResult } from "../types/showcase";
+import type { ShowcaseApiResponse, ShowcaseResult } from "../types/showcase";
 
 type ReadMap = Record<string, { readAt: string }>;
 
@@ -18,6 +18,22 @@ const TRACKING_QUERY_PARAMS = new Set([
   "utm_source",
   "utm_term",
 ]);
+
+export function isShowcaseResponseStale(
+  response: ShowcaseApiResponse | null | undefined,
+  now = Date.now(),
+): boolean {
+  if (!response || !Number.isFinite(response.cache_ttl_seconds) || response.cache_ttl_seconds <= 0) {
+    return true;
+  }
+
+  const generatedAt = Date.parse(response.generated_at);
+  if (!Number.isFinite(generatedAt)) {
+    return true;
+  }
+
+  return now >= generatedAt + (response.cache_ttl_seconds * 1000);
+}
 
 export function getLatestResultCreatedAt(items: ShowcaseResult[] = []): string {
   return items[0]?.created_at ?? "";

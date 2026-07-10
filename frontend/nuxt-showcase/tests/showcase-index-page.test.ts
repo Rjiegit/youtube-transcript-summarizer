@@ -43,7 +43,7 @@ const response: ShowcaseApiResponse = {
       processing_duration: 5.1,
     },
   ],
-  generated_at: "2026-04-11T00:00:00.000Z",
+  generated_at: new Date().toISOString(),
   cache_ttl_seconds: 3600,
 };
 
@@ -85,6 +85,7 @@ function stubNuxtState() {
 
 describe("showcase index page", () => {
   beforeEach(() => {
+    vi.useRealTimers();
     vi.resetModules();
     useFetchMock.mockReset();
     fetchMock.mockReset();
@@ -531,7 +532,7 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("read");
   });
 
-  it("force refreshes list data when SPA history navigation returns to the list page", async () => {
+  it("keeps fresh list data when SPA history navigation returns to the list page", async () => {
     stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
@@ -595,6 +596,77 @@ describe("showcase index page", () => {
     route.fullPath = "/";
     await flushPromises();
 
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("First result");
+  });
+
+  it("revalidates an expired cached list without replacing it before the background refresh completes", async () => {
+    stubLocalStorage();
+
+    const cachedData = ref<ShowcaseApiResponse>({
+      ...response,
+      generated_at: new Date(Date.now() - 61_000).toISOString(),
+      cache_ttl_seconds: 60,
+    });
+    useFetchMock.mockResolvedValue({
+      data: cachedData,
+      pending: ref(false),
+      error: ref(null),
+    });
+    let resolveRefresh: ((value: ShowcaseApiResponse) => void) | undefined;
+    fetchMock.mockImplementation(() => new Promise<ShowcaseApiResponse>((resolve) => {
+      resolveRefresh = resolve;
+    }));
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const global = {
+      stubs: {
+        ClientOnly: defineComponent({
+          template: "<slot />",
+        }),
+        ShowcaseCard: defineComponent({
+          props: {
+            item: {
+              type: Object,
+              required: true,
+            },
+            isRead: {
+              type: Boolean,
+              default: false,
+            },
+          },
+          template: "<article :data-testid=\"'card-' + item.id\">{{ item.title }}</article>",
+        }),
+      },
+    };
+
+    const wrapper = mount(TestHost, { global });
+    await flushPromises();
+    expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("First result");
+
+    resolveRefresh?.({
+      items: [
+        {
+          id: "result-new",
+          title: "Fresh result",
+          summary: "Fresh summary.",
+          source_url: "https://www.youtube.com/watch?v=fresh",
+          created_at: "2026-07-10T07:01:01.000Z",
+          processing_duration: 6.3,
+        },
+      ],
+      generated_at: new Date().toISOString(),
+      cache_ttl_seconds: 60,
+    });
+    await flushPromises();
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(fetchMock).toHaveBeenCalledWith("/api/showcase/results", {
       query: {
         refresh: "1",
