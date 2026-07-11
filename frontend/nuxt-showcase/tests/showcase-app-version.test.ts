@@ -85,6 +85,7 @@ describe("showcase app version footer", () => {
     await wrapper.vm.$nextTick();
 
     const overlay = wrapper.get('[data-testid="app-loading-overlay"]');
+    expect(overlay.element.parentElement?.classList.contains("app-frame")).toBe(true);
     expect(overlay.classes()).toContain("app-loading-skeleton--list");
     expect(overlay.find(".app-loading-skeleton__grid").exists()).toBe(true);
     expect(overlay.text()).toBe("");

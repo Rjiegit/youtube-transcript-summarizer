@@ -1,5 +1,7 @@
 import { mount } from "@vue/test-utils";
 import { describe, expect, it } from "vitest";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
 import AppLoadingSkeleton from "../components/AppLoadingSkeleton.vue";
 
@@ -33,5 +35,16 @@ describe("AppLoadingSkeleton", () => {
     expect(wrapper.find(".app-loading-skeleton__card").exists()).toBe(false);
     expect(wrapper.text()).toBe("");
     expect(wrapper.attributes("aria-label")).toBe("頁面載入中");
+  });
+
+  it("uses a fully opaque overlay without backdrop blur or transparent transitions", () => {
+    const stylesheet = readFileSync(resolve(process.cwd(), "assets/css/main.css"), "utf8");
+    const overlayRule = stylesheet.match(/\.app-loading-skeleton\s*\{([^}]*)\}/)?.[1] || "";
+
+    expect(overlayRule).toContain("background: var(--bg)");
+    expect(overlayRule).not.toContain("rgba(");
+    expect(overlayRule).not.toContain("backdrop-filter");
+    expect(stylesheet).not.toContain(".app-loading-overlay-enter-active");
+    expect(stylesheet).not.toContain(".app-loading-overlay-leave-active");
   });
 });

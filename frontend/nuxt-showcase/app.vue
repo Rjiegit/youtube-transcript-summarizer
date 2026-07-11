@@ -110,12 +110,10 @@ useHead({
 
 <template>
   <div class="app-frame">
-    <Transition name="app-loading-overlay">
-      <AppLoadingSkeleton
-        v-if="isLoadingVisible"
-        :variant="loadingSkeletonVariant"
-      />
-    </Transition>
+    <AppLoadingSkeleton
+      v-if="isLoadingVisible"
+      :variant="loadingSkeletonVariant"
+    />
     <div
       class="app-frame__content"
       :class="{ 'app-frame__content--loading': isLoadingVisible }"
