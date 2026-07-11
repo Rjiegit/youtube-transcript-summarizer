@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
 const useRuntimeConfigMock = vi.fn();
@@ -26,6 +26,10 @@ describe("showcase app version footer", () => {
       }
       return stateStore.get(key)!;
     }));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   async function mountApp() {
@@ -68,6 +72,7 @@ describe("showcase app version footer", () => {
   });
 
   it("shows one top progress bar and dims content during route loading", async () => {
+    vi.useFakeTimers();
     useRuntimeConfigMock.mockReturnValue({ public: {} });
     const wrapper = await mountApp();
 
@@ -76,11 +81,44 @@ describe("showcase app version footer", () => {
     await wrapper.vm.$nextTick();
 
     expect(wrapper.get('[data-testid="app-loading-progress"]').attributes("style") || "").not.toContain("display: none");
+    expect(wrapper.get('[data-testid="app-loading-status"]').text()).toContain("目前正在更新畫面當中");
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
     expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("true");
 
+    vi.advanceTimersByTime(100);
     loadingHooks.get("page:loading:end")?.();
     await wrapper.vm.$nextTick();
+
+    expect(wrapper.get('[data-testid="app-loading-progress"]').attributes("style") || "").not.toContain("display: none");
+    expect(wrapper.get('[data-testid="app-loading-status"]').attributes("style") || "").not.toContain("display: none");
+    expect(wrapper.get('[data-testid="app-content"]').classes()).not.toContain("app-frame__content--loading");
+    expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("false");
+
+    vi.advanceTimersByTime(399);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.get('[data-testid="app-loading-status"]').attributes("style") || "").not.toContain("display: none");
+
+    vi.advanceTimersByTime(1);
+    await wrapper.vm.$nextTick();
     expect(wrapper.get('[data-testid="app-loading-progress"]').isVisible()).toBe(false);
+    expect(wrapper.find('[data-testid="app-loading-status"]').exists()).toBe(false);
+  });
+
+  it("keeps the loading notice visible when another load starts before it hides", async () => {
+    vi.useFakeTimers();
+    useRuntimeConfigMock.mockReturnValue({ public: {} });
+    const wrapper = await mountApp();
+
+    loadingHooks.get("page:loading:start")?.();
+    vi.advanceTimersByTime(100);
+    loadingHooks.get("page:loading:end")?.();
+    vi.advanceTimersByTime(200);
+    loadingHooks.get("page:loading:start")?.();
+    await wrapper.vm.$nextTick();
+
+    vi.advanceTimersByTime(200);
+    await wrapper.vm.$nextTick();
+    expect(wrapper.get('[data-testid="app-loading-status"]').attributes("style") || "").not.toContain("display: none");
+    expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
   });
 });

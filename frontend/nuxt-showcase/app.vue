@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount } from "vue";
+import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 import { useAppLoading } from "./composables/useAppLoading";
 
@@ -10,6 +10,10 @@ const commitSha = computed(() => normalizeVersionPart(publicConfig.commitSha));
 const shortCommitSha = computed(() => commitSha.value.slice(0, 7) || "local");
 const appVersionLabel = computed(() => `${buildDate.value} · ${shortCommitSha.value}`);
 const { finish: finishLoading, isLoading, start: startLoading } = useAppLoading();
+const minimumLoadingVisibilityMs = 500;
+const isLoadingVisible = ref(false);
+let loadingVisibleSince = 0;
+let hideLoadingTimer: ReturnType<typeof setTimeout> | null = null;
 const nuxtApp = useNuxtApp();
 const stopLoadingStartHook = nuxtApp.hook("page:loading:start", () => {
   startLoading("route-navigation");
@@ -29,7 +33,42 @@ function normalizeVersionPart(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function clearHideLoadingTimer(): void {
+  if (hideLoadingTimer === null) {
+    return;
+  }
+
+  clearTimeout(hideLoadingTimer);
+  hideLoadingTimer = null;
+}
+
+watch(isLoading, (isBusy) => {
+  clearHideLoadingTimer();
+
+  if (isBusy) {
+    loadingVisibleSince = Date.now();
+    isLoadingVisible.value = true;
+    return;
+  }
+
+  if (!isLoadingVisible.value) {
+    return;
+  }
+
+  const remainingVisibilityMs = minimumLoadingVisibilityMs - (Date.now() - loadingVisibleSince);
+  if (remainingVisibilityMs <= 0) {
+    isLoadingVisible.value = false;
+    return;
+  }
+
+  hideLoadingTimer = setTimeout(() => {
+    isLoadingVisible.value = false;
+    hideLoadingTimer = null;
+  }, remainingVisibilityMs);
+}, { immediate: true });
+
 onBeforeUnmount(() => {
+  clearHideLoadingTimer();
   stopLoadingStartHook();
   stopLoadingEndHook();
   finishLoading("route-navigation");
@@ -69,12 +108,24 @@ useHead({
 <template>
   <div class="app-frame">
     <div
-      v-show="isLoading"
+      v-show="isLoadingVisible"
       class="app-loading-progress"
       data-testid="app-loading-progress"
       role="progressbar"
       aria-label="頁面載入中"
     ></div>
+    <Transition name="app-loading-notice">
+      <div
+        v-if="isLoadingVisible"
+        class="app-loading-status"
+        data-testid="app-loading-status"
+        role="status"
+        aria-live="polite"
+      >
+        <span class="app-loading-status__spinner" aria-hidden="true"></span>
+        <span>目前正在更新畫面當中</span>
+      </div>
+    </Transition>
     <div
       class="app-frame__content"
       :class="{ 'app-frame__content--loading': isLoading }"
