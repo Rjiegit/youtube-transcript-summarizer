@@ -87,7 +87,8 @@ describe("showcase app version footer", () => {
     const overlay = wrapper.get('[data-testid="app-loading-overlay"]');
     expect(overlay.classes()).toContain("app-loading-skeleton--list");
     expect(overlay.find(".app-loading-skeleton__grid").exists()).toBe(true);
-    expect(overlay.find(".app-loading-skeleton__sr-only").text()).toBe("頁面載入中");
+    expect(overlay.text()).toBe("");
+    expect(overlay.attributes("aria-label")).toBe("頁面載入中");
     expect(wrapper.find('[data-testid="app-loading-progress"]').exists()).toBe(false);
     expect(wrapper.find(".app-loading-status").exists()).toBe(false);
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");

@@ -11,9 +11,8 @@ defineProps<{
     data-testid="app-loading-overlay"
     role="status"
     aria-live="polite"
+    aria-label="頁面載入中"
   >
-    <span class="app-loading-skeleton__sr-only">頁面載入中</span>
-
     <div v-if="variant === 'list'" class="app-loading-skeleton__frame" aria-hidden="true">
       <section class="app-loading-skeleton__list-hero">
         <span class="app-loading-skeleton__line app-loading-skeleton__line--eyebrow"></span>

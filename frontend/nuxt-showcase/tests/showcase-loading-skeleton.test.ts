@@ -14,7 +14,10 @@ describe("AppLoadingSkeleton", () => {
     expect(wrapper.find(".app-loading-skeleton__list-toolbar").exists()).toBe(true);
     expect(wrapper.findAll(".app-loading-skeleton__card")).toHaveLength(3);
     expect(wrapper.find(".app-loading-skeleton__detail").exists()).toBe(false);
-    expect(wrapper.get(".app-loading-skeleton__sr-only").text()).toBe("頁面載入中");
+    expect(wrapper.text()).toBe("");
+    expect(wrapper.attributes("role")).toBe("status");
+    expect(wrapper.attributes("aria-live")).toBe("polite");
+    expect(wrapper.attributes("aria-label")).toBe("頁面載入中");
   });
 
   it("renders an article-page content skeleton", () => {
@@ -28,5 +31,7 @@ describe("AppLoadingSkeleton", () => {
     expect(wrapper.find(".app-loading-skeleton__detail-title").exists()).toBe(true);
     expect(wrapper.findAll(".app-loading-skeleton__detail-line").length).toBeGreaterThan(3);
     expect(wrapper.find(".app-loading-skeleton__card").exists()).toBe(false);
+    expect(wrapper.text()).toBe("");
+    expect(wrapper.attributes("aria-label")).toBe("頁面載入中");
   });
 });
