@@ -71,37 +71,43 @@ describe("showcase app version footer", () => {
     expect(wrapper.get('[data-testid="app-version"]').text()).toBe("2026.06.26 · local");
   });
 
-  it("shows one top progress bar and dims content during route loading", async () => {
+  it("covers and locks the page with a spinner overlay during route loading", async () => {
     vi.useFakeTimers();
     useRuntimeConfigMock.mockReturnValue({ public: {} });
     const wrapper = await mountApp();
 
-    expect(wrapper.get('[data-testid="app-loading-progress"]').isVisible()).toBe(false);
+    expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(false);
     loadingHooks.get("page:loading:start")?.();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.get('[data-testid="app-loading-progress"]').attributes("style") || "").not.toContain("display: none");
-    expect(wrapper.get('[data-testid="app-loading-status"]').text()).toContain("目前正在更新畫面當中");
+    const overlay = wrapper.get('[data-testid="app-loading-overlay"]');
+    expect(overlay.find(".app-loading-overlay__spinner").exists()).toBe(true);
+    expect(overlay.find(".app-loading-overlay__sr-only").text()).toBe("頁面載入中");
+    expect(wrapper.find('[data-testid="app-loading-progress"]').exists()).toBe(false);
+    expect(wrapper.find(".app-loading-status").exists()).toBe(false);
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
     expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("true");
+    expect(wrapper.get('[data-testid="app-content"]').attributes("inert")).toBeDefined();
 
     vi.advanceTimersByTime(100);
     loadingHooks.get("page:loading:end")?.();
     await wrapper.vm.$nextTick();
 
-    expect(wrapper.get('[data-testid="app-loading-progress"]').attributes("style") || "").not.toContain("display: none");
-    expect(wrapper.get('[data-testid="app-loading-status"]').attributes("style") || "").not.toContain("display: none");
-    expect(wrapper.get('[data-testid="app-content"]').classes()).not.toContain("app-frame__content--loading");
-    expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("false");
+    expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(true);
+    expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
+    expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("true");
+    expect(wrapper.get('[data-testid="app-content"]').attributes("inert")).toBeDefined();
 
     vi.advanceTimersByTime(399);
     await wrapper.vm.$nextTick();
-    expect(wrapper.get('[data-testid="app-loading-status"]').attributes("style") || "").not.toContain("display: none");
+    expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(true);
 
     vi.advanceTimersByTime(1);
     await wrapper.vm.$nextTick();
-    expect(wrapper.get('[data-testid="app-loading-progress"]').isVisible()).toBe(false);
-    expect(wrapper.find('[data-testid="app-loading-status"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(false);
+    expect(wrapper.get('[data-testid="app-content"]').classes()).not.toContain("app-frame__content--loading");
+    expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("false");
+    expect(wrapper.get('[data-testid="app-content"]').attributes("inert")).toBeUndefined();
   });
 
   it("keeps the loading notice visible when another load starts before it hides", async () => {
@@ -118,7 +124,7 @@ describe("showcase app version footer", () => {
 
     vi.advanceTimersByTime(200);
     await wrapper.vm.$nextTick();
-    expect(wrapper.get('[data-testid="app-loading-status"]').attributes("style") || "").not.toContain("display: none");
+    expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
   });
 });

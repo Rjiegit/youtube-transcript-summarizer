@@ -107,29 +107,23 @@ useHead({
 
 <template>
   <div class="app-frame">
-    <div
-      v-show="isLoadingVisible"
-      class="app-loading-progress"
-      data-testid="app-loading-progress"
-      role="progressbar"
-      aria-label="頁面載入中"
-    ></div>
-    <Transition name="app-loading-notice">
+    <Transition name="app-loading-overlay">
       <div
         v-if="isLoadingVisible"
-        class="app-loading-status"
-        data-testid="app-loading-status"
+        class="app-loading-overlay"
+        data-testid="app-loading-overlay"
         role="status"
         aria-live="polite"
       >
-        <span class="app-loading-status__spinner" aria-hidden="true"></span>
-        <span>目前正在更新畫面當中</span>
+        <span class="app-loading-overlay__spinner" aria-hidden="true"></span>
+        <span class="app-loading-overlay__sr-only">頁面載入中</span>
       </div>
     </Transition>
     <div
       class="app-frame__content"
-      :class="{ 'app-frame__content--loading': isLoading }"
-      :aria-busy="isLoading ? 'true' : 'false'"
+      :class="{ 'app-frame__content--loading': isLoadingVisible }"
+      :aria-busy="isLoadingVisible ? 'true' : 'false'"
+      :inert="isLoadingVisible ? '' : undefined"
       data-testid="app-content"
     >
       <NuxtPage />
