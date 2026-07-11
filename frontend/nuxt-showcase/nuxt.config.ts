@@ -37,6 +37,7 @@ function formatTaipeiBuildDate(date = new Date()): string {
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
+  css: ["~/assets/css/main.css"],
   runtimeConfig: {
     notionApiKey: showcaseConfig.notionApiKey,
     notionDatabaseId: showcaseConfig.notionDatabaseId,

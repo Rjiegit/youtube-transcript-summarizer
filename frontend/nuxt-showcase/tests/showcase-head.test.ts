@@ -83,11 +83,13 @@ describe("showcase head metadata", () => {
       expect.objectContaining({ property: "og:site_name", content: SITE_NAME }),
     ]));
     expect(headArg.link).toEqual(expect.arrayContaining([
-      expect.objectContaining({ rel: "stylesheet", href: "/showcase.css" }),
       expect.objectContaining({ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }),
       expect.objectContaining({ rel: "shortcut icon", type: "image/x-icon", href: "/favicon.ico" }),
       expect.objectContaining({ rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" }),
       expect.objectContaining({ rel: "manifest", href: "/site.webmanifest" }),
+    ]));
+    expect(headArg.link).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ rel: "stylesheet" }),
     ]));
   });
 

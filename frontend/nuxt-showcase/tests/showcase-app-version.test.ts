@@ -1,12 +1,14 @@
 import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 
 const useRuntimeConfigMock = vi.fn();
 const loadingHooks = new Map<string, () => void>();
+const route = reactive({ path: "/", fullPath: "/" });
 
 vi.stubGlobal("useHead", vi.fn());
 vi.stubGlobal("useRuntimeConfig", useRuntimeConfigMock);
+vi.stubGlobal("useRoute", () => route);
 vi.stubGlobal("useNuxtApp", () => ({
   hook: vi.fn((name: string, callback: () => void) => {
     loadingHooks.set(name, callback);
@@ -19,6 +21,8 @@ describe("showcase app version footer", () => {
     vi.resetModules();
     useRuntimeConfigMock.mockReset();
     loadingHooks.clear();
+    route.path = "/";
+    route.fullPath = "/";
     const stateStore = new Map<string, ReturnType<typeof ref>>();
     vi.stubGlobal("useState", vi.fn((key: string, init?: () => unknown) => {
       if (!stateStore.has(key)) {
@@ -81,8 +85,9 @@ describe("showcase app version footer", () => {
     await wrapper.vm.$nextTick();
 
     const overlay = wrapper.get('[data-testid="app-loading-overlay"]');
-    expect(overlay.find(".app-loading-overlay__spinner").exists()).toBe(true);
-    expect(overlay.find(".app-loading-overlay__sr-only").text()).toBe("頁面載入中");
+    expect(overlay.classes()).toContain("app-loading-skeleton--list");
+    expect(overlay.find(".app-loading-skeleton__grid").exists()).toBe(true);
+    expect(overlay.find(".app-loading-skeleton__sr-only").text()).toBe("頁面載入中");
     expect(wrapper.find('[data-testid="app-loading-progress"]').exists()).toBe(false);
     expect(wrapper.find(".app-loading-status").exists()).toBe(false);
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
@@ -126,5 +131,21 @@ describe("showcase app version footer", () => {
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
+  });
+
+  it("uses the article skeleton on detail routes", async () => {
+    vi.useFakeTimers();
+    route.path = "/results/result-1";
+    route.fullPath = route.path;
+    useRuntimeConfigMock.mockReturnValue({ public: {} });
+    const wrapper = await mountApp();
+
+    loadingHooks.get("page:loading:start")?.();
+    await wrapper.vm.$nextTick();
+
+    const overlay = wrapper.get('[data-testid="app-loading-overlay"]');
+    expect(overlay.classes()).toContain("app-loading-skeleton--detail");
+    expect(overlay.find(".app-loading-skeleton__detail").exists()).toBe(true);
+    expect(overlay.find(".app-loading-skeleton__grid").exists()).toBe(false);
   });
 });

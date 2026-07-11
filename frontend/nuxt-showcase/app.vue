@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 
+import AppLoadingSkeleton from "./components/AppLoadingSkeleton.vue";
 import { useAppLoading } from "./composables/useAppLoading";
 
 const runtimeConfig = useRuntimeConfig();
@@ -12,6 +13,9 @@ const appVersionLabel = computed(() => `${buildDate.value} · ${shortCommitSha.v
 const { finish: finishLoading, isLoading, start: startLoading } = useAppLoading();
 const minimumLoadingVisibilityMs = 500;
 const isLoadingVisible = ref(false);
+const route = useRoute();
+const loadingSkeletonVariant = computed<"list" | "detail">(() =>
+  String(route.path || route.fullPath || "").startsWith("/results/") ? "detail" : "list");
 let loadingVisibleSince = 0;
 let hideLoadingTimer: ReturnType<typeof setTimeout> | null = null;
 const nuxtApp = useNuxtApp();
@@ -87,7 +91,6 @@ useHead({
     return `${titleChunk} | 影片筆記庫`;
   },
   link: [
-    { rel: "stylesheet", href: "/showcase.css" },
     { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
     { rel: "shortcut icon", type: "image/x-icon", href: "/favicon.ico" },
     { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
@@ -108,16 +111,10 @@ useHead({
 <template>
   <div class="app-frame">
     <Transition name="app-loading-overlay">
-      <div
+      <AppLoadingSkeleton
         v-if="isLoadingVisible"
-        class="app-loading-overlay"
-        data-testid="app-loading-overlay"
-        role="status"
-        aria-live="polite"
-      >
-        <span class="app-loading-overlay__spinner" aria-hidden="true"></span>
-        <span class="app-loading-overlay__sr-only">頁面載入中</span>
-      </div>
+        :variant="loadingSkeletonVariant"
+      />
     </Transition>
     <div
       class="app-frame__content"

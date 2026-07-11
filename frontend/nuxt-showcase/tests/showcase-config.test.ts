@@ -129,6 +129,7 @@ describe("showcase env resolution", () => {
     expect(config.routeRules["/api/showcase/results"].headers["cache-control"]).toBe(
       "public, s-maxage=900, stale-while-revalidate=900",
     );
+    expect(config.css).toEqual(["~/assets/css/main.css"]);
   });
 
   it("injects public build metadata for the version footer", async () => {
