@@ -68,6 +68,13 @@ describe("Showcase detail page", () => {
     useRouteMock.mockReset();
     markAsReadMock.mockReset();
     markManyAsReadMock.mockReset();
+    const stateStore = new Map<string, ReturnType<typeof ref>>();
+    vi.stubGlobal("useState", vi.fn((key: string, init?: () => unknown) => {
+      if (!stateStore.has(key)) {
+        stateStore.set(key, ref(init ? init() : undefined));
+      }
+      return stateStore.get(key)!;
+    }));
   });
 
   afterEach(() => {
@@ -182,7 +189,7 @@ describe("Showcase detail page", () => {
     expect(wrapper.find('[data-testid="detail-video"]').exists()).toBe(false);
   });
 
-  it("shows loading state before the fetch resolves", async () => {
+  it("leaves loading presentation to the global app before the fetch resolves", async () => {
     useRouteMock.mockReturnValue({
       params: { id: "result-2-page-id" },
     });
@@ -201,7 +208,8 @@ describe("Showcase detail page", () => {
       },
     });
 
-    expect(wrapper.text()).toContain("載入展示資料中");
+    expect(wrapper.text()).not.toContain("載入展示資料中");
+    expect(wrapper.find(".state-panel").exists()).toBe(false);
     expect(wrapper.text()).not.toContain("Second result");
     expect(markAsReadMock).not.toHaveBeenCalled();
     expect(markManyAsReadMock).not.toHaveBeenCalled();

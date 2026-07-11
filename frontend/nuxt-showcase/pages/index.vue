@@ -2,6 +2,7 @@
 import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import ShowcaseCard from "../components/ShowcaseCard.vue";
+import { useAppLoading } from "../composables/useAppLoading";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
 import { formatTaipeiDateTime } from "../utils/datetime";
@@ -48,8 +49,8 @@ useHead({
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
 const { isReady, markManyAsRead, readMap, refreshReadState } = useReadResults();
+const { finish: finishLoading, start: startLoading } = useAppLoading();
 const titleSearchQuery = ref("");
-const isRefreshingList = ref(false);
 const listRenderRevision = ref(0);
 const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
 const filteredItems = computed(() => {
@@ -67,6 +68,7 @@ const canMarkAllRead = computed(() => isReady.value && unreadDisplayReadKeys.val
 const skeletonItems = computed(() => Array.from({ length: Math.max(items.value.length, 3) }, (_, index) => index));
 const hasTitleSearchQuery = computed(() => normalizedTitleSearchQuery.value.length > 0);
 let listRefreshPromise: Promise<void> | null = null;
+let isListDataLoading = false;
 const errorMessage = computed(() => {
   if (!error.value) {
     return "";
@@ -99,14 +101,27 @@ function refreshListDataIfStale(): Promise<void> {
     return listRefreshPromise;
   }
 
-  isRefreshingList.value = true;
+  startLoading("showcase-list-refresh");
   listRefreshPromise = forceRefreshListData()
     .finally(() => {
       listRefreshPromise = null;
-      isRefreshingList.value = false;
+      finishLoading("showcase-list-refresh");
     });
   return listRefreshPromise;
 }
+
+watch(() => pending.value, (isPending) => {
+  if (isPending === isListDataLoading) {
+    return;
+  }
+
+  isListDataLoading = isPending;
+  if (isPending) {
+    startLoading("showcase-list-data");
+  } else {
+    finishLoading("showcase-list-data");
+  }
+}, { immediate: true });
 
 function markCurrentListAsRead(): void {
   if (!canMarkAllRead.value) {
@@ -168,6 +183,9 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  if (isListDataLoading) {
+    finishLoading("showcase-list-data");
+  }
   window.removeEventListener("pageshow", handlePageShow);
   window.removeEventListener("focus", refreshVisibleList);
   document.removeEventListener("visibilitychange", handleVisibilityChange);
@@ -215,21 +233,9 @@ onBeforeUnmount(() => {
           autocomplete="off"
         />
       </label>
-      <span
-        v-if="isRefreshingList"
-        class="showcase-toolbar__refresh-progress"
-        data-testid="showcase-refresh-progress"
-        role="status"
-        aria-label="更新中"
-      ></span>
     </section>
 
-    <section v-if="pending" class="state-panel">
-      <p class="state-panel__title">載入展示資料中</p>
-      <p class="state-panel__body">正在讀取最近的完成結果。</p>
-    </section>
-
-    <section v-else-if="error" class="state-panel state-panel--error">
+    <section v-if="!pending && error" class="state-panel state-panel--error">
       <p class="state-panel__title">目前無法載入展示資料</p>
       <p class="state-panel__body">
         {{ errorMessage }}
@@ -243,7 +249,7 @@ onBeforeUnmount(() => {
       </p>
     </section>
 
-    <section v-else-if="items.length === 0" class="state-panel">
+    <section v-else-if="!pending && items.length === 0" class="state-panel">
       <p class="state-panel__title">還沒有可展示的結果</p>
       <p class="state-panel__body">Notion database 目前沒有 `Completed` 項目。</p>
     </section>
@@ -253,7 +259,7 @@ onBeforeUnmount(() => {
       <p class="state-panel__body">請調整搜尋關鍵字後再試一次。</p>
     </section>
 
-    <ClientOnly v-else>
+    <ClientOnly v-else-if="!pending">
       <section v-if="!isReady" class="showcase-grid showcase-grid--skeleton" aria-label="同步已讀狀態中">
         <article
           v-for="index in skeletonItems"

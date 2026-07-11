@@ -34,6 +34,9 @@ vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useRoute", useRouteMock);
 vi.stubGlobal("useHead", useHeadMock);
 vi.stubGlobal("useRuntimeConfig", useRuntimeConfigMock);
+vi.stubGlobal("useNuxtApp", () => ({
+  hook: vi.fn(() => vi.fn()),
+}));
 vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string }) => {
   const error = new Error(input.statusMessage);
   return Object.assign(error, input);
@@ -43,6 +46,13 @@ describe("showcase head metadata", () => {
   beforeEach(() => {
     readResultIds = new Set<string>();
     vi.clearAllMocks();
+    const stateStore = new Map<string, ReturnType<typeof ref>>();
+    vi.stubGlobal("useState", vi.fn((key: string, init?: () => unknown) => {
+      if (!stateStore.has(key)) {
+        stateStore.set(key, ref(init ? init() : undefined));
+      }
+      return stateStore.get(key)!;
+    }));
     useRouteMock.mockReturnValue({
       fullPath: "/",
     });

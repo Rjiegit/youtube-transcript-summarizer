@@ -655,7 +655,7 @@ describe("showcase index page", () => {
     const wrapper = mount(TestHost, { global });
     await flushPromises();
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("First result");
-    expect(wrapper.find('[data-testid="showcase-refresh-progress"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="showcase-refresh-progress"]').exists()).toBe(false);
 
     resolveRefresh?.({
       items: [

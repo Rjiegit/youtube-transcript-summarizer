@@ -53,6 +53,13 @@ const nuxtLinkStub = defineComponent({
 describe("showcase title search", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    const stateStore = new Map<string, ReturnType<typeof ref>>();
+    vi.stubGlobal("useState", vi.fn((key: string, init?: () => unknown) => {
+      if (!stateStore.has(key)) {
+        stateStore.set(key, ref(init ? init() : undefined));
+      }
+      return stateStore.get(key)!;
+    }));
     useRouteMock.mockReturnValue({
       fullPath: "/",
     });

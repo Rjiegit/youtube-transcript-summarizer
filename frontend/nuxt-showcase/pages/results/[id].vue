@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, watchEffect } from "vue";
+import { computed, onBeforeUnmount, watch, watchEffect } from "vue";
 
 import MarkdownContent from "../../components/MarkdownContent.vue";
+import { useAppLoading } from "../../composables/useAppLoading";
 import { useReadResults } from "../../composables/useReadResults";
 import type { ShowcaseDetailResult } from "../../types/showcase";
 import { formatTaipeiDateTime } from "../../utils/datetime";
@@ -17,9 +18,30 @@ const { data, error, pending } = useFetch<ShowcaseDetailResult>(`/api/showcase/r
 
 const item = computed<ShowcaseDetailResult | null>(() => data.value ?? null);
 const { markManyAsRead } = useReadResults();
+const { finish: finishLoading, start: startLoading } = useAppLoading();
 const isLoading = computed(() => pending.value);
 const fetchError = computed(() => error.value);
 const isNotFound = computed(() => !isLoading.value && !fetchError.value && !item.value);
+let isDetailDataLoading = false;
+
+watch(() => pending.value, (isPending) => {
+  if (isPending === isDetailDataLoading) {
+    return;
+  }
+
+  isDetailDataLoading = isPending;
+  if (isPending) {
+    startLoading("showcase-detail-data");
+  } else {
+    finishLoading("showcase-detail-data");
+  }
+}, { immediate: true });
+
+onBeforeUnmount(() => {
+  if (isDetailDataLoading) {
+    finishLoading("showcase-detail-data");
+  }
+});
 
 watchEffect(() => {
   if (isNotFound.value) {
@@ -146,12 +168,7 @@ const youtubeEmbedUrl = computed(() => {
 
 <template>
   <main class="showcase-shell">
-    <section v-if="isLoading" class="state-panel">
-      <p class="state-panel__title">載入展示資料中</p>
-      <p class="state-panel__body">正在讀取詳細內容。</p>
-    </section>
-
-    <section v-else-if="fetchError" class="state-panel state-panel--error">
+    <section v-if="!isLoading && fetchError" class="state-panel state-panel--error">
       <p class="state-panel__title">目前無法載入展示內容</p>
       <p class="state-panel__body">{{ errorMessage }}</p>
     </section>

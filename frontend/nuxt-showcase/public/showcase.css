@@ -43,8 +43,35 @@ a {
   min-height: 100vh;
 }
 
-.app-frame > .showcase-shell {
+.app-frame__content {
   flex: 1;
+  transition: opacity 180ms ease;
+}
+
+.app-frame__content--loading {
+  pointer-events: none;
+  opacity: 0.48;
+}
+
+.app-loading-progress {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  background: var(--accent-soft);
+}
+
+.app-loading-progress::before {
+  content: "";
+  display: block;
+  width: 36%;
+  height: 100%;
+  background: var(--accent);
+  animation: showcase-refresh-progress 900ms ease-in-out infinite;
 }
 
 .showcase-shell {
@@ -134,25 +161,6 @@ a {
   gap: 16px;
   margin-bottom: 18px;
   padding-bottom: 4px;
-}
-
-.showcase-toolbar__refresh-progress {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 2px;
-  overflow: hidden;
-  background: var(--line);
-}
-
-.showcase-toolbar__refresh-progress::before {
-  content: "";
-  display: block;
-  width: 36%;
-  height: 100%;
-  background: var(--accent);
-  animation: showcase-refresh-progress 900ms ease-in-out infinite;
 }
 
 .showcase-toolbar__actions {
@@ -342,8 +350,12 @@ a {
   .showcase-skeleton-card__meta,
   .showcase-skeleton-card__title,
   .showcase-skeleton-card__summary,
-  .showcase-toolbar__refresh-progress::before {
+  .app-loading-progress::before {
     animation: none;
+  }
+
+  .app-frame__content {
+    transition: none;
   }
 
   .showcase-grid-move,
