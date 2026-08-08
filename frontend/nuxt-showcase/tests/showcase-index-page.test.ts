@@ -56,6 +56,8 @@ function stubNuxtState() {
     }
     return stateStore.get(key)!;
   }));
+
+  return stateStore;
 }
 
   function stubLocalStorage() {
@@ -84,13 +86,15 @@ function stubNuxtState() {
 }
 
 describe("showcase index page", () => {
+  let stateStore: ReturnType<typeof stubNuxtState>;
+
   beforeEach(() => {
     vi.useRealTimers();
     vi.resetModules();
     useFetchMock.mockReset();
     fetchMock.mockReset();
     route.fullPath = "/";
-    stubNuxtState();
+    stateStore = stubNuxtState();
   });
 
   function loadPageModule() {
@@ -311,6 +315,40 @@ describe("showcase index page", () => {
     expect(html).toContain("Second summary.");
     expect(html).toContain("https://www.youtube.com/watch?v=first");
     expect(html).not.toContain("showcase-skeleton-card");
+  });
+
+  it("clears an SSR loading source when hydration starts with resolved list data", async () => {
+    stubLocalStorage();
+    stateStore.set("showcase-app-loading-sources", ref({
+      "showcase-list-data": 1,
+    }));
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: {
+        IndexPage: pageModule.default,
+      },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({
+            template: "<slot />",
+          }),
+          ShowcaseCard: true,
+        },
+      },
+    });
+    await flushPromises();
+
+    const { useAppLoading } = await import("../composables/useAppLoading");
+    expect(useAppLoading().isLoading.value).toBe(false);
   });
 
   it("refreshes read state from localStorage when returning to the page", async () => {

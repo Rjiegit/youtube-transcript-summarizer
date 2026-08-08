@@ -8,6 +8,7 @@ const useFetchMock = vi.fn();
 const useRouteMock = vi.fn();
 const markAsReadMock = vi.fn();
 const markManyAsReadMock = vi.fn();
+let stateStore: Map<string, ReturnType<typeof ref>>;
 
 vi.mock("../composables/useReadResults", () => ({
   useReadResults: () => ({
@@ -68,7 +69,7 @@ describe("Showcase detail page", () => {
     useRouteMock.mockReset();
     markAsReadMock.mockReset();
     markManyAsReadMock.mockReset();
-    const stateStore = new Map<string, ReturnType<typeof ref>>();
+    stateStore = new Map<string, ReturnType<typeof ref>>();
     vi.stubGlobal("useState", vi.fn((key: string, init?: () => unknown) => {
       if (!stateStore.has(key)) {
         stateStore.set(key, ref(init ? init() : undefined));
@@ -213,6 +214,32 @@ describe("Showcase detail page", () => {
     expect(wrapper.text()).not.toContain("Second result");
     expect(markAsReadMock).not.toHaveBeenCalled();
     expect(markManyAsReadMock).not.toHaveBeenCalled();
+  });
+
+  it("clears an SSR loading source when hydration starts with resolved detail data", async () => {
+    stateStore.set("showcase-app-loading-sources", ref({
+      "showcase-detail-data": 1,
+    }));
+    useRouteMock.mockReturnValue({
+      params: { id: "result-2-page-id" },
+    });
+    useFetchMock.mockReturnValue({
+      data: ref(detailResponse),
+      pending: ref(false),
+      error: ref(null),
+    });
+
+    const pageModule = await loadPageModule();
+    mount(pageModule.default, {
+      global: {
+        stubs: {
+          NuxtLink: true,
+        },
+      },
+    });
+
+    const { useAppLoading } = await import("../composables/useAppLoading");
+    expect(useAppLoading().isLoading.value).toBe(false);
   });
 
   it("renders an error state when fetch fails", async () => {

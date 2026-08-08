@@ -110,18 +110,22 @@ function refreshListDataIfStale(): Promise<void> {
   return listRefreshPromise;
 }
 
-watch(() => pending.value, (isPending) => {
-  if (isPending === isListDataLoading) {
-    return;
-  }
+if (typeof window !== "undefined") {
+  watch(() => pending.value, (isPending) => {
+    if (isPending && isListDataLoading) {
+      return;
+    }
 
-  isListDataLoading = isPending;
-  if (isPending) {
-    startLoading("showcase-list-data");
-  } else {
-    finishLoading("showcase-list-data");
-  }
-}, { immediate: true });
+    isListDataLoading = isPending;
+    if (isPending) {
+      startLoading("showcase-list-data");
+    } else {
+      // Hydration can start with resolved data while retaining a loading source
+      // from an older server build, so finishing also runs for the initial false value.
+      finishLoading("showcase-list-data");
+    }
+  }, { immediate: true });
+}
 
 function markCurrentListAsRead(): void {
   if (!canMarkAllRead.value) {

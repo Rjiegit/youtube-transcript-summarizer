@@ -24,18 +24,22 @@ const fetchError = computed(() => error.value);
 const isNotFound = computed(() => !isLoading.value && !fetchError.value && !item.value);
 let isDetailDataLoading = false;
 
-watch(() => pending.value, (isPending) => {
-  if (isPending === isDetailDataLoading) {
-    return;
-  }
+if (typeof window !== "undefined") {
+  watch(() => pending.value, (isPending) => {
+    if (isPending && isDetailDataLoading) {
+      return;
+    }
 
-  isDetailDataLoading = isPending;
-  if (isPending) {
-    startLoading("showcase-detail-data");
-  } else {
-    finishLoading("showcase-detail-data");
-  }
-}, { immediate: true });
+    isDetailDataLoading = isPending;
+    if (isPending) {
+      startLoading("showcase-detail-data");
+    } else {
+      // Hydration can start with resolved data while retaining a loading source
+      // from an older server build, so finishing also runs for the initial false value.
+      finishLoading("showcase-detail-data");
+    }
+  }, { immediate: true });
+}
 
 onBeforeUnmount(() => {
   if (isDetailDataLoading) {
