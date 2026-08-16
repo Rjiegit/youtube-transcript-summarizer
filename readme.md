@@ -94,7 +94,7 @@ TZ=Asia/Taipei
 
 註：
 - 若同時設定多組 LLM API key，摘要會依 `auto` 模型池做加權隨機挑選，並把實際使用的 `provider:model` 寫入 log 與儲存欄位。
-- 目前 `auto` 池為 `gemini-3-flash-preview` 10%、`gemini-2.5-flash` 40%、`gemini-2.5-flash-lite` 40%、`kimi-k2.5:cloud` 10%；可在 `src/infrastructure/llm/model_options.py` 調整。
+- 目前 `auto` 池固定使用 `gemini-3.5-flash-lite`（100%）；可在 `src/infrastructure/llm/model_options.py` 調整。
 
 ### 2. 啟動 Docker 服務
 

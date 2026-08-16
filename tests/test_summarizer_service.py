@@ -91,7 +91,7 @@ class TestSummarizerService(unittest.TestCase):
         self.assertNotIn("{title}", result)
         self.assertNotIn("{text}", result)
 
-    def test_auto_selects_kimi_cloud_and_records_label(self):
+    def test_auto_selects_gemini_3_5_flash_lite_at_low_random_value(self):
         with patch.dict(
             os.environ,
             {
@@ -105,22 +105,60 @@ class TestSummarizerService(unittest.TestCase):
 
         with patch(
             "src.infrastructure.llm.summarizer_service.random.random",
-            return_value=0.95,
+            return_value=0.59,
         ):
             with patch.object(
                 Summarizer,
-                "summarize_with_ollama",
-                return_value="ollama-summary",
-            ) as mock_ollama:
+                "summarize_with_google_gemini",
+                return_value="gemini-summary",
+            ) as mock_gemini:
                 result = summarizer.summarize("title", "text")
 
-        self.assertEqual(result, "ollama-summary")
-        self.assertEqual(summarizer.last_backend, "ollama")
-        self.assertEqual(summarizer.last_model_label, "ollama:kimi-k2.5:cloud")
-        mock_ollama.assert_called_once_with(
+        self.assertEqual(result, "gemini-summary")
+        self.assertEqual(summarizer.last_backend, "gemini")
+        self.assertEqual(
+            summarizer.last_model_label,
+            "gemini:gemini-3.5-flash-lite",
+        )
+        mock_gemini.assert_called_once_with(
             "title",
             "text",
-            model="kimi-k2.5:cloud",
+            model="gemini-3.5-flash-lite",
+        )
+
+    def test_auto_selects_gemini_3_5_flash_lite_at_high_random_value(self):
+        with patch.dict(
+            os.environ,
+            {
+                "OPENAI_API_KEY": "openai-key",
+                "GOOGLE_GEMINI_API_KEY": "gemini-key",
+                "OLLAMA_API_KEY": "ollama-key",
+            },
+            clear=False,
+        ):
+            summarizer = Summarizer()
+
+        with patch(
+            "src.infrastructure.llm.summarizer_service.random.random",
+            return_value=0.60,
+        ):
+            with patch.object(
+                Summarizer,
+                "summarize_with_google_gemini",
+                return_value="gemini-summary",
+            ) as mock_gemini:
+                result = summarizer.summarize("title", "text")
+
+        self.assertEqual(result, "gemini-summary")
+        self.assertEqual(summarizer.last_backend, "gemini")
+        self.assertEqual(
+            summarizer.last_model_label,
+            "gemini:gemini-3.5-flash-lite",
+        )
+        mock_gemini.assert_called_once_with(
+            "title",
+            "text",
+            model="gemini-3.5-flash-lite",
         )
 
     def test_single_ollama_backend_uses_weighted_ollama_model(self):
