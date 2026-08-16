@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from "vitest";
 import { sampleNotionPages } from "../test-data/notion";
 import { sampleNotionBlocks } from "../test-data/notion";
 import {
-  MAX_SHOWCASE_RESULTS,
   fetchShowcaseDetail,
   fetchLatestCompletedResults,
   mapNotionPageToResult,
@@ -25,7 +24,7 @@ describe("showcase Notion mapping", () => {
     });
   });
 
-  it("queries Notion for the latest 100 completed items", async () => {
+  it("queries Notion for the latest 50 completed items", async () => {
     const fetchImpl = vi.fn()
       .mockResolvedValueOnce({
         ok: true,
@@ -54,7 +53,7 @@ describe("showcase Notion mapping", () => {
     expect(fetchImpl).toHaveBeenCalledTimes(2);
     const [, request] = fetchImpl.mock.calls[1];
     expect(JSON.parse(String(request.body))).toMatchObject({
-      page_size: MAX_SHOWCASE_RESULTS,
+      page_size: 50,
       sorts: [
         {
           timestamp: "created_time",

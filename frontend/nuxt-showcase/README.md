@@ -1,6 +1,6 @@
 # Nuxt Showcase
 
-這是一個部署到 Vercel 的 Nuxt 3 展示頁，會直接從 Notion database 讀取最近 100 筆 `Completed` 結果並顯示在首頁。
+這是一個部署到 Vercel 的 Nuxt 3 展示頁，會直接從 Notion database 讀取最近 50 筆 `Completed` 結果並顯示在首頁。
 
 ## Commands
 
