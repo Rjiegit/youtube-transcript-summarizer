@@ -1,10 +1,11 @@
 import unittest
 
+from src.infrastructure.llm.model_options import Backend, ModelCandidate
 from src.infrastructure.llm.weighted_selection import (
-    WeightedBackendModel,
-    WeightedModel,
-    choose_weighted_backend_model,
-    choose_weighted_model,
+    InvalidModelPoolError,
+    NoAvailableModelCandidateError,
+    choose_weighted_candidate,
+    validate_model_candidates,
 )
 
 
@@ -20,39 +21,103 @@ class _FixedRng:
 
 
 class TestWeightedSelection(unittest.TestCase):
-    def test_choose_weighted_model_deterministic(self):
-        candidates = [
-            WeightedModel("a", 5),
-            WeightedModel("b", 5),
-            WeightedModel("c", 10),
+    def setUp(self):
+        self.candidates = [
+            ModelCandidate(Backend.GEMINI, "gemini-a", 5),
+            ModelCandidate(Backend.OPENAI, "openai-a", 5),
+            ModelCandidate(Backend.OLLAMA, "ollama-a", 10),
         ]
 
+    def test_choose_weighted_candidate_is_deterministic(self):
         rng = _FixedRng([0.0, 0.26, 0.8])
-        self.assertEqual(choose_weighted_model(candidates, rng=rng), "a")
-        self.assertEqual(choose_weighted_model(candidates, rng=rng), "b")
-        self.assertEqual(choose_weighted_model(candidates, rng=rng), "c")
+        available = set(Backend)
 
-    def test_choose_weighted_model_rejects_empty(self):
-        with self.assertRaises(ValueError):
-            choose_weighted_model([], rng=_FixedRng([0.5]))
+        self.assertEqual(
+            choose_weighted_candidate(
+                self.candidates,
+                available_backends=available,
+                rng=rng,
+            ),
+            self.candidates[0],
+        )
+        self.assertEqual(
+            choose_weighted_candidate(
+                self.candidates,
+                available_backends=available,
+                rng=rng,
+            ),
+            self.candidates[1],
+        )
+        self.assertEqual(
+            choose_weighted_candidate(
+                self.candidates,
+                available_backends=available,
+                rng=rng,
+            ),
+            self.candidates[2],
+        )
 
-    def test_choose_weighted_backend_model_deterministic(self):
-        candidates = [
-            WeightedBackendModel("gemini", "a", 5),
-            WeightedBackendModel("ollama", "b", 5),
-            WeightedBackendModel("gemini", "c", 10),
+    def test_filters_unavailable_backends_and_recalculates_weights(self):
+        selected = choose_weighted_candidate(
+            self.candidates,
+            available_backends={Backend.OPENAI, Backend.OLLAMA},
+            rng=_FixedRng([0.2]),
+        )
+
+        self.assertEqual(selected, self.candidates[1])
+
+    def test_excludes_a_previous_candidate_before_retry(self):
+        selected = choose_weighted_candidate(
+            self.candidates,
+            available_backends=set(Backend),
+            excluded={self.candidates[0].key},
+            rng=_FixedRng([0.0]),
+        )
+
+        self.assertEqual(selected, self.candidates[1])
+
+    def test_rejects_invalid_model_pool(self):
+        invalid_pools = [
+            [],
+            [
+                ModelCandidate(
+                    "unknown",  # type: ignore[arg-type]
+                    "model-a",
+                    1,
+                )
+            ],
+            [ModelCandidate(Backend.GEMINI, "", 1)],
+            [
+                ModelCandidate(
+                    Backend.GEMINI,
+                    "gemini-a",
+                    "heavy",  # type: ignore[arg-type]
+                )
+            ],
+            [ModelCandidate(Backend.GEMINI, "gemini-a", 0)],
+            [ModelCandidate(Backend.GEMINI, "gemini-a", -1)],
+            [
+                ModelCandidate(Backend.GEMINI, "gemini-a", 1),
+                ModelCandidate(Backend.GEMINI, "gemini-a", 2),
+            ],
         ]
 
-        rng = _FixedRng([0.0, 0.26, 0.8])
-        self.assertEqual(
-            choose_weighted_backend_model(candidates, rng=rng),
-            WeightedBackendModel("gemini", "a", 5),
-        )
-        self.assertEqual(
-            choose_weighted_backend_model(candidates, rng=rng),
-            WeightedBackendModel("ollama", "b", 5),
-        )
-        self.assertEqual(
-            choose_weighted_backend_model(candidates, rng=rng),
-            WeightedBackendModel("gemini", "c", 10),
-        )
+        for candidates in invalid_pools:
+            with self.subTest(candidates=candidates):
+                with self.assertRaises(InvalidModelPoolError):
+                    validate_model_candidates(candidates)
+
+    def test_rejects_pool_without_eligible_candidates(self):
+        with self.assertRaisesRegex(
+            NoAvailableModelCandidateError,
+            "openai",
+        ):
+            choose_weighted_candidate(
+                self.candidates[:1],
+                available_backends={Backend.OPENAI},
+                rng=_FixedRng([0.0]),
+            )
+
+
+if __name__ == "__main__":
+    unittest.main()

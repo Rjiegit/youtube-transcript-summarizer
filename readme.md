@@ -93,8 +93,24 @@ TZ=Asia/Taipei
 ```
 
 註：
-- 若同時設定多組 LLM API key，摘要會依 `auto` 模型池做加權隨機挑選，並把實際使用的 `provider:model` 寫入 log 與儲存欄位。
-- 目前 `auto` 池固定使用 `gemini-3.5-flash-lite`（100%）；可在 `src/infrastructure/llm/model_options.py` 調整。
+- 正式摘要一律從 `AUTO_MODEL_CANDIDATES` 候選池挑選模型，並把實際使用的
+  `provider:model` 寫入 log 與儲存欄位。
+- 權重是相對值，不必加總為 100。沒有 API key 的 provider 會先被排除，再以
+  剩餘候選的權重重新計算比例。
+- API key 只代表 provider 可用；未列入候選池的模型不會自動取得流量。目前候選池
+  只有 `gemini:gemini-3.5-flash-lite`，權重為 100。
+- 遇到 rate limit、timeout、連線或 provider 5xx 錯誤時，系統會排除失敗候選，
+  依剩餘權重改選一次；認證與一般 4xx 錯誤不會切換模型。
+
+可在 `src/infrastructure/llm/model_options.py` 調整候選池，例如：
+
+```python
+AUTO_MODEL_CANDIDATES = (
+    ModelCandidate(Backend.GEMINI, "gemini-3.5-flash-lite", 70),
+    ModelCandidate(Backend.OPENAI, "gpt-4o-mini", 20),
+    ModelCandidate(Backend.OLLAMA, "kimi-k2.5:cloud", 10),
+)
+```
 
 ### 2. 啟動 Docker 服務
 
@@ -410,7 +426,8 @@ export OLLAMA_HOST=https://ollama.com
 uv sync --frozen --no-install-project
 ```
 
-3. 若同時有多個 provider key，系統會在 auto 模式中將 Ollama Cloud 納入加權隨機選模。
+3. 在 `AUTO_MODEL_CANDIDATES` 加入 Ollama 模型與正數權重。只有 API key、不加入
+   候選池時，Ollama 不會接收 Auto 流量。
 
 ## 輸出結果
 

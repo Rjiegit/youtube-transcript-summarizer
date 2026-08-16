@@ -1,28 +1,45 @@
 import os
+import random
+import time
+from collections.abc import Iterable
+
 from dotenv import load_dotenv
 import google.generativeai as genai
+import openai
 from openai import OpenAI
+
 from src.core import prompt
 from src.core.logger import logger
 from src.infrastructure.llm.model_options import (
-    AUTO_SUMMARIZER_MODELS,
+    AUTO_MODEL_CANDIDATES,
+    Backend,
     GEMINI_MODEL,
-    GEMINI_WEIGHTED_MODELS,
+    ModelCandidate,
     OLLAMA_MODEL,
-    OLLAMA_WEIGHTED_MODELS,
     OPENAI_MODEL,
+    PROVIDER_SETTINGS,
 )
-import time
-import random
-
 from src.infrastructure.llm.weighted_selection import (
-    choose_weighted_backend_model,
-    choose_weighted_model,
+    NoAvailableModelCandidateError,
+    choose_weighted_candidate,
+    validate_model_candidates,
 )
 
 try:
+    from google.api_core import exceptions as google_api_exceptions
+except ImportError:  # pragma: no cover - dependency fallback
+    google_api_exceptions = None
+
+try:
+    import httpx
+except ImportError:  # pragma: no cover - dependency fallback
+    httpx = None
+
+try:
+    import ollama as ollama_module
     from ollama import Client as OllamaClient
 except ImportError:  # pragma: no cover - optional dependency in minimal envs
+    ollama_module = None
     OllamaClient = None
 
 try:
@@ -39,131 +56,226 @@ load_dotenv()
 
 
 class Summarizer:
-    def __init__(self):
-        self.openai_api_key = os.getenv("OPENAI_API_KEY")
-        self.google_gemini_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
-        self.ollama_api_key = os.getenv("OLLAMA_API_KEY")
+    def __init__(
+        self,
+        *,
+        model_candidates: Iterable[ModelCandidate] | None = None,
+        rng=None,
+    ):
+        configured_candidates = (
+            AUTO_MODEL_CANDIDATES
+            if model_candidates is None
+            else model_candidates
+        )
+        self.model_candidates = validate_model_candidates(
+            configured_candidates
+        )
+        self.rng = rng or random
+
+        self._api_keys = {
+            backend: os.getenv(settings.api_key_env)
+            for backend, settings in PROVIDER_SETTINGS.items()
+        }
+        # Preserve these attributes for provider-specific methods and callers.
+        self.openai_api_key = self._api_keys[Backend.OPENAI]
+        self.google_gemini_api_key = self._api_keys[Backend.GEMINI]
+        self.ollama_api_key = self._api_keys[Backend.OLLAMA]
         self.ollama_host = os.getenv("OLLAMA_HOST", "https://ollama.com")
-        # Keep last-used backend/model label for callers
         self.last_backend = None
         self.last_model_label = None
 
     def summarize(self, title, text):
-        # Decide backend based on environment and test mode
-        selection_mode = self._determine_backend(text)
-
-        if selection_mode == "mock":
+        if self._is_test_mode(text):
             self.last_backend = "mock"
-            self.last_model_label = self._format_model_label("mock", "mock")
+            self.last_model_label = "mock"
             return self._mock_summarize(title, text)
-        if selection_mode == "unknown":
-            raise ValueError(
-                "No available summarization backend "
-                "(set API keys or enable test mode)"
+
+        candidate = self._choose_candidate()
+        try:
+            return self._summarize_with_candidate(candidate, title, text)
+        except Exception as first_error:
+            if not self._is_transient_provider_error(
+                candidate.backend,
+                first_error,
+            ):
+                raise
+
+            logger.warning(
+                f"[Auto] Transient failure "
+                f"backend={candidate.backend.value} model={candidate.model} "
+                f"error={type(first_error).__name__}; selecting fallback"
+            )
+            fallback = self._choose_fallback(candidate)
+            if fallback is None:
+                logger.warning(
+                    "[Auto] No alternative candidate is available; "
+                    "re-raising the original error"
+                )
+                raise
+
+            try:
+                return self._summarize_with_candidate(fallback, title, text)
+            except Exception as second_error:
+                logger.error(
+                    f"[Auto] Fallback failed "
+                    f"backend={fallback.backend.value} model={fallback.model} "
+                    f"error={type(second_error).__name__}"
+                )
+                raise
+
+    def _available_backends(self) -> set[Backend]:
+        return {
+            backend
+            for backend, api_key in self._api_keys.items()
+            if api_key and api_key.strip()
+        }
+
+    def _choose_candidate(
+        self,
+        *,
+        excluded: set[tuple[Backend, str]] | None = None,
+    ) -> ModelCandidate:
+        selected = choose_weighted_candidate(
+            self.model_candidates,
+            available_backends=self._available_backends(),
+            excluded=excluded,
+            rng=self.rng,
+        )
+        logger.info(
+            f"[Auto] Selected backend={selected.backend.value} "
+            f"model={selected.model} weight={selected.weight}"
+        )
+        return selected
+
+    def _choose_fallback(
+        self,
+        failed_candidate: ModelCandidate,
+    ) -> ModelCandidate | None:
+        try:
+            return self._choose_candidate(excluded={failed_candidate.key})
+        except NoAvailableModelCandidateError:
+            return None
+
+    def _summarize_with_candidate(
+        self,
+        candidate: ModelCandidate,
+        title: str,
+        text: str,
+    ) -> str:
+        self.last_backend = candidate.backend.value
+        self.last_model_label = self._format_model_label(
+            candidate.backend,
+            candidate.model,
+        )
+        logger.info(
+            f"[Summarizer] backend={candidate.backend.value} "
+            f"model={candidate.model}"
+        )
+
+        if candidate.backend == Backend.GEMINI:
+            return self.summarize_with_google_gemini(
+                title,
+                text,
+                model=candidate.model,
+            )
+        if candidate.backend == Backend.OPENAI:
+            return self.summarize_with_openai(
+                title,
+                text,
+                model=candidate.model,
+            )
+        if candidate.backend == Backend.OLLAMA:
+            return self.summarize_with_ollama(
+                title,
+                text,
+                model=candidate.model,
+            )
+        raise ValueError(f"Unsupported backend: {candidate.backend}")
+
+    def _is_transient_provider_error(
+        self,
+        backend: Backend,
+        error: Exception,
+    ) -> bool:
+        if backend == Backend.OPENAI:
+            if self._is_instance_of_named_types(
+                error,
+                openai,
+                (
+                    "RateLimitError",
+                    "APITimeoutError",
+                    "APIConnectionError",
+                    "InternalServerError",
+                ),
+            ):
+                return True
+            api_status_error = getattr(openai, "APIStatusError", None)
+            return bool(
+                api_status_error
+                and isinstance(error, api_status_error)
+                and getattr(error, "status_code", 0) >= 500
             )
 
-        backend, model = self._choose_backend_and_model(selection_mode)
-        self.last_backend = backend
-        self.last_model_label = self._format_model_label(backend, model)
-        logger.info(
-            f"[Summarizer] selection_mode={selection_mode} "
-            f"backend={backend} model={model}"
+        if backend == Backend.GEMINI and google_api_exceptions:
+            return self._is_instance_of_named_types(
+                error,
+                google_api_exceptions,
+                (
+                    "TooManyRequests",
+                    "DeadlineExceeded",
+                    "ServiceUnavailable",
+                    "InternalServerError",
+                    "ServerError",
+                ),
+            )
+
+        if backend == Backend.OLLAMA:
+            timeout_types = (TimeoutError, ConnectionError)
+            if httpx:
+                timeout_types += (httpx.TimeoutException,)
+            if isinstance(error, timeout_types):
+                return True
+            response_error = (
+                getattr(ollama_module, "ResponseError", None)
+                if ollama_module
+                else None
+            )
+            if response_error and isinstance(error, response_error):
+                status_code = getattr(error, "status_code", -1)
+                return status_code == 429 or status_code >= 500
+
+        return False
+
+    @staticmethod
+    def _is_instance_of_named_types(
+        error: Exception,
+        module,
+        names: tuple[str, ...],
+    ) -> bool:
+        exception_types = tuple(
+            exception_type
+            for name in names
+            if isinstance(
+                exception_type := getattr(module, name, None),
+                type,
+            )
         )
+        return bool(exception_types and isinstance(error, exception_types))
 
-        if backend == "gemini":
-            return self.summarize_with_google_gemini(title, text, model=model)
-        if backend == "openai":
-            return self.summarize_with_openai(title, text, model=model)
-        if backend == "ollama":
-            return self.summarize_with_ollama(title, text, model=model)
-        raise ValueError(
-            "No available summarization backend "
-            "(set API keys or enable test mode)"
-        )
-
-    def _determine_backend(self, text):
-        if self._is_test_mode(text):
-            return "mock"
-        available_backends = self._available_backends()
-        if len(available_backends) > 1:
-            return "auto"
-        if available_backends:
-            return available_backends[0]
-        return "unknown"
-
-    def _available_backends(self) -> list[str]:
-        available = []
-        if self.google_gemini_api_key:
-            available.append("gemini")
-        if self.openai_api_key:
-            available.append("openai")
-        if self.ollama_api_key:
-            available.append("ollama")
-        return available
-
-    def _format_model_label(self, backend: str, model: str) -> str:
-        if backend == "mock":
-            return "mock"
-        return f"{backend}:{model}"
-
-    def _choose_backend_and_model(
+    def _format_model_label(
         self,
-        selection_mode: str,
-    ) -> tuple[str, str]:
-        if selection_mode == "auto":
-            return self._choose_auto_backend_and_model()
-
-        if selection_mode == "gemini":
-            return "gemini", self._choose_gemini_model()
-        if selection_mode == "openai":
-            return "openai", OPENAI_MODEL
-        if selection_mode == "ollama":
-            return "ollama", self._choose_ollama_model()
-
-        raise ValueError(f"Unsupported selection mode: {selection_mode}")
-
-    def _choose_auto_backend_and_model(self) -> tuple[str, str]:
-        available_backends = set(self._available_backends())
-        candidates = [
-            candidate
-            for candidate in AUTO_SUMMARIZER_MODELS
-            if candidate.backend in available_backends
-        ]
-        selected = choose_weighted_backend_model(candidates, rng=random)
-        logger.info(
-            f"[Auto] Selected backend={selected.backend} model={selected.model}"
+        backend: Backend | str,
+        model: str,
+    ) -> str:
+        backend_name = (
+            backend.value if isinstance(backend, Backend) else backend
         )
-        return selected.backend, selected.model
-
-    def _choose_gemini_model(self) -> str:
-        selected_model = GEMINI_MODEL
-        if GEMINI_WEIGHTED_MODELS:
-            try:
-                selected_model = choose_weighted_model(
-                    GEMINI_WEIGHTED_MODELS,
-                    rng=random,
-                )
-            except ValueError:
-                selected_model = GEMINI_MODEL
-        logger.info(f"[Gemini] Selected model: {selected_model}")
-        return selected_model
-
-    def _choose_ollama_model(self) -> str:
-        selected_model = OLLAMA_MODEL
-        if OLLAMA_WEIGHTED_MODELS:
-            try:
-                selected_model = choose_weighted_model(
-                    OLLAMA_WEIGHTED_MODELS,
-                    rng=random,
-                )
-            except ValueError:
-                selected_model = OLLAMA_MODEL
-        logger.info(f"[Ollama] Selected model: {selected_model}")
-        return selected_model
+        if backend_name == "mock":
+            return "mock"
+        return f"{backend_name}:{model}"
 
     def _is_test_mode(self, text):
         """檢測是否為測試模式"""
-        # 只接受顯式旗標（Streamlit 開關或環境變數），避免因關鍵字誤觸
         if (
             st
             and hasattr(st, "session_state")
@@ -184,28 +296,22 @@ class Summarizer:
         """模擬摘要過程"""
         logger.info("[測試模式] 模擬文字摘要...")
 
-        # 檢查 TestSampleManager 是否可用
         if TestSampleManager is None:
             logger.warning("[測試模式] TestSampleManager 不可用，使用基本模擬")
             time.sleep(random.uniform(0.8, 1.5))
             return f"[測試模式摘要] {title}\n\n這是一個模擬的摘要內容，用於測試目的。"
 
-        # 模擬處理時間
         time.sleep(random.uniform(0.8, 1.5))
 
-        # 檢查是否要模擬錯誤
         sample_manager = TestSampleManager()
         if sample_manager.simulate_error():
             error_msg = sample_manager.get_random_error_message()
             logger.error(f"[測試模式] 模擬摘要錯誤: {error_msg}")
             raise Exception(f"[測試模式] {error_msg}")
 
-        # 根據標題或轉錄文字內容選擇對應樣本摘要
         summary = sample_manager.get_mock_summary(title, text)
-
         logger.info(f"[測試模式] 模擬摘要完成，摘要長度: {len(summary)} 字元")
         logger.info(f"[測試模式] 摘要來源: {title}")
-
         return summary
 
     def get_prompt(self, title, text):
@@ -235,7 +341,7 @@ class Summarizer:
         self,
         title,
         text,
-        model: str | None = None,
+        model: str = GEMINI_MODEL,
     ):
         if not self.google_gemini_api_key:
             raise ValueError(
@@ -243,18 +349,12 @@ class Summarizer:
             )
 
         genai.configure(api_key=self.google_gemini_api_key)
-
-        selected_model = model or self._choose_gemini_model()
         self.last_backend = "gemini"
-        self.last_model_label = self._format_model_label(
-            "gemini",
-            selected_model,
-        )
-        gemini = genai.GenerativeModel(selected_model)
+        self.last_model_label = self._format_model_label("gemini", model)
+        gemini = genai.GenerativeModel(model)
         response = gemini.generate_content(
             self.get_prompt(title=title, text=text)
         )
-
         return response.text
 
     def summarize_with_ollama(self, title, text, model: str = OLLAMA_MODEL):

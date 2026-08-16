@@ -1,7 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Iterable, Protocol
+from collections.abc import Iterable, Set
+from numbers import Real
+from typing import Protocol
+
+from src.infrastructure.llm.model_options import Backend, ModelCandidate
 
 
 class _RandomLike(Protocol):
@@ -9,61 +12,85 @@ class _RandomLike(Protocol):
         ...
 
 
-@dataclass(frozen=True)
-class WeightedModel:
-    model: str
-    weight: int
+class InvalidModelPoolError(ValueError):
+    """Raised when the code-defined auto model pool is invalid."""
 
 
-@dataclass(frozen=True)
-class WeightedBackendModel:
-    backend: str
-    model: str
-    weight: int
+class NoAvailableModelCandidateError(ValueError):
+    """Raised when no configured candidate can use available credentials."""
 
 
-def choose_weighted_model(
-    candidates: Iterable[WeightedModel],
+def validate_model_candidates(
+    candidates: Iterable[ModelCandidate],
+) -> tuple[ModelCandidate, ...]:
+    configured = tuple(candidates)
+    if not configured:
+        raise InvalidModelPoolError(
+            "Auto model candidate pool cannot be empty"
+        )
+
+    seen: set[tuple[Backend, str]] = set()
+    for candidate in configured:
+        if not isinstance(candidate.backend, Backend):
+            raise InvalidModelPoolError(
+                f"Unknown model backend: {candidate.backend!r}"
+            )
+        if not candidate.model.strip():
+            raise InvalidModelPoolError("Model name cannot be empty")
+        if (
+            isinstance(candidate.weight, bool)
+            or not isinstance(candidate.weight, Real)
+            or candidate.weight <= 0
+        ):
+            raise InvalidModelPoolError(
+                f"Weight must be positive for "
+                f"{candidate.backend.value}:{candidate.model}"
+            )
+        if candidate.key in seen:
+            raise InvalidModelPoolError(
+                f"Duplicate auto model candidate: "
+                f"{candidate.backend.value}:{candidate.model}"
+            )
+        seen.add(candidate.key)
+
+    return configured
+
+
+def choose_weighted_candidate(
+    candidates: Iterable[ModelCandidate],
     *,
+    available_backends: Set[Backend],
     rng: _RandomLike,
-) -> str:
-    weighted = list(candidates)
-    if not weighted:
-        raise ValueError("No weighted model candidates provided")
+    excluded: Set[tuple[Backend, str]] | None = None,
+) -> ModelCandidate:
+    configured = validate_model_candidates(candidates)
+    excluded_keys = excluded or set()
+    eligible = [
+        candidate
+        for candidate in configured
+        if candidate.backend in available_backends
+        and candidate.key not in excluded_keys
+    ]
+    if not eligible:
+        available = ", ".join(
+            sorted(backend.value for backend in available_backends)
+        ) or "none"
+        configured_labels = ", ".join(
+            f"{candidate.backend.value}:{candidate.model}"
+            for candidate in configured
+        )
+        raise NoAvailableModelCandidateError(
+            "No auto model candidate is eligible "
+            f"(available providers: {available}; "
+            f"configured candidates: {configured_labels})"
+        )
 
-    total_weight = sum(item.weight for item in weighted)
-    if total_weight <= 0:
-        raise ValueError("Total weight must be positive")
-
+    total_weight = sum(candidate.weight for candidate in eligible)
     pick = rng.random() * total_weight
     running = 0.0
-    for item in weighted:
-        running += item.weight
+    for candidate in eligible:
+        running += candidate.weight
         if pick < running:
-            return item.model
+            return candidate
 
-    # Floating point edge case: fall back to last item.
-    return weighted[-1].model
-
-
-def choose_weighted_backend_model(
-    candidates: Iterable[WeightedBackendModel],
-    *,
-    rng: _RandomLike,
-) -> WeightedBackendModel:
-    weighted = list(candidates)
-    if not weighted:
-        raise ValueError("No weighted backend model candidates provided")
-
-    total_weight = sum(item.weight for item in weighted)
-    if total_weight <= 0:
-        raise ValueError("Total weight must be positive")
-
-    pick = rng.random() * total_weight
-    running = 0.0
-    for item in weighted:
-        running += item.weight
-        if pick < running:
-            return item
-
-    return weighted[-1]
+    return eligible[-1]
