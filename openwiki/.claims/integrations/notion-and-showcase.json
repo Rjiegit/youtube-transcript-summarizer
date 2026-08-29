@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:ba48f728f856b9deb1ad7ff46015970480c95bbb0226ace8385e5b9d3b09dee3",
+  "pageVersion": "sha256:03ea8fc4eb9acc44c11c3a48680efdda2d9e082f281bef258fddf3cefe7e24ea",
   "claims": [
     {
       "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
@@ -72,21 +72,31 @@
     },
     {
       "id": "claim_bfb8e72e1e1041048a35f690a6409b9f",
-      "statement": "Showcase 列表最多查詢 50 筆並按 created_time 倒序；詳細資料會分頁取得所有 blocks 並在無 block content 時回退到 Summary。",
+      "statement": "Showcase 列表最多查詢 50 筆並按 created_time 倒序；詳細資料會逐層分頁並遞迴取得 has_children blocks，且只在完整 block tree 沒有 Markdown content 時回退到 Summary。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L422-L462",
-          "version": "repo-lines-v1:sha256:fd28053cf291438cedb08766436e8174f487fed2c0fce5cd7af6353be35a1acc:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3NDAwZGFkYjA4MzUzZWQ0YzQyNGVkM2Q0ZjQ0MmM5NDBjMWUyYTY0ZjJjZGM2MTI3OWFiNzdiNDlhY2QxMzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlZDMzNjVjOTkyMGYyMzgxODQyM2Y2NGJlZThjYjgzZTAzMWEwZjUxNWI2NDE5NDg4NTVhNTQ0NDc3ZmFlYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ0YzBiZTQ2MGFiYTQ3YTg1NjdlMjIxOWYyNzE2NWU2NmNmNTBlMmFkYzQyNDk5YjkyNWUwYjY3Yzc0MWU5ZWIifQ"
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L456-L508",
+          "version": "repo-lines-v1:sha256:0dee9284e7631c3a1d34af1fb89bc050da6527c0e2ec93c224318aa7914f9f7a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3NDAwZGFkYjA4MzUzZWQ0YzQyNGVkM2Q0ZjQ0MmM5NDBjMWUyYTY0ZjJjZGM2MTI3OWFiNzdiNDlhY2QxMzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ3OTExMDBmMWM2ZTczMTc0ZTE0N2U4NmJjZmUzZTI1MDA5NGNlZTE0MjZhYWEyNWNjNTNhZjI3YTVmYmZlMWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlZDMzNjVjOTkyMGYyMzgxODQyM2Y2NGJlZThjYjgzZTAzMWEwZjUxNWI2NDE5NDg4NTVhNTQ0NDc3ZmFlYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYwMzY2ZmJjOGEwZDgyMTI4NmI5Y2NjNzg1YzUxYzZjMDZkMTYzYzU3NDkyOGZiZWYxNzNmYWI0YWZhZDZkZGYifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L522-L585",
-          "version": "repo-lines-v1:sha256:0c7d67349dc8e74540bd24a0eb406918231ce018875bd3ce0552967db790d017:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyYjY1MjI3ZDVkNzIyYjA1NTU0NDViYzc3Njc2OTE4YTNhOTU1MTQxZTAwMzYyODRlNGEwNTBiZDU0MjcwMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L569-L631",
+          "version": "repo-lines-v1:sha256:e7be503ff573f5341cb6b8893418ebff21e2499418385fe84dd165c3192032fb:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyYjY1MjI3ZDVkNzIyYjA1NTU0NDViYzc3Njc2OTE4YTNhOTU1MTQxZTAwMzYyODRlNGEwNTBiZDU0MjcwMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7d0c63e920b248a79ae92e018845d1bf",
+      "statement": "Showcase 將完整 Notion block tree 轉成 Markdown：巢狀 list/to-do 子內容縮排四個 spaces，quote/callout 將 parent 與 children 一起套用引用格式，無可呈現 parent 仍保留 children。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L323-L405",
+          "version": "repo-lines-v1:sha256:c8083821f1694d3ba49d9ad7c1bf7384095eb59b2e0b38e24b9bc51e33fe1553:eyJzZWxlY3RlZExpbmVDb3VudCI6ODMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxM2IyYTQ1MWQxYWRlZTA5MDcyMmU0YzQ5NTdlZjg0MGE2ZmVmZGM3MTE5MWM5NTVkMzgwYTkzYjFkZmE0N2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiMjYzNDYyYzk0M2RjMjIzNWJjMDgwODBmZTg4YjExOWJmODA5ODM5YTFkMTFiYTU1NzU2ODM2MWU5NzAwYmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2MjgxNWMyMDQxODEwN2I3MTk3NTQ2YzFlMGFiMzBhMDlkYzIzODRjNmE4NTM1MDRlZmE0ZTNlNzEwYmQ3YWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxZWY4YWYwNmY0NjU0NzcwYTllODcwMDhmNWQ0YWY3YmUzZjliN2Q3MWNkODBkZWQ1MTVmY2ZiMmFhNmE5ZjEifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-29T14:03:31.952Z"
+    "at": "2026-08-29T14:47:48.560Z"
   }
 }

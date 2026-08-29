@@ -5,7 +5,7 @@ description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀
 tags: [notion, integration, persistence, showcase]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-29T14:03:31.952Z
+    at: 2026-08-29T14:47:48.560Z
 sources:
   - id: openwiki-source-59891cd71dd0c8a50b5690a9
     resource: repo://frontend/nuxt-showcase/server/utils/notion.ts
@@ -15,7 +15,7 @@ sources:
     resource: repo://src/infrastructure/persistence/notion/utils.py
   - id: openwiki-source-5858a6e533d57781fe90f469
     resource: repo://src/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-08-29T14:03:31.952Z" }
+generated: { by: "codex", at: "2026-08-29T14:47:48.560Z" }
 ---
 
 # Notion 資料整合
@@ -36,7 +36,9 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 
 狀態欄位可由設定明確指定；未指定時依 `Status`、`狀態`、`State` 等候選尋找 `status`/`select`，最後 fallback 到任一相符型別。指定的欄位不存在或型別錯誤會明確失敗。完全找不到狀態欄位時不加 filter；因此公開 database 若依賴 Completed 可見性，應明確配置正確欄位，而不能把無 filter fallback 當成存取控制。
 
-列表 query 依 created time 倒序、最多 50 筆，通常以解析出的狀態欄位篩選 `Completed`。詳細頁讀取 page properties，並分頁抓取所有 child blocks；支援的 blocks 轉成 Markdown，若沒有 block content 才 fallback 到 Summary property。
+列表 query 依 created time 倒序、最多 50 筆，通常以解析出的狀態欄位篩選 `Completed`。詳細頁讀取 page properties，並從 page 的 children endpoint 分頁抓取 blocks；每一層遇到 `has_children` 的 block，會再以該 block id 遞迴抓取並分頁完成其 children，形成完整 block tree。這個流程是逐層、依 API 回傳順序進行，任一層的 Notion request 失敗都會讓詳細頁查詢失敗，而不會回傳不完整樹。
+
+完整 block tree 再轉成 Markdown。一般子內容接在 parent 後方；bulleted/numbered list item 與 to-do 的子內容縮排四個 spaces，以保存巢狀清單層級；quote 與 callout 則將自己的文字和所有子內容一起套用引用前綴。若 parent block 本身沒有可呈現內容，仍保留其可呈現 children。只有整棵 block tree 最終沒有 Markdown content 時，詳細頁才 fallback 到 Summary property。
 
 ## 安全與故障邊界
 
