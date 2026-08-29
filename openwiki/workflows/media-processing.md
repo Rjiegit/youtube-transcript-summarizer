@@ -5,15 +5,17 @@ description: 追蹤單筆任務的下載、Whisper 轉錄、LLM 選擇、輸出�
 tags: [pipeline, whisper, llm, storage]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-29T14:03:31.952Z
+    at: 2026-08-29T14:29:59.537Z
 sources:
+  - id: openwiki-source-36d48d46c256392dc902bc2d
+    resource: repo://src/infrastructure/llm/model_options.py
   - id: openwiki-source-a1071f6de2071698b70c8d14
     resource: repo://src/infrastructure/llm/summarizer_service.py
   - id: openwiki-source-791a1bcc2cae6ed2d067dedb
     resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-08-29T14:03:31.952Z" }
+generated: { by: "codex", at: "2026-08-29T14:29:59.537Z" }
 ---
 
 # 媒體轉錄與摘要流程
@@ -41,6 +43,19 @@ Transcriber 使用 faster-whisper，逐 segment 累積文字並可透過 Streaml
 ## LLM weighted selection 與 failover
 
 候選池在建構時驗證：不可為空、backend/model 必須有效、weight 必須為正數且 provider:model 不可重複。實際選擇先排除沒有 API key 的 backend 與已 excluded candidate，再對剩餘 weight 重新計算比例。
+
+目前預設自動池只包含 Gemini，依模型 Max RPM 的相對比例設定六個候選：
+
+| 模型 | 權重 | 理論選取占比 |
+| --- | ---: | ---: |
+| `gemini-3.7-flash` | 1 | 9.09% |
+| `gemini-2.5-flash-lite` | 2 | 18.18% |
+| `gemini-2.5-flash` | 1 | 9.09% |
+| `gemini-3-flash-preview` | 1 | 9.09% |
+| `gemini-3.1-flash-lite` | 3 | 27.27% |
+| `gemini-3.5-flash-lite` | 3 | 27.27% |
+
+這是每次摘要請求的加權隨機選擇：短期樣本可能偏離理論占比，也不會追蹤或強制各模型的 RPM。Provider credential 只讓該 backend 具備被選資格，不會把未列在 `AUTO_MODEL_CANDIDATES` 的 OpenAI、Ollama 或其他模型自動加入流量池。
 
 成功選定後記錄 `last_backend` 與 `last_model_label`。只有 transient provider error 才做一次 fallback，且排除第一次失敗的 candidate：OpenAI rate limit/timeout/connection/5xx、Gemini quota/timeout/server errors、Ollama timeout/connection/429/5xx。認證與一般 4xx 直接向上拋出；沒有替代 candidate 時重拋原始 error；fallback 再失敗時也不嘗試第三次。
 

@@ -3,9 +3,6 @@ type: testing-guide
 title: 測試策略與擴充指南
 description: 說明 Python unittest 與 Nuxt Vitest 的風險分層、mock seams、關鍵 invariants 與執行方式。
 tags: [testing, unittest, vitest, quality]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-08-29T14:03:31.952Z
 sources:
   - id: openwiki-source-fcc5a6911958eaf3419d651d
     resource: repo://frontend/nuxt-showcase/tests/showcase-index-page.test.ts
@@ -19,9 +16,14 @@ sources:
     resource: repo://tests/test_api_create_task.py
   - id: openwiki-source-839ded7442c98545a6825769
     resource: repo://tests/test_processing_worker.py
+  - id: openwiki-source-7def47d9e5d7b25e40812c7c
+    resource: repo://tests/test_summarizer_service.py
   - id: openwiki-source-e2ee026fbcf730652e2c0e63
     resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-08-29T14:03:31.952Z" }
+generated: { by: "codex", at: "2026-08-29T14:29:59.537Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-08-29T14:29:59.537Z
 ---
 
 # 測試策略與擴充指南
@@ -40,10 +42,12 @@ CI parity 的 Python lint 為 `uv run flake8 .`。
 - **API contract**：FastAPI TestClient 驗證 URL normalization、status code、dedup/cache policy、backend configuration、worker scheduling 與 lock admin authorization。外部 database 與 scheduler 應 mock，assert response 與 collaborator calls。
 - **Queue/persistence invariants**：SQLite tests 使用暫存 database 驗證 migrations、task status、locks、retry relationship、recent history 與 RSS watermark。這一層保留真實 SQL，mock network。
 - **Processing orchestration**：worker tests 替換 downloader、transcriber、summarizer、file/Notion storage、notification 與 config，驗證呼叫順序的可觀察結果、Notion page id persistence，以及單筆失敗後繼續處理。
-- **純邏輯**：URL、filename、output path、weighted selection 等應以 deterministic inputs 測試。加權選擇注入固定 RNG，涵蓋 unavailable provider、excluded retry candidate、invalid pool 與無 eligible candidate。
+- **純邏輯**：URL、filename、output path、weighted selection 等應以 deterministic inputs 測試。加權選擇注入固定 RNG，涵蓋 unavailable provider、excluded retry candidate、invalid pool 與無 eligible candidate；另以完整 tuple equality 鎖定預設 Gemini 候選順序與 `1:2:1:1:3:3` 權重，避免流量設定在重構時靜默漂移。
 - **外部整合**：Notion、Discord、RSS HTTP 與 LLM provider 不應在 unit suite 發真實 request；用 response fixtures 或 mock client 固定 success/failure contract。
 
 `ProcessingWorker` constructor factories 是新增 pipeline component 的首選 seam。新增步驟時至少測試完整成功、該步驟失敗後 task 轉 `Failed`、後續 task 不受影響，以及 lock 最終釋放。
+
+LLM service 測試不應依賴預設池碰巧只含單一模型。需要驗證特定 failover 或「沒有替代候選」時，直接注入最小 `ModelCandidate` 清單；需要驗證預設分流時則注入固定 RNG，並同時 assert 選到的 `provider:model` 與實際 provider 呼叫。權重測試驗證的是每次請求的隨機選擇 contract，不代表嚴格的 RPM limiter。
 
 ## Nuxt 風險層
 

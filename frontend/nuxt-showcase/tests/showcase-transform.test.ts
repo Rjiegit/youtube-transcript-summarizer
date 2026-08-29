@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import { sampleNotionPages } from "../test-data/notion";
 import { sampleNotionBlocks } from "../test-data/notion";
 import {
+  fetchPageBlocks,
   fetchShowcaseDetail,
   fetchLatestCompletedResults,
   mapNotionPageToResult,
@@ -138,6 +139,119 @@ describe("showcase Notion mapping", () => {
         },
       },
     ])).toBe("## 重點整理\n\n- 第一點\n- 第二點\n\n[參考連結](https://example.com/docs)");
+  });
+
+  it("preserves nested Notion blocks as indented markdown", () => {
+    expect(renderNotionBlocks([
+      {
+        id: "solution",
+        type: "bulleted_list_item",
+        bulleted_list_item: {
+          rich_text: [{ plain_text: "解決方案：OpenWiki" }],
+        },
+        children: [
+          {
+            id: "positioning",
+            type: "bulleted_list_item",
+            bulleted_list_item: {
+              rich_text: [{ plain_text: "定位：獨立於 Agent 的基礎設施" }],
+            },
+            children: [
+              {
+                id: "detail",
+                type: "paragraph",
+                paragraph: {
+                  rich_text: [{ plain_text: "**重點**：共同使用的長期知識庫" }],
+                },
+              },
+            ],
+          },
+          {
+            id: "goal",
+            type: "numbered_list_item",
+            numbered_list_item: {
+              rich_text: [{ plain_text: "讓不同 Agent 共用知識庫" }],
+            },
+          },
+        ],
+      },
+    ])).toBe([
+      "- 解決方案：OpenWiki",
+      "",
+      "    - 定位：獨立於 Agent 的基礎設施",
+      "",
+      "        **重點**：共同使用的長期知識庫",
+      "",
+      "    1. 讓不同 Agent 共用知識庫",
+    ].join("\n"));
+  });
+
+  it("recursively fetches paginated child blocks", async () => {
+    const fetchImpl = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          results: [{
+            id: "parent",
+            type: "bulleted_list_item",
+            has_children: true,
+            bulleted_list_item: { rich_text: [{ plain_text: "Parent" }] },
+          }],
+          has_more: false,
+          next_cursor: null,
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          results: [{
+            id: "child-1",
+            type: "paragraph",
+            has_children: true,
+            paragraph: { rich_text: [{ plain_text: "First child" }] },
+          }],
+          has_more: true,
+          next_cursor: "next page",
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          results: [{
+            id: "child-2",
+            type: "paragraph",
+            has_children: false,
+            paragraph: { rich_text: [{ plain_text: "Second child" }] },
+          }],
+          has_more: false,
+          next_cursor: null,
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          results: [{
+            id: "grandchild",
+            type: "bulleted_list_item",
+            has_children: false,
+            bulleted_list_item: { rich_text: [{ plain_text: "Grandchild" }] },
+          }],
+          has_more: false,
+          next_cursor: null,
+        }),
+      });
+
+    const blocks = await fetchPageBlocks("secret", "page-id", fetchImpl);
+
+    expect(blocks[0].children?.map((child) => child.id)).toEqual(["child-1", "child-2"]);
+    expect(blocks[0].children?.[0].children?.[0].id).toBe("grandchild");
+    expect(fetchImpl).toHaveBeenCalledTimes(4);
+    expect(fetchImpl.mock.calls.map(([url]) => url)).toEqual([
+      "https://api.notion.com/v1/blocks/page-id/children?page_size=100",
+      "https://api.notion.com/v1/blocks/parent/children?page_size=100",
+      "https://api.notion.com/v1/blocks/parent/children?page_size=100&start_cursor=next+page",
+      "https://api.notion.com/v1/blocks/child-1/children?page_size=100",
+    ]);
   });
 
   it("preserves Notion rich text annotations without escaping raw markdown text", () => {

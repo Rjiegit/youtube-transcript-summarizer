@@ -57,6 +57,8 @@ interface NotionBlockRichTextContainer {
 export interface NotionBlock {
   id: string;
   type: string;
+  has_children?: boolean;
+  children?: NotionBlock[];
   paragraph?: NotionBlockRichTextContainer;
   heading_1?: NotionBlockRichTextContainer;
   heading_2?: NotionBlockRichTextContainer;
@@ -318,6 +320,14 @@ function renderQuotedMarkdown(content: string): string {
     .join("\n");
 }
 
+function indentMarkdown(content: string, spaces = 4): string {
+  const indentation = " ".repeat(spaces);
+  return content
+    .split("\n")
+    .map((line) => line ? `${indentation}${line}` : "")
+    .join("\n");
+}
+
 function normalizeCodeLanguage(language: string | undefined): string {
   const normalizedLanguage = (language || "").trim().toLowerCase().replace(/\s+/g, "-");
   return /^[a-z0-9_-]+$/.test(normalizedLanguage) ? normalizedLanguage : "";
@@ -363,9 +373,33 @@ function renderNotionBlock(block: NotionBlock): string {
   }
 }
 
+function renderNotionBlockTree(block: NotionBlock): string {
+  const childrenContent = renderNotionBlocks(block.children ?? []);
+
+  if ((block.type === "quote" || block.type === "callout") && childrenContent) {
+    const container = getBlockRichTextContainer(block);
+    const content = renderRichTextMarkdown(container?.rich_text);
+    return renderQuotedMarkdown([content, childrenContent].filter(Boolean).join("\n\n"));
+  }
+
+  const content = renderNotionBlock(block);
+  if (!childrenContent) {
+    return content;
+  }
+  if (!content) {
+    return childrenContent;
+  }
+
+  if (["bulleted_list_item", "numbered_list_item", "to_do"].includes(block.type)) {
+    return `${content}\n\n${indentMarkdown(childrenContent)}`;
+  }
+
+  return `${content}\n\n${childrenContent}`;
+}
+
 export function renderNotionBlocks(blocks: NotionBlock[]): string {
   return blocks
-    .map((block) => renderNotionBlock(block))
+    .map((block) => renderNotionBlockTree(block))
     .filter((content) => content.length > 0)
     .join("\n\n")
     .trim();
@@ -458,7 +492,20 @@ export async function fetchPageBlocks(
     cursor = payload.next_cursor;
   }
 
-  return blocks;
+  const hydratedBlocks: NotionBlock[] = [];
+  for (const block of blocks) {
+    if (!block.has_children) {
+      hydratedBlocks.push(block);
+      continue;
+    }
+
+    hydratedBlocks.push({
+      ...block,
+      children: await fetchPageBlocks(apiKey, block.id, fetchImpl),
+    });
+  }
+
+  return hydratedBlocks;
 }
 
 export function resolveStatusConfig(

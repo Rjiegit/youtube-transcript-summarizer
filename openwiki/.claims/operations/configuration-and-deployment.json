@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:4e4411f3c1b2bde7ae4721c3e33e8be205ff4a7b07c422e59e85974e0d75d74e",
+  "pageVersion": "sha256:768dd5fcf3d44f98364b5b03203b8003d5569ca2909dabc281183dabbc1dfc36",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -79,10 +79,34 @@
           "version": "repo-lines-v1:sha256:f97faa2ff14013abf7e719f052c7f892579af7d4fddea0581130ade4c4f55d72:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyNThkMjJlNWJmODlmYzM0MTUzMDhjNzE0YTI5YjBiOGVhNzUzZWM1MzlmZDEwNmIxNDY1ZDZiODEzNTllYWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5YjliNDllY2UwMzc5ZTRiZWE1MjY2ZjFmNzBlZjVmMWUyZGU1NGE5YjA0MDc4NTY3MmQ0ZDA3MWIzOTYwN2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4ZTdhN2IxNDRhYjc1MDVlYmQzNTQ2MTNhMzg0YTljNDQ0Yjk4MzFmZWZjOTA5MjZiMWRhYzAwZmI3NTQxZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
+    },
+    {
+      "id": "claim_fc1525a67e99465cbda9bbb3373a0735",
+      "statement": "OpenWiki update workflow 目前只能由 workflow_dispatch 手動觸發，使用完整 Git history、Node.js 22 與 openwiki code --update --print 產生增量文件。",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yml#L1-L32",
+          "version": "repo-lines-v1:sha256:dc9e820eeab60460e544ed18aeac4896e92187fb88f67a55d5a51cd0e47f0825:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2MDI3ODdhZjZkY2MwODM0ZGUxMjFjYmIxY2I5NWY5NDU5YjcyMWVhYjAzNDlmMTA1MDFiOTk2YzFjNzdmZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0MWM2MGQ4MzU5N2M3NmNjYTY5NmFhYzc0ZGZiN2FjNWRjMzM2MmZlNjUxZjhjYWI1YTMwNDk5NjMwMTdkNDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5MjQ3NzIxNDRhNmNhNTFhMjljNjljYjg0OTU4ZWY1MmZjOGQ0YThmMzdmOGExNTk5ZTVkNzRmOTk5NGY2MDUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ea39b469730b447c89b03047bf913e1b",
+      "statement": "OpenWiki workflow 從 GitHub Secrets 注入模型與 connector credentials，完成後以具備 contents 與 pull-requests 寫入權限的 action 建立 openwiki/update 文件 PR。",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yml#L31-L60",
+          "version": "repo-lines-v1:sha256:51d2feea2d3cd1bd81b4b23b86f87ec98efd6d0f1a26c218fe82fc1dc5e7dfc7:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZThmOWZhNDBlN2JkMDQ5OWQxYzBkODNmZDc1OGFhODViMzA4NDJkYmQ2MWYwZWE2YjdhZTEwZWZlYzc2ZDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0Nzc5NmQzMTczMmZiY2U4OTk4YTJmN2U3YjFiYjk3NTVjMjNlNTg1MDMyMGI5MDkzN2Q4MmMzZmQwZTYyYTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhMmQ5NWViODViNjA0YjdiZmIxNzRiMzdlNThkYzg1ODVlZjcyNjUzNTAzMGExZTE4YTZkZDUwNTQ1OGM5YjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/openwiki-update.yml#L6-L8",
+          "version": "repo-lines-v1:sha256:dcc4bb79f6ebc8555975f87c1bbfadb4481f70b03c1a7b0c9ccb4ee3dac77d61:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzUyNjI0N2VkZTAwNmU5YmRhYjljNjg1MDcyODQyNWQxYjQxNjZjYWY1Y2FjNTBjZjA5NTVjNDRkMjRjMWE4ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTc0M2EyYTJmYjgyZWFlZDI0ODhlMjg2NGQ0MjNiZWI1MDA2MWRkNDIzZDgwYjg3MjFkM2JhZTVhNjQ3YTdmNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVmZDI1ZGU3NjQ2NmMwM2I0NDUxNmUyY2JkZjU5ZWU4NDFhNWExZmUxYjBkNGViMDc1ODlhMmZiNGIxMTIzYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2JhNWFmZmQ4MjMxYzBlODFiYmNkNDIxNTRhMWNjOTBlODZlZmY2NjM1NWMwNDhjZTU1YjMyMzdiZGFjM2ExZCJ9"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-29T14:03:31.952Z"
+    "at": "2026-08-29T14:29:59.537Z"
   }
 }
