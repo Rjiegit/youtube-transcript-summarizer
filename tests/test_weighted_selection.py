@@ -1,6 +1,10 @@
 import unittest
 
-from src.infrastructure.llm.model_options import Backend, ModelCandidate
+from src.infrastructure.llm.model_options import (
+    AUTO_MODEL_CANDIDATES,
+    Backend,
+    ModelCandidate,
+)
 from src.infrastructure.llm.weighted_selection import (
     InvalidModelPoolError,
     NoAvailableModelCandidateError,
@@ -55,6 +59,35 @@ class TestWeightedSelection(unittest.TestCase):
                 rng=rng,
             ),
             self.candidates[2],
+        )
+
+    def test_auto_model_candidates_match_gemini_rpm_proportions(self):
+        self.assertEqual(
+            AUTO_MODEL_CANDIDATES,
+            (
+                ModelCandidate(Backend.GEMINI, "gemini-3.7-flash", 1),
+                ModelCandidate(
+                    Backend.GEMINI,
+                    "gemini-2.5-flash-lite",
+                    2,
+                ),
+                ModelCandidate(Backend.GEMINI, "gemini-2.5-flash", 1),
+                ModelCandidate(
+                    Backend.GEMINI,
+                    "gemini-3-flash-preview",
+                    1,
+                ),
+                ModelCandidate(
+                    Backend.GEMINI,
+                    "gemini-3.1-flash-lite",
+                    3,
+                ),
+                ModelCandidate(
+                    Backend.GEMINI,
+                    "gemini-3.5-flash-lite",
+                    3,
+                ),
+            ),
         )
 
     def test_filters_unavailable_backends_and_recalculates_weights(self):

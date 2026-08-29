@@ -97,8 +97,21 @@ TZ=Asia/Taipei
   `provider:model` 寫入 log 與儲存欄位。
 - 權重是相對值，不必加總為 100。沒有 API key 的 provider 會先被排除，再以
   剩餘候選的權重重新計算比例。
-- API key 只代表 provider 可用；未列入候選池的模型不會自動取得流量。目前候選池
-  只有 `gemini:gemini-3.5-flash-lite`，權重為 100。
+- API key 只代表 provider 可用；未列入候選池的模型不會自動取得流量。目前 Gemini
+  候選池依各模型 Max RPM 配置，將 `5:10:5:5:15:15` 簡化為等比例權重
+  `1:2:1:1:3:3`：
+
+  | 模型代號 | Max RPM | 權重 | 預期流量占比 |
+  | --- | ---: | ---: | ---: |
+  | `gemini-3.7-flash` | 5 | 1 | 9.09% |
+  | `gemini-2.5-flash-lite` | 10 | 2 | 18.18% |
+  | `gemini-2.5-flash` | 5 | 1 | 9.09% |
+  | `gemini-3-flash-preview` | 5 | 1 | 9.09% |
+  | `gemini-3.1-flash-lite` | 15 | 3 | 27.27% |
+  | `gemini-3.5-flash-lite` | 15 | 3 | 27.27% |
+
+  此設定是每次請求的加權隨機選擇，少量請求時比例可能波動，且不等同嚴格的
+  RPM rate limiter。
 - 遇到 rate limit、timeout、連線或 provider 5xx 錯誤時，系統會排除失敗候選，
   依剩餘權重改選一次；認證與一般 4xx 錯誤不會切換模型。
 

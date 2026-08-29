@@ -114,7 +114,7 @@ class TestSummarizerService(unittest.TestCase):
             },
             clear=False,
         ):
-            summarizer = Summarizer()
+            summarizer = Summarizer(rng=_FixedRng([0.8]))
 
         with patch.object(
             Summarizer,
@@ -227,7 +227,12 @@ class TestSummarizerService(unittest.TestCase):
             {"GOOGLE_GEMINI_API_KEY": "gemini-key"},
             clear=True,
         ):
-            summarizer = Summarizer(rng=_FixedRng([0.0]))
+            summarizer = Summarizer(
+                model_candidates=[
+                    ModelCandidate(Backend.GEMINI, "gemini-a", 1),
+                ],
+                rng=_FixedRng([0.0]),
+            )
 
         with patch.object(
             summarizer,
