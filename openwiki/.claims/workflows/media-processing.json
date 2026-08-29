@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6b6c6c2879ed8fd7236a28300c4933eb70a7aa1dcd925324112880a15eacbdef",
+  "claims": [
+    {
+      "id": "claim_2c361d6854b0489a9c545d131c871425",
+      "statement": "單筆 pipeline 依序執行下載、更新 title、轉錄、摘要、Markdown 保存、Notion 保存、Completed 狀態更新與 Discord 通知。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L230-L298",
+          "version": "repo-lines-v1:sha256:18c08618461a0c42d8a7f8d1b9c7acc82e763d8a3081259661dd1632e143d91c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNkOGM3MGVkMWYwNmNmZDhjZGE5NDdiM2ZmODAxNDFkNDFiNGM4ZWQyNjMwNjkxOTZmYWRkNWM4ZDRhNGRkN2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhMjJkZDMxZjcxNWVmZGQ4YjAxZGYyYTY0Mzc3OGI1MDIxN2RhMmE1Nzc0ZTBlYzA2MDNlZjczNDhjYmE1MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZhZjgxNmI3MDg4MjZiNWJlZjIxMzhkOTUyYzI0MWRjOTE1ZmQ2MTZmYTgzNjBjZjVjZThiMmExZTk1YTNiMzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwNmJjYjEyNmNiNjk2N2YyYTUwNGMxYjE3MGE1OTg4MDY0MTFiYjEwM2U4NWVkMTAxYzk1YzViNThiOWY0YzAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bed34abe309f4052ba057c0b07d880f9",
+      "statement": "Pipeline 任一步驟丟出 exception 時 task 會轉為 Failed並保存 error與 duration，worker 可繼續下一筆。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L214-L220",
+          "version": "repo-lines-v1:sha256:3cce8e6680577f7ebd00a897435b8e1f275567034a77a36668f2343bac139ad8:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDk2MDEyYmVjNmIyMmVjY2Q3MmZhOWY0ODAxMTE5NWY1NzNjOTZhNDk2NGNlZWMxZTE3MzNlNTg5YTg4YzM1MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDk2MDEyYmVjNmIyMmVjY2Q3MmZhOWY0ODAxMTE5NWY1NzNjOTZhNDk2NGNlZWMxZTE3MzNlNTg5YTg4YzM1MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWM2YTUyZGJmM2RmNWZjN2YyZjcxYTZlYjVmMjE4MmFmOTc2ODE5MjE1MzA0NjJlYmIwZjY2ZGNlMzg1NTM4ZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODk1ZTBmZmJhMDkxOTAyZWY5NzI3NDdkZTU1NjdmY2YxMjVjZmFiYzFhZTlmN2NkYWQwMjIwNjg4NTcwY2RmYyJ9"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L300-L311",
+          "version": "repo-lines-v1:sha256:d80744503800658d636c00ba014eed2235ff42dfcdaac4a1412c494a52a3492e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4NDhlYjc3OTAyODdkMmI3ODYzMjA4NmQ1MTM0NzkyYTIwNDAzNTNkZjlkOTJhZjBlZWQwMzIyNzE0MGY4YmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmMTFlYTExZWYwMWUyZTk2OWU1ZjRjNjI3MmYzZGI2NmRlNWY4ZTU0ZDFjYWFhNGFmZWYyZDIwYmJhMmVmMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwMDE4MDdhMjMxZTJhNTgwMDM3ZmVlOTZkODMxYzc5NjIwY2M3M2JhNjFlMDdjZDEwMzhjNDZiNjcyZGM4NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiNTNkZTU5YTBlYjVmOTVkN2ZkZDQ0M2U0NDBiNmNiODY1NjgxYTY5NjU5YzQ2MTE2NmM4OTRmNjA2NzAxNjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6d363db936b64c6ab67b04baaeabe9f4",
+      "statement": "LLM 候選池拒絕空池、未知 backend、空 model、非正 weight 與重複 provider:model，選擇時只對有 credentials 且未被排除的候選重新計算權重。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/weighted_selection.py#L23-L56",
+          "version": "repo-lines-v1:sha256:f248b255184ef2b6bf960cc89d6a5a5d90a35f8bbe79bd254e929b4122feeab8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwOGUwNmIyNzQxNjRhY2MxMjZjNDU1NjU3MzM0OWEwMDVkYzhiNTYzYzE3OWQ3MDcxMGZhZGM2MjRkZjRlMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzNTA1NWM0OGNhZGMzYmFkOGIxYjA1NjAzMGMwOTIxNjgyNDJmMzAzZjQxNzFiNmE0ZmIzNDFkNmI2YmVlNDQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NWZmMjk2NTY0NDU2ODAxMjc0NWRhODBmYWZhNDAzZmU1MWNiMWU0NmViMTAwNGQ1ZmVhZWQzNjNlODQ5MTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM2ZTllNTA1MDBjOTE5ZGJhMWFjMDcxYzFhNzYzMjk2YmQ0MzQ4YjE5MWM4MjJkMjNjYjJkOTBkNGI5OWM4NjIifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/weighted_selection.py#L59-L96",
+          "version": "repo-lines-v1:sha256:6504b96b0d91e300e484112706c1e8ddc01205dfb7e4f59a15ec1e84f0c59027:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0NmJjYWYzZWUxZWI0MWYwYWJhMGQxZjFiOWE2ZGViMjE0NmZlYzJkZGNjNzY5Njc4YmVmZDJjMGJlOGU4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4M2ExMWRlZmI1Y2UwYjNjYzc2NWZmZmFmMGFlOTZiZTUzZjQ5OGRlMWE5YWQ1YzQwNmYzMjQ5ZjNmMzE2ZmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0ZjViZDEyZjBiYzc2MTg2ZDA1OGRhOGNjMDdhZjBkNjdjMGMxMjRhNzI3MWIzMjIyOTEwNGZmNThjNzI2ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d3108d29dbea414395f96c7631633e48",
+      "statement": "Summarizer 只在 transient provider error 時排除失敗 candidate 並重選一次；非 transient error 不切換，沒有 fallback 時保留原始 exception。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L150-L157",
+          "version": "repo-lines-v1:sha256:d8d20ec7cf59a989b0ee3dc15e7b36c50c6245a060e5c1ca4eb7e27819da0a14:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjVkNjE1ZGZkYzQwMTMwZGI4NGI4YTI0NjZiNDc2M2ZiNTM3NDgxMWM1NmU3NjcyYTg0ZGVkY2MzNjExYjFkYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDIwNzgzOTJmZmU5MzUxM2E0Y2VjMDYyNDY4NmE5NzIzZjgzODFiMzhhM2M2MGZhZDQ2ZjNiMTBhNzY2NWU3ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNTFjMmI1MjE2YzAwM2UzYWYxMzc5ZjFlNjI1M2I0ODBmZjQ4MjM4ODlkYTk4ZmIwNjcyZDc5MWRlZTI4YTRmMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYjYzMTgwYmYzYzQyMzFkYjc5YzVjOTM4ZThjMDY5OWE0MDc1MjY4Mzk4ZmE5ZDE5ZGNlYTJmYjA4OThiNjliMiJ9"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L87-L124",
+          "version": "repo-lines-v1:sha256:d9c64361757702120514608ea5fea04c1a48fd8b1853355a0b4687cd6f3e439f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyNTcyNmNjMDJmNDBhOGU4NWQ3Y2RjMmMzOWI3Y2Q0MmU0OTdiYWJmZGIwOGJiYTk1MzBiOGRkNjRkNjdkOTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxNjFjZTliMTJjOGMxZGQwOWU3MTcwMWUzNzU3Mjk3OGU1MWU3YTQ3ZDA4ZDAwYzEwM2JkODE2NmU3NTFjNzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImViYWU2NWYwZjU0OWQyZGJiYTZmYzZlYzA0MGQwZmE5ZTlkMTA5NDYwZWNkMDJlZTkxODNlMGM3MDFhY2UyMzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE3ZDA1NjIwNjdiZjAyN2RjNzAxZGFhYjRiMTI3ODBmMDI2NzJiMzU2YWVkYjkwODQwZTdjNmI0NTI0NWRkYmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_56e54b7a4cc345e18918e1a152f3225e",
+      "statement": "Transient classification 涵蓋 OpenAI rate limit/timeout/connection/5xx、Gemini quota/timeout/server errors及 Ollama timeout/connection/429/5xx。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L195-L247",
+          "version": "repo-lines-v1:sha256:71ff1d7bc2597f743dec2c1cf78b627dd668e9ccedd66c1f5096db3fc9aa6222:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzYmVmZGIzMTQ0OTQ3NmI1NDU1YmFkNDU1OTZlNmVmMGY4M2MxNWNiNDBlYTUyMjJjODE2NzU4ZTRjZDM3ZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5N2M3MTI0N2FmM2NkMWVkZjU1NWE3ZDEwNzU5MzE1N2Y2ZGMyYTIyYWYwZGU4MmU3Nzc0YWJmMTBmOGFkZTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwNWNiNjIzMzYzZjllZWVkZGZlZTFhNjFmMjQ3ODdmNjMzNDc0OTRmYWY0ZWNjNTNjMDcxZTk3YzZkMmE5MTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkzYTViYzc3MzNiNzNiZjY2ZDAxN2VhNzMyZGNlMjg3NDJiYzliY2E0ZDBkYTUzNjM5MTIwYmMyZTkzMWExYmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4dbfffa6d47a434b90324baabf05aaff",
+      "statement": "成功 candidate 以 provider:model 記錄 last_model_label，worker 再與 faster-whisper model size 組合為持久化模型標籤。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L159-L193",
+          "version": "repo-lines-v1:sha256:bf694a20476bafa2a5049379dfdf368cfdbe8c37f7ad9da170d835fb939845b8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2MDljM2YwODFhNTAxMDM4ODAxNGM1MjBlZjAyM2M5MDM1NzFhNzFmNDRhNDRhMGFmODI2MDM1YzFkMjJjNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1OWNiZTFhMGM0Nzg5ODMyZTkzZTcwZjY4NTM4NDQwYjRlZTJjMTNkNTJjZWI2ZTBmNmNjZWU1ZGE2OTczY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkM2NiOWMwZGM0MTMxNTc5YWY2ZjY2MTQxYzUxYTEwNDY0ZTBkMjkzZGFmOTI3ZjNiMzM4ODFiOTQ3OTQ0YjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmOTYwYjRiY2E2MzQ3NjQ4ZDQ2ZWIwYjg4NmY3ZjA1ZmYwMDBmZWY5MWM2M2UzMzk1YzIzOWZiNmVkMDY2NGUifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L265-L275",
+          "version": "repo-lines-v1:sha256:89b72c190e0e0b9f6f263f9e8921bdb870df8b59c13510939851952b8ab20cd8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMmE1NDFhNjgyODQyMmZiNGRjOTQ2MWNjZjU2OTFmZGY3YzYxMzc5OWFlYjAxMTc2YmEyMjFkZmJkYmIxYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxNThjOGRiNGU3YjNiNDk4MTFiMDAzNzhiZmRjY2Y2Yzc5NmRkZjNiMDMzYTgzMmY3N2FiMTk0MjUzYmQ2YmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkZTg0MTI4ZTQ4ZThjZTM2MDM1YmM4ZDMzZmZmYTlkMDVmMWIzMTg1M2QyOWYwMGZiZTdjNWZiZGIyNmIxYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE2M2FmYjQzNTZkMzk4MjEwOTE0NjNhMDIzZTBlM2FjMTEwZTNkNGZhYjkyMDRkMmE0ZDI5YTM2Mzk5MDRiNTIifQ"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L250-L270",
+          "version": "repo-lines-v1:sha256:da20f0378a1a1e323163a0f2748bd409310947277c84e08514cd6201b55f9ddc:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkMDM2Yjg5NGM2MDlmM2RmYWNmNDdiMGFjYjBlNjZmNDIyZWFlZmQ0OTExNWVmNmUwNzQ5OTc3ZmMzY2U2YzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyMjcyMmY5YTY3ZDE0ZWViZTM3YjBmOWJiZTY5Mjc3OTRkNzA2MWY0NWUwNzk5YjMxOTdkYzFiY2UyY2ZmZjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzNjk1Yzk4MTZiNGVhOTJlNWUyZDZiM2EzMjUyOGJjNTk3MDBhN2E2YTJhZDBmZDU5NDZiY2NkYzNhZGU2NDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3ZDdjYmRjNWNmNjU4OTExMDYyN2UwNzFkNWNjNTAwOTViNjUyYWJmZDAwMzAwYzU0MjUyMTExOTMwN2EyMTMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_870cb79b5f454a51aa4d6d5bb74f2cd3",
+      "statement": "ProcessingWorker 的 downloader、transcriber、summarizer、storage、notifier 與 config 都可透過 constructor factory 注入。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L118-L177",
+          "version": "repo-lines-v1:sha256:1a314a862fda841f230a908f89a769cf6ef74848364ba22724713f38246530b7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmZDdhMDdhODNkZDE5OTZmYjUxNjg0YjQyYWVjYWY0ZTkwZmI3OGJhNzIzMGU1NDJlZDdiZDAxZDQyMzAxYmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhZTQ0MTY4ZTE2NmMzZDA1NWJkNzAzYzhhNmZhNWRkZGI4NzZmMzVkMmZiZjA5NjU4NWI0ZTU1OWI1OWIyMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhZmNkZmFjNWU5NDc5ZTBlNzYyM2RhNTdjZWVhMjRlYWE1NjcwZjk3YTk5YWU4MzE0OGI3MmU2ZjU0MzgwZDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0YTg0YTk5ZjgzYWZhYTA1MGQ1YWI0MzZlNzhlMzdlMzA1YzI0NWEzYjI4MDhiZTY4MjIwZjkwOWVlODU2M2IifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}

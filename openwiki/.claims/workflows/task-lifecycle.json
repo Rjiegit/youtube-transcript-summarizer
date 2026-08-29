@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:e0d230f04de94ea55a4f58208d202fb9db576ebe9d556a7255a5d497388aba08",
+  "claims": [
+    {
+      "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
+      "statement": "相同 URL 的 Pending/Processing task 會被視為 active duplicate；Completed task 可依 block_existing 永久阻擋或在 cache TTL 內回傳 cached result。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/tasks/task_creation.py#L22-L72",
+          "version": "repo-lines-v1:sha256:b58ca20ea6aab9034bbabfbb0f8b10cb2dee478d42137f12d957eecc1415ce43:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a54570232f094d6cb043f160bedc1ffc",
+      "statement": "POST /tasks 對 active或 blocked completed duplicate 回 409，對 TTL cached result 回 200且不排程 worker，其他新 task 回 201並嘗試排程。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L426-L531",
+          "version": "repo-lines-v1:sha256:e19d8d2e56c3b19794d0123c566b6af71f92f154502cd7897c007d0264109339:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhZDRmOGUzZDg3ZjdkZDhiMmQ5ZmM1YTc0Nzc4YTFhNTI4YTk0ZDY4YzViMmNlYmJiOWFlYzdhYjlmNDEzNjg5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1YzExZmFjOTdhMzUwNTZlOTk2MTYwMDcxZmUyZjYzN2IzNGQwYjBmMjNiYWM1ZTA2M2NjODA2NjRkNzRmZTYwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhYzMxM2Y2MDc0NzdiMGVkMzY0N2ZlNzI1YTM1MzBiODYzOGZjNWYwYTM0NWVjODNlMzk1YTZlODQ2NGQ0NDIyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_5cebfa29cd9542708b925d08c18713be",
+      "statement": "Scheduler 在建立 daemon worker thread 前先取得全域 processing lock；已有 worker 時拒絕排程，thread 啟動失敗時釋放 lease。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/tasks/processing_scheduler.py#L39-L75",
+          "version": "repo-lines-v1:sha256:7b263514a792e1b1551be4f78cbd08c72b613eb91ba0b0bd1d6693a9b0588ca1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlYzg4YTFkYTQ5ZGUyZWM1NTM1Y2ZhNzVhNWM0N2FjNDhlMmU3NmU1ZDMwYWJlNWVkZTc0YjYxOTdhNWE0MDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiODI0MTY4OTRlNmJhMzk5ZGVjOGViZGQ0MTc4NWY5NDYxMDFlZjAzNmJlOTFlYTM4MjMxNDk2MTIzOWM0MzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_82769993de0c48d9a71229656204821b",
+      "statement": "SQLite 以 BEGIN IMMEDIATE 原子選取最舊 Pending 或 stale Processing task，並寫入 Processing、worker id 和 locked time。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L224-L290",
+          "version": "repo-lines-v1:sha256:d4148de546a0f1873e74838cf1033a4251dac905a5e9dce44055bbeb7e3c9302:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwMGI0YmZlMjdiMDEwOTIzY2VjNTc4OWQ4YzM5Y2NkMzliOWNhZjIwMDYyNGIzOTM3MTNjNTBiZmIwNDU5MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3MzJmOGJlOGM1Yzg2OTBmOTY1ZWRlMWQ0NzA2YzQwZTAxMmEwNDQ2NGIyYTAxNzc4MDM4MGQwYzVmYTJmMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjNzYyOTQxN2VkMWJiMWQwMDQ0ZTk3NjBmZDlhYjg0YjhmZTg5NGNkNTk5ZTE4NWFjOTUyOGUzY2I1MDcwY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3YWFkMTZhODU4ODQxYThhOGFkNDFiNmNjNGIyNWU2MTVmYWFmZDdiMDQ2NTY0MTkzZTU3Zjc4ODhiNDA1ZWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_57571655639b40248241a1205c66a635",
+      "statement": "SQLite global processing lock 可由相同 worker續用或在 timeout後接管，heartbeat與 release都只作用於 matching worker id。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L292-L378",
+          "version": "repo-lines-v1:sha256:057638e0f47aa251a28f6160603a9de6f53a86bdeb676f594afcc736f74ad83e:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjllNzg5ODFmOThlYWE5NjM1NjMxYmUzOGFlMTFkZjYwMWNmNzYxZWMzZjQxOWI5N2FlOWY2ZDNlNmQxMTdiNTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4YThhODRjNGYwZmI1ODIwM2Y5MjI5Zjk0YjFhOWM0NzE2YjU0NjM4YjI0MjNhZjNiNWNlYWViMWRhYjQ4OTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0MTZkZGYyYmVhNzIxNDhlNTZiNDk2MDFhY2Q5ZmNkNTY5OGZhZTIzMGUwMjRiZmY2MWMxNDg5MGQ0NjQ2MzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c509e2fd9b794df1a38d655fe4fb9c05",
+      "statement": "SQLite task 離開 Processing 狀態時會清除 task-level locked_at 與 worker_id。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L425-L474",
+          "version": "repo-lines-v1:sha256:312596fb7a7e9cfdcfb96a3bbea84408742a218f724ec2c15c8bcae560f6017d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiNmMwNTVmODI4OTE1NDJlNTNmOGVhNTNlYWNkMjU0YzhjNGIzOTBlZTc1ZTI3ZjhlMWM4M2Q0MjI0NGUxOGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4YThhODRjNGYwZmI1ODIwM2Y5MjI5Zjk0YjFhOWM0NzE2YjU0NjM4YjI0MjNhZjNiNWNlYWViMWRhYjQ4OTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwOGU1YmQ4ZGQ5NDJmNDUwODE2OThkZGIxMmVmNGY0MjMwMWM4N2M4MTA5MGU3ODU2NzQ0MzhlN2I0ZDY3YzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6d40e85eeeba486cb96a9825eb0082ba",
+      "statement": "Retry endpoint 只接受 Failed task，建立關聯的新 Pending retry task並把 source改為 Failed Retry Created；endpoint 沒有排程 worker。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L580-L624",
+          "version": "repo-lines-v1:sha256:627d429ed7b6bf88605520e56880e4fbe5abb095b7b01364f1eacfb6b679b166:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxNjAzOGZhZjAxNjQ1M2Y4YTRiNTRjYzEzZDQ1MjgwZjlkN2U2Y2QxYWEyZDcwMjEwNTE3NjQzMDRjNWVhYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2YmJlNTAwZGUxN2FjZDI5ZmRkNjdjYmUyZTZjN2JlMWIwOGRkMDZhMmRhM2E1YTdiMzdlOGZmZDdkZmY3ZGQifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L494-L520",
+          "version": "repo-lines-v1:sha256:bd9f8967a5dfde7ed7006a63d4c463317c940a2a2c324f1ca03311b133fe051e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyMTBiZTYzNjUxY2E3NmE0ZDk4ZGFkZTdlNzcxMzU3YTA2ZDA5YjZlYmIzNTY4YTNjZjg0ZmNmY2VjNDA3ZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkYmExMmRjNjgzMWEzMWU5NzdjMTMzMDU0NWZiMzZhMTFjYjE2MDQ5YjQ5ZGYwN2MzYjAyNjM4YjIwNzA2YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjNzYyOTQxN2VkMWJiMWQwMDQ0ZTk3NjBmZDlhYjg0YjhmZTg5NGNkNTk5ZTE4NWFjOTUyOGUzY2I1MDcwY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_7b4daa12da1d48d6998f9db24b8ef737",
+      "statement": "Processing lock管理端點需要 maintainer token；一般 release需 matching expected worker，force release可要求 lock age threshold。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L660-L683",
+          "version": "repo-lines-v1:sha256:e782878e9c6202a6756cc9365e1c792109d76a78bff6a918963949d2bf7a3a8b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3ODljNmZlY2Q4YzcyNzIxNzI3NTNiMTM0N2VkZGRjOWNlYjFmMjk3MGUyNDg2NTNlOGZmOTQ0NTFiZmFhOGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAyMmI4Y2YzZWY3ZTY4ZTVmOWMxMTE1MDZhODE0MmFkMzM2NmM2MWVlZjM0MTBjYjU5YjY4NmMyZGEzNjQwNjcifQ"
+        },
+        {
+          "resource": "repo://src/apps/api/main.py#L686-L774",
+          "version": "repo-lines-v1:sha256:a11d32297e5fd68ce1f8df4d96d2a16448d7c7f3f7e8e6ae21c00eb3dae56a11:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwZWMwNTMwZGUxNGQ0NjdhYmJlZDQwNDc0ZDg1YzMzNTAzZTgyMTNiMTI2MzRlMmM0ZmMwZjA3OTQ3MTM2MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}

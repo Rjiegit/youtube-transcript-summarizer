@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:6ce9f4fd70fe3a536e2fc13071f49e5d88f9a34e1daa99f066ef263880da91b4",
+  "claims": [
+    {
+      "id": "claim_86e1c834777a4a8eb4d0689cc40e666d",
+      "statement": "RSS monitor 只發現影片並透過 FastAPI 建立 SQLite task，不直接執行媒體 processing pipeline。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L92-L126",
+          "version": "repo-lines-v1:sha256:9827d6947dce2b824a1014a46307a83f75e675c11f84043ffbcd17e5d9ed4a03:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmNTY4MzgxMTMzNzMxMDVlNGRkMGU4M2MwMmI4NTZiNTMzYWIxZTEwZjBlMTc2MzNhZmQyMDBhYTZiM2Q4MjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0YzRmOWExYWZiNWNhN2Q5OGIwMTYzYmNlZWMyYTIyZjgxOTI3NWNjNzkzYjI5YTlmYTMxNWQ4NzU2ZDY4ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhNTljYTMwY2Q3MDFlODQ5OTA3ZDJjYzBkZDhhNGFkMDI0YTZlY2IyYmE1OTQ1OGQ1ZmIyNGRhN2JjODEwYjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d35d50340a714ab580bb5a8bf9ab55cf",
+      "statement": "訂閱輸入會正規化並驗證 channel id 與 feed URL 一致，duplicate SQLite subscription 會轉成明確錯誤。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/rss/subscription_service.py#L23-L66",
+          "version": "repo-lines-v1:sha256:23e57cdba1257167d4c2c9638d0836e9d2bf634db8a4a5b08764791c605ef228:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0Mjk3YWFjMzA5NTkxZGJjMTViOWQzOThiZmJmMjAzNDY1MzI2MTk3MmM0OGViMjNiNzRhMjE1MjYyMTQ1ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTdkOTViZTk3MDY1M2JlOWM3YzIzOGQ2MWM0NGUwZmY4YzM2ZWU2MDYyMDU5Njg3NDM0NmVhZmFkOWJiMWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE5YWNiMjE3NzQwNjYyMDRjMWM0MzBlOTZiYzE5YjZkMGQ1Nzg5N2E0ZTI5NjhkNWMwODM3YjJjYjA0ZjY3NDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b24384d96a6b4fb986b97e40d4460170",
+      "statement": "第一次 poll 僅將最新發布時間 seed 為 watermark，不建立歷史 tasks。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L164-L184",
+          "version": "repo-lines-v1:sha256:a232438f6914b36e19b88ab17757d438e975cfd88c2a9dfa453802470e8c6ff3:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxYzg1ZTQ3MzY4ZTM3ZDg0ODZlNThkNzJiOGNiYjk0YzQwZDc4Y2I4NjZlZWY3ZTRiZmEzZWQxYjU1NmNhNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZDQ3MzFhNjM1NmVkZDhkNGQ2OTNhYjYwZTk3MzJlMTdmZDRkOTQzYTE2NDEzZDI1YWJjZWYxMGY2ZWUwYzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgzMjViY2IxODY4YWNmNTA2NmRkMTk4NjE4NWFkYjkyMjc3YWRlZTFmOTNlMDM0YjJkZTcyYzljODhmNjIyMTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MGJhMDgyOWYyYTViNDI0ZDJhYTg1ZmQ0YjY1MjdkZDRlMGNlNzNmYTg2YmJlOWM3YjE3MzJkODM3NTUzZDYifQ"
+        },
+        {
+          "resource": "repo://tests/test_rss_monitor.py#L44-L69",
+          "version": "repo-lines-v1:sha256:76768fb2ee047064fb52d7862686bcaf8f30efebd3771d8dff384d587c575f4a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIyZGU3MTg3MzExOWExZWQ2OTgwNTY2ZGE4MjFkM2NhNjZhMjhiMzE1YWQ5OTRjMmE2ZmEyNzQ4ODdiODE0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1Y2YwZDYyYjQzZmI3NWViZDQ3Yzk3NWE4N2FhODFjZmQ5N2ZiMzFhNjJmN2FmZmYxY2M4ZTM0OWQwNDM2YzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMzUxNWI2NDYxYTgwMGM5ZDYwZjQwYTMxOTA2ZTBiOGZhODc5N2U2YjM2ZjAxMDYyOGQzMWU1M2I5NTg4YzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBlZmM4YTk2MGRmY2RiOWNiMGVhZDQ1YTIxZjViMzg0YjlhZTRhZmEwZTRhOTczNWU3ZmUxY2ZmMmFiN2Q2YjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a9b22ed3106f4e158c9c00175d80e817",
+      "statement": "後續 poll 只入列發布時間晚於 watermark 的項目，201 計為新 task、409 計為 duplicate，並使用 block_existing policy。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L186-L210",
+          "version": "repo-lines-v1:sha256:56269e5576bbece8a776f1a4f1c07ff0fb1b06d1f298c62e04f0d070f844e9aa:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4NzM2MWU3OGIzNGYxNDMwYWQwMDJiY2U3NmU5ODI1ODc4ZTFhNWU5MjE1MDQzNGI5NDMxNTliODA2ZjdlYjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzYmE5OWQ0ODc1ZDA1NDE0MWE2NjYxYjE5MmM4YTBiZTYxYjEwMjNkMWU1ODE1MDEyMDgyY2QwMTRjYzk1YmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiODIwNzVjNDRhNzg5MjY2MzNmMzM4MjQwYTA2YzY2NjkwMjdhMjIwNDgzMTExYjU1OTI1NDY3ZDY5M2U4ZDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxMGZkMjQ3Y2U5YmEyNThiNjY3YjgxNjM1NDE1ZjA2NjUxZjlhMWM2ZDQyMDI0ODA5MjJhMGNiYzdiNmI1NzgifQ"
+        },
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L97-L126",
+          "version": "repo-lines-v1:sha256:9e308fc5579a6638a3721a96c07bb747f74994a0433d9069be431e04117024ad:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4YmFjZDdmN2QyMWU3ZmMzZWY4MzQwZTIwMzFlOGM2M2ExMjhlNGFhZGYwMmY2ZGJiNDc0OWY3NzA3ZGUwMjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc5ZjMyZmJhMDNkMjdlMjU1MDNiZjY4YjdjNjkyYjRlYTk4NjE1Njk3ZmYyYmMzMDQxMmM0YjU4MzliMmM3YzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhNTljYTMwY2Q3MDFlODQ5OTA3ZDJjYzBkZDhhNGFkMDI0YTZlY2IyYmE1OTQ1OGQ1ZmIyNGRhN2JjODEwYjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c332983bce9544608b673e8c03a9cec4",
+      "statement": "單一訂閱 polling 失敗時會保留舊 watermark並記錄 error、checked time，讓後續輪詢可重試。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L211-L224",
+          "version": "repo-lines-v1:sha256:8f19a0488c0b62acc0556efd0751115bea49a3d21e479f42c6157c2bf3a79f52:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1OWU0MTllNWNmYWRiZDY3YzA4MTgxZDk1OTE3NWIyZGU3ZThiY2EyMGU4NzA5Zjk5NjQ4ZmViZGM4MzI4NDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzYmE5OWQ0ODc1ZDA1NDE0MWE2NjYxYjE5MmM4YTBiZTYxYjEwMjNkMWU1ODE1MDEyMDgyY2QwMTRjYzk1YmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxNjM3M2EwMzViYzI3ZTk0YjI1YWYyODY3ZDMxN2U4YTgyMjcwMTY3MjRhNjExMjYyZTEwNWU3OGMwMzM5YjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4cb96a6d6984491da0b4b6fc8ed635b4",
+      "statement": "RSS CLI 支援單次或常駐模式，且停用設定時不會開始 polling；常駐 interval 不低於設定的最小 interval。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/workers/rss_monitor.py#L11-L29",
+          "version": "repo-lines-v1:sha256:07ff0d253f749746e12000e6a31331d3b435d3e5f1f8a9e140df30d74c6a53ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwYmM1MTI2NWRhM2M0OTRiZGQyOTQwOGMwZTE3NzY2NWJmZWFkNmZkMjc5MzZmMDU5ZDJjNTU3YjE5YTNjZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmZTE1ZWI3ZTA3NDY2Y2NhOGU3ZmEyOGU5MTJhNzM2ZGMzYmQ1YTUwNjIwYTk2ZWQyYThlOGI1ZTVmNWQyOTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU4MmQ5MTBkY2Y1Y2Y3OTA5N2M5OGY5NjNiZjllMzNiODk0Zjc1ODZlODVjOTM3ZjhmZjkyYmEyMDNiNDAzMWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+        },
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L147-L162",
+          "version": "repo-lines-v1:sha256:d73721ae45a40ec10455bb9ef8d9744a73b6ef3cd0b275f691a9021fa73f4bad:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiNDNiNWEzN2MwMmJjZDU2M2RkZmUwYTFmNTBhMzY4MGVjY2FhNDg1OWNmNDRlMzdjOWEwZTVkY2JlNzdiZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVkMWRhNzQxNTYzOTg4ODRiNDlhOWY2M2IxOWZkNmM1MTViNjUyYmI3NmNhYTNiZjIxMzM4MWZhNGZkM2M4YzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVlZTg2ZDk2Y2FhNjRkYmM5ZDZhNjI2YjU5ZWRhMjJkMmU2ZjEyMzJjZTQxMGVhMGM0NjA0YTg1MDQ1NDAxMDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhhY2E0M2U0OWYzMDZiMzAwZWE2OWQwNWM3MmMxOGE4YWVlZDJjNTM5OGYzZGYzNzdhMTQ0NmU5Yjg3YmM1OTEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d9ed9dbdeb0e4ba1a4ca6a6b7eb57758",
+      "statement": "RSS subscriptions 與 monitor state 儲存在 SQLite，polling 僅列出 enabled subscriptions。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/rss_subscription_repository.py#L156-L187",
+          "version": "repo-lines-v1:sha256:4129285595730a6134e871ef08dd57f1c597e441f99bf83f1f54623fe2271380:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhMzQ3YmE0NmVmODJlODI3YjkwOTE1NzRmNjBhMDlhYWU1MmMyYmQ5MDM0NjExZWM1MDZmYzM3OTI4MzFiYzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3MzJmOGJlOGM1Yzg2OTBmOTY1ZWRlMWQ0NzA2YzQwZTAxMmEwNDQ2NGIyYTAxNzc4MDM4MGQwYzVmYTJmMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4YThhODRjNGYwZmI1ODIwM2Y5MjI5Zjk0YjFhOWM0NzE2YjU0NjM4YjI0MjNhZjNiNWNlYWViMWRhYjQ4OTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/rss_subscription_repository.py#L19-L64",
+          "version": "repo-lines-v1:sha256:8c4f921a3641cf5f86784d7d7a8245712d1da14a6c0d326bad87e1ff9465b66e:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAyMGI2OTc5MWI0ZTQ3NWViMjY4OTQ5YTQ2ZDdmY2E2YjVmMjliYjNhNGMzOWI1YWYxNGVmNWMzM2FlNDMwZGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNkZDc5MGYwMTBlYmUyZDRhZDM2ZmE3NzU4YzM1MTM5NjFhMTNlOTFkNTk2Yjg3NWM3OGE5NTM5MjdkMDRkNTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczM2U4NDg3Yzg1ZGZkY2Y5ZmE3YjkzYzc0NmM5NDYyNWFlNDdlMTIwYzc5N2U3OTFlNzM3ZjllZDdmZmM3M2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcwMWYxNDY2OTk5YmUzYjdjODA0ODBkOTBmNjc5MzRmZjBiOWQyYTU5MWFmOTM2ZWY5ZDNiYjc5NzhkNjVhOWQifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}

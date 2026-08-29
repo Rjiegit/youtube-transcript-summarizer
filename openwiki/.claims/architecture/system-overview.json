@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:bfe9a065b03cb271e58eeacd3920bcfa69bab248d8e2535c41d0b2c45f9ac69e",
+  "claims": [
+    {
+      "id": "claim_e58d32757ef34b6a8caff1e6252ae528",
+      "statement": "Python 主系統提供 FastAPI、Streamlit、CLI 與 RSS monitor 等入口，而 Nuxt Showcase 是從 Notion 讀取完成成果的獨立展示應用。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L522-L585",
+          "version": "repo-lines-v1:sha256:0c7d67349dc8e74540bd24a0eb406918231ce018875bd3ce0552967db790d017:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyYjY1MjI3ZDVkNzIyYjA1NTU0NDViYzc3Njc2OTE4YTNhOTU1MTQxZTAwMzYyODRlNGEwNTBiZDU0MjcwMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/apps/api/main.py#L330-L335",
+          "version": "repo-lines-v1:sha256:3a509ada6c79207a4cf61ef0ccedcaa672f32994bf79e231385f8ee023a4f64b:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZmFmYmEwNTI3YzM5NTNjNGI2ZTBlNWI1NzM5YmE4MzYxMmY4MDUzYmNkYzk0NjY3MzAxOTNjZDFkNTkwYjQwOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTZjNTU4ZGJiN2YyYzZlNjA1ZTI3MTIzZmJjOGU0ODY4ZDQxMWMwYTVkYjE2Y2Q2ZDAyNWI0NTY1ZTI1ZjBkYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDdkYjI2YWJlNDliZmMzZjFkMzM5ZDNiYTM5NzUzZWZhYTc4ZDRmM2VjYmEwOWY3ZjBmMmI4NzNlMDkwMWI2OSJ9"
+        },
+        {
+          "resource": "repo://src/apps/ui/streamlit_app.py#L55-L69",
+          "version": "repo-lines-v1:sha256:645667c7b304a2bdc1d83c5faa408a076b3b5c9920f7248248c60887ac8f7268:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0ODZmZjVjZjkzNjNiNDQyOTMzNjgwM2IyYzk2MGU3M2RhOGM0N2ZhMGM2ZjY3NjU4ZDE0YjMyM2NkMjJkMzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU1OWFlZjkxZWRjZGVhMjg1N2FjMDBkMzNhYmFlYTkxZjc1OTBiZTdjODJiN2I5YjBlMmRlMjhmZjk1ZDkyZjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzN2QwZDUxNjJlMzQ3NGNmNTQ2M2ZjYmE2N2FmYjVlMjZhMTMwMTVkY2VhZjcwMTM0NGZiZjI0NTg2ODA5MmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/apps/workers/cli.py#L11-L28",
+          "version": "repo-lines-v1:sha256:9210226f98f896d365a09492fe50e8973de29baafce9a1f32c91ed2ba10a2671:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwYmM1MTI2NWRhM2M0OTRiZGQyOTQwOGMwZTE3NzY2NWJmZWFkNmZkMjc5MzZmMDU5ZDJjNTU3YjE5YTNjZTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4NmQ3YmJlNjBjZWVkYWMyZjM3Y2EzMDY2ZDI2ZDdkMDc4NGFiYTc5MTU3YjMzOTQzZDBkMzEyYTY4NDIyMzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkwOTY0OTQ0YmE5MGM2ZGRlYWU2NzI2MjVmMDY0OGNhMDY1Y2ZiMjcwYjE4ZTJmNTEyNjE4ZDQwZDhmMDdkNDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ee81f9ef23bd4be4a4874113ead2c506",
+      "statement": "Docker Compose 編排 api、streamlit 與 rss-monitor 三個 Python 服務，Streamlit 和 RSS monitor 透過內部的 http://api:8080 存取 API。",
+      "evidence": [
+        {
+          "resource": "repo://compose.yaml#L15-L41",
+          "version": "repo-lines-v1:sha256:9e495d25c88a405be64514a0da8f3fd985198c0dc7231c2cbad404a430270599:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwNWJlNjc1MThlYzNhODQ3NzE0MzlkMGE1YzBmOTNiYmJlMzZhYjBlYzAxMmEyMGRkYjdlMDQxODY2OTY2MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhODExYzFiY2VkMGJlY2U1ODJkNTFjMWM1OTM5YWUwNzk3MWUzN2YwOGY3YTJhNjYwZGRiMjYzOTdmMDZmNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_dd8d0389def34328aeffd8c3a8db6123",
+      "statement": "建立新任務後 FastAPI 會嘗試排程背景 worker；若排程失敗，已建立的任務仍保留且 response 會回報未啟動處理。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L484-L531",
+          "version": "repo-lines-v1:sha256:aa61eed303ec0416ec223f8272e57f8d7fda326f2393537a6378f01135c15d6b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyMWY2NzVkM2Q3M2M4OWY0OGYxNmZjNTRjOTlmNzU4ZTM1YTkwZTRlMjQyMDQ3YzA2YjljM2VjYjQ5NDY3MmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjMTFmYWM5N2EzNTA1NmU5OTYxNjAwNzFmZTJmNjM3YjM0ZDBiMGYyM2JhYzVlMDYzY2M4MDY2NGQ3NGZlNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJlNjQxNGU2ZjkyYjJlYjU2MGFmMjc2MDY5ZTJlYWJhNDY2ZjEwY2IzMzQ5ODRkNzdmNjc3MmRjMjJhOGY4ZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0978c6b1cd274ddb9a486770f6950de8",
+      "statement": "ProcessingWorker 取得並維護全域 processing lock，逐筆取得任務、隔離單筆失敗，並在所有退出路徑釋放全域 lock。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L179-L228",
+          "version": "repo-lines-v1:sha256:f99d75d78d31d6f47171b3623c34a0000920e0d9c261ba9d685cdba43a486da7:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwNzQ0NmFjYzI5NDIxNDMxY2Q1YWQ1N2Y1ZjQ2MTE2ZTk3YTQ5N2NjODRjMDhiNGFjOWJhNTY4NDMzMjhhYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUyNzAxMzgxYTM1ZDJhYmQ1YjEzMmNkZDhlMWRlYTRiOTBkNzU1M2ZmMTU1NDMzYTEwOTY0YjdiOWRiZGYxMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwNWE0Nzg4NzYwMTZiY2UyYjhhY2RlMjVjZWRjZWI2MDExNjY3YTZhMWIyNjQxOWI5NWEwODFjM2M1N2FmOTIifQ"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L300-L311",
+          "version": "repo-lines-v1:sha256:d80744503800658d636c00ba014eed2235ff42dfcdaac4a1412c494a52a3492e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE4NDhlYjc3OTAyODdkMmI3ODYzMjA4NmQ1MTM0NzkyYTIwNDAzNTNkZjlkOTJhZjBlZWQwMzIyNzE0MGY4YmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmMTFlYTExZWYwMWUyZTk2OWU1ZjRjNjI3MmYzZGI2NmRlNWY4ZTU0ZDFjYWFhNGFmZWYyZDIwYmJhMmVmMjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwMDE4MDdhMjMxZTJhNTgwMDM3ZmVlOTZkODMxYzc5NjIwY2M3M2JhNjFlMDdjZDEwMzhjNDZiNjcyZGM4NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiNTNkZTU5YTBlYjVmOTVkN2ZkZDQ0M2U0NDBiNmNiODY1NjgxYTY5NjU5YzQ2MTE2NmM4OTRmNjA2NzAxNjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4d579ead316542a2b32fd96c2a289e67",
+      "statement": "DBFactory 支援 SQLite 與延遲載入的 Notion backend，並對未知 backend 或缺少 Notion dependency 提供明確錯誤。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/factory.py#L5-L18",
+          "version": "repo-lines-v1:sha256:de2cb6dd97cac537cdcc3ff9618bdd2fe8767595f24389a4ed254c9fda1dc506:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlZGRiMGRiZDY3ZWQ3NDAzNjM5OWU1YjFjMGY5NGM5NTkzMjA2MmUyNTBiM2MzNmQ0MDNlOGVmNzNiZjVlZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkYTg5MTZlNzNjNjVkOWY1N2MzOTg2M2U5YzEzNTY5MDYyMjg3YTlhYjkyN2I2MjUyOGQwMjYyMzdlMzI0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4YzUzZTQ3NzcyOTJjMWIxZTJkOGVhYzU4Nzk2ZmFkYjBkZGNmNzYyZGY4YzAzMDZjZDBjNDQ4ZGI5ZTY5NDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cbb06da82a6d440b8864ff51a0ac327d",
+      "statement": "ProcessingWorker 的媒體、LLM、儲存、通知與設定依賴可透過 constructor factories 注入，形成測試與擴充 seam。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L118-L177",
+          "version": "repo-lines-v1:sha256:1a314a862fda841f230a908f89a769cf6ef74848364ba22724713f38246530b7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmZDdhMDdhODNkZDE5OTZmYjUxNjg0YjQyYWVjYWY0ZTkwZmI3OGJhNzIzMGU1NDJlZDdiZDAxZDQyMzAxYmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhZTQ0MTY4ZTE2NmMzZDA1NWJkNzAzYzhhNmZhNWRkZGI4NzZmMzVkMmZiZjA5NjU4NWI0ZTU1OWI1OWIyMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhZmNkZmFjNWU5NDc5ZTBlNzYyM2RhNTdjZWVhMjRlYWE1NjcwZjk3YTk5YWU4MzE0OGI3MmU2ZjU0MzgwZDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0YTg0YTk5ZjgzYWZhYTA1MGQ1YWI0MzZlNzhlMzdlMzA1YzI0NWEzYjI4MDhiZTY4MjIwZjkwOWVlODU2M2IifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_51a1ac0be0d14c508f342c0d64902713",
+      "statement": "Nuxt runtime config 僅將 build date 與 commit SHA 放在 public 區段，Notion credentials 保留於 server-only runtime config。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/nuxt.config.ts#L38-L52",
+          "version": "repo-lines-v1:sha256:98e92a1830c3e6655d7b3fda6fdc7fd6df79517ea55682ad7383fa317e8cf8fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNjU3MTI1NDdhNGU1NmFmZmVmOTE0MDUxYjRhNzg3NjkyMGRiNjQ4N2I1OWE1YWQ2ZTg4MjRhY2ViOTRmYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlMzYyNWM1NDczZmMyZWVjZWQwNDYxODNiOTUxY2JmMzI1ZGU0NDRjYTY5NTEyNmJkOWJiYzc3OWE3ODZlNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwOWU2ZjJiNjg0YzI2YTViYjMyMGNkOWQ4YjI5NDEzZTIyZWJiOTMwOWI3MTZiNTZjZjkwYjMzMjhmNDA0NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:af41093799c2fb9930ca866680e431f4cfb4a01ac1ee184b6d20447a36a21add",
+  "claims": [
+    {
+      "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
+      "statement": "Repository包含 Python 3.14 的轉錄摘要系統與獨立 Nuxt 3 Showcase；Python dependencies由 uv管理，Nuxt dependencies由 npm管理。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/package.json#L1-L25",
+          "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
+        },
+        {
+          "resource": "repo://pyproject.toml#L1-L21",
+          "version": "repo-lines-v1:sha256:8639e0c24b21f6124ad009533153321b851dcec7c164f09372d2c8e8cd111613:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwMmE4MWMzODM2ZWRlZjJkMGJhMTFkMjM1M2ZiNmRhYmM3NzcxNTBhN2NhODNlYTBkOWU5YTcwMzEzZmVhYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYjc0OTliMWNlMWM0ZjRiMjUyN2YzYTMyODRjYWM2YjZhMWUzYmY0OTg4YjU2Nzk4MmMzZGM4ZTlhMTdmMjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFhMzc4YzY5ZmJlYWM2MjIwYzQwNWQ3YmYyZWU3ZGE3NTA4NzViYzRkYzIwNzk3MDI4YzE2MTIwNGExMjYzMTYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f9811ce536bb4b659a807a50e05d2f61",
+      "statement": "本機 Python 入口包括 FastAPI、Streamlit與 SQLite worker，對應 make api、make streamlit及 make run。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L18-L31",
+          "version": "repo-lines-v1:sha256:42495596be49ee3178fc26f6c6730b40f4907b874e40645252e4a41a49303870:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzYThiYTkzMzc4ZDBlZTE4ODU5Yzk3MDBkOGMyOGY3ZjU3MGE5YzJjMThhZWI5OWQwZGIxODk4YzkxZTI1MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4YmQ4YjQyNDYyZTJjMTRiNmJmODBlYmZiYmEzMDE0MGEzNjE4NmEwYTQzYzU1YTM5MzFjNGFlOGI2YTYzMWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjOGYxNmQxNmFiNjQwZjFhZmU4NTk1OWE4OWMwZjE1N2QwOTY4NjhjZDBjZWZhMDc5YWY2MDdhMzlmNzVjOTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQyZTQ2YTU0MDQ4MTE5YTc4ZWNhMGQ5ZWI5NzhlNWU3ZGYxMDczNmU1NzdiYzE4MzA0N2M5YjEzZjI0Y2FmN2MifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e66c3bd5a9dc40cc994cd542a55d8ff1",
+      "statement": "Docker Compose 啟動 api、streamlit與 rss-monitor，對外提供 API 8080及 Streamlit 8501。",
+      "evidence": [
+        {
+          "resource": "repo://compose.yaml#L15-L41",
+          "version": "repo-lines-v1:sha256:9e495d25c88a405be64514a0da8f3fd985198c0dc7231c2cbad404a430270599:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwNWJlNjc1MThlYzNhODQ3NzE0MzlkMGE1YzBmOTNiYmJlMzZhYjBlYzAxMmEyMGRkYjdlMDQxODY2OTY2MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhODExYzFiY2VkMGJlY2U1ODJkNTFjMWM1OTM5YWUwNzk3MWUzN2YwOGY3YTJhNjYwZGRiMjYzOTdmMDZmNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_169c796272d442ec9383732ca166744e",
+      "statement": "Nuxt Showcase提供 dev、build、preview、test及 check-env scripts，development server固定使用 port 3000。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/package.json#L5-L13",
+          "version": "repo-lines-v1:sha256:c5245520a1b50616b0e00ae78345573465eca9ae3917ceabe299c0c53c12df48:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNmMzMjM3NGQ1ZjAyNjAxOTllNTkwMmFlOGY1MjBmYTk3NTZlOGI3ODY2MTBjYjVhYTcxMTIzM2Q0OWFmYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmNjOTcxNzkwNDg3NWYwMzc1OTNlNGU3ZWZmOWMwYmE2YTIzZWNhNDUyNTQzMzRkNTk2OWZkNGQxM2QxMjAzNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTQxZjZhMmYyYjBmM2RjMDVkNDVmZDA5YTQyNTNiMDhhNWI1OTYxOTkzZWM5ZGY5Y2MzMjkxYzVjYmU4NmJmZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDJmZjIxNjNiMzQyNzM1MGMwNzEyNGRjODg5NWFhMzM4MWQ1ZmQ2Y2EzMGRlMTg5YTdiYzU3ZjhmZDMxOGFlYyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_408be23bb0784e15ae6cae6ec54841b0",
+      "statement": "Python測試使用 unittest discovery，Nuxt測試可由 repository root透過 npm --prefix執行。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L33-L58",
+          "version": "repo-lines-v1:sha256:861ffb6eef4c119bc089f2b2f45b5eb6ce76fe84b6b06e55d782cda03729888e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYzIwMTNkMjFhZGU5YzYyNTc0YWYwZDA2OGM2MzRkYTM5NDk5MWIyNzcxZDUwZjUyMDI0MGM5NTkzODY5N2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4Nzk2ZWYxZTY1M2UzYjEyZDZlMzUwMWVkNTdlYWRiMGRlZjcyMDk4NzdiN2FhNzZkZmI0YmQ4NDg2OGJkY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxOTc5NTdlOWU0YTdhZjljZGM2MDk4ZTY4YWFhZTNiMTBkZDIxMzJjYjRhOTQ5YTAwZDJlZDU5YWMyOWQ4ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNWFiN2NkNjNiMDlkMmUzZGVhYzk0OTRlNGVmNGFmZmQ3MzE0MmUzM2Q5NDVlYzViZThmOWVhY2YxOGNiOWUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_283faddd8cf54822bf70f47ce1149dfb",
+      "statement": "Python Config驗證至少需一個摘要 provider key，且提供 Notion key時必須同時提供 database id。",
+      "evidence": [
+        {
+          "resource": "repo://src/core/config.py#L94-L115",
+          "version": "repo-lines-v1:sha256:09d44b938c6a635817011f72860716cb2f7b9ee6fb28899257a1d1991fcc5fe4:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2MmE2ODQ1NzVmNTg4YjdmYTQ0YWJiMTY5MGE1NGEyZmFkMzNjYTMxYmY2NjUyMDlhY2E2YTJhODJmMTM0ZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4ZmFhZTA1NGRiNThlNmUxM2JjMzQxMjEzMmJmMmU4OTBiODhmMjE0MWE1M2U0MjcwOGJkNDNkMWFlOTg0MjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_ce3eb06cd198448fbb91ed6d336ef63d",
+      "statement": "API、Streamlit與 RSS monitor在 Docker 中共享 repository volume與 .env，Streamlit及 RSS monitor透過 API service DNS存取 task API。",
+      "evidence": [
+        {
+          "resource": "repo://compose.yaml#L1-L41",
+          "version": "repo-lines-v1:sha256:8f8c8e105f6f9974a7fdd60d18502b0400d1b1eee7b2895139e42b34b2a07bfa:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyNjVlODc1ZDlkZTRkYzQ2MTRlY2Y1ZDRiMjdjNWQxMTQxOGI3YWE0Yzk1YTdiYTJiM2M3OWU0NmQzZDkxMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwNWJlNjc1MThlYzNhODQ3NzE0MzlkMGE1YzBmOTNiYmJlMzZhYjBlYzAxMmEyMGRkYjdlMDQxODY2OTY2MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}

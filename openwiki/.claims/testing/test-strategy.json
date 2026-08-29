@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:02c6fe7adec25261c476ea337a4300b5a3d054015d171332168426467b4842e8",
+  "claims": [
+    {
+      "id": "claim_d5e03481a41442a7b2c0597a6836572d",
+      "statement": "Python tests 使用 unittest discovery，Nuxt tests 使用啟用 Vue plugin、jsdom 與 globals 的 Vitest。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L54-L58",
+          "version": "repo-lines-v1:sha256:bce34f8dad619f01155e5fb4eb7670d39d9de7224b4b6fa822922b0cef9efdc9:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjA1ZWU3ZmY2ZjRmY2JiMjc5N2U3NzQ4MGIzZTA0ZDNhNTA4ZWJmZTJjN2MxOWFmNGJlMjVjMDM1NjlmM2I4MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTg3OTZlZjFlNjUzZTNiMTJkNmUzNTAxZWQ1N2VhZGIwZGVmNzIwOTg3N2I3YWE3NmRmYjRiZDg0ODY4YmRjZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTI0MTgzODhjMWFmOTM1MjM5MGRmNmRmNDhiZjc0ZDQ5MzM0NDMyZWMxMzE3MDFmZGY0YjE5NDU0MDJhMDA5NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDM1YWI3Y2Q2M2IwOWQyZTNkZWFjOTQ5NGU0ZWY0YWZmZDczMTQyZTMzZDk0NWVjNWJlOGY5ZWFjZjE4Y2I5ZSJ9"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/vitest.config.ts#L1-L10",
+          "version": "repo-lines-v1:sha256:b1d48dca475201f0d887c598b358b5c53e43f0423adba128855bbe8988cde9e4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0NTczZDlkN2YyNDU2MWJhMWVmZGQyNmUyZjRmNzU0NWFmYzE3MDM4MmFjNTg3ODI5NTJlMWUwYjVkNGQyNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_19c866d6a4c443e982b6b7925269facf",
+      "statement": "Processing worker tests 使用暫存 SQLite database 並 mock 重型 pipeline dependencies，驗證完成狀態、Notion page id、file storage 與 notification。",
+      "evidence": [
+        {
+          "resource": "repo://tests/test_processing_worker.py#L36-L120",
+          "version": "repo-lines-v1:sha256:70cbb23e2f7b0e24219726e1d307c343fb5cbe41495c9c31650c577e29e0e354:eyJzZWxlY3RlZExpbmVDb3VudCI6ODUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxYWIwMzA3NWYwOWQzZTYyMzljM2M4OTAxY2RlOTNkMTlmMjYwODM4YmE4OWQ0MTNkNjJiY2Q4MTRlMGU5Y2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzNDBhMDhmODExOTkxZTVmNzJjNzhlOGVhYmE4ODIzZTY3YmMyOWQxZjhkYTBlZTdmNmNlOTdiNzIxN2ZkMWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwMjE0Mjk0NzRhYWM4YmMwYjhhOTk4NTFkN2QxMWFjYmVhNjE4YzI3MThlM2YxYTUzZmZmNmRjMTc4YzVkYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFlZGI5MjM3ZDlmMjhkNmZmMDM4ZjQ4Mzk2MDdjM2Y4NDY1ZTFkOGU0YzllYjljNWZlNTljOTE5MmMwOTdmYzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d9115be2266f4870bd32c4dac0674d91",
+      "statement": "Processing worker regression suite 驗證單筆下載失敗會標記該 task 為 Failed，但下一筆仍能完成。",
+      "evidence": [
+        {
+          "resource": "repo://tests/test_processing_worker.py#L136-L211",
+          "version": "repo-lines-v1:sha256:2198e86f8f2d9da45880ebd92d2f7aa65dae82cc22013e75b999c42fea3b9a05:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjZjIyMjFjZWI4OTk0NGJiNjRjMGVhZDZkNTQyNDQxZDA0Zjg2YmMxZDZjYjAzYWE5MTFkOGI4MTFlMDRiNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1MTBlYWUyMTFiNGJiYjU4ZDI1MWUwMGVkYzBhMmQ4NGVhNmFmZDExMDgwMTU5ZWJlODNlNmE2MGUwNWFhOWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_075efc25591b46b89ada5acbf9ab541d",
+      "statement": "API tests mock database 與 scheduler，驗證 URL validation、backend selection、task persistence 與 processing scheduling contract。",
+      "evidence": [
+        {
+          "resource": "repo://tests/test_api_create_task.py#L166-L224",
+          "version": "repo-lines-v1:sha256:514096d09844ab339aa9378191374427f081cbe5b707005360e5bf317c769082:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4Zjg0YWQ2YTdkNGFlYzk2ZWJhZGIwYzY1MmY1MmJkYmE5M2IxMWEwYjY1YWZhMzE4MDJmZGJhZWY0MTRhYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZlZjI1MmZhYTIwNTNlZjhkNTA2NjI3YTQxNWM1YjdjMDdmZWQ1MWQyY2NhYjI2MTcxYTk2M2NlYTgzOGM2OWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjMGY3YTE0YTg0Y2E0NjVjYjExOTY0NWI1MjkzZWMzNzQ0YjIyNDdiMzFkODEzMTgwZDZjOTIwMDI5Yjk5ZTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc4OWYwNTIwOWJiMjljYzU5YTU5MWI2MGM1MDNkYTA3OTQ1YjQ4MTEyMjNjZGZlZjEyMzhkNWYzYTExMGMyMmQifQ"
+        },
+        {
+          "resource": "repo://tests/test_api_create_task.py#L50-L102",
+          "version": "repo-lines-v1:sha256:032eb7ca5df967968afe6b620662ff5efb9189915b3f467aa4e5d5de4f535627:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjMGMyOGMzMGUyZDA2YTRkOGNkYWY0OGRmZDRlNmMwMzRmMGY4Nzk3YTI4MTcxYTYyZTNkYzYyZWY3YjVkNGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YTc1NTJmOTU2MWVlZDY1YTA5NDU0MTc0NDI0ZWE2OGY3Y2ZmMTE2MWNlZWIwMWQzYWJkN2RhNGU0YzA2YTkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEwMmQ2NGQ2ZmI1YWZhNmUwOTA1OWZkYTI4NGI4OWE2NTkxNWEzMjVmZTg1NTZhY2Y5MmIwZWUwNWUzOTJkNDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNlOGFkZmYzNDRkZjY3M2IwMzM0OGNmODU0YWYxNTdlMDA4MDBmODhkYmU5NmE4ZDM0MmRlMmM2ZDRiYTQxMjUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cfc9fcc539ad48fdb91b77cc9bc7ccc1",
+      "statement": "Weighted model selection tests 注入 deterministic RNG，涵蓋權重、unavailable backend、excluded candidate、invalid pool 與沒有 eligible candidate。",
+      "evidence": [
+        {
+          "resource": "repo://tests/test_weighted_selection.py#L23-L119",
+          "version": "repo-lines-v1:sha256:2590a60a364135cb58b456ce5f648d690f359eb117f133db913bef804f8a79a0:eyJzZWxlY3RlZExpbmVDb3VudCI6OTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlkYWIxYmQwOGY1NTEwMmM2ZjU1NDQ5NWQxMzM4NGMzOTg4ODBjMGMwMTc1ODkwY2VlODM3ZGI1MzFiMTlkNmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2NWM5MWQxMGY1NDlmNWEwYzI1YWQwOTc3ODhlZmI1MWRjOTJhNjBhZjMzNDY3YmQ3NDY3OGY1ZjNhMWE4OWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5cdc58fa15994f2f919969e74693e9ff",
+      "statement": "Showcase page tests stub Nuxt globals與 localStorage，驗證去重和已讀狀態更新，而不呼叫真實 server 或 browser storage。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/tests/showcase-index-page.test.ts#L104-L176",
+          "version": "repo-lines-v1:sha256:8ba6de021d6d54876b8654a1e16a818d6c9b2c7e6a0242633460e1efe533f413:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmNWM1OTVlNjg2ZjRhOTRjN2ZkZTQ3ZDU1MTU2ZTM3MTg4YTAwOTdlMjgwNTZiZmNhNzQwY2UxMDIwNWRmNGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjgxYTlkZWQwYjgzZTRhZjFmYjEzZmExNGNmMTc4OWI5MzYyNjVjNTk5YjIyMWI0MDZkMDA3ZTI3NWFhMjllM2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImZlZDYxY2YxMGQyYWZiMWQ2NzlhYjIyYWJjYTlmOWE2NTQyODU1ODNkNzI3MTQ4ZTk5OTE3YjRjNDZmYWRkZDgifQ"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/tests/showcase-index-page.test.ts#L8-L86",
+          "version": "repo-lines-v1:sha256:424fffda878e7ce812cfd8ff934acfab33acc8964af2ee8ad4a6b3107a18f0b8:eyJzZWxlY3RlZExpbmVDb3VudCI6NzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwZjgxZDM4OWE2NGVjY2VlOGYzY2VkYmIwOGJhMmYxNzE2NzczNjlmYWMzMDZjYjAwYTc4MjQ2MGE5ZTAzMjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiOTE2NmE2Yzg3YzliYjJkYTkzMjU4ZTg4N2Q0MGY2NzBmNzZmNzljMjQ2MmZkMjMyYzdiMTgzYTJmOTg2ZDMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwMjJmOTM1MDdhZTRjOGVkYWU4OTU5ZGE2OGI3N2IyOWI4Yzc0YmJjZDBjNGM3YjkxZjU3NDY0NjQyNDk4YjcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e0e114628dd14a5188737dc835ea161f",
+      "statement": "SWR tests涵蓋 fresh cache、stale background refresh、forced refresh concurrency 與無 snapshot 的初次失敗。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/tests/swr-cache.test.ts#L5-L99",
+          "version": "repo-lines-v1:sha256:c1d75bc3092cb4939263711e36ead729403457fb35dd152d92e3e6ea0b2e3058:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZjM2E1ZDY0NTUyZGRkMTFhOWJhNDg4ZWQ4YTFmMWQ0MTNhOTg2NDk3MjBhNmFjNTZjZWE4ZDQ4ZWJiNThjMWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0MmE3YmYzNTQ5OWMzNWJmOWNlNjg1OTM1NzAxNThkNjUzYTlkYjc1NDc0NDA0Mzg0OWE1ODRlNzEyZTc5ZjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}

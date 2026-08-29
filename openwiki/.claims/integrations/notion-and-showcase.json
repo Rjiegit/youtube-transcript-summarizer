@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ba48f728f856b9deb1ad7ff46015970480c95bbb0226ace8385e5b9d3b09dee3",
+  "claims": [
+    {
+      "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
+      "statement": "NotionDB 可將 Notion database 當作任務 queue，使用 URL、Name、Status 建立與更新任務。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/notion/client.py#L12-L49",
+          "version": "repo-lines-v1:sha256:665b5fc4d6a52769ef74024d6c6de9ab6a6d2e032e54f6b6fb61ae7c165acd09:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmODRhMjE5NDI4NDM2YjEzNzEyNTE2ODE3MzkyMjRjZTA4NmM3MDZjZmU3MWU4NjFhY2E1MDBmYTE3YWZkMmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0ODIzNzM1MTYwNWM2YWM1NjkwOTUzZmU3NjgxZjE4NWM5OGEwMmM0M2Y4Nzc1NTMzNGY0OWNkZmFjN2M2NzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2NWFmOThiODBjNzk1MDFiMjVhY2JlYzY3MzY3MGQxNDc2ZGFiOWIyNTBlY2IyMDE3ZmNkNDE2ZGMyOTAzYTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNjIxZDQyYWY3MDI4N2ZjZDRhN2FiN2EyMzMyOTk1MjU4NjA0MDM1NzRjM2U2MzYzMDM5M2E1ZDJmNzkxMzkifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/persistence/notion/client.py#L124-L148",
+          "version": "repo-lines-v1:sha256:96bdca85059c8fb91561eb38adefa0be44cd777c33815b60668de187a01522b9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiNmMwNTVmODI4OTE1NDJlNTNmOGVhNTNlYWNkMjU0YzhjNGIzOTBlZTc1ZTI3ZjhlMWM4M2Q0MjI0NGUxOGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwMmQxYTk2MjdkNGJlMDljZjcxMjBjMjUzNzliYzMyYWEzMGEzYmQwODE3MTIxZjAzOWYyZTE4MjYwZTFmZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjOWMyYjVjMmViNmJkMzU4MjQ0MTYyMTZhYzBmOWZmMDk5YTQ4ZDg1NTgwNWE1Y2NlZDg5NzI4MmE4NzVjNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwOGU1YmQ4ZGQ5NDJmNDUwODE2OThkZGIxMmVmNGY0MjMwMWM4N2M4MTA5MGU3ODU2NzQ0MzhlN2I0ZDY3YzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8fc6a2c088ef41ef9362d6169b0bdd85",
+      "statement": "Notion backend 的任務取得是 best-effort，沒有真正 row lock，且 global processing lock lifecycle 都是 no-op，因此假設單一 worker。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/notion/client.py#L81-L122",
+          "version": "repo-lines-v1:sha256:69c23436113af1692aa49a0bebcfe28f34d30f3fe9e33ec21977ac88499ed988:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwMGI0YmZlMjdiMDEwOTIzY2VjNTc4OWQ4YzM5Y2NkMzliOWNhZjIwMDYyNGIzOTM3MTNjNTBiZmIwNDU5MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlN2M5NTdiY2I0NGZiNjczYzk4YjAwNTBhNzVkMzgwODJkYjgxZDkxOGRlMzEzYTNmMDdjMTIzNTMwNmQ3ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhNzA5N2Q1MjNlMDBiYmU3Yzg4OGFkYjE3YTk4OTY5NDdiMzY1MmNhNjEzMzkzZjgzN2EwYzNiN2YyYzFkNTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyMWUxZDRkY2FiMDg0MTY4MDA5YWViNjI3MWY3ZDc3ODIyZjEwZWVkMjk1NmE0MWQxZDRmOWE5MjM5MGFjNzMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e320fa3b25d54067a00fc15217a701d7",
+      "statement": "SummaryStorage 建立含 Title、URL、Model、預設非公開 Public 欄位的 Notion page，並將摘要分塊為 paragraph children。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/storage/summary_storage.py#L109-L159",
+          "version": "repo-lines-v1:sha256:a727ac2752da90460b7c6ea57eab8e5dc2fc3f67e5f96f711d731adc899c303c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NjMzMWY1ZTVjNjlkZjc4ODYwNGI0YTAxNTdmN2Q2YjI4MzY5YTM2YTcwN2ZkZWY2ZTJjODQ4OGJlMzAzMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMjVmMjdiYjBjYWEwNWM1OGMyODkwZTZiYjNiMWU2YmQwOTRhMmMzMzk1MmNiNDQyOWQyNWI3MGM1NzdhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiMDRlNWVhMzliYmExODRjZjNjNzRjNDcyZDI1ZjJiZTgzMWFiODUwYmU5OWYyM2M4YmUyZDI0ZDhjZmFlZmQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_357133df4eba4a53a8de3b9b8f720814",
+      "statement": "Notion rich text helper 以 1,800 characters 為預設上限切分內容。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/notion/utils.py#L5-L19",
+          "version": "repo-lines-v1:sha256:a0df116944d79ac4282e9d9c6477476743c5372ee04dde20c0997ef7548df22c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiNTYyNzgwNjA2MzhjZjY3ZjJjZWVkOTk3NTVjMjI2OWU5YzI4OGY4OWU1YjYwMmM0MDI1NjZmYjdjNmM5MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzZmNlOWI4NjcwNDA3Y2YyMmEzNzgzNTI0ODhhNGZhMTNkNDRmZTEyYmNhZTNiMDI3ZmY3M2NmNTgxNTRjZTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1ODE4OGRmZTk2Yjc1ODZmMjczODI1ZmE0YTM4ZmE2ZjJhYmFlZTZhNmE2NTk0ZTczYjIzYTg1MTQwMDEyZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_8a4a01a937b94b61a9affd8e7746d35a",
+      "statement": "Nuxt Showcase 根據 schema 的候選名稱與欄位型別解析 title、summary、URL、日期及 processing duration，缺漏時使用安全預設。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L147-L233",
+          "version": "repo-lines-v1:sha256:6615e7e1b59b574fe38d9bac93b4f62eca1a7bfaefbe1262741033be2ef9ded3:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdhMTIyNzViZDBkYzllOGU5MWNiMGRlNTM2Y2ZiODE3YzUwZTU2OTg4ZmM0MzAxNWMyMzY3MGFiMzk3MTZlNjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2YTJjNTc4ZTgyNzU4MzA3YTM0MGE1YjUzYzA4YzEwNGU3NjRlNDk5Y2UwOGFhZTdkMWQ1ZDAyOGIyYWVlMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJlNDliM2IwZTk2OGJhMmIxNjNmOGQ5YzZhMWExZWQ5Nzg0ODVhNjU1MzAwZDIxMTUxYWVlYTlmODcwNzVlMWEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b80f131c495046a3bba04ff50f514772",
+      "statement": "Showcase 可使用指定或自動偵測的 status/select 欄位篩選完成狀態；明確指定但不存在或型別不符會失敗，完全找不到時則不加狀態 filter。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L464-L520",
+          "version": "repo-lines-v1:sha256:f391d6ace9e6a1011a10bbf807a869817f64a5c611831e6bbe14350b7893bbc9:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzZDZjZmU3NzdkY2I0Mjc3MTkzMmM5ZDVhZDIyNGFhZWM0ZTliMjFkNzI3NDczZmMzM2NiNjBhYWJlZDVlNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNkNTMwMGY3NjE2NjhlZjQ3ZTY2Mzg4ZGJlMmNiMDUwNDFmZGUyYzAzODJmOWQwNmUxZjI4MDkwNTkzY2I1ZTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYyOTI0ODA4MTU1M2M5NjM4MGEyNmNjYTc2NjJlZWRlNDVjOGQ3YmNlOTVhNGFmOWVlZjljNWI1Y2Q1ZDJmZDcifQ"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L522-L554",
+          "version": "repo-lines-v1:sha256:ed04585216da93350f77c878a628e9108f4fb6fdfbed758c585da9b6df2a9849:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyYjY1MjI3ZDVkNzIyYjA1NTU0NDViYzc3Njc2OTE4YTNhOTU1MTQxZTAwMzYyODRlNGEwNTBiZDU0MjcwMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzMmRlYzlhMDZiY2ZmMjFmMzA1NjQ2Mjg3YzUwYzFjZWQzMDY2MTZmZjIzY2RkODMwMzlhOTllNTg2MjIyNDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_bfb8e72e1e1041048a35f690a6409b9f",
+      "statement": "Showcase 列表最多查詢 50 筆並按 created_time 倒序；詳細資料會分頁取得所有 blocks 並在無 block content 時回退到 Summary。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L422-L462",
+          "version": "repo-lines-v1:sha256:fd28053cf291438cedb08766436e8174f487fed2c0fce5cd7af6353be35a1acc:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3NDAwZGFkYjA4MzUzZWQ0YzQyNGVkM2Q0ZjQ0MmM5NDBjMWUyYTY0ZjJjZGM2MTI3OWFiNzdiNDlhY2QxMzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlZDMzNjVjOTkyMGYyMzgxODQyM2Y2NGJlZThjYjgzZTAzMWEwZjUxNWI2NDE5NDg4NTVhNTQ0NDc3ZmFlYzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ0YzBiZTQ2MGFiYTQ3YTg1NjdlMjIxOWYyNzE2NWU2NmNmNTBlMmFkYzQyNDk5YjkyNWUwYjY3Yzc0MWU5ZWIifQ"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L522-L585",
+          "version": "repo-lines-v1:sha256:0c7d67349dc8e74540bd24a0eb406918231ce018875bd3ce0552967db790d017:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyYjY1MjI3ZDVkNzIyYjA1NTU0NDViYzc3Njc2OTE4YTNhOTU1MTQxZTAwMzYyODRlNGEwNTBiZDU0MjcwMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-29T14:03:31.952Z"
+  }
+}
