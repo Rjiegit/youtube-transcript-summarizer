@@ -10,6 +10,7 @@ from typing import Callable, Optional
 from src.core.config import Config
 from src.core.logger import logger
 from src.domain.interfaces.database import BaseDB
+from src.domain.media.models import VideoMetadata
 from src.domain.tasks.models import Task
 try:  # pragma: no cover - optional heavy dependencies
     from src.infrastructure.llm.summarizer_service import Summarizer
@@ -238,10 +239,15 @@ class ProcessingWorker:
             downloader = self.downloader_factory(task.url, self.config.data_dir)
             download_result = downloader.download()
             file_path = download_result["path"]
+            metadata = download_result.get("metadata")
+            if not isinstance(metadata, VideoMetadata):
+                metadata = None
             previous_title = task.title
             task.title = download_result.get("title") or task.title or task.url
             logger.info(
-                f"Resolved task title={task.title} (download_title={download_result.get('title')}, previous_title={previous_title})"
+                f"Resolved task title={task.title} "
+                f"(download_title={download_result.get('title')}, "
+                f"previous_title={previous_title})"
             )
 
             # Persist the resolved title while keeping status in Processing.
@@ -252,14 +258,47 @@ class ProcessingWorker:
             transcription_text = transcriber.transcribe(file_path)
 
             summarizer = self.summarizer_factory()
-            summarized_text = summarizer.summarize(task.title, transcription_text)
+            if metadata is None:
+                summarized_text = summarizer.summarize(
+                    task.title,
+                    transcription_text,
+                )
+            else:
+                summarized_text = summarizer.summarize(
+                    task.title,
+                    transcription_text,
+                    metadata,
+                )
 
             summarizer_label = getattr(summarizer, "last_model_label", "unknown")
             model_label = f"faster-whisper-{cfg.transcription_model_size}+{summarizer_label}"
 
             output_file = build_summary_output_path(task.title, task.url)
             file_manager = self.file_manager_factory()
-            file_manager.save_text(summarized_text, output_file)
+            summary_file_result = file_manager.save_text(
+                summarized_text,
+                output_file,
+            )
+            if metadata is not None:
+                saved_summary_path = output_file
+                if isinstance(summary_file_result, dict):
+                    result_path = summary_file_result.get("path")
+                    if isinstance(result_path, str) and result_path:
+                        saved_summary_path = result_path
+                metadata_output_file = (
+                    os.path.splitext(saved_summary_path)[0]
+                    + ".metadata.json"
+                )
+                try:
+                    file_manager.save_json(
+                        metadata.to_dict(),
+                        metadata_output_file,
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        "Could not save video metadata sidecar for "
+                        f"task {task.id}: {exc}"
+                    )
 
             notion_page_id: Optional[str] = task.notion_page_id
             summary_storage = self.summary_storage_factory()

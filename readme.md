@@ -456,6 +456,24 @@ uv sync --frozen --no-install-project
 - 結構化的內容整理
 - 關鍵洞察與見解
 
+### YouTube metadata
+
+新處理的 YouTube 任務會在下載時一併擷取精選 metadata，包括影片描述、
+頻道、上架日期、時長與章節。摘要模型會將這些資料視為創作者提供的輔助背景，
+逐字稿仍是主要事實來源；描述超過 6,000 字元時，只有送入模型的版本會截斷。
+
+每份摘要旁會建立同名的 `.metadata.json` sidecar，例如：
+
+```text
+_summarized_20250101T123000_dQw4w9WgXcQ_我的筆記.md
+_summarized_20250101T123000_dQw4w9WgXcQ_我的筆記.metadata.json
+```
+
+JSON 會保留完整描述及白名單欄位，不會保存 cookies、下載格式或完整的
+`yt-dlp` info JSON。平台未提供部分欄位或 metadata 無法解析時，轉錄與摘要仍會
+繼續；sidecar 寫入失敗也只會記錄 warning，不會讓已完成的摘要任務失敗。
+此功能只套用於新任務及後續 retry，不會自動補抓或重寫既有摘要。
+
 ## 自定義設置
 
 ### 修改 Whisper 模型大小

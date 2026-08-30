@@ -1,3 +1,4 @@
+import json
 import os
 import time
 import random
@@ -128,6 +129,30 @@ class FileManager:
             "original_file": output_file,
             "sanitized_file": sanitized_file,
             "size": len(text),
+        }
+
+    @staticmethod
+    def save_json(data, output_file):
+        """Save a UTF-8 JSON sidecar while preserving the output directory."""
+        output_dir = os.path.dirname(output_file)
+        if output_dir:
+            os.makedirs(output_dir, exist_ok=True)
+
+        base_name = os.path.basename(output_file)
+        sanitized_file = FileManager.truncate_filename(
+            FileManager.sanitize_filename(base_name),
+            max_length=240,
+        )
+        full_path = os.path.join(output_dir, sanitized_file)
+        with open(full_path, "w", encoding="utf-8") as file:
+            json.dump(data, file, ensure_ascii=False, indent=2)
+            file.write("\n")
+
+        return {
+            "path": full_path,
+            "success": True,
+            "original_file": output_file,
+            "sanitized_file": sanitized_file,
         }
 
     @staticmethod

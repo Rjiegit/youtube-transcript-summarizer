@@ -157,6 +157,8 @@ PROMPT_VIDEO_SUMMARY = """
 影片標題：
 {title}
 
+{metadata_context}
+
 逐字稿內容：
 ---
 {text}

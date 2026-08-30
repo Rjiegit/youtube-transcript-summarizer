@@ -8,13 +8,14 @@ class SummarizerInterface(ABC):
     """
 
     @abstractmethod
-    def summarize(self, title, text):
+    def summarize(self, title, text, metadata=None):
         """
         Summarize the given text.
 
         Args:
             title (str): The title of the content to summarize.
             text (str): The text content to summarize.
+            metadata: Optional curated source metadata for context.
 
         Returns:
             str: The summarized text.

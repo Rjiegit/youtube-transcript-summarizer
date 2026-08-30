@@ -3,7 +3,7 @@ import sys
 import tempfile
 import types
 import unittest
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 # Provide lightweight stubs for optional dependencies when running in minimal envs.
 if "pytz" not in sys.modules:  # pragma: no cover - testing scaffold
@@ -30,6 +30,7 @@ if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
     sys.modules["notion_client"] = notion_stub
 
 from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from src.domain.media.models import VideoMetadata
 from src.services.pipeline.processing_runner import ProcessingWorker
 
 
@@ -209,6 +210,65 @@ class TestProcessingWorker(unittest.TestCase):
             notion_url=None,
             notion_task_id="ffffffff-1111-2222-3333-444444444444",
         )
+
+    def test_worker_uses_metadata_and_completes_when_sidecar_write_fails(self):
+        task = self.db.add_task("https://youtu.be/dQw4w9WgXcQ")
+        metadata = VideoMetadata(
+            video_id="dQw4w9WgXcQ",
+            source_url=task.url,
+            title="Metadata title",
+            description="Creator description",
+        )
+        downloader = MagicMock()
+        downloader.download.return_value = {
+            "path": "/tmp/audio.wav",
+            "title": "Metadata title",
+            "metadata": metadata,
+        }
+        transcriber = MagicMock()
+        transcriber.transcribe.return_value = "transcription text"
+        summarizer = MagicMock()
+        summarizer.summarize.return_value = "summary"
+        summarizer.last_model_label = "gpt"
+        storage = MagicMock()
+        storage.save.return_value = {"page_id": "page-id"}
+        file_manager = MagicMock()
+        file_manager.save_json.side_effect = OSError("disk full")
+        notifier = MagicMock(return_value=True)
+
+        worker = ProcessingWorker(
+            self.db,
+            worker_id="worker-metadata",
+            task_lock_timeout_seconds=1,
+            processing_lock_timeout_seconds=5,
+            lock_refresh_interval=1,
+            downloader_factory=lambda *_args, **_kwargs: downloader,
+            transcriber_factory=lambda *_args, **_kwargs: transcriber,
+            summarizer_factory=lambda: summarizer,
+            summary_storage_factory=lambda: storage,
+            file_manager_factory=lambda: file_manager,
+            notifier=notifier,
+            config_factory=lambda: types.SimpleNamespace(
+                transcription_model_size="tiny",
+                notion_url=None,
+                discord_webhook_url=None,
+                data_dir="data",
+            ),
+        )
+
+        result = worker.run()
+
+        self.assertEqual(result.processed_tasks, 1)
+        self.assertEqual(self.db.get_task_by_id(task.id).status, "Completed")
+        summarizer.summarize.assert_called_once_with(
+            "Metadata title",
+            "transcription text",
+            metadata,
+        )
+        file_manager.save_json.assert_called_once()
+        sidecar_data, sidecar_path = file_manager.save_json.call_args.args
+        self.assertEqual(sidecar_data["description"], "Creator description")
+        self.assertTrue(sidecar_path.endswith(".metadata.json"))
 
 
 if __name__ == "__main__":
