@@ -5,7 +5,7 @@ description: 說明任務輸入、API、背景 worker、持久層、外部整合
 tags: [architecture, pipeline, api, streamlit, extension, nuxt]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:29:02.704Z
+    at: 2026-08-31T13:54:23.498Z
 sources:
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
@@ -23,7 +23,7 @@ sources:
     resource: repo://src/services/pipeline/processing_runner.py
   - id: openwiki-source-0b294e3f86f4bc3838cb6ca2
     resource: repo://src/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
+generated: { by: "codex", at: "2026-08-31T13:54:23.498Z" }
 ---
 
 # 系統架構與端到端資料流
@@ -52,15 +52,21 @@ Docker Compose 只編排 Python 側的 `api`、`streamlit` 與 `rss-monitor`。�
 5. 每一筆任務的例外會轉成 `Failed` 狀態並累計失敗數；worker 繼續處理下一筆。queue 完成或取得任務失敗後，都會在 `finally` 釋放全域 lock。
 6. 完成結果寫入 Notion 後，Nuxt server API 以自己的設定、schema mapping 與 SWR cache 讀取 `Completed` 結果；瀏覽器只呼叫 Nuxt internal API，不會取得 Notion API key。
 
-```text
-Streamlit ─┐
-Extension ─┼─> FastAPI ─> task backend ─> scheduler/worker
-RSS monitor┘                                  │
-                                              ├─> yt-dlp ─> faster-whisper ─> LLM
-CLI ─────────────> task backend ─> worker ────┘
-                                                        │
-                                      Markdown/JSON <───┼───> Notion ─> Nuxt Showcase
-                                                        └───> Discord
+```mermaid
+flowchart LR
+    Streamlit --> FastAPI
+    Extension --> FastAPI
+    RSS[RSS monitor] --> FastAPI
+    FastAPI --> Backend[task backend]
+    CLI --> Backend
+    Backend --> Worker[scheduler / worker]
+    Worker --> Ytdlp[yt-dlp]
+    Ytdlp --> Whisper[faster-whisper]
+    Whisper --> LLM
+    LLM --> Artifacts[Markdown / JSON]
+    LLM --> Notion
+    LLM --> Discord
+    Notion --> Showcase[Nuxt Showcase]
 ```
 
 ## 邊界與依賴方向
@@ -69,13 +75,13 @@ CLI ─────────────> task backend ─> worker ───�
 
 Streamlit 是 FastAPI 的 client，而不是另一個 pipeline owner。CLI 則直接建立 backend 並呼叫同步的 `process_pending_tasks`。因此所有入口最終共享同一組 task persistence 與 processing-lock 語意，但觸發方式分為 HTTP background scheduling 與 command-line synchronous drain。
 
-Extension 與 RSS monitor 都只負責建立輸入，不直接執行media pipeline；Nuxt Showcase只消費Notion成果，不依賴Task API。各自的endpoint、credential與failure contract由相關integration/API頁負責。
+Extension 與 RSS monitor 都只負責建立輸入，不直接執行 media pipeline；Nuxt Showcase 只消費 Notion 成果，不依賴 Task API。各自的 endpoint、credential 與 failure contract 由相關 integration/API 頁負責。
 
 ## 重要邊界
 
-- FastAPI是task submission與worker scheduling邊界；完整status及authentication語意見[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)。
-- Task backend、locks、Notion publication與本機artifacts的保證不同，見[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
-- Browser Extension、RSS、LLM、Notion與Showcase各自持有不同的network、credential及trust boundary，細節留在對應integration頁。
+- FastAPI 是 task submission 與 worker scheduling 邊界；完整 status 及 authentication 語意見[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)。
+- Task backend、locks、Notion publication 與本機 artifacts 的保證不同，見[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
+- Browser Extension、RSS、LLM、Notion 與 Showcase 各自持有不同的 network、credential 及 trust boundary，細節留在對應 integration 頁。
 
 ## 延伸閱讀
 

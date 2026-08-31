@@ -5,7 +5,7 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
@@ -23,7 +23,7 @@ sources:
     resource: repo://src/apps/extension/service_worker.js
   - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
     resource: repo://src/core/config.py
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # 快速開始與開發導覽
@@ -81,7 +81,7 @@ npm run dev
 src/apps/extension
 ```
 
-Options page 的 API Base URL 預設為 `http://localhost:8080`。Extension可從YouTube影片頁/連結建立SQLite task，也可從channel context建立RSS subscription；它不包含worker或Notion credentials。
+Options page 的 API Base URL 預設為 `http://localhost:8080`。Extension 可從 YouTube 影片頁/連結建立 SQLite task，也可從 channel context 建立 RSS subscription；它不包含 worker 或 Notion credentials。
 
 ## 驗證變更
 
@@ -122,5 +122,5 @@ npm --prefix frontend/nuxt-showcase run build
 - Showcase 顯示缺少設定：先執行 `npm run check-env`，再查看 `/api/showcase/diagnostics`。
 - diagnostics 正常但無資料：查看 `/api/showcase/health`，確認 Notion integration 權限、database id 與 status schema。
 - task 已 Pending 但未開始：呼叫 `POST /processing-jobs` 或執行 `make run`；先確認是否已有 processing lock。
-- Extension 無法送出：確認 Options API Base URL、API connectivity與頁面是否為支援的YouTube URL；channel handle還需要DOM提供channel id。
+- Extension 無法送出：確認 Options API Base URL、API connectivity 與頁面是否為支援的 YouTube URL；channel handle 還需要 DOM 提供 channel id。
 - RSS 沒有建立舊影片 tasks：首次 poll 只 seed watermark，這是避免回填整個歷史 feed 的預期行為。

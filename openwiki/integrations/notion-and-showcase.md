@@ -5,7 +5,7 @@ description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀
 tags: [notion, integration, persistence, showcase]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:29:02.704Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-59891cd71dd0c8a50b5690a9
     resource: repo://frontend/nuxt-showcase/server/utils/notion.ts
@@ -13,7 +13,7 @@ sources:
     resource: repo://src/infrastructure/persistence/notion/client.py
   - id: openwiki-source-5858a6e533d57781fe90f469
     resource: repo://src/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -24,13 +24,13 @@ Notion 在本系統有兩種不同角色：Python `NotionDB` 可把 database 當
 
 ## Python 寫入端
 
-Python有兩條Notion寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等properties管理task；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public`與摘要blocks的成果page。兩者共用credentials/database設定，但用途與schema不完全相同。Queue locking、rich-text chunking與storage failure語意集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
+Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等 properties 管理 task；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public` 與摘要 blocks 的成果 page。兩者共用 credentials/database 設定，但用途與 schema 不完全相同。Queue locking、rich-text chunking 與 storage failure 語意集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## Nuxt 唯讀端
 
 Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文候選名稱與型別尋找 title、summary、URL、created time/date 與 processing duration，title/created time 另可 fallback 到首個相符型別。缺少欄位時回傳安全預設，例如 `Untitled result`、空 summary 或 `null` URL。
 
-狀態欄位可由設定明確指定；未指定時依 `Status`、`狀態`、`State` 等候選尋找 `status`/`select`，最後 fallback 到任一相符型別。指定的欄位不存在或型別錯誤會明確失敗。完全找不到狀態欄位時不加 filter；因此公開 database 若依賴 Completed 可見性，應明確配置正確欄位，而不能把無 filter fallback 當成存取控制。
+狀態欄位可由設定明確指定；未指定時依 `Status`、` 狀態 `、`State` 等候選尋找 `status`/`select`，最後 fallback 到任一相符型別。指定的欄位不存在或型別錯誤會明確失敗。完全找不到狀態欄位時不加 filter；因此公開 database 若依賴 Completed 可見性，應明確配置正確欄位，而不能把無 filter fallback 當成存取控制。
 
 列表 query 依 created time 倒序、最多 50 筆，通常以解析出的狀態欄位篩選 `Completed`。詳細頁讀取 page properties，並從 page 的 children endpoint 分頁抓取 blocks；每一層遇到 `has_children` 的 block，會再以該 block id 遞迴抓取並分頁完成其 children，形成完整 block tree。這個流程是逐層、依 API 回傳順序進行，任一層的 Notion request 失敗都會讓詳細頁查詢失敗，而不會回傳不完整樹。
 
@@ -42,7 +42,7 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 - diagnostics 僅回報設定是否存在，不回傳 token value。
 - Showcase 將 Notion error body 壓成單行並截到 300 characters 後才放入錯誤訊息，避免無界輸出。
 - Showcase cache 可在短暫 Notion failure 時回傳最後成功 snapshot，但初次查詢沒有 snapshot 時仍會失敗。
-- Notion queue與SQLite的consistency差異由持久化頁維護，本頁不把Showcase的read schema誤當作queue locking保證。
+- Notion queue 與 SQLite 的 consistency 差異由持久化頁維護，本頁不把 Showcase 的 read schema 誤當作 queue locking 保證。
 
 ## 延伸閱讀
 

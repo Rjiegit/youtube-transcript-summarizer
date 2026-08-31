@@ -5,7 +5,7 @@ description: 比較 SQLite 與 Notion task backend，並說明 recent history、
 tags: [persistence, sqlite, notion, locking, artifacts]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-9fbc07b2ec408ab8469cae35
     resource: repo://src/domain/interfaces/database.py
@@ -21,7 +21,7 @@ sources:
     resource: repo://src/services/outputs/path_builder.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # 任務、鎖與結果持久化
@@ -30,7 +30,7 @@ generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
 
 ## `BaseDB` 與 backend 選擇
 
-`BaseDB` 定義 task新增、查詢、取得下一筆、狀態更新、URL去重、retry，以及 global processing lock lifecycle。`DBFactory` 依 `sqlite|notion` 建立 adapter；因此 application service能使用共用contract，但不能假設所有backend具有相同鎖語意。
+`BaseDB` 定義 task 新增、查詢、取得下一筆、狀態更新、URL 去重、retry，以及 global processing lock lifecycle。`DBFactory` 依 `sqlite|notion` 建立 adapter；因此 application service 能使用共用 contract，但不能假設所有 backend 具有相同鎖語意。
 
 | 能力 | SQLite | Notion |
 | --- | --- | --- |
@@ -40,43 +40,43 @@ generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
 | Global lock | 單列 lease、heartbeat、owner-aware release | methods 為 no-op |
 | Multi-worker | 以 transaction/lease 協調 | 假設單一 worker |
 
-相同API形狀只代表可替換性，不代表相同consistency guarantee。需要background concurrency時，SQLite是現行具實際鎖保證的backend。
+相同 API 形狀只代表可替換性，不代表相同 consistency guarantee。需要 background concurrency 時，SQLite 是現行具實際鎖保證的 backend。
 
 ## SQLite state
 
-預設database path是 `data/tasks.db`。初始化會建立：
+預設 database path 是 `data/tasks.db`。初始化會建立：
 
-- `tasks`：URL、status、summary/error、duration、retry relationship、task lease、Notion page id與來源；
-- `processing_lock`：固定 id=1 的global worker lease；
-- `recent_task_history`：每個task最新的view timestamp；
-- `rss_channel_subscriptions`：channel、feed、enabled、watermark與poll status/error。
+- `tasks`：URL、status、summary/error、duration、retry relationship、task lease、Notion page id 與來源；
+- `processing_lock`：固定 id=1 的 global worker lease；
+- `recent_task_history`：每個 task 最新的 view timestamp；
+- `rss_channel_subscriptions`：channel、feed、enabled、watermark 與 poll status/error。
 
-Legacy database會在啟動時以 `ALTER TABLE` 補上已知缺少欄位。這是輕量的forward migration，沒有versioned rollback。
+Legacy database 會在啟動時以 `ALTER TABLE` 補上已知缺少欄位。這是輕量的 forward migration，沒有 versioned rollback。
 
-Task claim在 `BEGIN IMMEDIATE` transaction內選最舊Pending或stale Processing，並在同一transaction寫入Processing、worker id與locked time。Global lock允許同一owner續用，其他worker只能在timeout後接管；heartbeat與release都限制matching worker id。Task離開Processing時清除task lease。
+Task claim 在 `BEGIN IMMEDIATE` transaction 內選最舊 Pending 或 stale Processing，並在同一 transaction 寫入 Processing、worker id 與 locked time。Global lock 允許同一 owner 續用，其他 worker 只能在 timeout 後接管；heartbeat 與 release 都限制 matching worker id。Task 離開 Processing 時清除 task lease。
 
-Recent history不是task status：Streamlit打開結果時upsert view time，讀取按最新排序，並依TTL prune。刪除history不會刪除task或摘要成果。
+Recent history 不是 task status：Streamlit 打開結果時 upsert view time，讀取按最新排序，並依 TTL prune。刪除 history 不會刪除 task 或摘要成果。
 
-## Notion task backend與summary publication
+## Notion task backend 與 summary publication
 
-`NotionDB` 把database page當作task record，以URL、Name、Status等properties建立與更新。它可供CLI/API選為queue backend，但task acquisition與global lock沒有SQLite的原子性；並行worker可能取得同一task，因此文件與部署都必須維持單worker假設。
+`NotionDB` 把 database page 當作 task record，以 URL、Name、Status 等 properties 建立與更新。它可供 CLI/API 選為 queue backend，但 task acquisition 與 global lock 沒有 SQLite 的原子性；並行 worker 可能取得同一 task，因此文件與部署都必須維持單 worker 假設。
 
-`SummaryStorage` 是另一個用途：pipeline不論task backend為何，都會建立承載摘要的Notion page，包含Title、URL、Model、預設false的Public與paragraph children。成功回傳的page id寫回task，供Streamlit、Discord link與後續查詢使用。Notion write失敗是pipeline failure，不會被本機Markdown成功掩蓋。
+`SummaryStorage` 是另一個用途：pipeline 不論 task backend 為何，都會建立承載摘要的 Notion page，包含 Title、URL、Model、預設 false 的 Public 與 paragraph children。成功回傳的 page id 寫回 task，供 Streamlit、Discord link 與後續查詢使用。Notion write 失敗是 pipeline failure，不會被本機 Markdown 成功掩蓋。
 
 ## 本機 artifacts
 
-Summary output path預設是 `data/summaries/_summarized_<timestamp>_<video-id>_<sanitized-title>.md`。`FileManager`只清理basename、保留directory、建立缺少目錄並以UTF-8覆寫檔案；過長filename保留extension後截斷。
+Summary output path 預設是 `data/summaries/_summarized_<timestamp>_<video-id>_<sanitized-title>.md`。`FileManager` 只清理 basename、保留 directory、建立缺少目錄並以 UTF-8 覆寫檔案；過長 filename 保留 extension 後截斷。
 
-有下載metadata時，worker以實際Markdown path的stem建立 `.metadata.json` sidecar。JSON以UTF-8、`ensure_ascii=False`與indent寫入。因sidecar依已清理/截斷後的實際path命名，兩個artifact會保持配對。Sidecar寫入失敗只記warning並繼續Notion與task completion；Markdown或Notion寫入失敗則使task失敗。
+有下載 metadata 時，worker 以實際 Markdown path 的 stem 建立 `.metadata.json` sidecar。JSON 以 UTF-8、`ensure_ascii=False` 與 indent 寫入。因 sidecar 依已清理/截斷後的實際 path 命名，兩個 artifact 會保持配對。Sidecar 寫入失敗只記 warning 並繼續 Notion 與 task completion；Markdown 或 Notion 寫入失敗則使 task 失敗。
 
-下載媒體本身位於 `data/videos`，不是summary artifact。Repository guideline將 `data` 視為generated/large output，不應提交。
+下載媒體本身位於 `data/videos`，不是 summary artifact。Repository guideline 將 `data` 視為 generated/large output，不應提交。
 
 ## 修改與遷移注意事項
 
-- 新增task欄位時需同步domain `Task`、`BaseDB` contract、SQLite schema/migration、task adapter與Notion mapping。
-- 改Notion property名稱時要同時檢查queue adapter、SummaryStorage、Nuxt schema detection與既有database。
-- 改output filename時要維持Markdown/metadata sidecar pairing，並驗證長Unicode title。
-- 新增backend不能只實作CRUD；必須明確定義task claim、global lock、stale recovery與retry semantics。
+- 新增 task 欄位時需同步 domain `Task`、`BaseDB` contract、SQLite schema/migration、task adapter 與 Notion mapping。
+- 改 Notion property 名稱時要同時檢查 queue adapter、SummaryStorage、Nuxt schema detection 與既有 database。
+- 改 output filename 時要維持 Markdown/metadata sidecar pairing，並驗證長 Unicode title。
+- 新增 backend 不能只實作 CRUD；必須明確定義 task claim、global lock、stale recovery 與 retry semantics。
 
 ## 延伸閱讀
 

@@ -5,7 +5,7 @@ description: 說明 Manifest V3 extension 如何辨識 YouTube context、建立�
 tags: [browser-extension, chrome, youtube, api, rss]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-c297a6919354a0aef232d787
     resource: repo://src/apps/extension/content_script.js
@@ -15,7 +15,7 @@ sources:
     resource: repo://src/apps/extension/options.js
   - id: openwiki-source-0520e948964d45782d02b5a3
     resource: repo://src/apps/extension/service_worker.js
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # Browser Extension 任務與 RSS 入口
@@ -26,7 +26,7 @@ Browser Extension 是 FastAPI 的 public client，讓使用者不必複製 URL�
 
 `src/apps/extension` 是可直接載入 Chrome/Edge 的 Manifest V3 extension：
 
-- service worker 建立 context menus、處理 toolbar action、呼叫 FastAPI並顯示 badge/notification；
+- service worker 建立 context menus、處理 toolbar action、呼叫 FastAPI 並顯示 badge/notification；
 - content script 在 YouTube DOM 中找 channel id、channel title 與 page type；
 - options page 驗證並保存 API base URL；
 - `chrome.storage.sync` 讓設定跨瀏覽器 profile 同步。

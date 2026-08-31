@@ -5,7 +5,7 @@ description: 說明 Gemini、OpenAI、Ollama 的候選資格、加權選擇、pr
 tags: [llm, gemini, openai, ollama, failover]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-36d48d46c256392dc902bc2d
     resource: repo://src/infrastructure/llm/model_options.py
@@ -19,7 +19,7 @@ sources:
     resource: repo://tests/test_summarizer_service.py
   - id: openwiki-source-e2ee026fbcf730652e2c0e63
     resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # LLM Providers、選擇與 Failover
@@ -55,7 +55,7 @@ Selector 每次 request 做一次 weighted random draw；它沒有紀錄已用 R
 
 ## Provider 呼叫
 
-共用 prompt 將 title、transcript 與受限的 creator metadata context組成學習筆記指令。OpenAI 使用 `OpenAI(...).chat.completions.create`；Gemini 先 configure API key，再建立 `GenerativeModel`；Ollama 使用指定 host、Authorization header 與 client chat。成功後 `last_backend` 與 `last_model_label` 設為實際 provider 及 `provider:model`，worker 再組成 `faster-whisper-<size>+<provider:model>`。
+共用 prompt 將 title、transcript 與受限的 creator metadata context 組成學習筆記指令。OpenAI 使用 `OpenAI(...).chat.completions.create`；Gemini 先 configure API key，再建立 `GenerativeModel`；Ollama 使用指定 host、Authorization header 與 client chat。成功後 `last_backend` 與 `last_model_label` 設為實際 provider 及 `provider:model`，worker 再組成 `faster-whisper-<size>+<provider:model>`。
 
 Ollama import 是 optional guard：套件不可用時會保留明確 runtime error，而不是在 module import 階段讓所有其他 provider 無法使用。
 

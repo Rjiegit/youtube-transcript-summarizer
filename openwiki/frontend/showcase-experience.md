@@ -5,7 +5,7 @@ description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、�
 tags: [nuxt, showcase, swr, caching, ux]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-a2ee3d44daa07a05306e975e
     resource: repo://frontend/nuxt-showcase/composables/useReadResults.ts
@@ -19,7 +19,7 @@ sources:
     resource: repo://frontend/nuxt-showcase/server/utils/swr-cache.ts
   - id: openwiki-source-6f3d5ab2255c7aff38623726
     resource: repo://frontend/nuxt-showcase/tests/swr-cache.test.ts
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # Nuxt Showcase 使用體驗與資料快取

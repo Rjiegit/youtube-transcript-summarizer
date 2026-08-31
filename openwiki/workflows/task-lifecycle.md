@@ -5,7 +5,7 @@ description: 說明任務建立、去重、背景排程、SQLite leases、狀態
 tags: [tasks, queue, locking, concurrency, retry]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:29:02.704Z
+    at: 2026-08-31T13:54:23.498Z
 sources:
   - id: openwiki-source-822793b105256e659707b60b
     resource: repo://src/apps/api/main.py
@@ -15,41 +15,48 @@ sources:
     resource: repo://src/services/tasks/processing_scheduler.py
   - id: openwiki-source-7722b0b050a91340f1fb6d2b
     resource: repo://src/services/tasks/task_creation.py
-generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
+generated: { by: "codex", at: "2026-08-31T13:54:23.498Z" }
 ---
 
 # 任務生命週期與併發控制
 
-本頁聚焦task的狀態與控制流；完整HTTP status/auth contract見[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)，backend schema與一致性比較見[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
+本頁聚焦 task 的狀態與控制流；完整 HTTP status/auth contract 見[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)，backend schema 與一致性比較見[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## 建立與去重
 
-建立流程先正規化YouTube URL，再由 `create_task_record` 查找相同URL最新且非失敗的task：
+建立流程先正規化 YouTube URL，再由 `create_task_record` 查找相同 URL 最新且非失敗的 task：
 
-- `Pending` / `Processing`：視為active duplicate；
+- `Pending` / `Processing`：視為 active duplicate；
 - `Completed` + `block_existing`：永久阻擋，RSS 使用此 policy。
-- `Completed` + `cache_ttl`：建立時間仍在TTL內時重用既有結果；
+- `Completed` + `cache_ttl`：建立時間仍在 TTL 內時重用既有結果；
 - 沒有上述情況：建立新的 `Pending` task。
 
-只有新task需要排程worker；cached或duplicate不啟動新處理。HTTP status與response欄位由[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)統一說明。
+只有新 task 需要排程 worker；cached 或 duplicate 不啟動新處理。HTTP status 與 response 欄位由[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)統一說明。
 
 ## 排程與兩層 ownership
 
-Scheduler在啟動daemon thread前先取得全域processing ownership；已有worker時不重複啟動，thread啟動失敗則釋放剛取得的ownership。Worker使用同一id確認ownership，處理期間refresh，並在所有退出路徑釋放。
+Scheduler 在啟動 daemon thread 前先取得全域 processing ownership；已有 worker 時不重複啟動，thread 啟動失敗則釋放剛取得的 ownership。Worker 使用同一 id 確認 ownership，處理期間 refresh，並在所有退出路徑釋放。
 
-每筆task另有獨立ownership：worker取得最舊可處理task，stale Processing task可在timeout後回收。這兩層控制分別避免同一backend被多個queue drain同時處理，以及同一task被重複處理。SQLite的transaction、lease欄位、owner-aware release與Notion差異只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。
+每筆 task 另有獨立 ownership：worker 取得最舊可處理 task，stale Processing task 可在 timeout 後回收。這兩層控制分別避免同一 backend 被多個 queue drain 同時處理，以及同一 task 被重複處理。SQLite 的 transaction、lease 欄位、owner-aware release 與 Notion 差異只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。
 
 ## 狀態轉移
 
-```text
-Pending -> Processing -> Completed
-                     \-> Failed -> Failed Retry Created
-                                  \-> 新 Pending retry task
+```mermaid
+stateDiagram-v2
+    [*] --> Pending
+    Pending --> Processing
+    Processing --> Completed
+    Processing --> Failed
+    Failed --> FailedRetryCreated: 更新原始 task
+    Failed --> PendingRetryTask: 建立 retry task
+    state "Failed Retry Created" as FailedRetryCreated
+    state "新 Pending retry task" as PendingRetryTask
+    PendingRetryTask --> Processing
 ```
 
-成功時保存title、summary、duration與Notion page id；失敗時保存error與duration。Worker將單筆exception收斂為`Failed`後繼續下一筆，queue空時停止並在`finally`釋放全域ownership。
+成功時保存 title、summary、duration 與 Notion page id；失敗時保存 error 與 duration。Worker 將單筆 exception 收斂為 `Failed` 後繼續下一筆，queue 空時停止並在 `finally` 釋放全域 ownership。
 
-Retry只接受現況為`Failed`的source task。它建立有relationship的新Pending task，再把source改成`Failed Retry Created`，避免舊失敗紀錄參與一般active-result判斷。Retry不自動排程worker。管理端點、authorization與force-release contract見API頁；backend實作保證見持久化頁。
+Retry 只接受現況為 `Failed` 的 source task。它建立有 relationship 的新 Pending task，再把 source 改成 `Failed Retry Created`，避免舊失敗紀錄參與一般 active-result 判斷。Retry 不自動排程 worker。管理端點、authorization 與 force-release contract 見 API 頁；backend 實作保證見持久化頁。
 
 ## 延伸閱讀
 

@@ -5,7 +5,7 @@ description: 說明 Python 分層的依賴方向，以及 Python、Nuxt、外部
 tags: [architecture, dependencies, python, nuxt, integrations]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:55:55.230Z
 sources:
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
@@ -33,7 +33,7 @@ sources:
     resource: repo://structure.md
   - id: openwiki-source-1eb6a61d042052ba1402c2eb
     resource: repo://uv.lock
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:55:55.230Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -42,11 +42,11 @@ generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
 
 Python 主系統以 `src` 為 package root，責任大致由入口向內收斂：
 
-```text
-apps (FastAPI / Streamlit / CLI / RSS monitor)
-  -> services (task creation / scheduling / pipeline / RSS)
-     -> domain (Task、RSS、media models 與抽象 interfaces)
-        <- infrastructure (SQLite、Notion、media、LLM、storage、notification adapters)
+```mermaid
+flowchart TD
+    Apps["apps — FastAPI / Streamlit / CLI / RSS monitor"] --> Services["services — task creation / scheduling / pipeline / RSS"]
+    Services --> Domain["domain — Task、RSS、media models 與抽象 interfaces"]
+    Infrastructure["infrastructure — SQLite、Notion、media、LLM、storage、notification adapters"] --> Domain
 ```
 
 `core` 提供環境設定、prompt、logging、時間與 URL/filename 工具。`domain` 保存不依賴第三方 SDK 的 models 與 contracts；例如 `BaseDB` 定義 task CRUD、task lease、global processing lock 與 retry 能力。`services` 負責 use-case orchestration，`infrastructure` 才直接接觸 SQLite、Notion、yt-dlp、Whisper、LLM SDK 與 Discord。`apps` 將 HTTP、UI 或 CLI 輸入轉成 service 呼叫。

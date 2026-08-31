@@ -5,7 +5,7 @@ description: 追蹤單筆任務的下載、YouTube metadata 擷取、Whisper 轉
 tags: [pipeline, whisper, llm, metadata, storage]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:29:02.704Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-0fdf5745e1f00e18dd400997
     resource: repo://src/core/prompt.py
@@ -19,7 +19,7 @@ sources:
     resource: repo://src/services/pipeline/processing_runner.py
   - id: openwiki-source-839ded7442c98545a6825769
     resource: repo://tests/test_processing_worker.py
-generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # 媒體轉錄與摘要流程
@@ -56,13 +56,13 @@ Transcriber 使用 faster-whisper，逐 segment 累積文字並可透過 Streaml
 
 ## LLM 邊界
 
-Summarizer 在 infrastructure 層選擇 Gemini、OpenAI 或 Ollama，並對特定 transient provider failure最多切換一次candidate。成功後記錄實際 `provider:model`，worker再與faster-whisper model size組合成持久化模型標籤。候選validation、credential eligibility、預設權重、provider-specific error分類與fallback細節集中在[LLM Providers、選擇與 Failover](../integrations/llm-providers.md)。
+Summarizer 在 infrastructure 層選擇 Gemini、OpenAI 或 Ollama，並對特定 transient provider failure 最多切換一次 candidate。成功後記錄實際 `provider:model`，worker 再與 faster-whisper model size 組合成持久化模型標籤。候選 validation、credential eligibility、預設權重、provider-specific error 分類與 fallback 細節集中在[LLM Providers、選擇與 Failover](../integrations/llm-providers.md)。
 
 ## 輸出與失敗語意
 
-Pipeline會保存Markdown、可選metadata sidecar與Notion成果；具體path、encoding、filename與Notion chunk規則只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。Workflow層的重要例外是：sidecar寫入失敗只記warning，仍可完成Notion保存與task；Markdown或Notion等一般步驟失敗則把task標成`Failed`。
+Pipeline 會保存 Markdown、可選 metadata sidecar 與 Notion 成果；具體 path、encoding、filename 與 Notion chunk 規則只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。Workflow 層的重要例外是：sidecar 寫入失敗只記 warning，仍可完成 Notion 保存與 task；Markdown 或 Notion 等一般步驟失敗則把 task 標成 `Failed`。
 
-Focused tests分別驗證yt-dlp metadata解析降級、prompt trust boundary、向後相容的無metadata路徑，以及sidecar寫入失敗仍完成task。Pipeline dependency injection與adapter extension規則集中在[模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)。
+Focused tests 分別驗證 yt-dlp metadata 解析降級、prompt trust boundary、向後相容的無 metadata 路徑，以及 sidecar 寫入失敗仍完成 task。Pipeline dependency injection 與 adapter extension 規則集中在[模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)。
 
 ## 延伸閱讀
 

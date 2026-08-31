@@ -20,10 +20,10 @@ sources:
     resource: repo://tests/test_summarizer_service.py
   - id: openwiki-source-e2ee026fbcf730652e2c0e63
     resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:29:02.704Z
+    at: 2026-08-31T13:51:03.458Z
 ---
 
 # 測試策略與擴充指南
@@ -63,9 +63,9 @@ SWR 的核心 regression 必須同時涵蓋 fresh hit、stale immediate response
 
 ## Browser Extension 驗證缺口
 
-`src/apps/extension` 目前沒有專用 automated test files。這是現況而非既有測試能力：service worker 的 URL routing/status handling、content script 的 DOM selectors、options validation 與 manifest permissions 主要依靠 code review及Chrome/Edge手動驗證。
+`src/apps/extension` 目前沒有專用 automated test files。這是現況而非既有測試能力：service worker 的 URL routing/status handling、content script 的 DOM selectors、options validation 與 manifest permissions 主要依靠 code review 及 Chrome/Edge 手動驗證。
 
-若後續補測試，優先把純 URL/channel解析抽出可注入函式，並以mock Chrome APIs與fetch涵蓋影片task、RSS subscription、duplicate、timeout及content-script fallback；manifest permission與實際YouTube DOM仍需保留小型browser smoke test。
+若後續補測試，優先把純 URL/channel 解析抽出可注入函式，並以 mock Chrome APIs 與 fetch 涵蓋影片 task、RSS subscription、duplicate、timeout 及 content-script fallback；manifest permission 與實際 YouTube DOM 仍需保留小型 browser smoke test。
 
 ## 新增測試的放置原則
 

@@ -5,7 +5,7 @@ description: 說明 YouTube channel 訂閱、watermark polling、API 入列與 m
 tags: [rss, youtube, automation, sqlite]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:03:19.622Z
+    at: 2026-08-31T13:51:03.458Z
 sources:
   - id: openwiki-source-c79e0b87395cb78682a64778
     resource: repo://src/apps/workers/rss_monitor.py
@@ -17,7 +17,7 @@ sources:
     resource: repo://src/services/rss/subscription_service.py
   - id: openwiki-source-01f22608fdc3c845dfb0f335
     resource: repo://tests/test_rss_monitor.py
-generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
+generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
 ---
 
 # YouTube RSS 自動化
