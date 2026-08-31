@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c6a052d95a0f8bc5ecbe86caeef838ceb2b67d35943c6dc5aa9bd16898883430",
+  "pageVersion": "sha256:c7782286a4bc05841c19f0ae3a6789b53df6dc0c4b9c4eaa926d6cab12a16f65",
   "claims": [
     {
       "id": "claim_d5e03481a41442a7b2c0597a6836572d",
@@ -86,7 +86,7 @@
     },
     {
       "id": "claim_afd136119d044678b72f2d7f98deb739",
-      "statement": "Weighted selection regression test 以完整 tuple equality 鎖定六個預設 Gemini candidates 的順序與 1:2:1:1:3:3 權重。",
+      "statement": "Weighted selection regression test以完整tuple equality鎖定預設候選設定，避免模型順序與權重在重構時靜默漂移。",
       "evidence": [
         {
           "resource": "repo://tests/test_weighted_selection.py#L64-L91",
@@ -111,6 +111,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-29T14:29:59.537Z"
+    "at": "2026-08-31T13:29:02.704Z"
   }
 }

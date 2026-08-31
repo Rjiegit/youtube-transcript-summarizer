@@ -20,10 +20,10 @@ sources:
     resource: repo://tests/test_summarizer_service.py
   - id: openwiki-source-e2ee026fbcf730652e2c0e63
     resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-08-29T14:29:59.537Z" }
+generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-29T14:29:59.537Z
+    at: 2026-08-31T13:29:02.704Z
 ---
 
 # 測試策略與擴充指南
@@ -42,7 +42,7 @@ CI parity 的 Python lint 為 `uv run flake8 .`。
 - **API contract**：FastAPI TestClient 驗證 URL normalization、status code、dedup/cache policy、backend configuration、worker scheduling 與 lock admin authorization。外部 database 與 scheduler 應 mock，assert response 與 collaborator calls。
 - **Queue/persistence invariants**：SQLite tests 使用暫存 database 驗證 migrations、task status、locks、retry relationship、recent history 與 RSS watermark。這一層保留真實 SQL，mock network。
 - **Processing orchestration**：worker tests 替換 downloader、transcriber、summarizer、file/Notion storage、notification 與 config，驗證呼叫順序的可觀察結果、Notion page id persistence，以及單筆失敗後繼續處理。
-- **純邏輯**：URL、filename、output path、weighted selection 等應以 deterministic inputs 測試。加權選擇注入固定 RNG，涵蓋 unavailable provider、excluded retry candidate、invalid pool 與無 eligible candidate；另以完整 tuple equality 鎖定預設 Gemini 候選順序與 `1:2:1:1:3:3` 權重，避免流量設定在重構時靜默漂移。
+- **純邏輯**：URL、filename、output path、weighted selection 等應以 deterministic inputs 測試。加權選擇注入固定 RNG，涵蓋 unavailable provider、excluded retry candidate、invalid pool 與無 eligible candidate；另以完整 tuple equality 鎖定預設候選設定，避免流量配置在重構時靜默漂移。實際模型與權重只在[LLM Providers、選擇與 Failover](../integrations/llm-providers.md)維護。
 - **外部整合**：Notion、Discord、RSS HTTP 與 LLM provider 不應在 unit suite 發真實 request；用 response fixtures 或 mock client 固定 success/failure contract。
 
 `ProcessingWorker` constructor factories 是新增 pipeline component 的首選 seam。新增步驟時至少測試完整成功、該步驟失敗後 task 轉 `Failed`、後續 task 不受影響，以及 lock 最終釋放。
@@ -61,12 +61,22 @@ Vitest 啟用 Vue plugin、jsdom 與 globals。測試分為：
 
 SWR 的核心 regression 必須同時涵蓋 fresh hit、stale immediate response/background refresh、forced refresh、沒有 snapshot 的 initial failure，以及較慢舊 refresh 不得覆蓋較新 forced result。
 
+## Browser Extension 驗證缺口
+
+`src/apps/extension` 目前沒有專用 automated test files。這是現況而非既有測試能力：service worker 的 URL routing/status handling、content script 的 DOM selectors、options validation 與 manifest permissions 主要依靠 code review及Chrome/Edge手動驗證。
+
+若後續補測試，優先把純 URL/channel解析抽出可注入函式，並以mock Chrome APIs與fetch涵蓋影片task、RSS subscription、duplicate、timeout及content-script fallback；manifest permission與實際YouTube DOM仍需保留小型browser smoke test。
+
 ## 新增測試的放置原則
 
 Python 測試放 `tests/test_*.py`；共用大型 inputs 放 `tests/fixtures/`。Nuxt 測試放 `frontend/nuxt-showcase/tests/*.test.ts`，Notion payload 重用 `test-data/`。優先從最小純函式或 service behavior 測起；只有跨 SSR、routing 或 DOM interaction 的風險才升級為 mounted page test。
 
 ## 延伸閱讀
 
+- [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
+- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
+- [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)

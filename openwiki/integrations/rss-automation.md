@@ -5,7 +5,7 @@ description: 說明 YouTube channel 訂閱、watermark polling、API 入列與 m
 tags: [rss, youtube, automation, sqlite]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-29T14:03:31.952Z
+    at: 2026-08-31T13:03:19.622Z
 sources:
   - id: openwiki-source-c79e0b87395cb78682a64778
     resource: repo://src/apps/workers/rss_monitor.py
@@ -17,7 +17,7 @@ sources:
     resource: repo://src/services/rss/subscription_service.py
   - id: openwiki-source-01f22608fdc3c845dfb0f335
     resource: repo://tests/test_rss_monitor.py
-generated: { by: "codex", at: "2026-08-29T14:03:31.952Z" }
+generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
 ---
 
 # YouTube RSS 自動化
@@ -44,5 +44,8 @@ Docker Compose 的 rss-monitor 使用 `http://api:8080`，並與 API/Streamlit �
 
 ## 延伸閱讀
 
+- [Browser Extension 任務與 RSS 入口](browser-extension.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
+- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)

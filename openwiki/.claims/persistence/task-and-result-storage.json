@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:332398cb0ce956dc319aae05b4ac5a040d0c9e098e5a4021c445a50630c74943",
+  "claims": [
+    {
+      "id": "claim_9d56e174f5594dbf9a9267743030c5a0",
+      "statement": "BaseDB統一定義task CRUD、task acquisition、global lock、status update、URL lookup與retry，但contract不保證各adapter具有相同一致性。",
+      "evidence": [
+        {
+          "resource": "repo://src/domain/interfaces/database.py#L19-L166",
+          "version": "repo-lines-v1:sha256:e92e5a3acb3e09d7c50f5e4d4d27804092e23c2fde91122e016b565c8cf17715:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQ4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiNGJlMzAwNDA0MzUwMGZmMzdiNjRjMTg5MjcyNzYxMzExNjJmNjNkZDVkMmI3MWJlMThlNTc2MzJkOTg3MTdkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyN2I0ODc5N2JjNTdiZGRhMzhkODExOTY4ZDExNGI4MzU2ZDdiNGJlMzMxYTE0MmZmOGQ4MzVlMDM3NzY1ZWMwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI1NWNmOGY3NTE3MDI3MjM1ZjU2MzE0YmE5MjAzNjUzYTY2NDEwNzY4MzZiMWNlZTBlNjU5ODhjNjhlMjRhYWM5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_4b65ceac7ae24c10b7715f992c7f85db",
+      "statement": "SQLite初始化tasks、recent_task_history、processing_lock與rss_channel_subscriptions tables，並以ALTER TABLE補齊legacy tasks缺少的已知欄位。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L24-L110",
+          "version": "repo-lines-v1:sha256:473216b140e1672900008f663719823395524657e0483c50b788754bf2d6f943:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc3NzUwNTQ1NTFlZjU4YzE1ZGI2NmE4YzkzOTE0MDg5ODhjYmQ1NGVkZDJlZDExZjZmZmRmOTc5ZjFmMTg2ZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3NTI5MWU2MGI5NjU1YWI1NjljNDU3MmY4MWU0NDJiNjEwMjk2NjMxMzcwYTlhMGRkYTBhZGUyZWU5NjAyYWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIzN2EwMTcyYWFjMGE0MWZkYTc1Y2FhZWYzOWU4YTg0YzE3ODIyNTU3Zjg3YWEyNTFkOGY5NDZkMTY1OTgxZjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3fb09cc58fdc49fea39acdd940e85006",
+      "statement": "SQLite在BEGIN IMMEDIATE transaction內原子選取最舊Pending或stale Processing task並寫入Processing、worker id與locked time。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L224-L290",
+          "version": "repo-lines-v1:sha256:d4148de546a0f1873e74838cf1033a4251dac905a5e9dce44055bbeb7e3c9302:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwMGI0YmZlMjdiMDEwOTIzY2VjNTc4OWQ4YzM5Y2NkMzliOWNhZjIwMDYyNGIzOTM3MTNjNTBiZmIwNDU5MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE3MzJmOGJlOGM1Yzg2OTBmOTY1ZWRlMWQ0NzA2YzQwZTAxMmEwNDQ2NGIyYTAxNzc4MDM4MGQwYzVmYTJmMmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjNzYyOTQxN2VkMWJiMWQwMDQ0ZTk3NjBmZDlhYjg0YjhmZTg5NGNkNTk5ZTE4NWFjOTUyOGUzY2I1MDcwY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3YWFkMTZhODU4ODQxYThhOGFkNDFiNmNjNGIyNWU2MTVmYWFmZDdiMDQ2NTY0MTkzZTU3Zjc4ODhiNDA1ZWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d6100bb194304cd38e32c93ee8ba1309",
+      "statement": "SQLite global lock支援同owner續用或timeout後接管，heartbeat與release都只作用於matching worker id；Notion對應lock lifecycle是no-op。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/notion/client.py#L100-L122",
+          "version": "repo-lines-v1:sha256:5f4524754627fff91523056f098bf4c278bd0305df8e49f7bb5c528e92abaad1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjllNzg5ODFmOThlYWE5NjM1NjMxYmUzOGFlMTFkZjYwMWNmNzYxZWMzZjQxOWI5N2FlOWY2ZDNlNmQxMTdiNTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlN2M5NTdiY2I0NGZiNjczYzk4YjAwNTBhNzVkMzgwODJkYjgxZDkxOGRlMzEzYTNmMDdjMTIzNTMwNmQ3ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzOTE1NTg1YmZmN2Y4MGY1Y2Y1OGM5MWE2MjY4ZjBiNjk4MmZkZDRhOTVmNmZhZjMyNWNmOWZlNzJjOTBmMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyMWUxZDRkY2FiMDg0MTY4MDA5YWViNjI3MWY3ZDc3ODIyZjEwZWVkMjk1NmE0MWQxZDRmOWE5MjM5MGFjNzMifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L292-L378",
+          "version": "repo-lines-v1:sha256:057638e0f47aa251a28f6160603a9de6f53a86bdeb676f594afcc736f74ad83e:eyJzZWxlY3RlZExpbmVDb3VudCI6ODcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjllNzg5ODFmOThlYWE5NjM1NjMxYmUzOGFlMTFkZjYwMWNmNzYxZWMzZjQxOWI5N2FlOWY2ZDNlNmQxMTdiNTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4YThhODRjNGYwZmI1ODIwM2Y5MjI5Zjk0YjFhOWM0NzE2YjU0NjM4YjI0MjNhZjNiNWNlYWViMWRhYjQ4OTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0MTZkZGYyYmVhNzIxNDhlNTZiNDk2MDFhY2Q5ZmNkNTY5OGZhZTIzMGUwMjRiZmY2MWMxNDg5MGQ0NjQ2MzgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_31cdde940012421791b6d1d97567d2a3",
+      "statement": "Recent task history以task id upsert最新view time、按view time倒序讀取並可依cutoff prune，與task status資料分開保存。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L112-L164",
+          "version": "repo-lines-v1:sha256:7be19e943655c6f433cf73f8299878986b29c908c8900f483583c94ed16e8780:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZjNzczYTNiZDNlOTQzNTM2NWJmY2UxYjVjOThhMThhYzNkMmE3YzQzYWM5M2E3NTYyNTY1ZTJhMWYxYzcxN2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhYWU4YTBjYTc2Zjk4ZjdiN2RjNzk4NDk1MWQ2M2U1N2RiM2M2NDU1NzljYTUxYmFkNmE1MzlkNjE0ZWRiYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJjZmNiMWU1ZWM2MmNkZGQ0OTRmZTdkMjhhMTY0NDBhOWQzY2M0ZGZhZGQwOTQ0NTU4ODE1NmVhZGM1NTIxYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ1N2YyNDMzMzk1ZWU3MWMxMjkzM2ZkY2UzY2M0NjBmNDg4MjdjNjhhYWUyNzJiMjI3MjI2ODMzYWExYjQzZDkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4ce61bc55b3048c5a0b7eee7c7ba586c",
+      "statement": "SummaryStorage建立含Title、URL、Model與預設false Public欄位的Notion page並將摘要分成paragraph children；成功page id由worker寫回task。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/storage/summary_storage.py#L109-L159",
+          "version": "repo-lines-v1:sha256:a727ac2752da90460b7c6ea57eab8e5dc2fc3f67e5f96f711d731adc899c303c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NjMzMWY1ZTVjNjlkZjc4ODYwNGI0YTAxNTdmN2Q2YjI4MzY5YTM2YTcwN2ZkZWY2ZTJjODQ4OGJlMzAzMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMjVmMjdiYjBjYWEwNWM1OGMyODkwZTZiYjNiMWU2YmQwOTRhMmMzMzk1MmNiNDQyOWQyNWI3MGM1NzdhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiMDRlNWVhMzliYmExODRjZjNjNzRjNDcyZDI1ZjJiZTgzMWFiODUwYmU5OWYyM2M4YmUyZDI0ZDhjZmFlZmQifQ"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L303-L326",
+          "version": "repo-lines-v1:sha256:ba1d52ebfe265f26436f18c83d19a64792db8184f7e38c3a4c70c6f0c8d02e5b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmMzc0MzI4OWNiODFmMWNmMmIxNzQ5NGRmYTg3MDFmNDU2MDBkMjkyYjI0ODRjZDgxNTdmZGQ5NjI2MDVmMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhNTA0NDE2NDVlZjlmODIxMGFkYTdkZjNjNjMwMThhNGYxMzlkMGE4ODRmOGE4OWY1ZjU2MDhlNTBmZjhlMTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVjOTMzMGI3MjYwMTc0NWM4MTI0NmNiOWJlOGI4ODRiMzBjOWEwNDg3NzhmYmM1NjcxNWRhZDQwMTE5ZjEyMzAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c9d88571c8c74bc1bb3e961a71f57ebe",
+      "statement": "Summary path預設位於data/summaries並包含timestamp、video id與清理後title，FileManager保留directory且只清理/截斷basename。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/storage/file_storage.py#L98-L132",
+          "version": "repo-lines-v1:sha256:5bb4043f31efe7ea3a8fc7ad6d09f3f75e6afb53e7c8d84f30b3334363173979:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjNzJkOTY2N2FhZGI0ODBkNDA5YzIyNmE2ZjkwNWQyMWYxOTJlMzc5Njc3ZWRiYmY5NGNmOGUxOTIyZGU5NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI0MjM3YjBmNmZmNDhjZGJmZDA1ZDk4MzgwNWU5NjExODk4ZTFkNjNmOGQ1YWFjYjQxOWUyNThjNGQzZGRlYTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY1Y2U0OTAwMmU5Mzk2MzQ0OTM5ZDc1NGM3ZDYyZjYwOWI1YzU2YzA2OGQxNTA5N2E4YzI0MmZkMGNkODM3YzAifQ"
+        },
+        {
+          "resource": "repo://src/services/outputs/path_builder.py#L12-L26",
+          "version": "repo-lines-v1:sha256:b9553a4e1c30ede08c01cdeeda80407c9a98f0d3fde9a982104c8a9784b5c00f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3MWQwNzM5ZjI4NmM2NjY5NmI5OTNmMzI0MWNjOTE4ZGM2OTgwN2EwZjkzY2UxNTllZjFmOGIzNDM4MjU4NWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2YmNmY2Q2MmJiN2QwZWZlNmY2MTMwYTI1NWUzN2MyY2ZmYTI1ZWZhNDdmNzYwZjJhMjNjOTg0MTRlMDBhYTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIyOWE0MjA4ZjBlZDg5MGM4ZTNhY2FiZDYwZDNjODUyYWY0NWM3YmRjZjljZGI2ZGFmYmE4NjU4MDEyYzcwMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d2216113e73349dbb2bdf0ec2ced11eb",
+      "statement": "Metadata JSON以實際Markdown path的stem配對並以UTF-8保存；sidecar寫入失敗只記warning而不阻止Notion保存與task完成。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/storage/file_storage.py#L134-L156",
+          "version": "repo-lines-v1:sha256:617ee7377e82ea27de11c63e25b11354b41a84558aeff587d21c73ecb2e8ba0b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxYWJjZDBjYzY5MTNkNGY1MWViMjFlNGY1YWZjMmU5MGY4NmQzNmE0NTBiYjQyY2IwNWM2ZjNlMGQ3MDZmOGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2NTAwN2E5ZjU0OTBmNTZhMjE4MGViYWU4MTYzZWRmYTllODljODgwODJlZWExOTk2N2I5OGNjNTY4N2I1MzgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE5Mzk2MjRlYTBjODU4M2UxMTc2OTAyY2I0M2I1YzY2ZjU4MjUxMTdhYTAyMzAwMzcxNWRmMWM2ODI5ODZmYWYifQ"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L276-L326",
+          "version": "repo-lines-v1:sha256:f642b7dbbf126c8bc30a38a0652b2cff3ad08d0f639980563e4c700f160a0744:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0OTU1NzUwYmJmMzBiZDM3NjBhMzU1YjFmYTI5YzNjYzdjNjg4ZTQ0NWMzNzM5YzA4N2Q5MDA1OWVlN2FlNzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVmZjVkZDdiODFhZjIxODEwNzJmMThiZTM3YzM1Y2JiMGIwYWFhOTAxMWZkZDczNjgxYjRkM2VlODlmZWY4MTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVjOTMzMGI3MjYwMTc0NWM4MTI0NmNiOWJlOGI4ODRiMzBjOWEwNDg3NzhmYmM1NjcxNWRhZDQwMTE5ZjEyMzAifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-31T13:03:19.622Z"
+  }
+}

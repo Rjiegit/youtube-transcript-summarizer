@@ -5,7 +5,7 @@ description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topo
 tags: [operations, configuration, docker, deployment]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-29T14:29:59.537Z
+    at: 2026-08-31T13:03:19.622Z
 sources:
   - id: openwiki-source-6d4b4e707b8d60b6ccfa3425
     resource: repo://.github/workflows/openwiki-update.yml
@@ -21,7 +21,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
     resource: repo://src/core/config.py
-generated: { by: "codex", at: "2026-08-29T14:29:59.537Z" }
+generated: { by: "codex", at: "2026-08-31T13:03:19.622Z" }
 ---
 
 # 設定、執行與部署
@@ -69,6 +69,9 @@ Workflow 使用 Node.js 22，安裝固定版本的 OpenWiki 與可選 Mermaid �
 
 ## 延伸閱讀
 
-- [快速開始與導覽](../quickstart.md)
-- [系統架構總覽](../architecture/system-overview.md)
+- [快速開始與開發導覽](../quickstart.md)
+- [系統架構與端到端資料流](../architecture/system-overview.md)
+- [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
+- [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)

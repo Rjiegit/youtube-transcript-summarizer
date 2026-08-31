@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:cddd817b3c638c75f1da3f014e010082e1aedbf2d6deadc9b152299261d69913",
+  "claims": [
+    {
+      "id": "claim_f60d99543e014db3873ccc8adea4841f",
+      "statement": "LLM候選池拒絕空池、未知backend、空model、非正或非數字weight與重複provider:model，選擇時只對具credential且未被排除的候選重新計算權重。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/weighted_selection.py#L23-L96",
+          "version": "repo-lines-v1:sha256:150de060a515d2398245f32677d2a278836eedbde4167b05e3d3eb2cf1152443:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwOGUwNmIyNzQxNjRhY2MxMjZjNDU1NjU3MzM0OWEwMDVkYzhiNTYzYzE3OWQ3MDcxMGZhZGM2MjRkZjRlMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4M2ExMWRlZmI1Y2UwYjNjYzc2NWZmZmFmMGFlOTZiZTUzZjQ5OGRlMWE5YWQ1YzQwNmYzMjQ5ZjNmMzE2ZmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NWZmMjk2NTY0NDU2ODAxMjc0NWRhODBmYWZhNDAzZmU1MWNiMWU0NmViMTAwNGQ1ZmVhZWQzNjNlODQ5MTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a3751955d4f44b02a1de53db440ac81b",
+      "statement": "OpenAI、Gemini與Ollama以各自API key環境變數決定eligibility；Ollama host另由OLLAMA_HOST設定。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L139-L156",
+          "version": "repo-lines-v1:sha256:bdb30aa96fa9406ec6c014bc904c800962204e929153ec4c60074c10f0161cbc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1ZDU2MjJiNjViN2U5NmI4OGFlODNhMmViZTUxNWQ1MzBlNjk4ZTQ1YmU0YjU3Y2VhMGE4ZDg1MzAxNTI1MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1NmFkZGZkZjliMDMwY2RhNjVkYjIyMDk0Njg4MzJlNjAxYWRlZmVmNDU3ZjkzZjNmMDU0NDA0Njk1NTg5MzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImViMTFlMWI3NDEzODZkODQ4NDE3Mzk3NzdmNDgwZGU5YjY0YWUyYWQ5NjJiNGQ0OTZhOGFiOTkyYmE5ZDM5YjMifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L78-L86",
+          "version": "repo-lines-v1:sha256:3315e870c8fee4f97f1ef3f11fce23a3c5f693ff1ad8e3d94d9cf110b55ef079:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiY2NjYWUyYTRjNGZiN2ZjMDA0OTVhYjAyM2Q2MzQ3ZGNkYWIxN2ZiMjFhYTZhZGRkNGU1MDU1YmMwODNhMjk0OCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWQxMjdkNjQ3ODE2NjFhYmFhODc1YmRjZjkwZTA1Mjc3MWJlNjNmNmY2OTRkZWZhZmI5ZjdhYThlODJkNTBhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2IzNzEzZWM4ZGE0MThhN2I3YjM4MjRkMTNmZTUzODhhMTRiOTFiMmVkYTFhYzU2ZjgxMzMxZTY3OTA1Y2UzZiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZWJhZTY1ZjBmNTQ5ZDJkYmJhNmZjNmVjMDQwZDBmYTllOWQxMDk0NjBlY2QwMmVlOTE4M2UwYzcwMWFjZTIzNCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_f3aa71b52889430d8416ee7cd6573d3d",
+      "statement": "預設自動池只有六個Gemini candidates，依序使用1:2:1:1:3:3相對權重；selector每次request隨機選擇，不追蹤或強制RPM。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/model_options.py#L67-L101",
+          "version": "repo-lines-v1:sha256:a047d0526aafcdfbc742f408c9e71f384dd1f9ed1cfc6d33853d10733558803b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhYTZjNGQxN2Y3MGU2ZmUxNGRjMWFhYjQ3M2E1OTY2YjUzZGI4OWM2MDg5OWI1OGMzM2Q0N2M2ZGIzOGY2NWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmJhMDUyN2MzOTUzYzRiNmUwZTViNTczOWJhODM2MTJmODA1M2JjZGM5NDY2NzMwMTkzY2QxZDU5MGI0MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk4ZGU2YWFlMzliNTUzMzRjZmY1YmQ3MzZjNTU2ZmY0MjAyNjFmYWE5YjZhZTQzNmZkYmQ2OWNkMmQ1ZWNlYzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/weighted_selection.py#L59-L96",
+          "version": "repo-lines-v1:sha256:6504b96b0d91e300e484112706c1e8ddc01205dfb7e4f59a15ec1e84f0c59027:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0NmJjYWYzZWUxZWI0MWYwYWJhMGQxZjFiOWE2ZGViMjE0NmZlYzJkZGNjNzY5Njc4YmVmZDJjMGJlOGU4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4M2ExMWRlZmI1Y2UwYjNjYzc2NWZmZmFmMGFlOTZiZTUzZjQ5OGRlMWE5YWQ1YzQwNmYzMjQ5ZjNmMzE2ZmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0ZjViZDEyZjBiYzc2MTg2ZDA1OGRhOGNjMDdhZjBkNjdjMGMxMjRhNzI3MWIzMjIyOTEwNGZmNThjNzI2ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0774b4d435844f03907d998de6fc3aba",
+      "statement": "成功provider call會記錄last_backend與provider:model格式的last_model_label，worker再與faster-whisper model size組合成持久化model label。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L172-L204",
+          "version": "repo-lines-v1:sha256:15b8437521cc87f19cb945a40db20698665f97ccb2f0cc5c15ed2433c3465c33:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2MDljM2YwODFhNTAxMDM4ODAxNGM1MjBlZjAyM2M5MDM1NzFhNzFmNDRhNDRhMGFmODI2MDM1YzFkMjJjNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk1OWNiZTFhMGM0Nzg5ODMyZTkzZTcwZjY4NTM4NDQwYjRlZTJjMTNkNTJjZWI2ZTBmNmNjZWU1ZGE2OTczY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRkM2NiOWMwZGM0MTMxNTc5YWY2ZjY2MTQxYzUxYTEwNDY0ZTBkMjkzZGFmOTI3ZjNiMzM4ODFiOTQ3OTQ0YjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmOTYwYjRiY2E2MzQ3NjQ4ZDQ2ZWIwYjg4NmY3ZjA1ZmYwMDBmZWY5MWM2M2UzMzk1YzIzOWZiNmVkMDY2NGUifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L416-L491",
+          "version": "repo-lines-v1:sha256:dea911a8172edecf71eeaa6de9207fa5bf760e5295fe46dde731b8b4bf545a71:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyN2UwZmZjMjAxM2Y0ODkxZTNlZDFiMzg4ZjllNzU1MWYzMDdkNjg0OWNjYWYwNTBmNTRlODRjZTQxYTlhNDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ1MWYyNDk3ODM1Yjc1ZTk5NDk0YTU3NGU4YzYxZGE2MWZlOGVkMTAwNDMzNWMyMTU4OTk1OWNhNzI3MmNkZmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlkODNmODhlYTI3NTFhMTNjYzAyZmRkM2RiMjk1NjU0MzU5ZDAyNmIzMGUwMWUzMzhkM2E2YTIyODg3OWNkOGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYzNWQ3ZTAyZWZmYjhjNmJlNzZmYjg4OTA0MWFmNmE0NzMyNTQ4MThmYTFjOThlMmYyYmQwOGE0YTQwZDA5YTUifQ"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L260-L275",
+          "version": "repo-lines-v1:sha256:62cc30de2ab76da77f8ded22d0432d338f464a3fbe19e2cd197275e28bc01b74:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3N2EzMzBlMThhODljMTc4N2RkZTQ0NDdlMjI4MWMyZTE3MmI4ZDMzMDAxOTJlMGU4MmNjNDVkM2NmZjQ0NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMWRjYzQ1ZDVkNjYyNWVjOGEwN2QzYTRjZGUwMWJlZjE3MjdhMTY5MmNhZTEwYWY2MGE1ZjhkM2FkOTI3MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5MjZkOTA5OTE5ZWZiZTcyYmY5M2M5N2NhNDM3ZjY2ZmJlYjkxMWYwYTg3ODEwNTk5NTVkZWViOTM0Y2U0Y2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4ae2cf4703aa401e8e4cd9f22071bade",
+      "statement": "Summarizer只在第一次candidate發生transient provider error時排除該candidate並重選一次；一般認證/4xx不failover，fallback再失敗也不嘗試第三次。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L90-L170",
+          "version": "repo-lines-v1:sha256:770a9350ec204f5c5cdc594cb18abc057adc4fa54c3b746f9675da27c980d395:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjYTYxMjQyZTFkOGVjMzM0Yzk4NmUzNDUzNmIwYTg2YWY4MDAyZDVkMDQzODVmYWY1YmViMWUzZjkyMWZlZWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyMDc4MzkyZmZlOTM1MTNhNGNlYzA2MjQ2ODZhOTcyM2Y4MzgxYjM4YTNjNjBmYWQ0NmYzYjEwYTc2NjVlN2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImViYWU2NWYwZjU0OWQyZGJiYTZmYzZlYzA0MGQwZmE5ZTlkMTA5NDYwZWNkMDJlZTkxODNlMGM3MDFhY2UyMzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI2MzE4MGJmM2M0MjMxZGI3OWM1YzkzOGU4YzA2OTlhNDA3NTI2ODM5OGZhOWQxOWRjZWEyZmIwODk4YjY5YjIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9c9ac40d14754a00a01e7b39d01fd0ea",
+      "statement": "Transient分類涵蓋OpenAI rate limit/timeout/connection/5xx、Gemini quota/timeout/server類錯誤與Ollama timeout/connection/429/5xx。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/summarizer_service.py#L195-L247",
+          "version": "repo-lines-v1:sha256:52c38fb1f75eff91176bfbdd6b06d757cd70525a61bdcb0cd6342cc027b1f973:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0NzVhODM1ZWUyMmYzMDdmN2M5ZGMxNjhkYTg1MWM0OTJiZDAzODFkOWI3NmFjN2VhOGQyZGQ5OGFhMmQxZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0NDc1MWQ1NzdjNjIwZmNiNGVhNzBiZDVjZGZkMGQ2ZThiNmI2MGIxN2ZhZjZjYTI1NzIyNzY5YzhmNWZlMDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1ZDllMGE0N2ZjYjAxOGQ0MDE1ZDQ3MDFkZWJkMjliZWRkYjkxODgxNTk4ZGIxYTc1NWY0ODU3MDQ5Y2QwODAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImEzZGZhYzg1OGNmMWRkMjA0OWU0NjY3ZTYwZTNlNmViZjUxYzE5YmZlZmVhZDQ2NmE1MGVkNzRmMzA3MmVkMmUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b714586377aa4b4e8750188aef3b93a4",
+      "statement": "Weighted selection tests以deterministic RNG驗證validation、credential filtering、exclusion與權重；Summarizer fallback tests注入最小候選池避免依賴預設pool內容。",
+      "evidence": [
+        {
+          "resource": "repo://tests/test_summarizer_service.py#L221-L284",
+          "version": "repo-lines-v1:sha256:a6698f225924d884cc67cc342cda6be40fa8da5cfd36c49d945aaafb7e61b211:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhZjQxM2UxOTUyZGE1MDA0NmE5OGFmODFmZDI5N2NiNmQ4NWJjMWE1YmVmNGYyMmQ4ZmE1MWE2NzQxNTcwMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU2NmY0OGMwODQ3ZmIwMWQ2YmEzZGE0OGFiOTFhNGNjYzNlYWZiNWRmZDQ0MGIzNTk0YTRmN2EwZWYzODVmY2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI1MTVkYjc2Yjg1ZDdkYjIxMGM2YjUxMjQxYzU0MzA3NGU1ZDVkMGQ5ZTdkM2JhMDRiYjQwOTJiYzNlNDhhMzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NjBiNjRlOGVlZjdiNDk0ZTVmOGZkOGU1YmJkOThhYzA2OWUzYzM5NTQ0ZjI3NTVhZGVlYWZmNmRkNmJlODMifQ"
+        },
+        {
+          "resource": "repo://tests/test_weighted_selection.py#L27-L152",
+          "version": "repo-lines-v1:sha256:1ad6b98884e4e9037cd7580dafe13a6445f3e0eaad973e5e92a82e0963d21133:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5ZGFiMWJkMDhmNTUxMDJjNmY1NTQ0OTVkMTMzODRjMzk4ODgwYzBjMDE3NTg5MGNlZTgzN2RiNTMxYjE5ZDZmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1NTAzMmU5NjRkMDkzMjM1MWU1ZDE4NTI2OTI4MWIxNzFhM2EwOWIwOGIyODZlNjYxZWE0NzAzMjNjODJlYjRkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlNjVjOTFkMTBmNTQ5ZjVhMGMyNWFkMDk3Nzg4ZWZiNTFkYzkyYTYwYWYzMzQ2N2JkNzQ2NzhmNWYzYTFhODlkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzZDQxMzQwY2MyMzlhMTU5Y2U5YjYwMjJlOWY2MzIyODMyZTJlYWQ3NmNhZTllNDc1NGQyMTBlYjhmYjZkNWU4In0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-31T13:03:19.622Z"
+  }
+}

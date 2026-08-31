@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:ea56950c6e46ff4a945069969650ec58adc56c47c3e3513034d184304f069506",
+  "claims": [
+    {
+      "id": "claim_8ce30e71df304864940a28036789b29e",
+      "statement": "Python 主系統以 apps 作為執行入口、services 組合 use cases、domain 定義 models/interfaces，infrastructure 提供 SQLite、Notion、media、LLM、storage 與 notification adapters。",
+      "evidence": [
+        {
+          "resource": "repo://structure.md#L3-L48",
+          "version": "repo-lines-v1:sha256:4756078bb81b0a05323dc16cad5fb5814d1f57af9202beea02c3a993bf2ba64a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliOWNkMDJlZjU2MDNjN2Q0MGEyMWVjNjkxOTBkNTVkNmJlODgyZGZiYzU3MjFkN2NkZjdhOWQ4YTQwOTAwYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkOWFmOWM3OWI4MTFkYjNlOGQ1ZGI5NmEyN2I2M2U4ZDRhMjIxMzYzYmVmMTFlNDk5ZjFiNTZhYTg4YWUzMzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ0N2M3ZTdlYTliZjI2YWMxZTM2NjYzODNmMWVmYjkwNWExOGNmYmU3N2NhM2ZkYzA0MGIxMzczZjhkYjExMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3MzBjZDk1ZTgwZjExMWRmNmRlY2FhNjlmMjE3MTBlYjc4Yzg4YTJiYTliMzY3MWYwNTI1MzFjN2JjNjUwNjgifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_cf387b99db6144958c39d20153389f3e",
+      "statement": "ProcessingWorker 的 downloader、transcriber、summarizer、summary storage、file manager、notifier 與 config 都可透過 constructor factories 注入。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L116-L177",
+          "version": "repo-lines-v1:sha256:e9a8858757b59aeee88bb790ae02dd334918f4565180a9ddf2853bd902889381:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4MWFlYTdjM2EyOTU1YzA5MjA1NGQyY2E2MTA0MTE4YWU5ZWRjZjQyOTlhYjJmNWRhYTgzZThiZDAzN2U1ZjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg1ZWFjZGNjMDU4N2I0NGUxZmM3NzcwMzliYWQyZmU4ZWVkNDk3YTI5MjYxYzljYTI0OTk5OTI3YWRkM2FhNzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVhZTZjOWZmYTE0ZWQ3MjdkY2EzMDFhZjIzOWI4Nzk3OGZmZjk0MTcwNzQyMDAxZmEzZGVhOTdmNjU1N2M1MjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBmZDkxZGE5ODhkNzg0NTkyYTAwOWE4MzA2NDcwZTRkYjVkNzVjMzAxNGJiY2E1OWI0MDM0MGUyYmY2NmZkYWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4e81cb3590d54341ae64e360314dfbe5",
+      "statement": "Nuxt Showcase 是獨立 npm application並由 server route直接讀取 Notion；Browser Extension 則透過 HTTP呼叫 FastAPI，兩者都不在 Python package import graph內。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/package.json#L1-L25",
+          "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L1-L89",
+          "version": "repo-lines-v1:sha256:dd99ab2c234b3a14eb6b1e9100c7c96e95971c27b583db53dd24d236f9ea121a:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2MTljNjZhMTI5ZjM2ZmM1MTFkOGY0YjVhNGE2ODQyZDIzZWVkOGNlYzQ2MzVkYWUyYTEwZTcxNjBjMWY4MDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://src/apps/extension/service_worker.js#L178-L218",
+          "version": "repo-lines-v1:sha256:433f68dd64b1f8464dd6bc6c25fa52d3617ac85dd2fa1b42c613277c6b3f898c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMjg5MWI0Y2E4N2UyZWQ0Yjg5Mjc0ZTc1Y2E0NzE4NTkyYjg4NGExOWU2OTE3MGEwYzM5N2Y4ZWQyNjBkZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4YjRiZWRhNjBjYWJhNTk2NjhhNWY0YzQ2NDcwZmU0YWJmOTIwZGZkZmY0YjkxMTFhNjViOTZiNGEwMWJhYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlMjIyOWIzOGYxNjM0OWRhNTliN2VjMDZjMzg3NzcyYzUwMDFjMzFkYTRhNmI4Mjk0Y2ZiYTUxNjMwM2YzNTAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fa4e8d6c2eee4d17b20937979bd9f7fb",
+      "statement": "主轉錄路徑使用 faster_whisper.WhisperModel；同一 adapter保留 whisper.load_model legacy method，但 transcribe預設呼叫 faster-whisper path。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/media/transcription/transcriber.py#L22-L46",
+          "version": "repo-lines-v1:sha256:36133a982ad93a6f576c2892baf70fe1162c340a3909aba05a2c0dd31940b0d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3MWJmNzI2NDk2YzkzM2YwZGE4ODQ5OWUyOTVmM2I5NTZkNGRjNDY1ODNlOWNjNTJhOTZhYTM3ZGUwOTQ3YTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhNWFlYWFhNWNmNjgxYmFjNWI4NWViYTk4MTFjZmMwM2YwMmU5NTc2YTY5MzNmNDZjZWY3YTM3ZGM2ODViNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM0MDFhZDc0MGM2OGRhYmJlMDk2ZDNkNWNhNzYzZTljMjM0NDIyNDY5MDRiZDAzNzcyNjEzZWE4MDBjZGM5ZjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI1YzhlODY2MWNiZDQzNGNlMzM3ODhhNmI3MDdlMWZiY2NmNzk3ZDU5NjE4ZmE1NDJkYzllYTM5MTk3YjJjMGEifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_888bffe77fbf42eb9752b25ca2a94fc6",
+      "statement": "pyproject宣告 pytubefix與 whisper，但 downloader實作以 subprocess執行外部 yt-dlp；因此 Python dependency sync與 yt-dlp executable availability是不同的 runtime contracts。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L10-L16",
+          "version": "repo-lines-v1:sha256:2818fdad4bff95541d6c4c5c0426da5d173d2f2b0a5fe7ce69f18a035451d442:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I4OWI4MGE3ZjViYzM0ZDU3OGY2NmI5NDYwZjlmMzk0MDg2NTQyZGE4M2U4MGFhNGE2OWU2ZDI1YTEyNzExYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjQ3NTg2NzczMzA2NGViYjcyNzNmOTc2MzA4ZjE2YzRjNWEzN2MwMmViYTQ5NzUwZjkxNDA2NDhiYzBkYTIwMyJ9"
+        },
+        {
+          "resource": "repo://pyproject.toml#L6-L19",
+          "version": "repo-lines-v1:sha256:1ff4deae1b2b84c0a450547ab965b1f1cac6f523cfe7c75d545f0bbb3a9d1b45:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkOTVmNWU5ZWRlMDE4MTYwNDNjMDc5N2FjZThkYTJhYzRlOTlhOGE2YTYxMGZhOTg1NzBlZjM0YjkzNTYxMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5NDE2ZTA5Zjc4YmEzMTZjMDMyNTY4MjEzYjg1NWVlNzU2ZTQxNTY1ZDkxOGYwOTUxOWM4MWZkNjIwZjQwNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5NjU1ZmI0NTBjM2VkNjY0NjlmZjNmZWNkMzYzZjBhNzE1ZGIyODYyZDA1MmJjODRiN2RmZmY5N2I2NDZiZWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI4NGI4NmI2MjEyOGI2YmJkNGE1MmQ0ZDM4NjYzYTZmNzk3NWMwMDNmN2FmZTU3NzEwMDQ3NTlmNTllYWJmZDQifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/media/downloader.py#L12-L20",
+          "version": "repo-lines-v1:sha256:875fe9cfe7784e77eb247c701433cce025c81d242ebd4af733e897274b2fde96:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzNhMGFiMTAxNmY0OGRkNDY5NTAyZWEwYzY2YTdkMzIyMzIxNmQ5OWJkYTFmYzFjNDc1MmMzZmI5MTczOGM1YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDg5YmNmMTYxNzk0MTQzNWEyMjc1YTZmZDQ1MzVmMjkxNDg3NmZjYTA4MmZjMDM3YjFhMDkxNmU4OWZkNmFkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmY1M2E1ZTM4YTYwYmEzOTg1NmM2MDViYjE3ZWNjMjk4NjM4NmRhYjVlMWIwNjE2MTQ1ZjhiOGQ5NjdhOWE3OCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGYxOTNjZmY2MWQxZGJlMTY3OTgxODgzMWMwYzhkOTZmYWJkYjcwOTA5OWVhYWE2NGRhZjhlYzc2Y2NjNjlmYiJ9"
+        },
+        {
+          "resource": "repo://src/infrastructure/media/downloader.py#L78-L107",
+          "version": "repo-lines-v1:sha256:9bc19369a224aa234c7374400fb68a65791239fa067765c6d20384704b109df9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2ZTUwZWYyNzJhNGEzNTRiYjkyMmI4YzNhNGE1NjBmNWIzYTg2YzM3Mzc3Y2UzYTk4Y2JjYjdhNzU3N2IxYjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM0NGQzMTEzZmFiY2ViMjI5ZGExMGY3YWY1NzI4OTY1NmM1NTFmNTgyNWNkYmJhOTk3MzhlMDFiNTZiOTczYjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUxNGZiZDc3YzUzZDQ1NmE5YTExNzRlYjhiNTBmODkyYzc2YTIwNWMxN2VhYzcwZjBlYWZiZTZiZDE2MWZmMjQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5a3a6c10f8484735abb4312473f57f1c",
+      "statement": "FastAPI API直接 import pydantic，Config直接 import pytz，但兩者未列在 pyproject的 direct dependency list而僅存在於 resolved lockfile。",
+      "evidence": [
+        {
+          "resource": "repo://pyproject.toml#L1-L25",
+          "version": "repo-lines-v1:sha256:bfc67ae9138d3d3023d6d7dffa644aa887c30074913b877426892a7cbc809ccd:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwMmE4MWMzODM2ZWRlZjJkMGJhMTFkMjM1M2ZiNmRhYmM3NzcxNTBhN2NhODNlYTBkOWU5YTcwMzEzZmVhYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5NDE2ZTA5Zjc4YmEzMTZjMDMyNTY4MjEzYjg1NWVlNzU2ZTQxNTY1ZDkxOGYwOTUxOWM4MWZkNjIwZjQwNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFjMWFhZmY4ODFkOGI1NTg4YjJmNjNjYTExODE1NGZhZjdhMzljODE3ZTZlMTk3YzdkOWUxNTI1MTJlYjkyMjAifQ"
+        },
+        {
+          "resource": "repo://src/apps/api/main.py#L1-L9",
+          "version": "repo-lines-v1:sha256:18eca63862dea4d1911e979c34fcde4b4f5bf8898c9c8bd46c142aa35ee9c0bf:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiM2JmNGIxZTU2MjJkOWI4NDk4ZGUyMThiMWYwM2ZmNmYxZTg2N2Y4MjNjNGNmNjZmZGQwODRiMTNmZmU4YTMzZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjAsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOTZkYjNlYmM3NWU1NGFmMzNlYjVlOWVmY2Q5Mjg5M2E0ZjViY2QxNmRhOTkyNjQ0YWQ4ZmVkZTEyM2RkZDA5OCJ9"
+        },
+        {
+          "resource": "repo://src/core/config.py#L1-L20",
+          "version": "repo-lines-v1:sha256:8e0cbffddd2915b239fdb74633a4e595bdddbb9c28107d6cc9986e0f15cf5102:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM3MjdhZGZmNTI0ZTA2MTYwMjJlYWRkOGY0YWYyMWEwNzc4YjI5ZmM0Yzc3YmRmZWZkMWFmY2UyY2JmNWU0YjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3ZjVkZmNkY2Q4ZmUyYjljZmRkZjAzZDFlNmM5OWU2NGI4ZDI2NGU1NGNiYTlhMmFmMjQzYTZiNzU5YzNmNTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY5OWVmZWRmZDJkOTcwNmQ4OTFjN2JhOTgzZTdmODRlMDVhZDBlMDE5MWMxMzI3OThiZTVlM2MxY2M1MzA0MjYifQ"
+        },
+        {
+          "resource": "repo://uv.lock",
+          "version": "repo-file-v1:sha256:5eee79a2406dfd4253d53922e9e41e37887a98ff1a4d5dad5291796f170ddedf"
+        }
+      ]
+    },
+    {
+      "id": "claim_3f73ab64a72a472dbb7d06b07ea1dfcb",
+      "statement": "Python dependency由 pyproject.toml與uv.lock管理，Nuxt dependency由package.json與package-lock.json管理，而yt-dlp由Make/Docker安裝流程管理。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L10-L16",
+          "version": "repo-lines-v1:sha256:2818fdad4bff95541d6c4c5c0426da5d173d2f2b0a5fe7ce69f18a035451d442:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I4OWI4MGE3ZjViYzM0ZDU3OGY2NmI5NDYwZjlmMzk0MDg2NTQyZGE4M2U4MGFhNGE2OWU2ZDI1YTEyNzExYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjQ3NTg2NzczMzA2NGViYjcyNzNmOTc2MzA4ZjE2YzRjNWEzN2MwMmViYTQ5NzUwZjkxNDA2NDhiYzBkYTIwMyJ9"
+        },
+        {
+          "resource": "repo://compose.yaml#L15-L21",
+          "version": "repo-lines-v1:sha256:c24fb4b13cee0f15b702241b170e9223a68681f92a811b985167fc5dffd9d89b:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmE4MTFjMWJjZWQwYmVjZTU4MmQ1MWMxYzU5MzlhZTA3OTcxZTM3ZjA4ZjdhMmE2NjBkZGIyNjM5N2YwNmY0NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzE2NTViY2E0Mzc1MGM3NzYzMTE5M2RmODY2YWM5MWQ3MTEyNmI0NjExMGQzYzIzM2I3M2Q5ODRhZDYxZTVmZSJ9"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/package.json#L1-L25",
+          "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
+        },
+        {
+          "resource": "repo://pyproject.toml#L1-L25",
+          "version": "repo-lines-v1:sha256:bfc67ae9138d3d3023d6d7dffa644aa887c30074913b877426892a7cbc809ccd:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwMmE4MWMzODM2ZWRlZjJkMGJhMTFkMjM1M2ZiNmRhYmM3NzcxNTBhN2NhODNlYTBkOWU5YTcwMzEzZmVhYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5NDE2ZTA5Zjc4YmEzMTZjMDMyNTY4MjEzYjg1NWVlNzU2ZTQxNTY1ZDkxOGYwOTUxOWM4MWZkNjIwZjQwNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFjMWFhZmY4ODFkOGI1NTg4YjJmNjNjYTExODE1NGZhZjdhMzljODE3ZTZlMTk3YzdkOWUxNTI1MTJlYjkyMjAifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_9d962514122646e5b9863615c865f7a5",
+      "statement": "Nuxt production dependencies是Nuxt與markdown-it，TypeScript、Vitest、jsdom、Vue Test Utils與Vite Vue plugin列為development dependencies；Python dev group則包含flake8與httpx。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/package.json#L14-L25",
+          "version": "repo-lines-v1:sha256:aee2b5a340eb509b5e9c6412d3698c6e7501b9652fe978f11b0ce1e820487e42:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmNDcxMDYxYTZhYjJkNjU5N2NmNzFmZmM0ZDZhMjFiNDExNjM4NDhmM2EyYWFjNWM4Y2MyMmRmYTVmNzM1NzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
+        },
+        {
+          "resource": "repo://pyproject.toml#L21-L25",
+          "version": "repo-lines-v1:sha256:0e0dfc1b8ace066d5ba7bd49eac1319ea43c47acdf4d0aeda4c3efb9033cb99c:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJiNzQ5OWIxY2UxYzRmNGIyNTI3ZjNhMzI4NGNhYzZiNmExZTNiZjQ5ODhiNTY3OTgyYzNkYzhlOWExN2YyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjk0MTZlMDlmNzhiYTMxNmMwMzI1NjgyMTNiODU1ZWU3NTZlNDE1NjVkOTE4ZjA5NTE5YzgxZmQ2MjBmNDA2MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzJmNjA1YmJkMTJlODBhOGIzN2I5NGM3ZDRlNzNjNDY3M2Q0NmMyNjUyYzZiNjFiZjE4YWEyNWQxYjFhYjc2MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWMxYWFmZjg4MWQ4YjU1ODhiMmY2M2NhMTE4MTU0ZmFmN2EzOWM4MTdlNmUxOTdjN2Q5ZTE1MjUxMmViOTIyMCJ9"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-31T13:03:19.622Z"
+  }
+}

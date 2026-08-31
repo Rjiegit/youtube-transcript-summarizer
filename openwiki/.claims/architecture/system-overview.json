@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:bfe9a065b03cb271e58eeacd3920bcfa69bab248d8e2535c41d0b2c45f9ac69e",
+  "pageVersion": "sha256:1e70d48e5789a2c2fc7719203f06cb76922cac8f566abb1dfacc191afa148f25",
   "claims": [
     {
       "id": "claim_e58d32757ef34b6a8caff1e6252ae528",
@@ -59,38 +59,22 @@
       ]
     },
     {
-      "id": "claim_4d579ead316542a2b32fd96c2a289e67",
-      "statement": "DBFactory 支援 SQLite 與延遲載入的 Notion backend，並對未知 backend 或缺少 Notion dependency 提供明確錯誤。",
+      "id": "claim_38067457d5514e95ac3f2cd4dd71ff6a",
+      "statement": "RSS monitor透過Task API建立SQLite task而不直接執行media pipeline；Nuxt Showcase則直接從Notion讀取，完全不呼叫Python Task API。",
       "evidence": [
         {
-          "resource": "repo://src/infrastructure/persistence/factory.py#L5-L18",
-          "version": "repo-lines-v1:sha256:de2cb6dd97cac537cdcc3ff9618bdd2fe8767595f24389a4ed254c9fda1dc506:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlZGRiMGRiZDY3ZWQ3NDAzNjM5OWU1YjFjMGY5NGM5NTkzMjA2MmUyNTBiM2MzNmQ0MDNlOGVmNzNiZjVlZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkYTg5MTZlNzNjNjVkOWY1N2MzOTg2M2U5YzEzNTY5MDYyMjg3YTlhYjkyN2I2MjUyOGQwMjYyMzdlMzI0YTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4YzUzZTQ3NzcyOTJjMWIxZTJkOGVhYzU4Nzk2ZmFkYjBkZGNmNzYyZGY4YzAzMDZjZDBjNDQ4ZGI5ZTY5NDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
-        }
-      ]
-    },
-    {
-      "id": "claim_cbb06da82a6d440b8864ff51a0ac327d",
-      "statement": "ProcessingWorker 的媒體、LLM、儲存、通知與設定依賴可透過 constructor factories 注入，形成測試與擴充 seam。",
-      "evidence": [
+          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L40-L89",
+          "version": "repo-lines-v1:sha256:de1c3c28dd75538befec98d9cd592292fc6ce6336dc3af3641c317c57ac63dd1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNGE0OTIwY2ZiNzdkOTRiMGZlYmEzYTY3ZGNmZGRkM2Y3YmYyYzdlYTk1MGUxYTViMzAzMTQ3MDE1M2VlMTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
         {
-          "resource": "repo://src/services/pipeline/processing_runner.py#L118-L177",
-          "version": "repo-lines-v1:sha256:1a314a862fda841f230a908f89a769cf6ef74848364ba22724713f38246530b7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlmZDdhMDdhODNkZDE5OTZmYjUxNjg0YjQyYWVjYWY0ZTkwZmI3OGJhNzIzMGU1NDJlZDdiZDAxZDQyMzAxYmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBhZTQ0MTY4ZTE2NmMzZDA1NWJkNzAzYzhhNmZhNWRkZGI4NzZmMzVkMmZiZjA5NjU4NWI0ZTU1OWI1OWIyMGMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdhZmNkZmFjNWU5NDc5ZTBlNzYyM2RhNTdjZWVhMjRlYWE1NjcwZjk3YTk5YWU4MzE0OGI3MmU2ZjU0MzgwZDIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0YTg0YTk5ZjgzYWZhYTA1MGQ1YWI0MzZlNzhlMzdlMzA1YzI0NWEzYjI4MDhiZTY4MjIwZjkwOWVlODU2M2IifQ"
-        }
-      ]
-    },
-    {
-      "id": "claim_51a1ac0be0d14c508f342c0d64902713",
-      "statement": "Nuxt runtime config 僅將 build date 與 commit SHA 放在 public 區段，Notion credentials 保留於 server-only runtime config。",
-      "evidence": [
-        {
-          "resource": "repo://frontend/nuxt-showcase/nuxt.config.ts#L38-L52",
-          "version": "repo-lines-v1:sha256:98e92a1830c3e6655d7b3fda6fdc7fd6df79517ea55682ad7383fa317e8cf8fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNjU3MTI1NDdhNGU1NmFmZmVmOTE0MDUxYjRhNzg3NjkyMGRiNjQ4N2I1OWE1YWQ2ZTg4MjRhY2ViOTRmYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlMzYyNWM1NDczZmMyZWVjZWQwNDYxODNiOTUxY2JmMzI1ZGU0NDRjYTY5NTEyNmJkOWJiYzc3OWE3ODZlNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwOWU2ZjJiNjg0YzI2YTViYjMyMGNkOWQ4YjI5NDEzZTIyZWJiOTMwOWI3MTZiNTZjZjkwYjMzMjhmNDA0NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+          "resource": "repo://src/services/rss/channel_monitor.py#L92-L126",
+          "version": "repo-lines-v1:sha256:9827d6947dce2b824a1014a46307a83f75e675c11f84043ffbcd17e5d9ed4a03:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmNTY4MzgxMTMzNzMxMDVlNGRkMGU4M2MwMmI4NTZiNTMzYWIxZTEwZjBlMTc2MzNhZmQyMDBhYTZiM2Q4MjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0YzRmOWExYWZiNWNhN2Q5OGIwMTYzYmNlZWMyYTIyZjgxOTI3NWNjNzkzYjI5YTlmYTMxNWQ4NzU2ZDY4ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhNTljYTMwY2Q3MDFlODQ5OTA3ZDJjYzBkZDhhNGFkMDI0YTZlY2IyYmE1OTQ1OGQ1ZmIyNGRhN2JjODEwYjYifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-29T14:03:31.952Z"
+    "at": "2026-08-31T13:29:02.704Z"
   }
 }

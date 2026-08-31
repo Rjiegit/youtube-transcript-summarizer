@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:03ea8fc4eb9acc44c11c3a48680efdda2d9e082f281bef258fddf3cefe7e24ea",
+  "pageVersion": "sha256:bfab91ec36debb10ede3f7142f0025877157fc1aa4a17cdf617942cfd5eac3a6",
   "claims": [
     {
       "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
@@ -17,32 +17,12 @@
       ]
     },
     {
-      "id": "claim_8fc6a2c088ef41ef9362d6169b0bdd85",
-      "statement": "Notion backend 的任務取得是 best-effort，沒有真正 row lock，且 global processing lock lifecycle 都是 no-op，因此假設單一 worker。",
-      "evidence": [
-        {
-          "resource": "repo://src/infrastructure/persistence/notion/client.py#L81-L122",
-          "version": "repo-lines-v1:sha256:69c23436113af1692aa49a0bebcfe28f34d30f3fe9e33ec21977ac88499ed988:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwMGI0YmZlMjdiMDEwOTIzY2VjNTc4OWQ4YzM5Y2NkMzliOWNhZjIwMDYyNGIzOTM3MTNjNTBiZmIwNDU5MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlN2M5NTdiY2I0NGZiNjczYzk4YjAwNTBhNzVkMzgwODJkYjgxZDkxOGRlMzEzYTNmMDdjMTIzNTMwNmQ3ZWMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhNzA5N2Q1MjNlMDBiYmU3Yzg4OGFkYjE3YTk4OTY5NDdiMzY1MmNhNjEzMzkzZjgzN2EwYzNiN2YyYzFkNTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyMWUxZDRkY2FiMDg0MTY4MDA5YWViNjI3MWY3ZDc3ODIyZjEwZWVkMjk1NmE0MWQxZDRmOWE5MjM5MGFjNzMifQ"
-        }
-      ]
-    },
-    {
       "id": "claim_e320fa3b25d54067a00fc15217a701d7",
       "statement": "SummaryStorage 建立含 Title、URL、Model、預設非公開 Public 欄位的 Notion page，並將摘要分塊為 paragraph children。",
       "evidence": [
         {
           "resource": "repo://src/infrastructure/storage/summary_storage.py#L109-L159",
           "version": "repo-lines-v1:sha256:a727ac2752da90460b7c6ea57eab8e5dc2fc3f67e5f96f711d731adc899c303c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NjMzMWY1ZTVjNjlkZjc4ODYwNGI0YTAxNTdmN2Q2YjI4MzY5YTM2YTcwN2ZkZWY2ZTJjODQ4OGJlMzAzMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMjVmMjdiYjBjYWEwNWM1OGMyODkwZTZiYjNiMWU2YmQwOTRhMmMzMzk1MmNiNDQyOWQyNWI3MGM1NzdhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiMDRlNWVhMzliYmExODRjZjNjNzRjNDcyZDI1ZjJiZTgzMWFiODUwYmU5OWYyM2M4YmUyZDI0ZDhjZmFlZmQifQ"
-        }
-      ]
-    },
-    {
-      "id": "claim_357133df4eba4a53a8de3b9b8f720814",
-      "statement": "Notion rich text helper 以 1,800 characters 為預設上限切分內容。",
-      "evidence": [
-        {
-          "resource": "repo://src/infrastructure/persistence/notion/utils.py#L5-L19",
-          "version": "repo-lines-v1:sha256:a0df116944d79ac4282e9d9c6477476743c5372ee04dde20c0997ef7548df22c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiNTYyNzgwNjA2MzhjZjY3ZjJjZWVkOTk3NTVjMjI2OWU5YzI4OGY4OWU1YjYwMmM0MDI1NjZmYjdjNmM5MTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzZmNlOWI4NjcwNDA3Y2YyMmEzNzgzNTI0ODhhNGZhMTNkNDRmZTEyYmNhZTNiMDI3ZmY3M2NmNTgxNTRjZTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1ODE4OGRmZTk2Yjc1ODZmMjczODI1ZmE0YTM4ZmE2ZjJhYmFlZTZhNmE2NTk0ZTczYjIzYTg1MTQwMDEyZmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -97,6 +77,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-29T14:47:48.560Z"
+    "at": "2026-08-31T13:29:02.704Z"
   }
 }

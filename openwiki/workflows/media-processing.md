@@ -5,27 +5,21 @@ description: 追蹤單筆任務的下載、YouTube metadata 擷取、Whisper 轉
 tags: [pipeline, whisper, llm, metadata, storage]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-30T14:54:17.621Z
+    at: 2026-08-31T13:29:02.704Z
 sources:
   - id: openwiki-source-0fdf5745e1f00e18dd400997
     resource: repo://src/core/prompt.py
   - id: openwiki-source-0a31e24491d869302652bc69
     resource: repo://src/domain/media/models.py
-  - id: openwiki-source-36d48d46c256392dc902bc2d
-    resource: repo://src/infrastructure/llm/model_options.py
   - id: openwiki-source-a1071f6de2071698b70c8d14
     resource: repo://src/infrastructure/llm/summarizer_service.py
-  - id: openwiki-source-791a1bcc2cae6ed2d067dedb
-    resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-bd11e0e09048def2f9ec2ff6
     resource: repo://src/infrastructure/media/downloader.py
-  - id: openwiki-source-c58845fdbb50864c91205283
-    resource: repo://src/infrastructure/storage/file_storage.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
   - id: openwiki-source-839ded7442c98545a6825769
     resource: repo://tests/test_processing_worker.py
-generated: { by: "codex", at: "2026-08-30T14:54:17.621Z" }
+generated: { by: "codex", at: "2026-08-31T13:29:02.704Z" }
 ---
 
 # 媒體轉錄與摘要流程
@@ -60,34 +54,21 @@ Transcriber 使用 faster-whisper，逐 segment 累積文字並可透過 Streaml
 
 送入模型的 description 最多 6,000 個字元，超出時加上截斷標記；此限制只影響 prompt context，sidecar 仍由 `VideoMetadata.to_dict()` 保存完整的 curated description。相同 metadata 會隨第一次 candidate 與 transient failure 後的 fallback candidate 傳遞給 OpenAI、Gemini 或 Ollama provider。
 
-## LLM weighted selection 與 failover
+## LLM 邊界
 
-候選池在建構時驗證：不可為空、backend/model 必須有效、weight 必須為正數且 provider:model 不可重複。實際選擇先排除沒有 API key 的 backend 與已 excluded candidate，再對剩餘 weight 重新計算比例。
+Summarizer 在 infrastructure 層選擇 Gemini、OpenAI 或 Ollama，並對特定 transient provider failure最多切換一次candidate。成功後記錄實際 `provider:model`，worker再與faster-whisper model size組合成持久化模型標籤。候選validation、credential eligibility、預設權重、provider-specific error分類與fallback細節集中在[LLM Providers、選擇與 Failover](../integrations/llm-providers.md)。
 
-目前預設自動池只包含 Gemini，依模型 Max RPM 的相對比例設定六個候選：
+## 輸出與失敗語意
 
-| 模型 | 權重 | 理論選取占比 |
-| --- | ---: | ---: |
-| `gemini-3.7-flash` | 1 | 9.09% |
-| `gemini-2.5-flash-lite` | 2 | 18.18% |
-| `gemini-2.5-flash` | 1 | 9.09% |
-| `gemini-3-flash-preview` | 1 | 9.09% |
-| `gemini-3.1-flash-lite` | 3 | 27.27% |
-| `gemini-3.5-flash-lite` | 3 | 27.27% |
+Pipeline會保存Markdown、可選metadata sidecar與Notion成果；具體path、encoding、filename與Notion chunk規則只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。Workflow層的重要例外是：sidecar寫入失敗只記warning，仍可完成Notion保存與task；Markdown或Notion等一般步驟失敗則把task標成`Failed`。
 
-這是每次摘要請求的加權隨機選擇：短期樣本可能偏離理論占比，也不會追蹤或強制各模型的 RPM。Provider credential 只讓該 backend 具備被選資格，不會把未列在 `AUTO_MODEL_CANDIDATES` 的 OpenAI、Ollama 或其他模型自動加入流量池。
-
-成功選定後記錄 `last_backend` 與 `last_model_label`。只有 transient provider error 才做一次 fallback，且排除第一次失敗的 candidate：OpenAI rate limit/timeout/connection/5xx、Gemini quota/timeout/server errors、Ollama timeout/connection/429/5xx。認證與一般 4xx 直接向上拋出；沒有替代 candidate 時重拋原始 error；fallback 再失敗時也不嘗試第三次。
-
-## 輸出、失敗語意與 extension seams
-
-Markdown filename 由 title 與 URL 建立，`FileManager.save_text` 只清理 basename、保留 directory，建立缺少的目錄並以 UTF-8 寫入。`save_json` 也保留 directory，以 UTF-8、未 ASCII escape 且具縮排的 JSON 寫入；sidecar 名稱以 `save_text` 回傳的實際路徑為準，因此 Markdown filename 因長度被截斷時，兩者仍共享相同 stem。Notion summary 另以 1,800-character rich-text chunks 保存。
-
-Worker constructor 可注入 downloader、transcriber、summarizer、summary storage、file manager、notifier 與 config factory。新增 media/LLM/storage implementation 時應遵守既有小介面並用 factory 注入，不必在 orchestration 中加入 test-specific branch。focused tests 分別驗證 yt-dlp metadata 白名單與解析降級、prompt 的 trust boundary 與 6,000 字元限制、Unicode JSON 與長檔名配對，以及 sidecar 寫入失敗仍完成 task。
+Focused tests分別驗證yt-dlp metadata解析降級、prompt trust boundary、向後相容的無metadata路徑，以及sidecar寫入失敗仍完成task。Pipeline dependency injection與adapter extension規則集中在[模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)。
 
 ## 延伸閱讀
 
 - [任務生命週期與併發控制](task-lifecycle.md)
+- [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
+- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
 - [Notion 資料整合](../integrations/notion-and-showcase.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 - [測試策略與擴充指南](../testing/test-strategy.md)

@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:cbe4f0009e2706ddfbc552b1ca3ac7db0ff898ad95ddef99901bed18d8063824",
+  "claims": [
+    {
+      "id": "claim_0e4a7ee19b934f6aa2edf7f1fa005e9f",
+      "statement": "Streamlit、Browser Extension與RSS monitor都是FastAPI clients，而Nuxt Showcase不呼叫Task API並由server route直接查詢Notion。",
+      "evidence": [
+        {
+          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L40-L89",
+          "version": "repo-lines-v1:sha256:de1c3c28dd75538befec98d9cd592292fc6ce6336dc3af3641c317c57ac63dd1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNGE0OTIwY2ZiNzdkOTRiMGZlYmEzYTY3ZGNmZGRkM2Y3YmYyYzdlYTk1MGUxYTViMzAzMTQ3MDE1M2VlMTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+        },
+        {
+          "resource": "repo://src/apps/extension/service_worker.js#L178-L282",
+          "version": "repo-lines-v1:sha256:935cb2a055542e716cd89e1922b06dbc5fbb361ca3e6006ee412fdb08190c16d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiYTI4OTFiNGNhODdlMmVkNGI4OTI3NGU3NWNhNDcxODU5MmI4ODRhMTllNjkxNzBhMGMzOTdmOGVkMjYwZGZkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiOGI0YmVkYTYwY2FiYTU5NjY4YTVmNGM0NjQ3MGZlNGFiZjkyMGRmZGZmNGI5MTExYTY1Yjk2YjRhMDFiYWFiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4ZTJmM2Q0NWY1YjBiZjk2MGMxZDVhYjZjY2Q5MWQ4NWYxYzM0YTM2ZDUxZGRkZWY3OTA5YjJjMzkzNGMwZWU3In0"
+        },
+        {
+          "resource": "repo://src/apps/ui/ui_api.py#L17-L88",
+          "version": "repo-lines-v1:sha256:cac173116041adf5674c69af1aa288a22d9b6a05b74be57881f80f2ff4e7f415:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg1MGMwZmYwYTIyMzczZDI5MzExNjFkODJiYmNhMDc0YTdiZTJlN2RjY2E5YzBmMmEzYjhlYjFmNDg5NTFiY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFkYTVjNjZlMTdiMTQ1Mzk3ODM0YjhjODU0ZGM0MTkzZTIxMjUxODBhODk5NmExNGMzMTg4MzMyNmIyZWZiY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3MDE0OWUwNjlhZDY3ZWNjZjQ3MzY0NmZmMWM3NTAwNTBkMzI5ZDExMDAxOGRjNTc2Njg3OGVhZmExZDYwN2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVjODNlODBjM2Q5ODkwMTA3ZTY3OGY1M2Q1Mzc2ZWU1YzExOGYxZGM4NDYwZmM5Yjk3ZGI4NmNjYjcyMmFlOGQifQ"
+        },
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py#L92-L126",
+          "version": "repo-lines-v1:sha256:9827d6947dce2b824a1014a46307a83f75e675c11f84043ffbcd17e5d9ed4a03:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmNTY4MzgxMTMzNzMxMDVlNGRkMGU4M2MwMmI4NTZiNTMzYWIxZTEwZjBlMTc2MzNhZmQyMDBhYTZiM2Q4MjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0YzRmOWExYWZiNWNhN2Q5OGIwMTYzYmNlZWMyYTIyZjgxOTI3NWNjNzkzYjI5YTlmYTMxNWQ4NzU2ZDY4ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhNTljYTMwY2Q3MDFlODQ5OTA3ZDJjYzBkZDhhNGFkMDI0YTZlY2IyYmE1OTQ1OGQ1ZmIyNGRhN2JjODEwYjYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_884919305d8b40948d64fa01559c95c0",
+      "statement": "POST /tasks對新task回201並嘗試schedule worker，TTL cached result回200且不schedule，active或blocked duplicate回409。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L426-L531",
+          "version": "repo-lines-v1:sha256:e19d8d2e56c3b19794d0123c566b6af71f92f154502cd7897c007d0264109339:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhZDRmOGUzZDg3ZjdkZDhiMmQ5ZmM1YTc0Nzc4YTFhNTI4YTk0ZDY4YzViMmNlYmJiOWFlYzdhYjlmNDEzNjg5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1YzExZmFjOTdhMzUwNTZlOTk2MTYwMDcxZmUyZjYzN2IzNGQwYjBmMjNiYWM1ZTA2M2NjODA2NjRkNzRmZTYwIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJhYzMxM2Y2MDc0NzdiMGVkMzY0N2ZlNzI1YTM1MzBiODYzOGZjNWYwYTM0NWVjODNlMzk1YTZlODQ2NGQ0NDIyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_4295901edc114b04af79a5dfe00b0b76",
+      "statement": "Task已持久化後scheduler未啟動不會撤銷task，response以processing_started=false表達已入列但尚無worker。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L484-L531",
+          "version": "repo-lines-v1:sha256:aa61eed303ec0416ec223f8272e57f8d7fda326f2393537a6378f01135c15d6b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyMWY2NzVkM2Q3M2M4OWY0OGYxNmZjNTRjOTlmNzU4ZTM1YTkwZTRlMjQyMDQ3YzA2YjljM2VjYjQ5NDY3MmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjMTFmYWM5N2EzNTA1NmU5OTYxNjAwNzFmZTJmNjM3YjM0ZDBiMGYyM2JhYzVlMDYzY2M4MDY2NGQ3NGZlNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJlNjQxNGU2ZjkyYjJlYjU2MGFmMjc2MDY5ZTJlYWJhNDY2ZjEwY2IzMzQ5ODRkNzdmNjc3MmRjMjJhOGY4ZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_3e357d8729d84e159128d2021e856b53",
+      "statement": "Retry endpoint只接受Failed task，建立新Pending retry並更新source狀態，但endpoint本身不schedule processing worker。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L580-L624",
+          "version": "repo-lines-v1:sha256:627d429ed7b6bf88605520e56880e4fbe5abb095b7b01364f1eacfb6b679b166:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxNjAzOGZhZjAxNjQ1M2Y4YTRiNTRjYzEzZDQ1MjgwZjlkN2U2Y2QxYWEyZDcwMjEwNTE3NjQzMDRjNWVhYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2YmJlNTAwZGUxN2FjZDI5ZmRkNjdjYmUyZTZjN2JlMWIwOGRkMDZhMmRhM2E1YTdiMzdlOGZmZDdkZmY3ZGQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4d44acdf5d34456d81a2897408fdb5f8",
+      "statement": "POST /processing-jobs先取得global lock再啟動daemon worker，成功回202；已有worker時拒絕排程，thread啟動失敗會釋放lease。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L627-L657",
+          "version": "repo-lines-v1:sha256:c94f380cd69b061b3f79bbdc47fc2355976bc858969cad92c0cf6f303a9df9f9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxNjAzOGZhZjAxNjQ1M2Y4YTRiNTRjYzEzZDQ1MjgwZjlkN2U2Y2QxYWEyZDcwMjEwNTE3NjQzMDRjNWVhYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU5ZmZhNjFkZjZjMGJiZWFjNzNiODhiYTg1ZDg3NDFmNmY4YjM2OTI1MjY0MjlkN2FlOTIwYjYzZjE2MzZhZTYifQ"
+        },
+        {
+          "resource": "repo://src/services/tasks/processing_scheduler.py#L39-L75",
+          "version": "repo-lines-v1:sha256:7b263514a792e1b1551be4f78cbd08c72b613eb91ba0b0bd1d6693a9b0588ca1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlYzg4YTFkYTQ5ZGUyZWM1NTM1Y2ZhNzVhNWM0N2FjNDhlMmU3NmU1ZDMwYWJlNWVkZTc0YjYxOTdhNWE0MDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiODI0MTY4OTRlNmJhMzk5ZGVjOGViZGQ0MTc4NWY5NDYxMDFlZjAzNmJlOTFlYTM4MjMxNDk2MTIzOWM0MzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_756d873ad0344cf2b7916b6e8ae266a0",
+      "statement": "POST /rss/subscriptions驗證channel input並建立SQLite subscription，成功回201且duplicate回409；RSS subscription沒有Notion backend選項。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L535-L577",
+          "version": "repo-lines-v1:sha256:265ce7de136aba17b3ce2c219e719f3a8125434a25cfe4ac3bb0e3f47e2cebb5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxNjAzOGZhZjAxNjQ1M2Y4YTRiNTRjYzEzZDQ1MjgwZjlkN2U2Y2QxYWEyZDcwMjEwNTE3NjQzMDRjNWVhYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2YmJlNTAwZGUxN2FjZDI5ZmRkNjdjYmUyZTZjN2JlMWIwOGRkMDZhMmRhM2E1YTdiMzdlOGZmZDdkZmY3ZGQifQ"
+        },
+        {
+          "resource": "repo://src/services/rss/subscription_service.py#L23-L66",
+          "version": "repo-lines-v1:sha256:23e57cdba1257167d4c2c9638d0836e9d2bf634db8a4a5b08764791c605ef228:eyJzZWxlY3RlZExpbmVDb3VudCI6NDQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0Mjk3YWFjMzA5NTkxZGJjMTViOWQzOThiZmJmMjAzNDY1MzI2MTk3MmM0OGViMjNiNzRhMjE1MjYyMTQ1ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1ZTdkOTViZTk3MDY1M2JlOWM3YzIzOGQ2MWM0NGUwZmY4YzM2ZWU2MDYyMDU5Njg3NDM0NmVhZmFkOWJiMWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE5YWNiMjE3NzQwNjYyMDRjMWM0MzBlOTZiYzE5YjZkMGQ1Nzg5N2E0ZTI5NjhkNWMwODM3YjJjYjA0ZjY3NDYifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_6e7f409c5efe479fadf0a670d70ab409",
+      "statement": "Processing lock GET與DELETE都要求X-Maintainer-Token；未設定server token、缺少header與錯誤token分別回503、401與403。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L370-L386",
+          "version": "repo-lines-v1:sha256:fb3e32c9a9bb55f724fd86caa9fc33a3ecd282e743c9471b047a0fe3d7b716b6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjNGRhODk2OTU5MGQyNmNiMTFiOTk3MzMzMDQ3MTcxMzI0YzYwOWI4ZDQzYWUyMWY5ZTY0MGViZmZmYTU3NzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlhMzY3Y2FlYTE0ZWIwMTI0YzliZjVmOGE1OWIyMDRhMmI2ZmQ4ZjAxYjNkYTY0NDBlYzMzYjJmMzBiZWVlMWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBjMmIyNTQ5MzEwMDc0MmY3MjM5YjU0OTY5NmUwNDBiZTEwNWQ2MjM5ODE0NTJhZDVkYTM4ZWZkMjhmNDQ2OGUifQ"
+        },
+        {
+          "resource": "repo://src/apps/api/main.py#L660-L774",
+          "version": "repo-lines-v1:sha256:8017fc7a53731de507b33f28593c3497bc2d357b8c87ac7a564b117c48cff48f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiNzg5YzZmZWNkOGM3MjcyMTcyNzUzYjEzNDdlZGRkYzljZWIxZjI5NzBlMjQ4NjUzZThmZjk0NDUxYmZhYThlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzMGMxZjE4OGYxNDJlZDdhODI0NjgwYjIwNzE3MmM1NTE5YmM2MTRhNDhmZGE3Y2YxNjdlZGI4ZGRmNzk5NTZjIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI4Y2M0YTdkMWNjNzk2YWJhM2U0NjcyMzMyN2Y1MTdlOWY4MTE5ODJkMjUwZjA3MDI5ODZlNGI1NzY0YWQ5NTg5IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+        }
+      ]
+    },
+    {
+      "id": "claim_f6071150d012487a8a2a8320d3d08f1b",
+      "statement": "Processing lock DELETE支援matching expected worker、force age threshold與dry run snapshots；Browser Extension不實作這些管理端點。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py#L262-L328",
+          "version": "repo-lines-v1:sha256:3321ef29b09709059acc7459801178ffba572674c1e05bd3fda6ab11abfe9569:eyJzZWxlY3RlZExpbmVDb3VudCI6NjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc4Zjk5MzFhYzIwNDNlMDNlM2JhZTI3ODhiMGMyMmI1MTgyNjFhYzk2MWQwZWJmMTYwYzljNjMxNDJkNmVmZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzNjM0ZTk5ZWVmMDcxYTFmNmEyYzY2ODZmOWVhZGI3NDBiODE3ZDJlZWI5NWNhNGFkYzI5OGI4OGZiNmM3NzIifQ"
+        },
+        {
+          "resource": "repo://src/apps/api/main.py#L686-L774",
+          "version": "repo-lines-v1:sha256:a11d32297e5fd68ce1f8df4d96d2a16448d7c7f3f7e8e6ae21c00eb3dae56a11:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEwZWMwNTMwZGUxNGQ0NjdhYmJlZDQwNDc0ZDg1YzMzNTAzZTgyMTNiMTI2MzRlMmM0ZmMwZjA3OTQ3MTM2MTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/apps/extension/service_worker.js#L178-L282",
+          "version": "repo-lines-v1:sha256:935cb2a055542e716cd89e1922b06dbc5fbb361ca3e6006ee412fdb08190c16d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiYTI4OTFiNGNhODdlMmVkNGI4OTI3NGU3NWNhNDcxODU5MmI4ODRhMTllNjkxNzBhMGMzOTdmOGVkMjYwZGZkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiOGI0YmVkYTYwY2FiYTU5NjY4YTVmNGM0NjQ3MGZlNGFiZjkyMGRmZGZmNGI5MTExYTY1Yjk2YjRhMDFiYWFiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4ZTJmM2Q0NWY1YjBiZjk2MGMxZDVhYjZjY2Q5MWQ4NWYxYzM0YTM2ZDUxZGRkZWY3OTA5YjJjMzkzNGMwZWU3In0"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-08-31T13:29:02.704Z"
+  }
+}

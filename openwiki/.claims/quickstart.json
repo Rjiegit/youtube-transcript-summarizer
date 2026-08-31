@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:af41093799c2fb9930ca866680e431f4cfb4a01ac1ee184b6d20447a36a21add",
+  "pageVersion": "sha256:5edddb738f322ee822933843cdc6040963342d5583ccf9e4818b8d5767ce749c",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -75,10 +75,28 @@
           "version": "repo-lines-v1:sha256:8f8c8e105f6f9974a7fdd60d18502b0400d1b1eee7b2895139e42b34b2a07bfa:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyNjVlODc1ZDlkZTRkYzQ2MTRlY2Y1ZDRiMjdjNWQxMTQxOGI3YWE0Yzk1YTdiYTJiM2M3OWU0NmQzZDkxMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwNWJlNjc1MThlYzNhODQ3NzE0MzlkMGE1YzBmOTNiYmJlMzZhYjBlYzAxMmEyMGRkYjdlMDQxODY2OTY2MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
+    },
+    {
+      "id": "claim_7f0fabf24d3d4be1b0a1b7e7117fa92f",
+      "statement": "Repository另包含可載入Chrome/Edge的Manifest V3 extension，預設呼叫http://localhost:8080並可建立SQLite task或RSS subscription。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/extension/manifest.json",
+          "version": "repo-file-v1:sha256:6493e32b17ff6717c07c280a59caa821ef536afffd85ae803d01489d07ae3560"
+        },
+        {
+          "resource": "repo://src/apps/extension/options.js#L1-L48",
+          "version": "repo-lines-v1:sha256:6947be67ceab6d8d96ca44493131cf538b06938943f54bacc377f2d85a5a760b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyM2NmMzFiMjgzNGUwNDMyYWRiOWE5ZTY5Njg4Y2VhYjE0M2MwYWFiZjgzNWYzZTZiYTJjMGRiNjVlZWMwZDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/apps/extension/service_worker.js#L178-L282",
+          "version": "repo-lines-v1:sha256:935cb2a055542e716cd89e1922b06dbc5fbb361ca3e6006ee412fdb08190c16d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiYTI4OTFiNGNhODdlMmVkNGI4OTI3NGU3NWNhNDcxODU5MmI4ODRhMTllNjkxNzBhMGMzOTdmOGVkMjYwZGZkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiOGI0YmVkYTYwY2FiYTU5NjY4YTVmNGM0NjQ3MGZlNGFiZjkyMGRmZGZmNGI5MTExYTY1Yjk2YjRhMDFiYWFiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4ZTJmM2Q0NWY1YjBiZjk2MGMxZDVhYjZjY2Q5MWQ4NWYxYzM0YTM2ZDUxZGRkZWY3OTA5YjJjMzkzNGMwZWU3In0"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-29T14:03:31.952Z"
+    "at": "2026-08-31T13:03:19.622Z"
   }
 }
