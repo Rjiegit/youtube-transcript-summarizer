@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c11bfa2ffecf414b0c848cc95689d9e7016bdfaaad0a65bf085ea01e45b4a552",
+  "pageVersion": "sha256:8fd587844d09de89b6330d2be5f75aa814ab0b005ffa356e98508a91cffc8c39",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -103,10 +103,48 @@
           "version": "repo-lines-v1:sha256:dcc4bb79f6ebc8555975f87c1bbfadb4481f70b03c1a7b0c9ccb4ee3dac77d61:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMzUyNjI0N2VkZTAwNmU5YmRhYjljNjg1MDcyODQyNWQxYjQxNjZjYWY1Y2FjNTBjZjA5NTVjNDRkMjRjMWE4ZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTc0M2EyYTJmYjgyZWFlZDI0ODhlMjg2NGQ0MjNiZWI1MDA2MWRkNDIzZDgwYjg3MjFkM2JhZTVhNjQ3YTdmNiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZjVmZDI1ZGU3NjQ2NmMwM2I0NDUxNmUyY2JkZjU5ZWU4NDFhNWExZmUxYjBkNGViMDc1ODlhMmZiNGIxMTIzYyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiY2JhNWFmZmQ4MjMxYzBlODFiYmNkNDIxNTRhMWNjOTBlODZlZmY2NjM1NWMwNDhjZTU1YjMyMzdiZGFjM2ExZCJ9"
         }
       ]
+    },
+    {
+      "id": "claim_af9b39c340e04867adfe15777d2b3504",
+      "statement": "Betterleaks 設定宣告最低版本 1.8.1 並延用預設規則，prefilter 排除根目錄 .env、指定 Codex 本機資料、data、Showcase node_modules 與根目錄 Python 環境及快取路徑。",
+      "evidence": [
+        {
+          "resource": "repo://.betterleaks.toml#L1-L14",
+          "version": "repo-lines-v1:sha256:a01e680fc6773cf6fbaa9eae892b4214c0b4a5ce17b22f1bf36747b254ee291b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZGMzNTQxZjhmODc2YzA4MjA4OWIyYmQyYTc0ZjM0ZTYyYzNiZTg4MGZjZWNjNGNmZmIyMTNmYWYxYTRhNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NTQyNTBmZWRhMmYwZWE5NTkzMjMyNmVmZmUzMTdjOTQ1N2ZmM2Q4ZTBjMDM0NDdkYzUwYWIzYWNiZjNjMzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2MzYwODNiNjI5ZWM4OWQ0MGRkNzI3ZDAxZDM0MjBiMzdlNWRkNjAzOTk2OWQxNmYwMTkzNWY2OWZhN2UwYWIifQ"
+        },
+        {
+          "resource": "repo://.betterleaks.toml#L45-L46",
+          "version": "repo-lines-v1:sha256:27630a96d6c55755cc37620f3933d5cab94b1eb78a726a32e11212972525d76e:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI4YTY0MjVmNGZmYTc4MTkyOWNhMjhlODFmYWZlYjQ3ZjEwNmExYWI4NDY2ZWUzNzg3MzA5MDUxOTZiMjA2NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGQ3YWFjMDFhY2U5NzgwNmViZWYwN2EyNWMwNmE4ZTkyMTY3M2E1YjU3ZTlhNDkwZDMxMzIwYWMzNjUzMjBjYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2MzMjMwNzJlYzQ5ZjA5MTVkYTJhMTllMmYzYTU3MTM4ZTZiMzBlOGM3MzVjN2YwNmE0YjhhMDViODhmMTY5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b0918cddb1b54a21af14b799e84f9aa4",
+      "statement": "Betterleaks finding filter 僅在指定測試或封存路徑搭配 placeholder 值模式時豁免；兩個 .env.example 路徑僅豁免精確值 example-maintainer-token，並未整批排除測試檔案。",
+      "evidence": [
+        {
+          "resource": "repo://.betterleaks.toml#L18-L43",
+          "version": "repo-lines-v1:sha256:a2bda4dd5f8634fb1cc2f0bad11b5a3db6b50ef967ab039a9b5695c7d273f39a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlNWI4NjM3NTM4NmMzOWRhNjMyOTFiMWE4OTE2NDVmMzNiZjU4NDBiMzViMzU3Mjk0N2E2ZDMwODdjNWY2ZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NTQyNTBmZWRhMmYwZWE5NTkzMjMyNmVmZmUzMTdjOTQ1N2ZmM2Q4ZTBjMDM0NDdkYzUwYWIzYWNiZjNjMzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2MzYwODNiNjI5ZWM4OWQ0MGRkNzI3ZDAxZDM0MjBiMzdlNWRkNjAzOTk2OWQxNmYwMTkzNWY2OWZhN2UwYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNDA4ZDYwMDI1MTMxYWEwYzFlZDQ1YWVlY2MyMWNkNWUwNzk5MzlkMDU1N2JkODc5YjVjZTE2ZDkzMDllZTIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_4a10ebc1a3ab47f1befdb7b17291bedd",
+      "statement": "Makefile 沒有 Betterleaks target，Python CI 執行 flake8 與 unittest，尚未加入 Betterleaks 掃描步驟。",
+      "evidence": [
+        {
+          "resource": "repo://.github/workflows/main.yml#L13-L46",
+          "version": "repo-lines-v1:sha256:a01ff5dfd16bc7d497a7d1bf08c14200f9c08ce12dceb6f7223463fc131d274f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4OTk5MTEwM2Y2YmE4ODhlM2RlNzY1MWM1YTMwNWM3N2U1NTQ3Njc3M2FiYTgzOTU5MWVjYzViZDBmMmFiMWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlZmZkODcxNmU2YWFlZjVlM2ZkNGYwMTIxYzEzZDJiOWQ4OTJjMjY4MDNmODk2ZjJiN2NlNDA1ZWFkMmY0NmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ0MDFlYTk4ZTMyZmYwZmEzMTAxMDc3NGI5MDVhZmE5ZTRiMWVhNzI2NWFlZjBjMDI1ZjM0MmFjYzY2OTQ4YzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://Makefile",
+          "version": "repo-file-v1:sha256:675218e0905ab7eb6c38950991f04b0651298ada10d3a27730fc9f2a4717000a"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-31T13:51:03.458Z"
+    "at": "2026-09-05T12:55:39.856Z"
   }
 }

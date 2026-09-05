@@ -1,0 +1,46 @@
+title = "openai-whisper Betterleaks configuration"
+betterleaksMinVersion = "1.8.1"
+
+# Runtime downloads and dependency caches are not repository source. Excluding
+# them keeps directory scans bounded without hiding secrets in tracked code.
+prefilter = '''
+filter.matchesAny(get(attributes, "path", ""), [
+  `^(?:\./)?\.env$`,
+  `^(?:\./)?\.codex/(?:auth\.json|sessions(?:/|$))`,
+  `^(?:\./)?data(?:/|$)`,
+  `^(?:\./)?frontend/nuxt-showcase/node_modules(?:/|$)`,
+  `^(?:\./)?(?:\.venv|venv|env|__pycache__|\.ruff_cache|\.pytest_cache)(?:/|$)`,
+])
+'''
+
+# Ignore only known placeholder values and only where fixtures/examples belong.
+# A provider-shaped or previously unseen value in the same files still reports.
+filter = '''
+let path = get(attributes, "path", "");
+let secret = finding["secret"];
+
+(
+  filter.matchesAny(path, [
+    `^(?:\./)?tests/`,
+    `^(?:\./)?frontend/nuxt-showcase/(?:tests|test-data)/`,
+    `^(?:\./)?\.archive/(?:tests/|test_)`,
+  ]) &&
+  filter.matchesAny(secret, [
+    `^(?:secret|token|api-key|database-id|page-id)$`,
+    `^(?:lock|openai|gemini|ollama)-(?:secret|key)$`,
+    `^(?:test|env|runtime|nuxt|mock)_[a-z0-9_]+$`,
+    `^(?:test|env|runtime|nuxt|mock)-[a-z0-9-]+$`,
+  ])
+)
+||
+(
+  filter.matchesAny(path, [
+    `^(?:\./)?\.env\.example$`,
+    `^(?:\./)?frontend/nuxt-showcase/\.env\.example$`,
+  ]) &&
+  secret == "example-maintainer-token"
+)
+'''
+
+[extend]
+useDefault = true

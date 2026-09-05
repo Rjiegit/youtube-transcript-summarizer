@@ -5,8 +5,12 @@ description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topo
 tags: [operations, configuration, docker, deployment]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-05T12:55:39.856Z
 sources:
+  - id: openwiki-source-6a7b8c07ba8513021d4c75f8
+    resource: repo://.betterleaks.toml
+  - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
+    resource: repo://.github/workflows/main.yml
   - id: openwiki-source-6d4b4e707b8d60b6ccfa3425
     resource: repo://.github/workflows/openwiki-update.yml
   - id: openwiki-source-e201e686a785f09b6d899f0b
@@ -21,7 +25,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
     resource: repo://src/core/config.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-05T12:55:39.856Z" }
 ---
 
 # 設定、執行與部署
@@ -58,6 +62,19 @@ Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*
 Notion token/database id、status property 和 completed value 位於 private runtime config；public config 僅有 build date 與 commit SHA。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
 
 `npm run check-env` 只輸出設定來源與各 key 是否存在，不輸出 secret value。執行時另可用 `/api/showcase/diagnostics` 檢查解析，或 `/api/showcase/health` 實際驗證 Notion 存取。
+
+## Betterleaks 掃描設定
+
+根目錄 `.betterleaks.toml` 宣告最低版本 `1.8.1`，並以 `[extend] useDefault = true` 延用預設規則。設定分成掃描前的路徑排除與 finding 的 placeholder 過濾。
+
+`prefilter` 排除根目錄 `.env`、`.codex/auth.json`、`.codex/sessions`、`data/`、`frontend/nuxt-showcase/node_modules/`，以及根目錄的 `.venv`、`venv`、`env`、`__pycache__`、`.ruff_cache`、`.pytest_cache`。路徑模式允許開頭 `./`，但不是任意深度的同名目錄排除；例如 frontend `.env` 不在根目錄 `.env` 的排除式內。這些規則界定掃描涵蓋範圍，不代表被排除內容已通過秘密檢查。
+
+`filter` 必須同時符合路徑與 secret 值條件才忽略 finding：
+
+- `tests/`、Showcase `tests/` 與 `test-data/`、`.archive/tests/` 或 `.archive/test_` 開頭路徑，只忽略列出的 placeholder 模式：`secret`、`token`、`api-key`、`database-id`、`page-id`，`lock|openai|gemini|ollama` 搭配 `-secret` 或 `-key`，以及 `test|env|runtime|nuxt|mock` 加底線或連字號的限定字元字串。
+- 根目錄與 Showcase 的 `.env.example` 僅忽略精確值 `example-maintainer-token`。
+
+因此測試檔案仍屬掃描範圍，不符合上述值模式的 finding 不會由這份 filter 豁免。目前 `Makefile` 沒有 Betterleaks target，Python CI（`.github/workflows/main.yml`）執行 flake8 與 unittest，也沒有 Betterleaks step；存在設定檔不代表 CI 已自動執行掃描。
 
 ## OpenWiki 文件維護
 
