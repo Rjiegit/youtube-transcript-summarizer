@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -eu
+
+repo_root=$(git rev-parse --show-toplevel)
+config_path="$repo_root/.betterleaks-pre-commit.toml"
+
+if ! command -v betterleaks >/dev/null 2>&1; then
+  echo "Betterleaks is required for commits but was not found in PATH." >&2
+  echo "Install Betterleaks, then retry the commit." >&2
+  exit 1
+fi
+
+if [ ! -f "$config_path" ]; then
+  echo "Betterleaks config not found: $config_path" >&2
+  exit 1
+fi
+
+echo "Checking staged changes with Betterleaks..."
+cd "$repo_root"
+exec betterleaks git --staged \
+  --config "$config_path" \
+  --redact \
+  --no-banner \
+  .

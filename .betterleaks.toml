@@ -1,20 +1,22 @@
 title = "openai-whisper Betterleaks configuration"
 betterleaksMinVersion = "1.8.1"
 
-# Runtime downloads and dependency caches are not repository source. Excluding
-# them keeps directory scans bounded without hiding secrets in tracked code.
+# Runtime downloads, VCS internals, build outputs, and dependency caches are not
+# repository source. Excluding them keeps directory scans bounded. Deliberately
+# do not exclude .env or auth files here: if one is force-added, the staged scan
+# must still reject it.
 prefilter = '''
 filter.matchesAny(get(attributes, "path", ""), [
-  `^(?:\./)?\.env$`,
-  `^(?:\./)?\.codex/(?:auth\.json|sessions(?:/|$))`,
+  `^(?:\./)?\.git(?:/|$)`,
   `^(?:\./)?data(?:/|$)`,
-  `^(?:\./)?frontend/nuxt-showcase/node_modules(?:/|$)`,
-  `^(?:\./)?(?:\.venv|venv|env|__pycache__|\.ruff_cache|\.pytest_cache)(?:/|$)`,
+  `^(?:\./)?frontend/nuxt-showcase/(?:node_modules|\.nuxt|\.output|coverage|dist)(?:/|$)`,
+  `^(?:\./)?(?:\.venv|venv|env|__pycache__|\.ruff_cache|\.pytest_cache|\.mypy_cache)(?:/|$)`,
 ])
 '''
 
-# Ignore only known placeholder values and only where fixtures/examples belong.
-# A provider-shaped or previously unseen value in the same files still reports.
+# Allowlist only known placeholder values and only where fixtures/examples
+# belong. Both the path and extracted secret must match. A provider-shaped or
+# previously unseen value in the same files still reports.
 filter = '''
 let path = get(attributes, "path", "");
 let secret = finding["secret"];

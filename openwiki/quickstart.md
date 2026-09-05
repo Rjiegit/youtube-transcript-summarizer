@@ -5,16 +5,22 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-05T14:47:18.852Z
 sources:
+  - id: openwiki-source-bf5be0c9253ed1d07b502e10
+    resource: repo://.githooks/pre-commit
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
   - id: openwiki-source-27a43165fe079c2f44e8c6f5
     resource: repo://frontend/nuxt-showcase/package.json
+  - id: openwiki-source-8c08a854bf0339fc3de677b0
+    resource: repo://frontend/nuxt-showcase/scripts/check-env.mjs
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-05ccef8d4cf1698187f20464
     resource: repo://pyproject.toml
+  - id: openwiki-source-da418bc01cba89686ece3492
+    resource: repo://scripts/install-git-hooks.sh
   - id: openwiki-source-224f65803d3de46b7fae180b
     resource: repo://src/apps/extension/manifest.json
   - id: openwiki-source-48e217db31524d96d35dbecd
@@ -23,7 +29,13 @@ sources:
     resource: repo://src/apps/extension/service_worker.js
   - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
     resource: repo://src/core/config.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+  - id: openwiki-source-36d48d46c256392dc902bc2d
+    resource: repo://src/infrastructure/llm/model_options.py
+  - id: openwiki-source-791a1bcc2cae6ed2d067dedb
+    resource: repo://src/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-df04114da62d5e054970a89f
+    resource: repo://src/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-05T14:47:18.852Z" }
 ---
 
 # 快速開始與開發導覽
@@ -46,7 +58,7 @@ make api
 make streamlit
 ```
 
-API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。`.env` 至少提供一個可用的摘要 provider key；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `.env`。
+API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。預設自動摘要池目前只有 Gemini，`.env` 請提供 `GOOGLE_GEMINI_API_KEY`。`Config.validate()` 雖接受任一摘要 provider key，但只有 OpenAI 或 Ollama key 仍無法使用目前的預設候選池；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `.env`。
 
 建立 task 後 API 通常會自動排程 background worker；也可手動同步 drain SQLite queue：
 
@@ -54,13 +66,15 @@ API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:85
 make run
 ```
 
+本機下載另需 PATH 上的 `yt-dlp`；`uv sync` 不會安裝此執行檔。可用 `make yt-dlp-update` 安裝至 `/usr/local/bin/yt-dlp`，該位置可能需要寫入權限。
+
 ## Docker 啟動
 
 ```bash
 docker compose up -d
 ```
 
-這會啟動 API、Streamlit 與 RSS monitor。API container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
+這會啟動 API、Streamlit 與 RSS monitor。API container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
 
 ## Nuxt Showcase
 
@@ -71,7 +85,7 @@ npm run check-env
 npm run dev
 ```
 
-開發站預設在 `http://localhost:3000`。必要設定為 Notion token 與 database id，可放在 frontend `.env` 或 repository root `.env`；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。
+開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。若設定只放在 repository root `.env`，請回 root 執行 `make showcase`，由 Makefile 載入後啟動。`npm run check-env` 自行讀取 root `.env` 的結果不會傳給後續程序。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。
 
 ## Browser Extension
 
@@ -85,12 +99,22 @@ Options page 的 API Base URL 預設為 `http://localhost:8080`。Extension 可�
 
 ## 驗證變更
 
+每個新 clone 或 checkout 先從 repository root 安裝 Git hooks：
+
+```bash
+make install-hooks
+```
+
+之後 `git commit` 會自動以 Betterleaks 檢查所有 staged changes；需要在 commit 前手動執行同一檢查時使用 `make betterleaks-staged`。日常 Git 防護不需執行 `betterleaks dir .`，因為 `dir` 會連同未追蹤的本機 `.env` 與工具狀態一起掃描。
+
 在 repository root 執行 Python suite 與 lint：
 
 ```bash
 make test
 uv run flake8 .
 ```
+
+上述為一般本機檢查；CI 實際採兩階段 lint，完整指令與阻擋條件見[測試策略](testing/test-strategy.md)。
 
 執行 Nuxt suite 與 production build：
 

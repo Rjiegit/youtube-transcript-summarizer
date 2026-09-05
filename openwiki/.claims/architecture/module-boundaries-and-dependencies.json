@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:a4675ccc394272f77d6b7e084c8d0936963343ca58ba8f8587e9a99ef42d27da",
+  "pageVersion": "sha256:193a3c620029e4284e74f0544c73f6f7e3ee4e80a4f44f6bbd97d7fedcc893dd",
   "claims": [
     {
       "id": "claim_8ce30e71df304864940a28036789b29e",
@@ -55,8 +55,8 @@
       "statement": "pyproject宣告 pytubefix與 whisper，但 downloader實作以 subprocess執行外部 yt-dlp；因此 Python dependency sync與 yt-dlp executable availability是不同的 runtime contracts。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L10-L16",
-          "version": "repo-lines-v1:sha256:2818fdad4bff95541d6c4c5c0426da5d173d2f2b0a5fe7ce69f18a035451d442:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I4OWI4MGE3ZjViYzM0ZDU3OGY2NmI5NDYwZjlmMzk0MDg2NTQyZGE4M2U4MGFhNGE2OWU2ZDI1YTEyNzExYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjQ3NTg2NzczMzA2NGViYjcyNzNmOTc2MzA4ZjE2YzRjNWEzN2MwMmViYTQ5NzUwZjkxNDA2NDhiYzBkYTIwMyJ9"
+          "resource": "repo://Makefile#L10-L13",
+          "version": "repo-lines-v1:sha256:bfa9781c49ed30cabbe86cac15b429540a70063c9ca1a1f5a43671e4397a1bc4:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWEyMTM5Y2M3MDIyMDc2Zjc3NmFhM2VlZjgyYjE4MGZhNDJlOTcyOGExOTU0YzRmMTc0ZmEwNTU5Mjk0OGE4NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjNlMjE2NTBkNTI0YTliNzM3MzhlYjE3NGZhMzA4YmE3ZTUzYjhiOTk5NTFkNzQxZjkzYjNhOTgxOTI0YWZlOCJ9"
         },
         {
           "resource": "repo://pyproject.toml#L6-L19",
@@ -99,8 +99,8 @@
       "statement": "Python dependency由 pyproject.toml與uv.lock管理，Nuxt dependency由package.json與package-lock.json管理，而yt-dlp由Make/Docker安裝流程管理。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L10-L16",
-          "version": "repo-lines-v1:sha256:2818fdad4bff95541d6c4c5c0426da5d173d2f2b0a5fe7ce69f18a035451d442:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2I4OWI4MGE3ZjViYzM0ZDU3OGY2NmI5NDYwZjlmMzk0MDg2NTQyZGE4M2U4MGFhNGE2OWU2ZDI1YTEyNzExYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjQ3NTg2NzczMzA2NGViYjcyNzNmOTc2MzA4ZjE2YzRjNWEzN2MwMmViYTQ5NzUwZjkxNDA2NDhiYzBkYTIwMyJ9"
+          "resource": "repo://Makefile#L10-L13",
+          "version": "repo-lines-v1:sha256:bfa9781c49ed30cabbe86cac15b429540a70063c9ca1a1f5a43671e4397a1bc4:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWEyMTM5Y2M3MDIyMDc2Zjc3NmFhM2VlZjgyYjE4MGZhNDJlOTcyOGExOTU0YzRmMTc0ZmEwNTU5Mjk0OGE4NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjNlMjE2NTBkNTI0YTliNzM3MzhlYjE3NGZhMzA4YmE3ZTUzYjhiOTk5NTFkNzQxZjkzYjNhOTgxOTI0YWZlOCJ9"
         },
         {
           "resource": "repo://compose.yaml#L15-L21",
@@ -129,10 +129,32 @@
           "version": "repo-lines-v1:sha256:0e0dfc1b8ace066d5ba7bd49eac1319ea43c47acdf4d0aeda4c3efb9033cb99c:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJiNzQ5OWIxY2UxYzRmNGIyNTI3ZjNhMzI4NGNhYzZiNmExZTNiZjQ5ODhiNTY3OTgyYzNkYzhlOWExN2YyMyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZjk0MTZlMDlmNzhiYTMxNmMwMzI1NjgyMTNiODU1ZWU3NTZlNDE1NjVkOTE4ZjA5NTE5YzgxZmQ2MjBmNDA2MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzJmNjA1YmJkMTJlODBhOGIzN2I5NGM3ZDRlNzNjNDY3M2Q0NmMyNjUyYzZiNjFiZjE4YWEyNWQxYjFhYjc2MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWMxYWFmZjg4MWQ4YjU1ODhiMmY2M2NhMTE4MTU0ZmFmN2EzOWM4MTdlNmUxOTdjN2Q5ZTE1MjUxMmViOTIyMCJ9"
         }
       ]
+    },
+    {
+      "id": "claim_c5016fd3899642a48ae7c5b0cf4a957a",
+      "statement": "Betterleaks 是 PATH 上的本機開發工具；repository hook 掃描 staged Git index，安裝腳本設定 local core.hooksPath，而現有 Python CI workflow 尚未執行 Betterleaks。",
+      "evidence": [
+        {
+          "resource": "repo://.githooks/pre-commit#L5-L25",
+          "version": "repo-lines-v1:sha256:22ffca03a5259a4962fbc4068a2a517d79b9a90f6e424d75a19cb9c2b2f633f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxNWRhODM4M2FiZWY0MTJlNTYwOGE1ODVmNjA2ZjExZGE4NjcwYjU1ODMzOGIxZTdhOWMxNzM5Yjc5M2M0NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4YWVkYWZjODhmYjhhNDcyZWVjODI2MjMyNTMzY2NkNDM5ODlhODAxNmI4MjljNTJjNmJlZDU1MTA3ZmIyNTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4YTk0NWVjMDhkOTIwMzY3OWY3YzM3MDBjZjZhMThhZDZhMzdmNGI0ZGYwYzQzOWEzZjJiYTgzNjNjMDg0NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://.github/workflows/main.yml#L13-L46",
+          "version": "repo-lines-v1:sha256:a01ff5dfd16bc7d497a7d1bf08c14200f9c08ce12dceb6f7223463fc131d274f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4OTk5MTEwM2Y2YmE4ODhlM2RlNzY1MWM1YTMwNWM3N2U1NTQ3Njc3M2FiYTgzOTU5MWVjYzViZDBmMmFiMWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlZmZkODcxNmU2YWFlZjVlM2ZkNGYwMTIxYzEzZDJiOWQ4OTJjMjY4MDNmODk2ZjJiN2NlNDA1ZWFkMmY0NmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ0MDFlYTk4ZTMyZmYwZmEzMTAxMDc3NGI5MDVhZmE5ZTRiMWVhNzI2NWFlZjBjMDI1ZjM0MmFjYzY2OTQ4YzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://Makefile#L15-L19",
+          "version": "repo-lines-v1:sha256:8c8f389f58c42f62507a9dbe1bdeb18d96b12b5a12977050420f8a09782e34a8:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTQyMDA2ZGQxODYwY2UxOTlmZDM1YjEyNmM5Njc4ZjMyNWM5ZDMwNTcxNDM0MzQ3YjhjMWRmMWRiOGZlMTljYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEyOGViOTE1OTg0YjMyZDRiOTU0NGZjZTQyZDEzNmU2ZWVhZTc2ZTkzZWJlMDAwOThiMzg3OWVjNDkyMTQ4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTA2ZTBkM2FkZGFjOTMxZTgzZTQxNTEzZGQ0YzEwMTRkZTg5NTM5ZTkwNDFiZjYyNWY3MzJkOTMzOGRjMzIyNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODBmNjE1MWIwMGNiNWIwMzc4ZGQzNjA1NzEzMzZjZjQ5MGJmOTVlYzI0OTU2YmRkMjczYjI0YjVkMTkxYjkyNyJ9"
+        },
+        {
+          "resource": "repo://scripts/install-git-hooks.sh#L5-L18",
+          "version": "repo-lines-v1:sha256:42102e9e599b0ce1e4b26ed860e8bd5e4641805b9f38fdc5880b2f090f343f44:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxNWRhODM4M2FiZWY0MTJlNTYwOGE1ODVmNjA2ZjExZGE4NjcwYjU1ODMzOGIxZTdhOWMxNzM5Yjc5M2M0NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NzM1N2U4NDQ4MDBkYWU4NDFhNGRjNTc5M2YwOWVmYTZlNWNhNmZkYzBlYzBjNzQ0NjYwMjkxNjcxZjA1YjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4YTk0NWVjMDhkOTIwMzY3OWY3YzM3MDBjZjZhMThhZDZhMzdmNGI0ZGYwYzQzOWEzZjJiYTgzNjNjMDg0NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-31T13:55:55.230Z"
+    "at": "2026-09-05T14:47:18.852Z"
   }
 }

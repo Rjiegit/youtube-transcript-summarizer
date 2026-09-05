@@ -5,8 +5,12 @@ description: 說明 Python 分層的依賴方向，以及 Python、Nuxt、外部
 tags: [architecture, dependencies, python, nuxt, integrations]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:55:55.230Z
+    at: 2026-09-05T14:47:18.852Z
 sources:
+  - id: openwiki-source-bf5be0c9253ed1d07b502e10
+    resource: repo://.githooks/pre-commit
+  - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
+    resource: repo://.github/workflows/main.yml
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
   - id: openwiki-source-27a43165fe079c2f44e8c6f5
@@ -17,6 +21,8 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-05ccef8d4cf1698187f20464
     resource: repo://pyproject.toml
+  - id: openwiki-source-da418bc01cba89686ece3492
+    resource: repo://scripts/install-git-hooks.sh
   - id: openwiki-source-822793b105256e659707b60b
     resource: repo://src/apps/api/main.py
   - id: openwiki-source-0520e948964d45782d02b5a3
@@ -33,7 +39,7 @@ sources:
     resource: repo://structure.md
   - id: openwiki-source-1eb6a61d042052ba1402c2eb
     resource: repo://uv.lock
-generated: { by: "codex", at: "2026-08-31T13:55:55.230Z" }
+generated: { by: "codex", at: "2026-09-05T14:47:18.852Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -76,6 +82,8 @@ Nuxt Showcase 與 Browser Extension 不屬於這個 Python package graph。Showc
 媒體下載依賴 PATH 上可執行的 `yt-dlp`，不是 Python dependency。`make install` 與 `make yt-dlp-update` 會從 GitHub release 下載 binary 到 `/usr/local/bin/yt-dlp`；Docker API 啟動時也預設先更新它。這表示 `uv sync` 成功仍不足以保證下載功能可用，且本機安裝可能需要寫入系統目錄的權限。
 
 SQLite 使用 Python 標準函式庫 `sqlite3`，檔案與 JSON 輸出使用標準函式庫，不需要獨立 database server。Whisper 模型則在 runtime 由 faster-whisper 載入，屬於可能產生下載、CPU、記憶體與磁碟成本的重型依賴。
+
+Betterleaks 是另一個 PATH 上的本機開發工具，不屬於 Python、Nuxt 或應用 runtime dependency。Repository hook 透過 `betterleaks git --staged` 檢查 Git index，並由 `make install-hooks` 設定 local `core.hooksPath`；目前 Python CI workflow 沒有執行這個 gate，因此 clone 後仍需在每個 checkout 安裝 hook。
 
 ## 遠端服務與 trust boundaries
 

@@ -47,6 +47,30 @@
   - Google Gemini API Key (可選)
   - Ollama 本地服務 (可選)
 
+## Secret 掃描
+
+本專案使用 Betterleaks 檢查 secret。第一次 clone 後，請安裝 repository hooks：
+
+```bash
+make install-hooks
+```
+
+之後每次 commit 都會執行 `betterleaks git --staged`，只掃描 Git index
+內準備提交的異動，不會重掃完整 history。也可以手動執行相同檢查：
+
+```bash
+make betterleaks-staged
+```
+
+白名單集中在 `.betterleaks.toml` 的 `filter`。新增項目時必須同時限制檔案路徑
+與明確的測試 placeholder；不要只依 rule ID、檔案類型或整個目錄放行。Build
+outputs、dependency caches 與 runtime data 可在一般目錄掃描的 `prefilter`
+排除，但 `dir` 仍可能找到未追蹤的本機 `.env` 或工具登入資料。
+
+日常 Git 防護請使用 pre-commit，不需執行 `betterleaks dir .`。Pre-commit 使用
+`.betterleaks-pre-commit.toml` 並檢查所有 staged paths；即使檔案原本被 ignore
+後又以 `git add -f` 加入，也不會跳過掃描。
+
 ## 快速開始
 
 ### 1. 設置環境

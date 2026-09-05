@@ -4,6 +4,8 @@ title: 測試策略與擴充指南
 description: 說明 Python unittest 與 Nuxt Vitest 的風險分層、mock seams、關鍵 invariants 與執行方式。
 tags: [testing, unittest, vitest, quality]
 sources:
+  - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
+    resource: repo://.github/workflows/main.yml
   - id: openwiki-source-fcc5a6911958eaf3419d651d
     resource: repo://frontend/nuxt-showcase/tests/showcase-index-page.test.ts
   - id: openwiki-source-6f3d5ab2255c7aff38623726
@@ -20,10 +22,10 @@ sources:
     resource: repo://tests/test_summarizer_service.py
   - id: openwiki-source-e2ee026fbcf730652e2c0e63
     resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-05T13:06:08.754Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-05T13:06:08.754Z
 ---
 
 # 測試策略與擴充指南
@@ -35,7 +37,15 @@ make test
 npm --prefix frontend/nuxt-showcase run test
 ```
 
-CI parity 的 Python lint 為 `uv run flake8 .`。
+一般本機 lint 可執行 `uv run flake8 .`；若要重現 `.github/workflows/main.yml` 的 CI 行為，使用：
+
+```bash
+uv run flake8 . --exclude=.venv,.archive --count --select=E9,F63,F7,F82 --show-source --statistics
+uv run flake8 . --exclude=.venv,.archive --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+uv run python -m unittest discover
+```
+
+第一段 lint 會阻擋指定的語法與名稱錯誤；第二段以 `--exit-zero` 回報其他問題，不會因 lint findings 使 CI 失敗。CI 的 unittest 使用預設 discovery；`make test` 則明確指定 root、`test*.py` 與 verbose 輸出。目前這份 workflow 不執行 Nuxt tests 或 production build，修改前端時需另行驗證。
 
 ## Python 風險層
 

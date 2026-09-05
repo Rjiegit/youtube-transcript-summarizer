@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:8fd587844d09de89b6330d2be5f75aa814ab0b005ffa356e98508a91cffc8c39",
+  "pageVersion": "sha256:3510668b877a557e90253fe26d8d3b33e1bab276acba255dbeaa408698e79565",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -106,14 +106,14 @@
     },
     {
       "id": "claim_af9b39c340e04867adfe15777d2b3504",
-      "statement": "Betterleaks 設定宣告最低版本 1.8.1 並延用預設規則，prefilter 排除根目錄 .env、指定 Codex 本機資料、data、Showcase node_modules 與根目錄 Python 環境及快取路徑。",
+      "statement": "Betterleaks 設定宣告最低版本 1.8.1 並延用預設規則；一般目錄掃描的 prefilter 排除 VCS internals、runtime data、Showcase dependency/build 產物及根目錄 Python environments/caches，但不排除 .env 或 Codex auth/session。",
       "evidence": [
         {
           "resource": "repo://.betterleaks.toml#L1-L14",
-          "version": "repo-lines-v1:sha256:a01e680fc6773cf6fbaa9eae892b4214c0b4a5ce17b22f1bf36747b254ee291b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZGMzNTQxZjhmODc2YzA4MjA4OWIyYmQyYTc0ZjM0ZTYyYzNiZTg4MGZjZWNjNGNmZmIyMTNmYWYxYTRhNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NTQyNTBmZWRhMmYwZWE5NTkzMjMyNmVmZmUzMTdjOTQ1N2ZmM2Q4ZTBjMDM0NDdkYzUwYWIzYWNiZjNjMzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2MzYwODNiNjI5ZWM4OWQ0MGRkNzI3ZDAxZDM0MjBiMzdlNWRkNjAzOTk2OWQxNmYwMTkzNWY2OWZhN2UwYWIifQ"
+          "version": "repo-lines-v1:sha256:23430dd42d4e1a7ee29640676fbda4a7fb2b953b2b4ba9f0d86142ea9792d26e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZGMzNTQxZjhmODc2YzA4MjA4OWIyYmQyYTc0ZjM0ZTYyYzNiZTg4MGZjZWNjNGNmZmIyMTNmYWYxYTRhNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2M2FhZTM5YWQ1OWZhZjMyZDNhMDQ1OGI4OTM0NmU4ZTg4ZTkxZmRkNDA0NTQwM2E4OGEwNjdlYjU2Mjk5NjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNDJhZGZmNjBhNThmYjI3YjczYjUzNWZjNjBlZWJkZmEzMTljMzQ0ZThkZGVkNGMyNWNjM2YxZjEyNmYxZmUifQ"
         },
         {
-          "resource": "repo://.betterleaks.toml#L45-L46",
+          "resource": "repo://.betterleaks.toml#L47-L48",
           "version": "repo-lines-v1:sha256:27630a96d6c55755cc37620f3933d5cab94b1eb78a726a32e11212972525d76e:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOGI4YTY0MjVmNGZmYTc4MTkyOWNhMjhlODFmYWZlYjQ3ZjEwNmExYWI4NDY2ZWUzNzg3MzA5MDUxOTZiMjA2NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOGQ3YWFjMDFhY2U5NzgwNmViZWYwN2EyNWMwNmE4ZTkyMTY3M2E1YjU3ZTlhNDkwZDMxMzIwYWMzNjUzMjBjYyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiN2MzMjMwNzJlYzQ5ZjA5MTVkYTJhMTllMmYzYTU3MTM4ZTZiMzBlOGM3MzVjN2YwNmE0YjhhMDViODhmMTY5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
         }
       ]
@@ -123,28 +123,84 @@
       "statement": "Betterleaks finding filter 僅在指定測試或封存路徑搭配 placeholder 值模式時豁免；兩個 .env.example 路徑僅豁免精確值 example-maintainer-token，並未整批排除測試檔案。",
       "evidence": [
         {
-          "resource": "repo://.betterleaks.toml#L18-L43",
-          "version": "repo-lines-v1:sha256:a2bda4dd5f8634fb1cc2f0bad11b5a3db6b50ef967ab039a9b5695c7d273f39a:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlNWI4NjM3NTM4NmMzOWRhNjMyOTFiMWE4OTE2NDVmMzNiZjU4NDBiMzViMzU3Mjk0N2E2ZDMwODdjNWY2ZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NTQyNTBmZWRhMmYwZWE5NTkzMjMyNmVmZmUzMTdjOTQ1N2ZmM2Q4ZTBjMDM0NDdkYzUwYWIzYWNiZjNjMzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU2MzYwODNiNjI5ZWM4OWQ0MGRkNzI3ZDAxZDM0MjBiMzdlNWRkNjAzOTk2OWQxNmYwMTkzNWY2OWZhN2UwYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNDA4ZDYwMDI1MTMxYWEwYzFlZDQ1YWVlY2MyMWNkNWUwNzk5MzlkMDU1N2JkODc5YjVjZTE2ZDkzMDllZTIifQ"
+          "resource": "repo://.betterleaks.toml#L17-L44",
+          "version": "repo-lines-v1:sha256:d03c3cda21222cfd6a90cb8f643de63e16d1bd9d5154f4c77c4ef56ade049ca1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiZTk0MmJlNWYxNjQ4M2QxMWYwYTA0NWRiNTdlN2IzNzUzNjRkNmI4MDdjMDIzOWUyNGJmNGE2NzMwMjhhZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmJhMDUyN2MzOTUzYzRiNmUwZTViNTczOWJhODM2MTJmODA1M2JjZGM5NDY2NzMwMTkzY2QxZDU5MGI0MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMTVjMjJlNWIwNmEzNjRkODE2NDEwZTU4MTk4MDFkN2JkODIyZmJjZTcxYTQxM2JjNjc3ZDVhZGJkMjExNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkYTE4YWJkOGRkYjgxZjE0MGJhMTI5NGFhMTY5MWQ0NGUwOGMzMGVhZTRmODYzZDIwZWE1Y2M2YmMxZjhjMDAifQ"
         }
       ]
     },
     {
       "id": "claim_4a10ebc1a3ab47f1befdb7b17291bedd",
-      "statement": "Makefile 沒有 Betterleaks target，Python CI 執行 flake8 與 unittest，尚未加入 Betterleaks 掃描步驟。",
+      "statement": "Makefile 提供 install-hooks 與 betterleaks-staged targets；Python CI 仍執行 flake8 與 unittest，尚未加入 Betterleaks 掃描步驟。",
       "evidence": [
         {
           "resource": "repo://.github/workflows/main.yml#L13-L46",
           "version": "repo-lines-v1:sha256:a01ff5dfd16bc7d497a7d1bf08c14200f9c08ce12dceb6f7223463fc131d274f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM4OTk5MTEwM2Y2YmE4ODhlM2RlNzY1MWM1YTMwNWM3N2U1NTQ3Njc3M2FiYTgzOTU5MWVjYzViZDBmMmFiMWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlZmZkODcxNmU2YWFlZjVlM2ZkNGYwMTIxYzEzZDJiOWQ4OTJjMjY4MDNmODk2ZjJiN2NlNDA1ZWFkMmY0NmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ0MDFlYTk4ZTMyZmYwZmEzMTAxMDc3NGI5MDVhZmE5ZTRiMWVhNzI2NWFlZjBjMDI1ZjM0MmFjYzY2OTQ4YzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://Makefile",
-          "version": "repo-file-v1:sha256:675218e0905ab7eb6c38950991f04b0651298ada10d3a27730fc9f2a4717000a"
+          "resource": "repo://Makefile#L15-L19",
+          "version": "repo-lines-v1:sha256:8c8f389f58c42f62507a9dbe1bdeb18d96b12b5a12977050420f8a09782e34a8:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTQyMDA2ZGQxODYwY2UxOTlmZDM1YjEyNmM5Njc4ZjMyNWM5ZDMwNTcxNDM0MzQ3YjhjMWRmMWRiOGZlMTljYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEyOGViOTE1OTg0YjMyZDRiOTU0NGZjZTQyZDEzNmU2ZWVhZTc2ZTkzZWJlMDAwOThiMzg3OWVjNDkyMTQ4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTA2ZTBkM2FkZGFjOTMxZTgzZTQxNTEzZGQ0YzEwMTRkZTg5NTM5ZTkwNDFiZjYyNWY3MzJkOTMzOGRjMzIyNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODBmNjE1MWIwMGNiNWIwMzc4ZGQzNjA1NzEzMzZjZjQ5MGJmOTVlYzI0OTU2YmRkMjczYjI0YjVkMTkxYjkyNyJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_ac9c6f7783d1404cb94096b0a7e9d128",
+      "statement": "預設 worker 的自動摘要候選池只有 Gemini，僅提供 OpenAI 或 Ollama credential 不足以選出預設候選。",
+      "evidence": [
+        {
+          "resource": "repo://src/infrastructure/llm/model_options.py#L67-L101",
+          "version": "repo-lines-v1:sha256:a047d0526aafcdfbc742f408c9e71f384dd1f9ed1cfc6d33853d10733558803b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhYTZjNGQxN2Y3MGU2ZmUxNGRjMWFhYjQ3M2E1OTY2YjUzZGI4OWM2MDg5OWI1OGMzM2Q0N2M2ZGIzOGY2NWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmJhMDUyN2MzOTUzYzRiNmUwZTViNTczOWJhODM2MTJmODA1M2JjZGM5NDY2NzMwMTkzY2QxZDU5MGI0MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk4ZGU2YWFlMzliNTUzMzRjZmY1YmQ3MzZjNTU2ZmY0MjAyNjFmYWE5YjZhZTQzNmZkYmQ2OWNkMmQ1ZWNlYzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://src/infrastructure/llm/weighted_selection.py#L59-L86",
+          "version": "repo-lines-v1:sha256:53bf4be2b359f9ab4feed0ceed34e48a3b7eae5d1aaa870ef952a1b0a6c7dbb7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0NmJjYWYzZWUxZWI0MWYwYWJhMGQxZjFiOWE2ZGViMjE0NmZlYzJkZGNjNzY5Njc4YmVmZDJjMGJlOGU4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0ZjViZDEyZjBiYzc2MTg2ZDA1OGRhOGNjMDdhZjBkNjdjMGMxMjRhNzI3MWIzMjIyOTEwNGZmNThjNzI2ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY3OGNhZGY4NzA5Zjc4ZDc0OWIzMzk5MTk5ZDU4NzE4NDE0ZmNjNjFhODIwMDVlNjIxYWQ0M2ExNjU1YTc3NDUifQ"
+        },
+        {
+          "resource": "repo://src/services/pipeline/processing_runner.py#L260-L274",
+          "version": "repo-lines-v1:sha256:da4589c96b0a66e1b2b48b7c3291d8ced5ea43cbc42c99a0d254fc81c4c424ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3N2EzMzBlMThhODljMTc4N2RkZTQ0NDdlMjI4MWMyZTE3MmI4ZDMzMDAxOTJlMGU4MmNjNDVkM2NmZjQ0NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwMDMyNjkyODQwODk5MjQyNTFhZjYzZWViNDhlYWM1OTM3OWVmNDU2YWViZjY1ZTZhZTQ2MDk3ZTM2YTcyMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMWRjYzQ1ZDVkNjYyNWVjOGEwN2QzYTRjZGUwMWJlZjE3MjdhMTY5MmNhZTEwYWY2MGE1ZjhkM2FkOTI3MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU1YTk5NjNkN2JkNzY1YzA4ZDkyZjY5OGZiMmQzOWZkZjkzNDM4NzkyOWUyNGQwNTBjNTAwOGQ1YTJkNjA5NDQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f38b98dd2b484f64a84f63f30f3af50f",
+      "statement": "check-env 在獨立程序中優先讀 frontend .env、再 fallback root .env，保留既有環境值；make showcase 會 export 選定檔案的值再啟動開發站。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L45-L58",
+          "version": "repo-lines-v1:sha256:3b8fe1655c4423a1ee11557e0452f401a94e6cbf9b7cd9491c7e49be603d1995:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiZjZjMGJlZjkwY2FjZDdlNDI4MGI1NjZmYjU2ZjM3MmI2ZTY3YWY0YTRhMzEwZmM5NTFhNjQ2MTA5ZDQwMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwMWYzNGViMzkyNDBiMThkMTFhY2UzNzViZDVlYjBiNDE4NTkxNTVkOGMwZTk3YzE5NjM5MjRjOGUyZTE4ZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzMDRkMDkzZjRhNDg4MDg3ZTFmZDc4N2M3NTQ1ZTE5NDdlMTk3ZjUyYWIyZTMxODVhZTU5MDIxZjAwNzhmZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkZjVkYTJmMmU5MDA1NjJiODRkNGRhMmE5MWQ1YzkwYmNmNmJiMjJkMzc2MGZlYTBjZDc3Mjg4ODAwNjdiNGIifQ"
+        },
+        {
+          "resource": "repo://frontend/nuxt-showcase/scripts/check-env.mjs#L1-L32",
+          "version": "repo-lines-v1:sha256:d9901ef4ff5f47eb929c1560bb0415fa4d1b27ec2e73c1e20788c5fad1c2c1a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmYjQ4NTA3YTRiOWNkNmFlMTBkNGRjZWM1NGJhYjI5NWUyM2UwNWUwOGZmNjk5ZWIxOWNjYWM3NDRkMTBlMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZjhhZmRkMGQwNjExNDc0NjBmOWQ2YzFlZjFkMjM3NDE3ODNhYzI0OGM0NmRjZGQ5YzcxODdjYzQ3Njc5ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjk4YTNkZDA2ZTI2ZjY3ZTIyMGU1YzY3MjA2YzNjOGY4OGM0YmY4MjllMDJmMDhjOGNkMjZmNzNhY2ZlZWMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_d4614fbc064c4c588f651f05160c4065",
+      "statement": "Pre-commit Betterleaks 設定繼承一般 finding filter但以 false 覆寫 prefilter，使 git --staged 掃描所有 index paths，包括以 git add -f 加入的 ignored 檔案。",
+      "evidence": [
+        {
+          "resource": "repo://.betterleaks-pre-commit.toml#L1-L12",
+          "version": "repo-lines-v1:sha256:4fd86c30cb614dda92bcb24de3f9c4b66075cac589da464416ba73785cb1a5aa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2OWJlMjExNDk4YWM3YjZmM2Q3NjIwMmQ2OTM1Y2E3ZDczMDBkZTU2ZmJiY2JhZjg3ZjAyZDUxNDU4NTU4NzYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiYmM1NTRiZGQ4NzIxNzRmNjRlNWEyZjhiNTE4MTM1YmU2ZGRlN2QwY2FhNjRhYzU0ODc0OTZhYTZjMTVjNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://.githooks/pre-commit#L19-L25",
+          "version": "repo-lines-v1:sha256:cf99a8334672c91205de84d3e70a9cf2d299cb8aa33b9002b026d468860a2741:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmM1NWVjNzU2ZDQ4YzdhMmJkY2FhMTFlOWE1YzI2NDkwZGEwMDE1NDI1ZmUxZjVmNzhiNmM1N2NlYzEwMmE4YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNThhZWRhZmM4OGZiOGE0NzJlZWM4MjYyMzI1MzNjY2Q0Mzk4OWE4MDE2YjgyOWM1MmM2YmVkNTUxMDdmYjI1MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzFjZTFhYTExNjk1ZDliNTE1NzBkYTE1ZjIzOWQ3MGQyZjVjYWQ1OGE3ODUwZDJhOGRhOWNlZDU4NjFkNDgzMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_b255c2fb9a3e49fb98be5e2bcef56757",
+      "statement": "Git hook 安裝腳本只在 core.hooksPath 未設定或已為 .githooks 時寫入 local 設定；若已有其他 hooks path，腳本會停止而不覆寫。",
+      "evidence": [
+        {
+          "resource": "repo://scripts/install-git-hooks.sh#L5-L18",
+          "version": "repo-lines-v1:sha256:42102e9e599b0ce1e4b26ed860e8bd5e4641805b9f38fdc5880b2f090f343f44:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxNWRhODM4M2FiZWY0MTJlNTYwOGE1ODVmNjA2ZjExZGE4NjcwYjU1ODMzOGIxZTdhOWMxNzM5Yjc5M2M0NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NzM1N2U4NDQ4MDBkYWU4NDFhNGRjNTc5M2YwOWVmYTZlNWNhNmZkYzBlYzBjNzQ0NjYwMjkxNjcxZjA1YjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4YTk0NWVjMDhkOTIwMzY3OWY3YzM3MDBjZjZhMThhZDZhMzdmNGI0ZGYwYzQzOWEzZjJiYTgzNjNjMDg0NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-05T12:55:39.856Z"
+    "at": "2026-09-05T14:47:18.852Z"
   }
 }

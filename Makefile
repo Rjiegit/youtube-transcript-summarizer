@@ -1,4 +1,4 @@
-.PHONY: install run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 
@@ -11,6 +11,12 @@ install:
 	curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
 	chmod a+rx /usr/local/bin/yt-dlp
 	uv sync --frozen --no-install-project
+
+install-hooks:
+	./scripts/install-git-hooks.sh
+
+betterleaks-staged:
+	betterleaks git --staged --config .betterleaks-pre-commit.toml --redact --no-banner .
 
 freeze:
 	uv lock

@@ -1,0 +1,12 @@
+title = "openai-whisper Betterleaks pre-commit configuration"
+betterleaksMinVersion = "1.8.1"
+
+# Override the manual directory-scan prefilter inherited from .betterleaks.toml.
+# A staged scan is already small, so inspect every path in the Git index,
+# including ignored files added with git add -f.
+prefilter = '''
+false
+'''
+
+[extend]
+path = ".betterleaks.toml"
