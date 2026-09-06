@@ -36,7 +36,7 @@
 - 自動處理 YouTube 影片下載、轉錄與摘要的完整工作流程
 - 以 Markdown 格式輸出結構化摘要
 - Docker 容器化部署，確保環境一致性
-- 獨立 Nuxt 展示頁，可部署到 Vercel 顯示最近 100 筆 Notion 成果
+- 獨立 Nuxt 展示頁，可部署到 Vercel 顯示最近 50 筆 Notion 成果
 
 ## 環境需求
 
@@ -320,7 +320,7 @@ curl -X POST http://localhost:8080/tasks \
 
 ### 啟動 Nuxt Showcase
 
-展示頁位於 `frontend/nuxt-showcase`，適合部署到 Vercel，會由 Nuxt server 直接讀取 Notion database 中最近 100 筆 `Completed` 結果。
+展示頁位於 `frontend/nuxt-showcase`，適合部署到 Vercel，會由 Nuxt server 直接讀取 Notion database 中最近 50 筆 `Completed` 結果。
 
 本機開發：
 
@@ -473,7 +473,7 @@ uv sync --frozen --no-install-project
 
 說明：
 - 每次處理都加入時間戳與 YouTube 影片 ID，避免同標題重複覆蓋。
-- 範例：`_summarized_20250101T123000_dQw4w9WgXcQ_我的筆記.md`
+- 範例：`_summarized_20250101123000_dQw4w9WgXcQ_我的筆記.md`
 
 摘要內容以 Markdown 格式呈現，包含：
 - 完整資訊與重要細節
@@ -489,8 +489,8 @@ uv sync --frozen --no-install-project
 每份摘要旁會建立同名的 `.metadata.json` sidecar，例如：
 
 ```text
-_summarized_20250101T123000_dQw4w9WgXcQ_我的筆記.md
-_summarized_20250101T123000_dQw4w9WgXcQ_我的筆記.metadata.json
+_summarized_20250101123000_dQw4w9WgXcQ_我的筆記.md
+_summarized_20250101123000_dQw4w9WgXcQ_我的筆記.metadata.json
 ```
 
 JSON 會保留完整描述及白名單欄位，不會保存 cookies、下載格式或完整的
