@@ -34,10 +34,10 @@ sources:
     resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-05T14:47:18.852Z" }
+generated: { by: "codex", at: "2026-09-06T09:42:15.755Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-05T14:47:18.852Z
+    at: 2026-09-06T09:42:15.755Z
 ---
 
 # 設定、執行與部署
@@ -57,6 +57,8 @@ verified:
 | Streamlit | `make streamlit` |
 | SQLite worker 一次 | `make run` |
 | RSS monitor | `make rss-monitor` / `make rss-monitor-once` |
+| 預覽過期 data 容量 | `make cleanup-data-dry-run` |
+| 刪除過期 data | `make cleanup-data` |
 | Python tests | `make test` |
 
 `make install` 還會寫入 `/usr/local/bin/yt-dlp`，本機可能需要權限，不應把它視為純 dependency sync。API 的開發命令綁定 `0.0.0.0:8080` 並啟用 reload。
@@ -64,6 +66,14 @@ verified:
 Docker Compose 以同一 image、`.env` 與 bind-mounted repository 啟動 api、streamlit、rss-monitor。API 暴露 8080、Streamlit 暴露 8501；後兩者的 `TASK_API_BASE_URL` 指向 Docker DNS 名稱 `api`。API 啟動時預設更新 yt-dlp，可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0` 停用；僅在主機 shell 設定此值，不會由目前的 Compose 設定自動傳入 container。
 
 processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-processing-lock` 會從 environment 或 root `.env` 取 token 並送出 force release；執行前應先用 GET/dry-run 確認目標 backend 與 lock age，避免中斷活躍 worker。
+
+### 本機 Data 清理
+
+`make cleanup-data-dry-run` 只統計符合條件的檔案數與預估可釋放容量，不列出或刪除檔案；確認後才執行 `make cleanup-data`。實際清理會顯示 `data/videos` 與 `data/summaries` 的清理前容量、清理後容量與總 reclaimed 容量。
+
+影片預設保留 7 天，summary artifacts 預設保留 180 天；可在命令列以 `VIDEO_RETENTION_DAYS` 與 `SUMMARY_RETENTION_DAYS` 覆寫，例如 `make cleanup-data-dry-run VIDEO_RETENTION_DAYS=30 SUMMARY_RETENTION_DAYS=365`。兩個值都必須是非負整數，且兩個 data 子目錄必須存在，否則 target 會在掃描或刪除前停止。
+
+清理範圍只包含 `data/videos` 與 `data/summaries` 中超過期限的 regular files，不會處理 `data/tasks.db` 或其他 `data` 內容。這兩個 Make targets 都是人工觸發的維運操作；目前沒有自動排程，也不會在 worker 完成後自動執行。
 
 ## Nuxt Showcase
 

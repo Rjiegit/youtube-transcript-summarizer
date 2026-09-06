@@ -1,6 +1,8 @@
-.PHONY: install install-hooks betterleaks-staged run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
+VIDEO_RETENTION_DAYS ?= 7
+SUMMARY_RETENTION_DAYS ?= 180
 
 PROCESSING_LOCK_HOST ?= http://localhost:8080
 PROCESSING_LOCK_PAYLOAD ?= {"force":true,"force_threshold_seconds":0,"reason":"manual release via make clear-processing-lock"}
@@ -83,6 +85,36 @@ yt-dlp-update:
 	yt-dlp --version
 
 auto: yt-dlp run
+
+cleanup-data-dry-run:
+	@case "$(VIDEO_RETENTION_DAYS)" in ''|*[!0-9]*) echo "VIDEO_RETENTION_DAYS must be a non-negative integer."; exit 1 ;; esac
+	@case "$(SUMMARY_RETENTION_DAYS)" in ''|*[!0-9]*) echo "SUMMARY_RETENTION_DAYS must be a non-negative integer."; exit 1 ;; esac
+	@test -d data/videos -a -d data/summaries || { echo "Expected data/videos and data/summaries directories."; exit 1; }
+	@video_minutes=$$(( $(VIDEO_RETENTION_DAYS) * 1440 )); \
+		summary_minutes=$$(( $(SUMMARY_RETENTION_DAYS) * 1440 )); \
+		find data/videos -type f -mmin +$$video_minutes -exec du -k {} + | \
+		awk 'function human(kib) { if (kib >= 1048576) return sprintf("%.2f GiB", kib / 1048576); if (kib >= 1024) return sprintf("%.2f MiB", kib / 1024); return sprintf("%.0f KiB", kib) } { count++; kib += $$1 } END { printf "Videos eligible for cleanup: %d files, %s\n", count, human(kib) }'; \
+		find data/summaries -type f -mmin +$$summary_minutes -exec du -k {} + | \
+		awk 'function human(kib) { if (kib >= 1048576) return sprintf("%.2f GiB", kib / 1048576); if (kib >= 1024) return sprintf("%.2f MiB", kib / 1024); return sprintf("%.0f KiB", kib) } { count++; kib += $$1 } END { printf "Summaries eligible for cleanup: %d files, %s\n", count, human(kib) }'
+
+cleanup-data:
+	@case "$(VIDEO_RETENTION_DAYS)" in ''|*[!0-9]*) echo "VIDEO_RETENTION_DAYS must be a non-negative integer."; exit 1 ;; esac
+	@case "$(SUMMARY_RETENTION_DAYS)" in ''|*[!0-9]*) echo "SUMMARY_RETENTION_DAYS must be a non-negative integer."; exit 1 ;; esac
+	@test -d data/videos -a -d data/summaries || { echo "Expected data/videos and data/summaries directories."; exit 1; }
+	@before_video_kib=$$(du -sk data/videos | awk '{ print $$1 }'); \
+		before_summary_kib=$$(du -sk data/summaries | awk '{ print $$1 }'); \
+		echo "Before cleanup:"; \
+		awk -v video="$$before_video_kib" -v summary="$$before_summary_kib" 'function human(kib) { if (kib >= 1048576) return sprintf("%.2f GiB", kib / 1048576); if (kib >= 1024) return sprintf("%.2f MiB", kib / 1024); return sprintf("%.0f KiB", kib) } BEGIN { printf "  Videos: %s\n  Summaries: %s\n  Total: %s\n", human(video), human(summary), human(video + summary) }'; \
+		video_minutes=$$(( $(VIDEO_RETENTION_DAYS) * 1440 )); \
+		summary_minutes=$$(( $(SUMMARY_RETENTION_DAYS) * 1440 )); \
+		find data/videos -type f -mmin +$$video_minutes -delete || exit 1; \
+		find data/summaries -type f -mmin +$$summary_minutes -delete || exit 1; \
+		after_video_kib=$$(du -sk data/videos | awk '{ print $$1 }'); \
+		after_summary_kib=$$(du -sk data/summaries | awk '{ print $$1 }'); \
+		echo "After cleanup:"; \
+		awk -v video="$$after_video_kib" -v summary="$$after_summary_kib" 'function human(kib) { if (kib >= 1048576) return sprintf("%.2f GiB", kib / 1048576); if (kib >= 1024) return sprintf("%.2f MiB", kib / 1024); return sprintf("%.0f KiB", kib) } BEGIN { printf "  Videos: %s\n  Summaries: %s\n  Total: %s\n", human(video), human(summary), human(video + summary) }'; \
+		reclaimed_kib=$$(( before_video_kib + before_summary_kib - after_video_kib - after_summary_kib )); \
+		awk -v reclaimed="$$reclaimed_kib" 'function human(kib) { if (kib >= 1048576) return sprintf("%.2f GiB", kib / 1048576); if (kib >= 1024) return sprintf("%.2f MiB", kib / 1024); return sprintf("%.0f KiB", kib) } BEGIN { printf "Reclaimed: %s\n", human(reclaimed) }'
 
 clear-processing-lock:
 	@token="$(PROCESSING_LOCK_ADMIN_TOKEN)"; \
