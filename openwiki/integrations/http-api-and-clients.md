@@ -1,11 +1,11 @@
 ---
-type: interface
+type: integration
 title: HTTP API 與 Client 契約
 description: 集中說明 Task API、RSS、worker scheduling 與 processing lock endpoints，以及 Streamlit、Extension、RSS monitor 的呼叫語意。
-tags: [api, fastapi, contracts, clients, operations]
+tags: [api, fastapi, contracts, clients, integrations]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-0030f56752f8cbf5e90a9d68
     resource: repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts
@@ -21,7 +21,7 @@ sources:
     resource: repo://src/services/rss/subscription_service.py
   - id: openwiki-source-d95510dd9df5633e605ade1a
     resource: repo://src/services/tasks/processing_scheduler.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # HTTP API 與 Client 契約
@@ -54,13 +54,13 @@ FastAPI 是互動式入口與 background processing 之間的主要邊界。Stre
 
 ## Retry 與 processing job
 
-`POST /tasks/{task_id}/retry` 只接受 `Failed` source task。成功會建立新的 Pending task、保存 source relationship，並把舊 task 改成 `Failed Retry Created`。Endpoint 本身不 schedule worker，呼叫端需再觸發 `POST /processing-jobs`；不存在的 task 回 404，非 Failed 狀態回 409。
+`POST /tasks/{task_id}/retry` 只接受 `Failed` source task。成功會建立新的 Pending task、保存 source relationship，並把舊 task改成 `Failed Retry Created`。Endpoint 本身不 schedule worker，呼叫端需再觸發 `POST /processing-jobs`；不存在的 task 回 404，非 Failed 狀態回 409。
 
 `POST /processing-jobs` 接受 backend 與可選 worker id。Scheduler 先取得 global processing lock，再啟動 daemon thread；成功回 `202 Accepted`。已有有效 lock 時回 409，thread 啟動失敗時釋放剛取得的 lease 並轉成 server error。這個 endpoint 只負責接受一輪 queue drain，不等待下載或摘要完成。
 
 ## RSS subscription
 
-`POST /rss/subscriptions` 接受 channel id、可選 feed URL/title 及 enabled flag。輸入會驗證 channel id，service 再正規化 feed URL 並確認兩者一致。成功建立 SQLite subscription 回 201；duplicate 回 409。RSS subscription 無 Notion backend 選項，後續 polling 由獨立 monitor process 處理。
+`POST /rss/subscriptions` 接受 channel id、可選 feed URL/title 及 enabled flag。輸入會驗證 channel id，service 再正規化 feed URL並確認兩者一致。成功建立 SQLite subscription 回 201；duplicate 回 409。RSS subscription 無 Notion backend 選項，後續 polling 由獨立 monitor process 處理。
 
 ## Processing lock 管理
 
@@ -76,13 +76,13 @@ GET 回目前 worker id、locked time、age 與是否超過 timeout。DELETE 支
 
 ## Backend 與安全邊界
 
-API 允許選擇 SQLite 或 Notion task backend；HTTP schema 相同不代表相同的 persistence 與 concurrency 保證。這些差異只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護，client 不應從 response shape 推論 multi-worker 安全性。
+API 允許選擇 SQLite 或 Notion task backend；HTTP schema 相同不代表相同的 persistence 與 concurrency 保證。這些差異只在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)維護，client 不應從 response shape 推論 multi-worker 安全性。
 
 目前 task 建立與 RSS 建立端點本身沒有 application authentication。若 API 離開可信本機/內網，應由 reverse proxy、network policy 或後續 API auth 保護；`PROCESSING_LOCK_ADMIN_TOKEN` 只保護 lock 管理，不保護一般 task submission。
 
 ## 延伸閱讀
 
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
-- [Browser Extension 任務與 RSS 入口](../integrations/browser-extension.md)
-- [YouTube RSS 自動化](../integrations/rss-automation.md)
+- [Browser Extension 任務與 RSS 入口](browser-extension.md)
+- [YouTube RSS 自動化](../workflows/rss-automation.md)
 - [系統架構與端到端資料流](../architecture/system-overview.md)

@@ -1,534 +1,151 @@
-# YouTube 影片文字轉錄與摘要工具
+# YouTube 影片轉錄與摘要平台
 
-此專案是一個專為內容創作者、研究人員和學習者設計的 YouTube 影片文字轉錄與摘要工具。它能自動下載 YouTube 影片、提取音訊、進行高精度語音轉文字，並利用先進的大型語言模型（LLM）生成結構化摘要，幫助用戶快速理解和提取影片中的關鍵信息。
+這個專案會接收 YouTube URL，使用 `yt-dlp` 下載媒體、以 faster-whisper 轉錄，再透過 LLM 產生繁體中文摘要。任務與結果可儲存在 SQLite、Markdown 與 Notion，並提供 Streamlit、FastAPI、RSS monitor、Browser Extension 與 Nuxt Showcase 等入口。
 
-## 專案架構與工作流程
+## 系統流程
 
-本工具採用模組化設計，並將核心程式碼集中在 `src/` 目錄：
-
-- **`src/infrastructure/media/transcription/transcriber.py`**：使用 Whisper/Faster-Whisper 進行音訊轉錄。
-- **`src/infrastructure/llm/summarizer_service.py`**：整合 OpenAI / Gemini / Mock 後端以生成摘要。
-- **`src/apps/api/main.py`**：FastAPI 入口，提供 `/tasks`、`/processing-jobs`、`/processing-lock` 等端點。
-- **`src/apps/ui/streamlit_app.py`**：Streamlit UI。
-- **`src/infrastructure/media/downloader.py`**：以 yt-dlp 管理影片與音訊下載。
-- **`src/services/pipeline/processing_runner.py`**：`ProcessingWorker` orchestration，負責任務鎖、轉錄、摘要與儲存。
-- **`src/services/rss/channel_monitor.py`**：RSS monitor，專責輪詢 feed、去重與呼叫 API 建立任務。
-- **`src/infrastructure/storage/file_storage.py`**：負責 Markdown 檔案輸出及檔名清理。
-- **`src/infrastructure/storage/summary_storage.py`**：將摘要同步到 Notion；可依需求替換其他儲存後端。
-- **`src/apps/workers/cli.py`**：CLI 入口，方便 `make run` 與背景 worker 處理佇列。
-
-> 註：請直接 import `src.*` 內的模組，實際邏輯皆位於 `src/`。
-
-工作流程自動化且高效：從 YouTube 下載影片 → 提取音訊 → 使用 Whisper 進行轉錄 → 使用 LLM 生成摘要 → 以 Markdown 格式保存結果 → 可選擇存儲到 Notion。整個流程在 Docker 容器中運行，確保環境一致性與易於部署。
-
-## 技術特色
-
-- **高精度轉錄**: 使用 OpenAI 的 Whisper 模型，支持多種語言的高質量語音轉文字
-- **智能摘要**: 利用先進的 LLM 技術，生成結構化、易於理解的內容摘要
-- **靈活配置**: 支持多種 LLM 選項，包括雲端服務 (OpenAI、Google) 和本地部署 (Ollama)
-- **容器化部署**: 使用 Docker 確保環境一致性，簡化安裝和配置過程
-- **中文優化**: 專為中文內容設計，輸出格式和提示詞均已優化
-
-## 功能特點
-
-- 使用 OpenAI 的 Whisper 模型進行高精度語音轉文字
-- 支援多種 LLM 進行摘要生成：Google Gemini、OpenAI GPT、Ollama (本地模型)
-- 自動處理 YouTube 影片下載、轉錄與摘要的完整工作流程
-- 以 Markdown 格式輸出結構化摘要
-- Docker 容器化部署，確保環境一致性
-- 獨立 Nuxt 展示頁，可部署到 Vercel 顯示最近 50 筆 Notion 成果
-
-## 環境需求
-
-- Docker 與 Docker Compose
-- （若不使用 Docker）Python 3.14 + `uv`
-- 以下至少需要一個 API Key 或服務：
-  - OpenAI API Key (可選)
-  - Google Gemini API Key (可選)
-  - Ollama 本地服務 (可選)
-
-## Secret 掃描
-
-本專案使用 Betterleaks 檢查 secret。第一次 clone 後，請安裝 repository hooks：
-
-```bash
-make install-hooks
+```text
+Streamlit / Extension / RSS monitor / HTTP client
+                       │
+                       ▼
+                    FastAPI
+                       │
+                       ▼
+             SQLite / Notion task backend
+                       │
+                       ▼
+                ProcessingWorker
+                       │
+        yt-dlp → faster-whisper → LLM
+                       │
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+       Markdown      Notion       Discord
+                       │
+                       ▼
+                 Nuxt Showcase
 ```
 
-之後每次 commit 都會執行 `betterleaks git --staged`，只掃描 Git index
-內準備提交的異動，不會重掃完整 history。也可以手動執行相同檢查：
-
-```bash
-make betterleaks-staged
-```
-
-白名單集中在 `.betterleaks.toml` 的 `filter`。新增項目時必須同時限制檔案路徑
-與明確的測試 placeholder；不要只依 rule ID、檔案類型或整個目錄放行。Build
-outputs、dependency caches 與 runtime data 可在一般目錄掃描的 `prefilter`
-排除，但 `dir` 仍可能找到未追蹤的本機 `.env` 或工具登入資料。
-
-日常 Git 防護請使用 pre-commit，不需執行 `betterleaks dir .`。Pre-commit 使用
-`.betterleaks-pre-commit.toml` 並檢查所有 staged paths；即使檔案原本被 ignore
-後又以 `git add -f` 加入，也不會跳過掃描。
+CLI worker 可以直接處理 backend 中的待辦任務；Nuxt Showcase 則直接讀取 Notion 的完成結果，不會呼叫 Python Task API。
 
 ## 快速開始
 
-### 1. 設置環境
-
-1. 克隆此專案到本地：
+需求：Python 3.14、[`uv`](https://docs.astral.sh/uv/)、`yt-dlp`，以及至少一組可供目前自動候選池使用的 LLM credential。完整設定條件請參考 [OpenWiki 快速開始](openwiki/quickstart.md)。
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+cp .env.example .env
+uv sync --frozen --no-install-project
+make install-hooks
+make api
 ```
 
-2. 創建 `.env` 檔案並設置 API Key (至少選擇一個)：
-
-```
-# OpenAI API (可選)
-OPENAI_API_KEY=your_openai_api_key
-
-# Google Gemini API (可選)
-GOOGLE_GEMINI_API_KEY=your_gemini_api_key
-
-# Ollama Cloud API (可選)
-OLLAMA_API_KEY=your_ollama_api_key
-OLLAMA_HOST=https://ollama.com
-
-# Notion 儲存與通知（可選）
-NOTION_API_KEY=your_notion_api_key
-NOTION_DATABASE_ID=your_notion_database_id
-NOTION_URL=https://www.notion.so/your-workspace
-SHOWCASE_CACHE_TTL_SECONDS=3600
-
-# Discord 通知（可選）
-DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/......
-
-# Processing lock 管理
-PROCESSING_LOCK_ADMIN_TOKEN=your_admin_token
-
-# RSS monitor
-RSS_MONITOR_ENABLED=false
-RSS_MONITOR_POLL_INTERVAL_SECONDS=3600
-RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS=300
-RSS_MONITOR_TASK_TIMEOUT_SECONDS=15
-TASK_API_BASE_URL=http://localhost:8080
-TZ=Asia/Taipei
-```
-
-註：
-- 正式摘要一律從 `AUTO_MODEL_CANDIDATES` 候選池挑選模型，並把實際使用的
-  `provider:model` 寫入 log 與儲存欄位。
-- 權重是相對值，不必加總為 100。沒有 API key 的 provider 會先被排除，再以
-  剩餘候選的權重重新計算比例。
-- API key 只代表 provider 可用；未列入候選池的模型不會自動取得流量。目前 Gemini
-  候選池依各模型 Max RPM 配置，將 `5:10:5:5:15:15` 簡化為等比例權重
-  `1:2:1:1:3:3`：
-
-  | 模型代號 | Max RPM | 權重 | 預期流量占比 |
-  | --- | ---: | ---: | ---: |
-  | `gemini-3.7-flash` | 5 | 1 | 9.09% |
-  | `gemini-2.5-flash-lite` | 10 | 2 | 18.18% |
-  | `gemini-2.5-flash` | 5 | 1 | 9.09% |
-  | `gemini-3-flash-preview` | 5 | 1 | 9.09% |
-  | `gemini-3.1-flash-lite` | 15 | 3 | 27.27% |
-  | `gemini-3.5-flash-lite` | 15 | 3 | 27.27% |
-
-  此設定是每次請求的加權隨機選擇，少量請求時比例可能波動，且不等同嚴格的
-  RPM rate limiter。
-- 遇到 rate limit、timeout、連線或 provider 5xx 錯誤時，系統會排除失敗候選，
-  依剩餘權重改選一次；認證與一般 4xx 錯誤不會切換模型。
-
-可在 `src/infrastructure/llm/model_options.py` 調整候選池，例如：
-
-```python
-AUTO_MODEL_CANDIDATES = (
-    ModelCandidate(Backend.GEMINI, "gemini-3.5-flash-lite", 70),
-    ModelCandidate(Backend.OPENAI, "gpt-4o-mini", 20),
-    ModelCandidate(Backend.OLLAMA, "kimi-k2.5:cloud", 10),
-)
-```
-
-### 2. 啟動 Docker 服務
-
-在專案根目錄執行：
-
-```bash
-docker compose up -d
-```
-
-此指令會啟動 Docker Compose 服務。
-- 預設對外開放 8501（Streamlit）與 8080（FastAPI）。
-- `api` 服務啟動時會自動更新 `yt-dlp`（可用 `YTDLP_AUTO_UPDATE=0` 關閉）。
-
-此指令會啟動三個服務：
-- `streamlit`：Streamlit UI（8501）
-- `api`：FastAPI（8080）
-- `rss-monitor`：YouTube RSS monitor（不對外開 port）
-
-### 3. 進入服務容器
-
-- 進入 Streamlit 容器：
-
-  ```bash
-  docker compose exec streamlit bash
-  ```
-
-- 進入 API 容器：
-
-  ```bash
-  docker compose exec api bash
-  ```
-
-### 4. 安裝依賴
-
-進入任一服務容器後，安裝所需的依賴項：
-
-```bash
-make install
-```
-
-此指令會：
-- 下載並安裝最新版本的 yt-dlp 到 /usr/local/bin/
-- 設置 yt-dlp 的執行權限
-- 以 `uv` 同步並安裝 Python 依賴（`uv sync --frozen`）
-
-## 使用方法
-
-### 下載 YouTube 影片
-
-使用以下指令下載 YouTube 影片的音訊到 `data/videos/` 目錄：
-
-```bash
-make yt-dlp url="YOUR_YOUTUBE_URL"
-```
-
-### 執行文字轉錄與摘要
-
-處理 `data/videos/` 目錄下的所有音訊檔案：
-
-```bash
-make run
-```
-或直接呼叫 CLI 入口：
-```bash
-uv run python -m src.apps.workers.cli --db-type sqlite --worker-id local-run
-```
-（`--db-type notion` 亦支援，適合 Notion 佇列；`--worker-id` 可選，用於鎖狀態追蹤。）
-
-### 執行 RSS 監控
-
-先在 Streamlit 的 `RSS Channel Management` 區塊新增 YouTube channel 訂閱，然後啟用 monitor：
-
-```bash
-make rss-monitor
-```
-
-若只想手動輪詢一次，可執行：
-
-```bash
-make rss-monitor-once
-```
-
-若使用 Docker Compose，設定 `RSS_MONITOR_ENABLED=true` 後，`docker compose up -d` 會一併啟動 `rss-monitor` service。它會在 container 內以長駐 Python process 執行，依 `RSS_MONITOR_POLL_INTERVAL_SECONDS` 定期輪詢。
-
-說明：
-- 第一次輪詢會先寫入 watermark，不會把歷史影片整批灌入 queue。
-- 偵測到新影片後，`rss-monitor` 只會呼叫 API 建立 SQLite task，不直接執行下載或摘要。
-- 任務建立後，會由 API 端沿用既有 background processing flow 啟動 worker。
-- RSS monitor 目前僅支援 SQLite queue。
-- `TASK_API_BASE_URL` 預設為 `http://localhost:8080`；在 Docker Compose 內部會使用 `http://api:8080`
-- `RSS_MONITOR_TASK_TIMEOUT_SECONDS` 用於控制 monitor 呼叫 API 的 request timeout
-- Docker 預設時區：`TZ=Asia/Taipei`
-
-### 一鍵完成整個流程
-
-下載影片並立即進行處理：
-
-```bash
-make auto url="YOUR_YOUTUBE_URL"
-```
-
-### 使用 Streamlit 網頁界面
-
-本專案提供了一個基於 Streamlit 的網頁界面，讓您可以通過瀏覽器輕鬆使用轉錄和摘要功能：
-
-1. 啟動 Streamlit 應用：
+另開 terminal 啟動 Streamlit：
 
 ```bash
 make streamlit
 ```
 
-2. 在瀏覽器中打開顯示的 URL（通常是 http://localhost:8501）
+預設服務：
 
-3. 使用界面功能：
-   - 在文本框中輸入 YouTube 影片網址
-   - 點擊「Add to Queue」後即會透過 API 建立任務並自動排程背景處理
-   - 若需要手動重新排程，可使用「Trigger Background Processing」按鈕
-   - 查看處理進度和結果
-   - 下載生成的摘要文件
-   - 瀏覽本次會話的歷史記錄
+- FastAPI：<http://localhost:8080>
+- FastAPI Swagger UI：<http://localhost:8080/docs>
+- Streamlit：<http://localhost:8501>
 
-Streamlit 界面特點：
-- 直觀的用戶界面，無需命令行操作
-- 新增任務後自動啟動背景處理，並提示鎖定狀態
-- 實時顯示處理進度
-- 直接在瀏覽器中查看摘要結果
-- 列表可顯示並點擊每筆紀錄的 Notion URL；缺漏時會顯示提示，避免空白或死鏈接
-- 一鍵下載摘要文件
-- 保存會話歷史記錄，方便查看之前處理過的影片
-
-與命令行版本的區別：
-- Streamlit 版本不會自動刪除原始影片文件
-- 提供了視覺化的處理進度
-- 支持在瀏覽器中直接預覽摘要內容
-### 啟動 FastAPI 任務 API
-
-這個 API 提供 `POST /tasks` 與 `POST /processing-jobs` 端點，分別用於排程新任務與觸發背景處理。
-
-1. 啟動開發伺服器：
+本機尚未安裝 `yt-dlp` 時，可執行：
 
 ```bash
-make api
+make yt-dlp-update
 ```
 
-服務會在 `http://localhost:8080` 提供 API。
+這會寫入 `/usr/local/bin/yt-dlp`，部分環境可能需要額外權限。
 
-2. 送出新增任務請求：
+## Docker
 
 ```bash
-curl -X POST http://localhost:8080/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ", "db_type": "sqlite"}'
+docker compose up -d
 ```
 
-支援的 YouTube URL 格式包含：`watch?v=...`、`youtu.be/...`、`embed/...`、`shorts/...`（會自動正規化成 `watch?v=...` 以利去重）。
+預設啟動：
 
-成功回應範例：
+- `api`：Task API 與 background processing
+- `streamlit`：主要操作介面
+- `rss-monitor`：RSS polling process；需設定 `RSS_MONITOR_ENABLED=true` 才會輪詢
 
-```json
-{
-  "task_id": "1",
-  "status": "Pending",
-  "db_type": "sqlite",
-  "message": "Task queued successfully. Processing worker scheduled (worker: api-worker-123456).",
-  "processing_started": true,
-  "processing_worker_id": "api-worker-123456",
-  "cached": false
-}
-```
+Nuxt Showcase 不在此 Compose topology 中。
 
-### 啟動 Nuxt Showcase
-
-展示頁位於 `frontend/nuxt-showcase`，適合部署到 Vercel，會由 Nuxt server 直接讀取 Notion database 中最近 50 筆 `Completed` 結果。
-
-本機開發：
+## 常用操作
 
 ```bash
-make showcase-install
-make showcase
+# 下載 YouTube 媒體
+make yt-dlp url="<YOUTUBE_URL>"
+
+# 處理 SQLite queue
+make run
+
+# 下載後立即處理
+make auto url="<YOUTUBE_URL>"
+
+# RSS monitor
+make rss-monitor
+make rss-monitor-once
+
+# Python 測試與 lint
+make test
+uv run flake8 .
+
+# Showcase 測試與 build
+npm --prefix frontend/nuxt-showcase run test
+npm --prefix frontend/nuxt-showcase run build
 ```
 
-`make showcase` 會優先載入 `frontend/nuxt-showcase/.env`，若不存在才 fallback 到 repo 根目錄 `.env`，再啟動 Nuxt dev server。
-展示頁開發預設使用 `http://localhost:3000`。
+完整的啟動、環境變數、資料清理與部署說明請看 [設定、執行與部署](openwiki/operations/configuration-and-deployment.md)。
 
-執行測試：
+## 主要元件
 
-```bash
-make showcase-test
-```
+| 元件 | 責任 |
+| --- | --- |
+| `src/apps/api/main.py` | FastAPI task、retry、RSS 與 processing lock endpoints |
+| `src/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
+| `src/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
+| `src/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
+| `src/services/pipeline/processing_runner.py` | 下載、轉錄、摘要、儲存與通知的 orchestration |
+| `src/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
+| `src/infrastructure/llm/` | LLM provider、候選模型與 failover |
+| `src/infrastructure/persistence/` | SQLite 與 Notion adapters |
+| `src/apps/extension/` | Chrome／Edge Manifest V3 client |
+| `frontend/nuxt-showcase/` | 從 Notion 讀取成果的 Nuxt 展示站 |
 
-Vercel 相關設定：
+## 文件怎麼讀
 
-- Root Directory: `frontend/nuxt-showcase`
-- Framework Preset: `Nuxt.js`
-- Environment Variables: `NOTION_API_KEY`、`NOTION_DATABASE_ID`、`NOTION_URL`
-- 選填 `SHOWCASE_CACHE_TTL_SECONDS`，預設為 `3600`
+文件權威順序：
 
-展示頁 API route 會回傳 `Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600`，讓 Vercel CDN 做簡易 SWR 快取；server process 內也會保留最後一次成功的資料快照，當 Notion 暫時失敗時優先回退可用資料。
+1. 原始碼與測試：實際行為。
+2. `openwiki/`：目前架構、流程、整合與維運說明。
+3. `CONTRIBUTING.md`、`AGENTS.md`：人類與 AI 開發規則。
+4. `openspec/`：功能規格、提案與決策歷史。
+5. `.docs/`、`memory-bank/`：歷史資料，不代表目前實作。
 
-#### 重複提交行為
+建議的新手閱讀順序：
 
-API 會自動對同一 URL 進行去重：
+1. [快速開始與開發導覽](openwiki/quickstart.md)
+2. [系統架構與端到端資料流](openwiki/architecture/system-overview.md)
+3. [任務生命週期與併發控制](openwiki/workflows/task-lifecycle.md)
+4. [媒體轉錄與摘要流程](openwiki/workflows/media-processing.md)
 
-- **已完成且在 TTL 內**（預設 1 小時）：回傳 `200 OK`，`cached: true`，直接返回先前的處理結果。
-- **正在處理中或排隊中**（Pending / Processing）：回傳 `409 Conflict`。
-- **無紀錄 / 已過期 / 曾失敗**：正常建立新 Task，回傳 `201 Created`。
+若已知道要修改的範圍，可直接使用 [Quickstart 的任務導覽](openwiki/quickstart.md#依任務找文件)。
 
-TTL 可透過環境變數 `TASK_CACHE_TTL_SECONDS` 調整（預設 3600 秒）。
+## 開發與安全
 
-## 瀏覽器外掛（Chrome/Edge）
+開始修改前請閱讀 [CONTRIBUTING.md](CONTRIBUTING.md)。重要原則如下：
 
-可使用瀏覽器外掛直接在 YouTube 影片頁或列表連結送出摘要任務，免手動複製網址。
+- 不要提交 `.env`、API key 或其他 secrets。
+- 大型下載與產物放在 `data/`，不要提交到 Git。
+- Python 測試使用 `unittest`；外部 API、Notion、LLM 與網路操作應使用 mock 或 fake。
+- 提交前至少執行與變更範圍相符的測試、`uv run flake8 .`，並確認 staged secret scan。
+- 新增執行入口時，同步更新 README 與 Makefile target。
 
-### 安裝（開發模式）
+## 子專案
 
-1. 開啟 Chrome/Edge 擴充功能管理頁
-   - Chrome: `chrome://extensions/`
-   - Edge: `edge://extensions/`
-2. 啟用「開發人員模式」
-3. 點擊「載入未封裝項目」並選擇資料夾：`src/apps/extension/`
-
-### 設定
-
-1. 在擴充功能列表中點擊「詳細資料」→「擴充功能選項」
-2. 設定 API Base URL（預設 `http://localhost:8080`）
-
-### 使用方式
-
-- 在 YouTube 影片頁點擊工具列的外掛按鈕，即可送出任務
-- 在 YouTube 列表中的影片連結上按右鍵，選擇「Send YouTube link to Whisper Summary」
-- 成功/失敗會顯示通知訊息
-
-> 注意：若要寫入 Notion，必須在 `.env` 中設定 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`，缺漏時 API 會回傳 400 錯誤。若希望 Discord 通知附上 Notion 頁面連結，請額外設定 `NOTION_URL`（例如 `https://www.notion.so/your-workspace`）。
-
-3. 觸發背景處理流程：
-
-```bash
-curl -X POST http://localhost:8080/processing-jobs \
-  -H "Content-Type: application/json" \
-  -d '{"db_type": "sqlite"}'
-```
-
-成功回應會立即回傳 202 Accepted，內容如下：
-
-```json
-{
-  "worker_id": "api-worker-123456",
-  "db_type": "sqlite",
-  "accepted": true,
-  "message": "Processing worker scheduled."
-}
-```
-
-如果已經有 worker 正在處理，API 會回傳 409 Conflict 並附上 `Processing already running.` 提示。
-新的 worker 會持續撈取佇列直到沒有可執行的任務，處理期間新增的任務也會在同一輪內完成。
-
-### 4. 查詢與釋放 processing lock（維運專用）
-
-當 `/processing-jobs` 回傳 `Processing already running.`，表示全域鎖仍由某個 worker 持有；此時可用下列維運端點查詢或強制釋放：
-
-- `GET /processing-lock`
-  - 回傳 lock 狀態（持有者、最後更新時間、是否超過 `PROCESSING_LOCK_TIMEOUT_SECONDS`）。
-  - 需要附帶 `X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}` header。
-  - 範例：
-
-    ```bash
-    curl http://localhost:8080/processing-lock \
-      -H "X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}"
-    ```
-
-- `DELETE /processing-lock`
-  - 詢問後釋放 lock；若 `expected_worker_id` 與目前持有者一致則直接釋放。
-  - 可加入 `force=true`（需 `force_threshold_seconds`）來清除停滯的 lock，或 `dry_run=true` 先預檢。
-  - 需要 `X-Maintainer-Token` header。
-  - 範例：先查詢持有者，再確認一致後釋放：
-
-    ```bash
-    curl -X DELETE http://localhost:8080/processing-lock \
-      -H "Content-Type: application/json" \
-      -H "X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}" \
-      -d '{"expected_worker_id": "api-worker-123", "reason": "recovery after crash"}'
-    ```
-
-  - 若要強制清除鎖，請另外提供 `force=true` 與 `force_threshold_seconds`（以秒為單位）：
-
-    ```bash
-    curl -X DELETE http://localhost:8080/processing-lock \
-      -H "Content-Type: application/json" \
-      -H "X-Maintainer-Token: ${PROCESSING_LOCK_ADMIN_TOKEN}" \
-      -d '{"force": true, "force_threshold_seconds": 1200, "reason": "stale worker cleanup"}'
-    ```
-
-    這個流程會先確認鎖已經停滯超過設定秒數才會真正 clear，避免誤殺活著的 worker。
-
-請將 `PROCESSING_LOCK_ADMIN_TOKEN` 設定在 `.env` 中，此值即為上述 `X-Maintainer-Token` 的內容，僅限內部維運人員使用；Streamlit 維運介面會自動套用該設定，不需額外輸入。
-
-若想於 Docker 環境啟動 API，可直接執行 `docker compose up -d api`（或在 `api` 容器內跑 `make api`），API 會綁定宿主機的 8080 連接埠。
-
-## 使用 Ollama Cloud
-
-如果您想使用 Ollama Cloud 進行摘要處理，請先準備 API key：
-
-1. 取得 Ollama API key，並設定：
-
-```bash
-export OLLAMA_API_KEY=your_ollama_api_key
-export OLLAMA_HOST=https://ollama.com
-```
-
-2. 安裝 Python client（專案依賴已包含 `ollama`）：
-
-```bash
-uv sync --frozen --no-install-project
-```
-
-3. 在 `AUTO_MODEL_CANDIDATES` 加入 Ollama 模型與正數權重。只有 API key、不加入
-   候選池時，Ollama 不會接收 Auto 流量。
-
-## 輸出結果
-
-處理完成後，摘要文件將保存在 `data/summaries/` 目錄下，檔名格式為：
-`_summarized_YYYYMMDDHHMMSS_<YouTubeID>_影片標題.md`。
-
-說明：
-- 每次處理都加入時間戳與 YouTube 影片 ID，避免同標題重複覆蓋。
-- 範例：`_summarized_20250101123000_dQw4w9WgXcQ_我的筆記.md`
-
-摘要內容以 Markdown 格式呈現，包含：
-- 完整資訊與重要細節
-- 結構化的內容整理
-- 關鍵洞察與見解
-
-### YouTube metadata
-
-新處理的 YouTube 任務會在下載時一併擷取精選 metadata，包括影片描述、
-頻道、上架日期、時長與章節。摘要模型會將這些資料視為創作者提供的輔助背景，
-逐字稿仍是主要事實來源；描述超過 6,000 字元時，只有送入模型的版本會截斷。
-
-每份摘要旁會建立同名的 `.metadata.json` sidecar，例如：
-
-```text
-_summarized_20250101123000_dQw4w9WgXcQ_我的筆記.md
-_summarized_20250101123000_dQw4w9WgXcQ_我的筆記.metadata.json
-```
-
-JSON 會保留完整描述及白名單欄位，不會保存 cookies、下載格式或完整的
-`yt-dlp` info JSON。平台未提供部分欄位或 metadata 無法解析時，轉錄與摘要仍會
-繼續；sidecar 寫入失敗也只會記錄 warning，不會讓已完成的摘要任務失敗。
-此功能只套用於新任務及後續 retry，不會自動補抓或重寫既有摘要。
-
-## 自定義設置
-
-### 修改 Whisper 模型大小
-
-在 `src/core/config.py` 中可調整 `Config.transcription_model_size`，例如：
-
-```python
-self.transcription_model_size = "base"  # 可選: tiny, base, small, medium, large
-```
-
-### 修改摘要提示詞
-
-在 `src/core/prompt.py` 中自定義摘要提示詞模板（目前預設為 `PROMPT_VIDEO_SUMMARY`）。
-
-## 開發相關
-
-### 開發指令
-
-- **執行測試**: `make test`
-- **Lint**: `uv run flake8 .`
-- **格式化**: `ruff format .`（若需）
-- **啟動 REST API**: `make api`（啟動 `src/apps/api/main.py` 內的 FastAPI）
-
-```
-CODEX_HOME="$PWD/.codex" codex
-```
-
-### 更新依賴
-
-若新增或更新依賴項，請更新 `pyproject.toml` 後鎖定版本：
-
-```bash
-uv lock
-```
+- [Nuxt Showcase README](frontend/nuxt-showcase/README.md)：Nuxt 開發、環境變數、cache 與 diagnostics。
+- [Browser Extension 文件](openwiki/integrations/browser-extension.md)：Extension 安裝、API 設定與安全邊界。
+- [OpenSpec](openspec/project.md)：規格與變更提案入口。

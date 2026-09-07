@@ -45,7 +45,7 @@
 - 主要服務 YouTube 影音內容的轉錄與摘要，產出偏重繁體中文閱讀體驗。
 - 摘要輸出為 Markdown，含關鍵整理、段落標題與洞見，便於知識管理。
 - 系統內含 FastAPI 任務佇列端點，可排程批次處理並與 Notion 同步。
-- `data/` 底下保存影音、音訊與摘要，`database/` 內含 Notion/SQLite adapter。
+- `data/` 底下保存影音、音訊與摘要；Notion/SQLite adapters 位於 `src/infrastructure/persistence/`。
 
 ## Important Constraints
 - `.env` 管理 `OPENAI_API_KEY`、`GOOGLE_GEMINI_API_KEY`、`NOTION_API_KEY` 等敏感資訊，禁止提交到版本控制。

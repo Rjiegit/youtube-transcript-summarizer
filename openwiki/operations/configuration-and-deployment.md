@@ -34,10 +34,10 @@ sources:
     resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-06T09:42:15.755Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-06T09:42:15.755Z
+    at: 2026-09-07T14:09:43.292Z
 ---
 
 # 設定、執行與部署
@@ -115,6 +115,8 @@ Workflow 使用 Node.js 22，安裝固定版本的 OpenWiki 與可選 Mermaid �
 - [快速開始與開發導覽](../quickstart.md)
 - [系統架構與端到端資料流](../architecture/system-overview.md)
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
+<!-- openwiki: broken internal link [../interfaces/http-api-and-clients.md] file "../interfaces/http-api-and-clients.md" does not exist. Fix the href or restore the target, then delete this comment. -->
 - [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
+<!-- openwiki: broken internal link [../frontend/showcase-experience.md] file "../frontend/showcase-experience.md" does not exist. Fix the href or restore the target, then delete this comment. -->
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)

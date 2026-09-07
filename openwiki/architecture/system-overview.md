@@ -5,7 +5,7 @@ description: 說明任務輸入、API、背景 worker、持久層、外部整合
 tags: [architecture, pipeline, api, streamlit, extension, nuxt]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:54:23.498Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
@@ -23,7 +23,7 @@ sources:
     resource: repo://src/services/pipeline/processing_runner.py
   - id: openwiki-source-0b294e3f86f4bc3838cb6ca2
     resource: repo://src/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-08-31T13:54:23.498Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # 系統架構與端到端資料流
@@ -79,14 +79,14 @@ Extension 與 RSS monitor 都只負責建立輸入，不直接執行 media pipel
 
 ## 重要邊界
 
-- FastAPI 是 task submission 與 worker scheduling 邊界；完整 status 及 authentication 語意見[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)。
-- Task backend、locks、Notion publication 與本機 artifacts 的保證不同，見[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
+- FastAPI 是 task submission 與 worker scheduling 邊界；完整 status 及 authentication 語意見[HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)。
+- Task backend、locks、Notion publication 與本機 artifacts 的保證不同，見[任務、鎖與結果持久化](task-and-result-storage.md)。
 - Browser Extension、RSS、LLM、Notion 與 Showcase 各自持有不同的 network、credential 及 trust boundary，細節留在對應 integration 頁。
 
 ## 延伸閱讀
 
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
-- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
-- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
+- [HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)
+- [任務、鎖與結果持久化](task-and-result-storage.md)
 - [Notion 資料整合](../integrations/notion-and-showcase.md)

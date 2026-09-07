@@ -5,7 +5,7 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-05T14:47:18.852Z
+    at: 2026-09-07T14:32:56.222Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -35,7 +35,7 @@ sources:
     resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-05T14:47:18.852Z" }
+generated: { by: "codex", at: "2026-09-07T14:32:56.222Z" }
 ---
 
 # 快速開始與開發導覽
@@ -114,7 +114,7 @@ make test
 uv run flake8 .
 ```
 
-上述為一般本機檢查；CI 實際採兩階段 lint，完整指令與阻擋條件見[測試策略](testing/test-strategy.md)。
+上述為一般本機檢查；CI 實際採兩階段 lint，完整指令與阻擋條件見[開發規則與測試策略](operations/development-and-testing.md)。
 
 執行 Nuxt suite 與 production build：
 
@@ -129,17 +129,17 @@ npm --prefix frontend/nuxt-showcase run build
 | --- | --- |
 | 了解元件責任與跨系統資料流 | [系統架構與端到端資料流](architecture/system-overview.md) |
 | 盤點 Python/npm/executable/遠端服務依賴 | [模組邊界與外部依賴](architecture/module-boundaries-and-dependencies.md) |
-| 修改 API request、status、authentication 或 client | [HTTP API 與 Client 契約](interfaces/http-api-and-clients.md) |
-| 修改 SQLite/Notion backend、locks 或輸出 artifacts | [任務、鎖與結果持久化](persistence/task-and-result-storage.md) |
+| 修改 API request、status、authentication 或 client | [HTTP API 與 Client 契約](integrations/http-api-and-clients.md) |
+| 修改 SQLite/Notion backend、locks 或輸出 artifacts | [任務、鎖與結果持久化](architecture/task-and-result-storage.md) |
 | 修改 task API、dedup、retry 或 locks | [任務生命週期與併發控制](workflows/task-lifecycle.md) |
 | 修改下載、Whisper、LLM 或輸出 | [媒體轉錄與摘要流程](workflows/media-processing.md) |
 | 修改 provider、模型權重或 failover | [LLM Providers、選擇與 Failover](integrations/llm-providers.md) |
 | 修改 Chrome/Edge Extension | [Browser Extension 任務與 RSS 入口](integrations/browser-extension.md) |
-| 維護 RSS channel automation | [YouTube RSS 自動化](integrations/rss-automation.md) |
+| 維護 RSS channel automation | [YouTube RSS 自動化](workflows/rss-automation.md) |
 | 修改 Notion schema 或 Python/Nuxt 整合 | [Notion 資料整合](integrations/notion-and-showcase.md) |
-| 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](frontend/showcase-experience.md) |
+| 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](integrations/showcase-experience.md) |
 | 設定 Docker、env、cache 或部署 | [設定、執行與部署](operations/configuration-and-deployment.md) |
-| 新增或定位測試 | [測試策略與擴充指南](testing/test-strategy.md) |
+| 新增或定位測試 | [開發規則與測試策略](operations/development-and-testing.md) |
 
 ## 常見檢查
 

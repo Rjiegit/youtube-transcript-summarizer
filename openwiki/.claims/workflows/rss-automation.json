@@ -1,0 +1,66 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:1ebaf7f1df359f04d6c73f557a41abc0f087dec3d41b64ff82e7fdba0cca936e",
+  "claims": [
+    {
+      "id": "claim_a541333b266a4705af9012a0abb94745",
+      "statement": "RSS monitor 只負責解析 feed 並透過 FastAPI 建立 SQLite task，下載、轉錄與摘要仍由 background worker 處理。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/workers/rss_monitor.py",
+          "version": "repo-file-v1:sha256:a44494657ab7c750ef0c533b11cb74d7eaae4b44412f1f3b8869ce420023de74"
+        },
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py",
+          "version": "repo-file-v1:sha256:594a6b6c51bff44015618c16e4bd64e2101a696095e3e01bd5047a78ffc9ad0a"
+        }
+      ]
+    },
+    {
+      "id": "claim_c2405c592e614a93a27d3dbeb5ff1b1c",
+      "statement": "首次 polling 只建立 watermark，不建立歷史 tasks；後續只處理發布時間嚴格晚於 watermark 的項目，失敗時保留舊 watermark 以便重試。",
+      "evidence": [
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py",
+          "version": "repo-file-v1:sha256:594a6b6c51bff44015618c16e4bd64e2101a696095e3e01bd5047a78ffc9ad0a"
+        },
+        {
+          "resource": "repo://tests/test_rss_monitor.py",
+          "version": "repo-file-v1:sha256:b6fc1b070f6ce71524558ddabbe4ef69749d5db58c4905980d04f31a83efaf96"
+        }
+      ]
+    },
+    {
+      "id": "claim_33136a4de07d40c384fb31ebd02b4ef6",
+      "statement": "RSS 任務固定送往 SQLite，成功建立回應與 duplicate 回應分別計為新增或重複，其餘狀態視為 polling error。",
+      "evidence": [
+        {
+          "resource": "repo://src/apps/api/main.py",
+          "version": "repo-file-v1:sha256:e6de0ba11587f2cdf2e82fa732b3954a0a8e9e67bc97a90bf853b68c86b03cc9"
+        },
+        {
+          "resource": "repo://src/services/rss/channel_monitor.py",
+          "version": "repo-file-v1:sha256:594a6b6c51bff44015618c16e4bd64e2101a696095e3e01bd5047a78ffc9ad0a"
+        }
+      ]
+    },
+    {
+      "id": "claim_af580ddfcec94a3d8b40807d56a7d002",
+      "statement": "RSS monitor 的實際 polling interval 取設定 interval 與 minimum interval 的較大值，並可用 --once 執行單輪；Docker 內 API base URL 使用 http://api:8080。",
+      "evidence": [
+        {
+          "resource": "repo://compose.yaml",
+          "version": "repo-file-v1:sha256:8f8c8e105f6f9974a7fdd60d18502b0400d1b1eee7b2895139e42b34b2a07bfa"
+        },
+        {
+          "resource": "repo://src/apps/workers/rss_monitor.py",
+          "version": "repo-file-v1:sha256:a44494657ab7c750ef0c533b11cb74d7eaae4b44412f1f3b8869ce420023de74"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.4.3",
+    "at": "2026-09-07T14:09:43.292Z"
+  }
+}

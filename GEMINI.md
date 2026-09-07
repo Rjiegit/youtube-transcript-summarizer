@@ -1,45 +1,5 @@
-# Gemini Project Brief: youtube-transcript-summarizer
+# Gemini Project Instructions
 
-## 1. Project Overview
+請以 [AGENTS.md](AGENTS.md) 作為本 repository 的主要開發、測試、安全與文件規則來源。
 
-This project is a Python-based application that downloads YouTube video transcripts, summarizes them using a large language model, and provides the summary to the user. The main user interface is built with Streamlit.
-
-## 2. Technical Stack
-
-- **Language:** Python 3.10+
-- **Main Libraries:**
-  - `streamlit`: For the web interface.
-  - `fastapi`: For building the API.
-  - `pytube`: For downloading YouTube videos.
-  - `openai`: For accessing summarization models.
-- **Dependency Management:** `uv` with `pyproject.toml` + `uv.lock`.
-
-## 3. Key Commands
-
-- **Install Dependencies:** `uv sync --frozen --no-install-project`
-- **Run the App:** `uv run streamlit run src/apps/ui/streamlit_app.py`
-- **Run Tests:** `python -m unittest -v`
-- **Check Style:** `uv run flake8 .`
-- **Format Code:** `ruff format .`
-
-## 4. Coding Conventions
-
-- **Style Guide:** Follows PEP 8. Use `ruff` to enforce.
-- **Naming:** Use `snake_case` for variables and functions. Use `PascalCase` for classes.
-- **Typing:** All new functions and methods must include type hints.
-- **Docstrings:** Use Google-style docstrings for all public modules and functions.
-
-## 5. Architectural Patterns
-
-- **Separation of Concerns:**
-  - `src/infrastructure/media/transcription/transcriber.py`: Handles video transcription logic.
-  - `src/infrastructure/llm/summarizer_service.py`: Handles text summarization logic.
-  - `src/apps/ui/streamlit_app.py`: Contains all UI-related code (invoked via root wrapper).
-  - `src/infrastructure/media/downloader.py`: Manages downloading video content.
-- **Error Handling:** Use custom exceptions for specific application errors (e.g., `InvalidURLError`, `DownloadError`).
-
-## 6. Specific Rules & Constraints
-
-- Do not commit secrets or API keys to the repository. Use environment variables loaded from a `.env` file.
-- All user-facing text in the Streamlit app should be clear and concise.
-- When adding new dependencies, update `pyproject.toml` and regenerate `uv.lock` accordingly.
+架構與流程說明請從 [OpenWiki 快速開始](openwiki/quickstart.md) 進入；實際行為仍以原始碼與測試為準。

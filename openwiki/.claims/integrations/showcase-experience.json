@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:3c32c2b02bf64fc77659be5c4911dc08ee2dc6aff2b610cf55189d67c45581d4",
+  "pageVersion": "sha256:7d59faf32598b0c4781eb0a258feae2e4404f395153214003d09fe7dd48d9ef5",
   "claims": [
     {
-      "id": "claim_93e52ef7b8b8401e802fd684ff185316",
+      "id": "claim_b49be5796ebb45d68855fac7f4755cef",
       "statement": "Showcase 首頁與詳細頁都透過 server-side useFetch 呼叫內部 API；首頁在 client 端去重、搜尋並把未讀結果排在前面。",
       "evidence": [
         {
@@ -17,7 +17,7 @@
       ]
     },
     {
-      "id": "claim_d7b86221cbf6462791bdee05c0ed744a",
+      "id": "claim_09ea540eea79419a8376d6e4b3e38121",
       "statement": "已讀狀態在 SSR 安全的 Nuxt state 中管理，browser 可用時同步 localStorage，儲存失敗不影響 session 記憶體狀態，且最多保留 500 筆。",
       "evidence": [
         {
@@ -31,7 +31,7 @@
       ]
     },
     {
-      "id": "claim_d745a0e1908046b8b97660101c7dac92",
+      "id": "claim_27f9d3114b49447aaa7106f7b31d47d6",
       "statement": "首頁在 activation、mount、focus、visibility change、BFCache pageshow 與返回列表 route 時同步已讀狀態，並在資料 stale 時刷新。",
       "evidence": [
         {
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "id": "claim_879ba25b7c8047b6ab9e09760388b30a",
+      "id": "claim_6b86b700ff4843059a9b25c5a974e1cc",
       "statement": "SWR cache 對 fresh snapshot 直接回傳，對 stale snapshot 立即回傳並背景刷新，沒有 snapshot 時等待 fetch；背景刷新失敗時可保留既有 snapshot。",
       "evidence": [
         {
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "id": "claim_a827f85f794148eb9621eecedbf3d92b",
+      "id": "claim_40ad0616381d484499c83b0e1f458353",
       "statement": "Forced refresh 不重用 stale background refresh，且只有最新啟動的 refresh 可以更新 snapshot，避免舊請求覆蓋新資料。",
       "evidence": [
         {
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "id": "claim_25a86dd6ae1e462daea5cbd497c0e794",
+      "id": "claim_588ae728e9e34211837e6df66d0ed68b",
       "statement": "列表 API 的 refresh=1 會強制刷新並回傳 no-store；Notion fetch 失敗時優先回退 snapshot，沒有 snapshot 才回 502。",
       "evidence": [
         {
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "id": "claim_9c53dd0438144d90a563be016b3eebe9",
+      "id": "claim_ff402631fe4b49a298ac857ec0353293",
       "statement": "詳細頁成功取得結果後會標記已讀、呈現 Markdown，並只為可解析的 YouTube URL 建立 youtube-nocookie embed。",
       "evidence": [
         {
@@ -103,6 +103,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-31T13:51:03.458Z"
+    "at": "2026-09-07T14:09:43.292Z"
   }
 }

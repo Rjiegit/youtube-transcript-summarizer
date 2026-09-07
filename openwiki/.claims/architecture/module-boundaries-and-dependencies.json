@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:193a3c620029e4284e74f0544c73f6f7e3ee4e80a4f44f6bbd97d7fedcc893dd",
+  "pageVersion": "sha256:a9133b9c1a425676fa8c692ecd95485f2fe4ed64411f2eefb60f0ebbbda5a83b",
   "claims": [
     {
       "id": "claim_8ce30e71df304864940a28036789b29e",
       "statement": "Python 主系統以 apps 作為執行入口、services 組合 use cases、domain 定義 models/interfaces，infrastructure 提供 SQLite、Notion、media、LLM、storage 與 notification adapters。",
       "evidence": [
         {
-          "resource": "repo://structure.md#L3-L48",
-          "version": "repo-lines-v1:sha256:4756078bb81b0a05323dc16cad5fb5814d1f57af9202beea02c3a993bf2ba64a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliOWNkMDJlZjU2MDNjN2Q0MGEyMWVjNjkxOTBkNTVkNmJlODgyZGZiYzU3MjFkN2NkZjdhOWQ4YTQwOTAwYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkOWFmOWM3OWI4MTFkYjNlOGQ1ZGI5NmEyN2I2M2U4ZDRhMjIxMzYzYmVmMTFlNDk5ZjFiNTZhYTg4YWUzMzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ0N2M3ZTdlYTliZjI2YWMxZTM2NjYzODNmMWVmYjkwNWExOGNmYmU3N2NhM2ZkYzA0MGIxMzczZjhkYjExMWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3MzBjZDk1ZTgwZjExMWRmNmRlY2FhNjlmMjE3MTBlYjc4Yzg4YTJiYTliMzY3MWYwNTI1MzFjN2JjNjUwNjgifQ"
+          "resource": "repo://CONTRIBUTING.md#L28-L36",
+          "version": "repo-lines-v1:sha256:93b218085d96f8d86fe5e570fee3dcbfbc73375673ced3e72d4a1308d497a832:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDgzYmFkOTEwODFlYmExNWM4NGRjNmY0Y2M4NjNhMTNhOGI2ZWM0MTc1NTU4MjJiNDc1Mjk1MGNhMzgwNjZiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjQ1ZjRlZjE3ZGJjNDE5NTFmNTRkZWNkMWJhMzk3NjdlN2YzNTQ1YjI5ZWQxZTFmMTFiZDhiOTFjZGVmMjU5MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzY5N2U0NmNiNDFkOWI1OTlkODYzMGNkNjRkNzQxOGYyOGFjNmE3MzIwNTVkOWQ5NTdkYTY4MjExZjY0ZTJjNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDdkNDQwYTQ0ZjIzZDY3YWI5MjA3ZDBiMmQ1MTZlZTJiMmUwNWI0OWY2ZDU4Nzk5YTU1NzM1Njc3OTcwYWRkNCJ9"
         }
       ]
     },
@@ -155,6 +155,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-05T14:47:18.852Z"
+    "at": "2026-09-07T14:09:43.292Z"
   }
 }

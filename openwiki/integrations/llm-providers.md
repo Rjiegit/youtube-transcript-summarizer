@@ -5,7 +5,7 @@ description: 說明 Gemini、OpenAI、Ollama 的候選資格、加權選擇、pr
 tags: [llm, gemini, openai, ollama, failover]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-36d48d46c256392dc902bc2d
     resource: repo://src/infrastructure/llm/model_options.py
@@ -19,7 +19,7 @@ sources:
     resource: repo://tests/test_summarizer_service.py
   - id: openwiki-source-e2ee026fbcf730652e2c0e63
     resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # LLM Providers、選擇與 Failover
@@ -78,4 +78,4 @@ Weighted selection tests 注入 deterministic RNG，分別驗證 validation、cr
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
-- [測試策略與擴充指南](../testing/test-strategy.md)
+- [開發規則與測試策略](../operations/development-and-testing.md)

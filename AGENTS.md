@@ -31,7 +31,7 @@
 - Follow PEP 8; 4-space indentation; prefer type hints.
 - Line length: 127 (matches CI’s flake8 config).
 - Naming: `snake_case` for functions/vars, `PascalCase` for classes, `UPPER_SNAKE_CASE` for constants.
-- Keep modules focused; place abstractions in `interfaces/` and adapters in `database/`.
+- Keep modules focused; place abstractions in `src/domain/interfaces/` and adapters in `src/infrastructure/persistence/`.
 
 ## Testing Guidelines
 - Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`) beside the code or under a `tests/` folder.
@@ -55,6 +55,7 @@
 Please use Traditional Chinese (Taiwan) as the primary language for communication and documentation. Technical terms can be kept in English. English explanations may be provided when necessary.
 
 ## Notes
+- Human-facing development conventions are summarized in `CONTRIBUTING.md`; keep it aligned with these repository guidelines.
 - Primary UX is via Streamlit; CLI/cron entry points may vary. When adding new entry scripts, document them in the README and wire Makefile targets accordingly.
 
 ## Active Technologies

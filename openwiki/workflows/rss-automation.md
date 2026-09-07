@@ -1,23 +1,23 @@
 ---
-type: integration-workflow
+type: workflow
 title: YouTube RSS 自動化
 description: 說明 YouTube channel 訂閱、watermark polling、API 入列與 monitor 執行模式。
 tags: [rss, youtube, automation, sqlite]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
+  - id: openwiki-source-e201e686a785f09b6d899f0b
+    resource: repo://compose.yaml
+  - id: openwiki-source-822793b105256e659707b60b
+    resource: repo://src/apps/api/main.py
   - id: openwiki-source-c79e0b87395cb78682a64778
     resource: repo://src/apps/workers/rss_monitor.py
-  - id: openwiki-source-3b279564fbfb5cc9e5b4304d
-    resource: repo://src/infrastructure/persistence/sqlite/rss_subscription_repository.py
   - id: openwiki-source-0b294e3f86f4bc3838cb6ca2
     resource: repo://src/services/rss/channel_monitor.py
-  - id: openwiki-source-25648eab61c0e46bdd2d19af
-    resource: repo://src/services/rss/subscription_service.py
   - id: openwiki-source-01f22608fdc3c845dfb0f335
     resource: repo://tests/test_rss_monitor.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # YouTube RSS 自動化
@@ -44,8 +44,7 @@ Docker Compose 的 rss-monitor 使用 `http://api:8080`，並與 API/Streamlit �
 
 ## 延伸閱讀
 
-- [Browser Extension 任務與 RSS 入口](browser-extension.md)
-- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
-- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
-- [任務生命週期與併發控制](../workflows/task-lifecycle.md)
+- [Browser Extension 任務與 RSS 入口](../integrations/browser-extension.md)
+- [HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)
+- [任務生命週期與併發控制](task-lifecycle.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)

@@ -5,7 +5,7 @@ description: 說明 Manifest V3 extension 如何辨識 YouTube context、建立�
 tags: [browser-extension, chrome, youtube, api, rss]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-c297a6919354a0aef232d787
     resource: repo://src/apps/extension/content_script.js
@@ -15,7 +15,7 @@ sources:
     resource: repo://src/apps/extension/options.js
   - id: openwiki-source-0520e948964d45782d02b5a3
     resource: repo://src/apps/extension/service_worker.js
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # Browser Extension 任務與 RSS 入口
@@ -64,7 +64,7 @@ API base URL 預設是 `http://localhost:8080`。Options page 只接受可由 `U
 
 ## 延伸閱讀
 
-- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
-- [YouTube RSS 自動化](rss-automation.md)
+- [HTTP API 與 Client 契約](http-api-and-clients.md)
+- [YouTube RSS 自動化](../workflows/rss-automation.md)
 - [系統架構與端到端資料流](../architecture/system-overview.md)
 - [快速開始與開發導覽](../quickstart.md)

@@ -5,7 +5,7 @@ description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀
 tags: [notion, integration, persistence, showcase]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-08-31T13:51:03.458Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-59891cd71dd0c8a50b5690a9
     resource: repo://frontend/nuxt-showcase/server/utils/notion.ts
@@ -13,17 +13,19 @@ sources:
     resource: repo://src/infrastructure/persistence/notion/client.py
   - id: openwiki-source-5858a6e533d57781fe90f469
     resource: repo://src/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-08-31T13:51:03.458Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
 
 Notion 在本系統有兩種不同角色：Python `NotionDB` 可把 database 當作任務 queue；`SummaryStorage` 另建立承載完整摘要 blocks 的成果 page。Nuxt Showcase 不建立或更新資料，只用 server-side API 讀取 database schema、完成項目與 page blocks。
 
+<!-- openwiki: broken internal link [../persistence/task-and-result-storage.md] file "../persistence/task-and-result-storage.md" does not exist. Fix the href or restore the target, then delete this comment. -->
 本頁聚焦 Python 與 Nuxt 之間的 Notion schema contract；SQLite transaction、task leases、recent history 與檔案 artifacts 集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## Python 寫入端
 
+<!-- openwiki: broken internal link [../persistence/task-and-result-storage.md] file "../persistence/task-and-result-storage.md" does not exist. Fix the href or restore the target, then delete this comment. -->
 Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等 properties 管理 task；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public` 與摘要 blocks 的成果 page。兩者共用 credentials/database 設定，但用途與 schema 不完全相同。Queue locking、rich-text chunking 與 storage failure 語意集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## Nuxt 唯讀端
@@ -46,7 +48,7 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 
 ## 延伸閱讀
 
-- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
+- [任務、鎖與結果持久化](../architecture/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
-- [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)
+- [Nuxt Showcase 使用體驗與資料快取](showcase-experience.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)

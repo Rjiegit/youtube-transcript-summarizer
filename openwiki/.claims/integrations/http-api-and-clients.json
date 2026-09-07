@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:9a248a35de74bfbcf6003bb22bb789bc8ebd34f263ce57ca3eb35370555e666d",
+  "pageVersion": "sha256:4b17e14628c7237cfb632b14e767f2df4cf746c04966dabd5480e7b6cab439dc",
   "claims": [
     {
-      "id": "claim_0e4a7ee19b934f6aa2edf7f1fa005e9f",
+      "id": "claim_82bdf561a818463185598d2b75e6f683",
       "statement": "Streamlit、Browser Extension與RSS monitor都是FastAPI clients，而Nuxt Showcase不呼叫Task API並由server route直接查詢Notion。",
       "evidence": [
         {
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "id": "claim_884919305d8b40948d64fa01559c95c0",
+      "id": "claim_62513b0061c244e395354838227e4e61",
       "statement": "POST /tasks對新task回201並嘗試schedule worker，TTL cached result回200且不schedule，active或blocked duplicate回409。",
       "evidence": [
         {
@@ -35,7 +35,7 @@
       ]
     },
     {
-      "id": "claim_4295901edc114b04af79a5dfe00b0b76",
+      "id": "claim_35de22504e104042a554847891532ae4",
       "statement": "Task已持久化後scheduler未啟動不會撤銷task，response以processing_started=false表達已入列但尚無worker。",
       "evidence": [
         {
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "id": "claim_3e357d8729d84e159128d2021e856b53",
+      "id": "claim_bd0b74019c2a4c44925aa5409e5afad2",
       "statement": "Retry endpoint只接受Failed task，建立新Pending retry並更新source狀態，但endpoint本身不schedule processing worker。",
       "evidence": [
         {
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "id": "claim_4d44acdf5d34456d81a2897408fdb5f8",
+      "id": "claim_3ef6885a85b44b689e516080600480e0",
       "statement": "POST /processing-jobs先取得global lock再啟動daemon worker，成功回202；已有worker時拒絕排程，thread啟動失敗會釋放lease。",
       "evidence": [
         {
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "id": "claim_756d873ad0344cf2b7916b6e8ae266a0",
+      "id": "claim_55c763d024c4404fbb00894493b7fd61",
       "statement": "POST /rss/subscriptions驗證channel input並建立SQLite subscription，成功回201且duplicate回409；RSS subscription沒有Notion backend選項。",
       "evidence": [
         {
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "id": "claim_6e7f409c5efe479fadf0a670d70ab409",
+      "id": "claim_4c3124cd7fb64b61ad5398f9740ca071",
       "statement": "Processing lock GET與DELETE都要求X-Maintainer-Token；未設定server token、缺少header與錯誤token分別回503、401與403。",
       "evidence": [
         {
@@ -97,7 +97,7 @@
       ]
     },
     {
-      "id": "claim_f6071150d012487a8a2a8320d3d08f1b",
+      "id": "claim_b5ee42859fbf44698e190a752e79b508",
       "statement": "Processing lock DELETE支援matching expected worker、force age threshold與dry run snapshots；Browser Extension不實作這些管理端點。",
       "evidence": [
         {
@@ -117,6 +117,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-31T13:51:03.458Z"
+    "at": "2026-09-07T14:09:43.292Z"
   }
 }

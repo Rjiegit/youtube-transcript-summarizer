@@ -5,7 +5,7 @@ description: 說明 Python 分層的依賴方向，以及 Python、Nuxt、外部
 tags: [architecture, dependencies, python, nuxt, integrations]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-05T14:47:18.852Z
+    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -13,6 +13,8 @@ sources:
     resource: repo://.github/workflows/main.yml
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
+  - id: openwiki-source-f317ee207e1653d2033c81a4
+    resource: repo://CONTRIBUTING.md
   - id: openwiki-source-27a43165fe079c2f44e8c6f5
     resource: repo://frontend/nuxt-showcase/package.json
   - id: openwiki-source-0030f56752f8cbf5e90a9d68
@@ -35,18 +37,16 @@ sources:
     resource: repo://src/infrastructure/media/transcription/transcriber.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-  - id: openwiki-source-e2f6a888f478cd181dc66b2b
-    resource: repo://structure.md
   - id: openwiki-source-1eb6a61d042052ba1402c2eb
     resource: repo://uv.lock
-generated: { by: "codex", at: "2026-09-05T14:47:18.852Z" }
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 ---
 
 # 模組邊界與外部依賴
 
 ## Python 分層與依賴方向
 
-Python 主系統以 `src` 為 package root，責任大致由入口向內收斂：
+Python 主系統以 `src` 為 package root；規範性的責任分層由入口向 use case 與 domain 收斂，第三方實作則留在 infrastructure：
 
 ```mermaid
 flowchart TD
@@ -55,7 +55,7 @@ flowchart TD
     Infrastructure["infrastructure — SQLite、Notion、media、LLM、storage、notification adapters"] --> Domain
 ```
 
-`core` 提供環境設定、prompt、logging、時間與 URL/filename 工具。`domain` 保存不依賴第三方 SDK 的 models 與 contracts；例如 `BaseDB` 定義 task CRUD、task lease、global processing lock 與 retry 能力。`services` 負責 use-case orchestration，`infrastructure` 才直接接觸 SQLite、Notion、yt-dlp、Whisper、LLM SDK 與 Discord。`apps` 將 HTTP、UI 或 CLI 輸入轉成 service 呼叫。
+`CONTRIBUTING.md` 將這套分層定義為現行開發規則：`domain` 保存 models 與 typed interfaces、`services` 負責 use-case orchestration、`infrastructure` 接觸 SQLite、Notion、yt-dlp、Whisper、LLM SDK 與 Discord，`apps` 則承接 HTTP、UI、CLI、RSS 與 Extension 等入口。`core` 另提供環境設定、prompt、logging、時間與 URL/filename 工具。這是維護方向，不代表 framework 會自動阻止跨層 import；review 仍需檢查新依賴是否放在正確邊界。
 
 這個方向不是完全由 framework 強制，但 `ProcessingWorker` 的 constructor factories 是最重要的邊界：downloader、transcriber、summarizer、summary storage、file manager、notifier 與 config 都可替換。測試因此能使用小型 fake，而不必真的下載影片、載入模型或呼叫外部 API。新增 adapter 時應實作既有小介面或 factory contract，避免把 provider-specific branch 放進 orchestration loop。
 
@@ -103,5 +103,5 @@ Betterleaks 是另一個 PATH 上的本機開發工具，不屬於 Python、Nuxt
 
 - [系統架構與端到端資料流](system-overview.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
-- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
-- [測試策略與擴充指南](../testing/test-strategy.md)
+- [任務、鎖與結果持久化](task-and-result-storage.md)
+- [開發規則與測試策略](../operations/development-and-testing.md)

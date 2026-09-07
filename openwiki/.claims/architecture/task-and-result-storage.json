@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:0e620274f0ad6cc9a31bfbacc4359abdbe0a55cd1143e32f74e5d84b6984279c",
+  "pageVersion": "sha256:82fdb29b593e47fe3e1cb0fbb9bd57a9b2f14f46660f0726a9c8b25c413eb9d7",
   "claims": [
     {
-      "id": "claim_9d56e174f5594dbf9a9267743030c5a0",
+      "id": "claim_75e65076b28846299e6ab93d5dd972e6",
       "statement": "BaseDB統一定義task CRUD、task acquisition、global lock、status update、URL lookup與retry，但contract不保證各adapter具有相同一致性。",
       "evidence": [
         {
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "id": "claim_4b65ceac7ae24c10b7715f992c7f85db",
+      "id": "claim_ebceac2a0b814a96b5619c34e3af7dee",
       "statement": "SQLite初始化tasks、recent_task_history、processing_lock與rss_channel_subscriptions tables，並以ALTER TABLE補齊legacy tasks缺少的已知欄位。",
       "evidence": [
         {
@@ -23,7 +23,7 @@
       ]
     },
     {
-      "id": "claim_3fb09cc58fdc49fea39acdd940e85006",
+      "id": "claim_0c194e3d77014fe4988a5fdf35cb8840",
       "statement": "SQLite在BEGIN IMMEDIATE transaction內原子選取最舊Pending或stale Processing task並寫入Processing、worker id與locked time。",
       "evidence": [
         {
@@ -33,7 +33,7 @@
       ]
     },
     {
-      "id": "claim_d6100bb194304cd38e32c93ee8ba1309",
+      "id": "claim_910420f31eee455db5927615e44b2dd0",
       "statement": "SQLite global lock支援同owner續用或timeout後接管，heartbeat與release都只作用於matching worker id；Notion對應lock lifecycle是no-op。",
       "evidence": [
         {
@@ -47,7 +47,7 @@
       ]
     },
     {
-      "id": "claim_31cdde940012421791b6d1d97567d2a3",
+      "id": "claim_06b18bdad6364eb192c1ef7c8c5c8a72",
       "statement": "Recent task history以task id upsert最新view time、按view time倒序讀取並可依cutoff prune，與task status資料分開保存。",
       "evidence": [
         {
@@ -57,7 +57,7 @@
       ]
     },
     {
-      "id": "claim_4ce61bc55b3048c5a0b7eee7c7ba586c",
+      "id": "claim_348e7ec40a4649748e170034d457b044",
       "statement": "SummaryStorage建立含Title、URL、Model與預設false Public欄位的Notion page並將摘要分成paragraph children；成功page id由worker寫回task。",
       "evidence": [
         {
@@ -71,7 +71,7 @@
       ]
     },
     {
-      "id": "claim_c9d88571c8c74bc1bb3e961a71f57ebe",
+      "id": "claim_2095cd9d6a70469a908e6dc6e4e603da",
       "statement": "Summary path預設位於data/summaries並包含timestamp、video id與清理後title，FileManager保留directory且只清理/截斷basename。",
       "evidence": [
         {
@@ -85,7 +85,7 @@
       ]
     },
     {
-      "id": "claim_d2216113e73349dbb2bdf0ec2ced11eb",
+      "id": "claim_44043247d0134d2ab43738d370dbbda3",
       "statement": "Metadata JSON以實際Markdown path的stem配對並以UTF-8保存；sidecar寫入失敗只記warning而不阻止Notion保存與task完成。",
       "evidence": [
         {
@@ -101,6 +101,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-08-31T13:51:03.458Z"
+    "at": "2026-09-07T14:09:43.292Z"
   }
 }
