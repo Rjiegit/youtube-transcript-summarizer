@@ -5,6 +5,7 @@
 ## 目前內容
 
 - [`browser-extension/`](browser-extension/)：Chrome／Edge Manifest V3 client，透過 HTTP 呼叫 FastAPI。
+- [`showcase/`](showcase/)：Nuxt 3/Nitro 成果展示站，server routes 直接讀取 Notion。
 
 ## 現階段保留位置
 
@@ -13,7 +14,6 @@
 - FastAPI：`src/apps/api/`。
 - Streamlit operator UI：`src/apps/ui/`。
 - Processing worker 與 RSS monitor：`src/apps/workers/`。
-- Nuxt Showcase：`frontend/nuxt-showcase/`。
 
 ## 長期規劃
 

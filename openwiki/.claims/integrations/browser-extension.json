@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:16ec11524d83d8ecbe2b15c47a1645e60e037b771526edfbc3bcb78412353354",
+  "pageVersion": "sha256:3e86fe51c39ce08b048b4994a577a2519c523151b523980aae1722dc105bfbff",
   "claims": [
     {
       "id": "claim_a80857af49314adf98410dc2de2d7431",
       "statement": "Browser Extension是Manifest V3 FastAPI client，由service worker、YouTube content script與options page組成，不執行processing pipeline。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/content_script.js#L1-L82",
+          "resource": "repo://apps/browser-extension/content_script.js#L1-L82",
           "version": "repo-lines-v1:sha256:2c2afd46f6b69316cbb6ea63dd5d1553c38fb116193f9a35e097781a2d34570d:eyJzZWxlY3RlZExpbmVDb3VudCI6ODIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiYzcxODgyZDA4OWQwOTIwNTJiN2Y4ZTQwMmVmMjJhY2EwODcyMGEwYTRjYTcwNWRlMTA3YzgxOGRmMWJhODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://src/apps/extension/manifest.json",
+          "resource": "repo://apps/browser-extension/manifest.json",
           "version": "repo-file-v1:sha256:6493e32b17ff6717c07c280a59caa821ef536afffd85ae803d01489d07ae3560"
         },
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L178-L282",
+          "resource": "repo://apps/browser-extension/service_worker.js#L178-L282",
           "version": "repo-lines-v1:sha256:935cb2a055542e716cd89e1922b06dbc5fbb361ca3e6006ee412fdb08190c16d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiYTI4OTFiNGNhODdlMmVkNGI4OTI3NGU3NWNhNDcxODU5MmI4ODRhMTllNjkxNzBhMGMzOTdmOGVkMjYwZGZkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiOGI0YmVkYTYwY2FiYTU5NjY4YTVmNGM0NjQ3MGZlNGFiZjkyMGRmZGZmNGI5MTExYTY1Yjk2YjRhMDFiYWFiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4ZTJmM2Q0NWY1YjBiZjk2MGMxZDVhYjZjY2Q5MWQ4NWYxYzM0YTM2ZDUxZGRkZWY3OTA5YjJjMzkzNGMwZWU3In0"
         }
       ]
@@ -25,7 +25,7 @@
       "statement": "Extension manifest要求storage、contextMenus、activeTab、tabs與notifications權限，並宣告所有HTTP/HTTPS hosts的host permission。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/manifest.json#L24-L39",
+          "resource": "repo://apps/browser-extension/manifest.json#L24-L39",
           "version": "repo-lines-v1:sha256:1e3b7f7b94d6e1c792044737cb15f4ae4fb028c74681608fcfce32ba96e457ad:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2NGQ4YzA3MzQyOTg5MzEwMTU3NmQ4OGQ5OTEyN2U4OWQ2ODkxZDNiMTdlODlkZjAyZWM5YWU3MDcwNWQ4YmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYxODE2ZDg3ZDhlNjU0NzdmMTk2NjRjZDcwMzY1MjI2MTJhMTdkNTBlMWM1YTlmM2UxOWU0ZTRlZTgzZjJjOTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc2MTMxOTliMmY3Zjg5MTc4MzgxODQ5MjE1NmIzNWYxNGU4ZTg2NjY5YzlmYzMxNDA4YWQxZTlmZjQyMTZiNGYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRmNzM5YTA2YzFjYmIxMjQ0ZTMzNjNkMzhiY2Y5ZmE1MGNlODRmZWQzOTljMjE5M2EzYzdmMDhkNTk5MThiMmEifQ"
         }
       ]
@@ -35,11 +35,11 @@
       "statement": "影片任務只接受YouTube watch、shorts、live或youtu.be URL，向POST /tasks傳送SQLite task，並以10秒AbortController timeout限制request。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L178-L218",
+          "resource": "repo://apps/browser-extension/service_worker.js#L178-L218",
           "version": "repo-lines-v1:sha256:433f68dd64b1f8464dd6bc6c25fa52d3617ac85dd2fa1b42c613277c6b3f898c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMjg5MWI0Y2E4N2UyZWQ0Yjg5Mjc0ZTc1Y2E0NzE4NTkyYjg4NGExOWU2OTE3MGEwYzM5N2Y4ZWQyNjBkZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4YjRiZWRhNjBjYWJhNTk2NjhhNWY0YzQ2NDcwZmU0YWJmOTIwZGZkZmY0YjkxMTFhNjViOTZiNGEwMWJhYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlMjIyOWIzOGYxNjM0OWRhNTliN2VjMDZjMzg3NzcyYzUwMDFjMzFkYTRhNmI4Mjk0Y2ZiYTUxNjMwM2YzNTAifQ"
         },
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L67-L100",
+          "resource": "repo://apps/browser-extension/service_worker.js#L67-L100",
           "version": "repo-lines-v1:sha256:1e61eee3e6e28582fc209637c05279daa41affca7485d170a9746ee64b74e5cc:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI2OTAzY2U4MmJjYzAwNzU2ODdhNWI3Njg3NTQ1MmZjMjEzOWQ2NTgyYmM3MzlhZmIwYWM4MzRkYTYyNzQ5ZmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI2YmQ5ZTIzOTIyYWQ3MDA0OTE0N2Y4YmFiZWRlMGQyN2Q2OGVhNWE2Y2FlMDE5ZjFhNTBhYmE4NWRhYjEyYzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM4NjM1YzQzNGQ3NzUwNGZiNDZhNjFmMmFkYzllMTM5ZDkxODdjNjc4YTZmYWU4NzY4ZTg2MTA4MjIwNmRjN2IifQ"
         }
       ]
@@ -49,7 +49,7 @@
       "statement": "Toolbar action在channel context建立RSS訂閱，其他context建立影片task；右鍵選單另提供page、link與channel三種明確動作。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L284-L338",
+          "resource": "repo://apps/browser-extension/service_worker.js#L284-L338",
           "version": "repo-lines-v1:sha256:e9b802cdf0fe0369b0410ea2605b16573dec4852ffd9aa37c0a5a7219ef68882:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMWRhMmY5MDU2MjE0MTg3ODRhNTQ5OGUzNzZmZGI5NDk3M2RlMmQ2MzI5NWIxMjM5ZTY5YjYyYTYwNmZmMGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
         }
       ]
@@ -59,7 +59,7 @@
       "statement": "Content script依序從channelId meta或Atom alternate link解析channel id，並從Open Graph、title meta或頁首解析title。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/content_script.js#L1-L53",
+          "resource": "repo://apps/browser-extension/content_script.js#L1-L53",
           "version": "repo-lines-v1:sha256:ef61c82eaa2605b2538f44d0a16a040d3c744a23a275121b0d56873844eca121:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiYzcxODgyZDA4OWQwOTIwNTJiN2Y4ZTQwMmVmMjJhY2EwODcyMGEwYTRjYTcwNWRlMTA3YzgxOGRmMWJhODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjYzM4NWI2NGZiMmFlN2QxNThhMDc2M2E4NTQ4ZWU0Nzk2NDUwNWE3OWY5ZDY2ZWNhMzdlNjAyNDYwODY5YjEifQ"
         }
       ]
@@ -69,11 +69,11 @@
       "statement": "Content script不可用時service worker可從/channel URL fallback channel id，但/@handle只能作為title，無channel id時拒絕建立RSS訂閱。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L102-L169",
+          "resource": "repo://apps/browser-extension/service_worker.js#L102-L169",
           "version": "repo-lines-v1:sha256:618c0157c09a0950370e59a12e20cb3c78dc3f528478cd261fe35886a1910ad0:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyOWU3MTBlMWUzZmU5ZjgxMmY0Njc3OWQxYzJmYTMwZmIyMmQwZWI0ZDg2OWJhZjRmOWNlOTM4ZjY2N2NkYzUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI2MmM0ZmZlZGM1NzYzNTZmYzllZGE5N2E2NTY3MzU1YTFiOTZkNzQ3NTk0MTEyMWM0ZTcxMDY5ODYyZDQ4NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg0N2E3MzgxMjBjNzcyNDEzZTQxOTg0YmMwODg2NTUzZGU3YjFiZWIyMzY2NjAxODgxZjhmNzNhNjU2YjcwYjkifQ"
         },
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L221-L229",
+          "resource": "repo://apps/browser-extension/service_worker.js#L221-L229",
           "version": "repo-lines-v1:sha256:49d31d8861d49a1698708c3eba641aff086ded5dc9495f379603e7178927ae46:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODhjOGFlYmE1MWUwOWVkMDk3N2JkNzhiMmI0YmFkMTg1MTlmOTFjZjBhNjNjM2U3N2Y2ZTdmYzQwZDBhYzRhZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjdlNTc4OGQ1ZDlkNzNkMjRhODFkYmMwYTVhNzRiZmE4MmM5YzNiM2FmOTllNTJhZjc5NmU5MGI0NjhhOGEzZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmI1ODBlOTY0ZjgzYTQ3M2Y0M2Q0NDM4NDYyOTQ5ZDY4YjU2MDBmZGE3ODdmMTYzNzQ1ZDAwZGU4OWNiZjM2YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOWFhMGVlNTU3Yjk5ZDU2MmNkN2VhMmI1OTlmN2JlY2MwN2UyYTk2ZWMxMTc1OGEwMzhmYmY3YmQ2MDVjYzM3MCJ9"
         }
       ]
@@ -83,7 +83,7 @@
       "statement": "Options page只接受HTTP/HTTPS API base URL並保存在chrome.storage.sync，預設值是http://localhost:8080。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/options.js#L1-L48",
+          "resource": "repo://apps/browser-extension/options.js#L1-L48",
           "version": "repo-lines-v1:sha256:6947be67ceab6d8d96ca44493131cf538b06938943f54bacc377f2d85a5a760b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyM2NmMzFiMjgzNGUwNDMyYWRiOWE5ZTY5Njg4Y2VhYjE0M2MwYWFiZjgzNWYzZTZiYTJjMGRiNjVlZWMwZDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
@@ -93,11 +93,11 @@
       "statement": "Extension對成功或失敗使用browser notification與暫時OK/ERR badge回饋，但不輪詢task後續processing狀態。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L203-L218",
+          "resource": "repo://apps/browser-extension/service_worker.js#L203-L218",
           "version": "repo-lines-v1:sha256:1f3cd10c08b7b9d76424d7b2576f80eaf43191c59eb8c5b2e83e720b313e3f51:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA3OTg0ZTNmNWM4N2NmM2Q4NjQ0ZGQ2YzhiZjdjMDVkNzA2NjJjNjE3ZjMwNWRiMWNlNjUxMmI2NDg5ZWMwMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjM2IzMzNlMmViYTdmMzAwZTk3ZWE4ZmJkZDg2YzBmNmI5ZTNiMWFlYWI3Y2RmNDRhNzdjZDY2NWVkNjEzZTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlMjIyOWIzOGYxNjM0OWRhNTliN2VjMDZjMzg3NzcyYzUwMDFjMzFkYTRhNmI4Mjk0Y2ZiYTUxNjMwM2YzNTAifQ"
         },
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L25-L58",
+          "resource": "repo://apps/browser-extension/service_worker.js#L25-L58",
           "version": "repo-lines-v1:sha256:fafeab8806fa404f70bef73f5ae20c5048e0c30ece006bb72e9e30f040dd83fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyZjk1YTVhYzBiZTc2YmNmNWVjNmU3YWMwOTA2YzNjNWI1OTBiZWVhOWIwMzU5MzM1NmFmYTcyZWFiOTg4ZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJiZGJlZTBlNjk0MjE5ZDlmZGY1ZTI1MDdlNmM1NmU4ZGJjZTMxMGJmMmMyYmM4YmY3YjIyNDJjNzVlZWViY2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdmNzVlZjJiNzcxMzZmM2ZkZmFiODFkYzkyNGMyNGE2YmVhMjU3YjJiYTExZTk4YzAyYTgyZTMzMDc3NGI3ZTkifQ"
         }
       ]
@@ -105,6 +105,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:09:43.292Z"
+    "at": "2026-09-07T16:12:01.072Z"
   }
 }

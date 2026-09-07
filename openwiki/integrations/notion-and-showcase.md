@@ -3,17 +3,17 @@ type: integration
 title: Notion 資料整合與 Showcase 邊界
 description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀查詢、schema 映射及可見性邊界。
 tags: [notion, integration, persistence, showcase]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
 sources:
-  - id: openwiki-source-59891cd71dd0c8a50b5690a9
-    resource: repo://frontend/nuxt-showcase/server/utils/notion.ts
+  - id: openwiki-source-7c8ae95541eb7e7de0873e3d
+    resource: repo://apps/showcase/server/utils/notion.ts
   - id: openwiki-source-71c6fb5bae534b32dd19c0ab
     resource: repo://src/infrastructure/persistence/notion/client.py
   - id: openwiki-source-5858a6e533d57781fe90f469
     resource: repo://src/infrastructure/storage/summary_storage.py
 generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # Notion 資料整合與 Showcase 邊界

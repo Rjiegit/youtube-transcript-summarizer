@@ -240,11 +240,11 @@ modules.xml
 .LSOverride
 
 # Node / Nuxt
-frontend/nuxt-showcase/node_modules/
-frontend/nuxt-showcase/.nuxt/
-frontend/nuxt-showcase/.output/
-frontend/nuxt-showcase/.vercel/
-frontend/nuxt-showcase/coverage/
+apps/showcase/node_modules/
+apps/showcase/.nuxt/
+apps/showcase/.output/
+apps/showcase/.vercel/
+apps/showcase/coverage/
 
 # Icon must end with two \r
 Icon

@@ -3,16 +3,13 @@ type: integration
 title: HTTP API 與 Client 契約
 description: 集中說明 Task API、RSS、worker scheduling 與 processing lock endpoints，以及 Streamlit、Extension、RSS monitor 的呼叫語意。
 tags: [api, fastapi, contracts, clients, integrations]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
 sources:
-  - id: openwiki-source-0030f56752f8cbf5e90a9d68
-    resource: repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-3f302af29bc8e91334af86aa
+    resource: repo://apps/browser-extension/service_worker.js
+  - id: openwiki-source-f987324e0612a557c62a85fb
+    resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-822793b105256e659707b60b
     resource: repo://src/apps/api/main.py
-  - id: openwiki-source-0520e948964d45782d02b5a3
-    resource: repo://src/apps/extension/service_worker.js
   - id: openwiki-source-5fa5731f7c4a5357f216d501
     resource: repo://src/apps/ui/ui_api.py
   - id: openwiki-source-0b294e3f86f4bc3838cb6ca2
@@ -22,6 +19,9 @@ sources:
   - id: openwiki-source-d95510dd9df5633e605ade1a
     resource: repo://src/services/tasks/processing_scheduler.py
 generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # HTTP API 與 Client 契約

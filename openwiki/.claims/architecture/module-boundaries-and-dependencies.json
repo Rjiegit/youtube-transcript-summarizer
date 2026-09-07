@@ -1,14 +1,18 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:a9133b9c1a425676fa8c692ecd95485f2fe4ed64411f2eefb60f0ebbbda5a83b",
+  "pageVersion": "sha256:908267349ae58a312bc86b83e6de0cb13c233051596664dd86402cd49a433bf9",
   "claims": [
     {
       "id": "claim_8ce30e71df304864940a28036789b29e",
-      "statement": "Python 主系統以 apps 作為執行入口、services 組合 use cases、domain 定義 models/interfaces，infrastructure 提供 SQLite、Notion、media、LLM、storage 與 notification adapters。",
+      "statement": "Python 主系統以 src/apps 作為執行入口、services 組合 use cases、domain 定義 models/interfaces，infrastructure 提供 SQLite、Notion、media、LLM、storage 與 notification adapters；top-level apps 目前放置獨立的 Browser Extension 與 Nuxt Showcase。",
       "evidence": [
         {
-          "resource": "repo://CONTRIBUTING.md#L28-L36",
-          "version": "repo-lines-v1:sha256:93b218085d96f8d86fe5e570fee3dcbfbc73375673ced3e72d4a1308d497a832:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDgzYmFkOTEwODFlYmExNWM4NGRjNmY0Y2M4NjNhMTNhOGI2ZWM0MTc1NTU4MjJiNDc1Mjk1MGNhMzgwNjZiOSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMjQ1ZjRlZjE3ZGJjNDE5NTFmNTRkZWNkMWJhMzk3NjdlN2YzNTQ1YjI5ZWQxZTFmMTFiZDhiOTFjZGVmMjU5MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzY5N2U0NmNiNDFkOWI1OTlkODYzMGNkNjRkNzQxOGYyOGFjNmE3MzIwNTVkOWQ5NTdkYTY4MjExZjY0ZTJjNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDdkNDQwYTQ0ZjIzZDY3YWI5MjA3ZDBiMmQ1MTZlZTJiMmUwNWI0OWY2ZDU4Nzk5YTU1NzM1Njc3OTcwYWRkNCJ9"
+          "resource": "repo://CONTRIBUTING.md#L28-L49",
+          "version": "repo-lines-v1:sha256:204aa5baacdcece841ccffa86f52b6779f0cfd122433c6ee299be3f1fa8efeed:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4M2JhZDkxMDgxZWJhMTVjODRkYzZmNGNjODYzYTEzYThiNmVjNDE3NTU1ODIyYjQ3NTI5NTBjYTM4MDY2YjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5NWNjYjJkMTk2ODM0YmM5ZDZhMDJhYzU2ZTljOWFkMzE5YmFjNjc1NjIwMWYyZTM0YTBhMGM4MDQwZDZhNzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2OTdlNDZjYjQxZDliNTk5ZDg2MzBjZDY0ZDc0MThmMjhhYzZhNzMyMDU1ZDlkOTU3ZGE2ODIxMWY2NGUyYzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlZDViNmM5ZWIyOTg1OTNiNGZjM2ZlOGViZDNjODdmNGI0ZDM2MzlmYTE4ZDFlMjljZmI4OWQyMmUwYTdiN2YifQ"
+        },
+        {
+          "resource": "repo://apps/README.md#L1-L34",
+          "version": "repo-lines-v1:sha256:c753a43dfb6ba5a5b6a8efa58482d91c5c718dcba9c6b55fb6c62809ce497ea1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2Y2MzNGI0ZjYyM2MwY2I4NWFhMzZiZjdhNmE1ZDhiYTlmY2UzZTUyMWZjNjQwYWFlZTNhYmM1OTNiODMxMDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzYjE3ZjU1NDAwZmM1Y2RiMzA5MTczM2UxNTVhZDhiN2I4NTg3YzVhNDIwMjQyNmIwMTNjZDhjNDg4MjQ2ZDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -24,19 +28,19 @@
     },
     {
       "id": "claim_4e81cb3590d54341ae64e360314dfbe5",
-      "statement": "Nuxt Showcase 是獨立 npm application並由 server route直接讀取 Notion；Browser Extension 則透過 HTTP呼叫 FastAPI，兩者都不在 Python package import graph內。",
+      "statement": "Nuxt Showcase 是位於 apps/showcase 的獨立 npm application並由 server route直接讀取 Notion；Browser Extension 位於 apps/browser-extension 並透過 HTTP呼叫 FastAPI，兩者都不在 Python package import graph內。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/package.json#L1-L25",
+          "resource": "repo://apps/browser-extension/service_worker.js#L178-L218",
+          "version": "repo-lines-v1:sha256:433f68dd64b1f8464dd6bc6c25fa52d3617ac85dd2fa1b42c613277c6b3f898c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMjg5MWI0Y2E4N2UyZWQ0Yjg5Mjc0ZTc1Y2E0NzE4NTkyYjg4NGExOWU2OTE3MGEwYzM5N2Y4ZWQyNjBkZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4YjRiZWRhNjBjYWJhNTk2NjhhNWY0YzQ2NDcwZmU0YWJmOTIwZGZkZmY0YjkxMTFhNjViOTZiNGEwMWJhYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlMjIyOWIzOGYxNjM0OWRhNTliN2VjMDZjMzg3NzcyYzUwMDFjMzFkYTRhNmI4Mjk0Y2ZiYTUxNjMwM2YzNTAifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/package.json#L1-L25",
           "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L1-L89",
+          "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L1-L89",
           "version": "repo-lines-v1:sha256:dd99ab2c234b3a14eb6b1e9100c7c96e95971c27b583db53dd24d236f9ea121a:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2MTljNjZhMTI5ZjM2ZmM1MTFkOGY0YjVhNGE2ODQyZDIzZWVkOGNlYzQ2MzVkYWUyYTEwZTcxNjBjMWY4MDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
-        },
-        {
-          "resource": "repo://src/apps/extension/service_worker.js#L178-L218",
-          "version": "repo-lines-v1:sha256:433f68dd64b1f8464dd6bc6c25fa52d3617ac85dd2fa1b42c613277c6b3f898c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhMjg5MWI0Y2E4N2UyZWQ0Yjg5Mjc0ZTc1Y2E0NzE4NTkyYjg4NGExOWU2OTE3MGEwYzM5N2Y4ZWQyNjBkZmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4YjRiZWRhNjBjYWJhNTk2NjhhNWY0YzQ2NDcwZmU0YWJmOTIwZGZkZmY0YjkxMTFhNjViOTZiNGEwMWJhYWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlMjIyOWIzOGYxNjM0OWRhNTliN2VjMDZjMzg3NzcyYzUwMDFjMzFkYTRhNmI4Mjk0Y2ZiYTUxNjMwM2YzNTAifQ"
         }
       ]
     },
@@ -96,19 +100,19 @@
     },
     {
       "id": "claim_3f73ab64a72a472dbb7d06b07ea1dfcb",
-      "statement": "Python dependency由 pyproject.toml與uv.lock管理，Nuxt dependency由package.json與package-lock.json管理，而yt-dlp由Make/Docker安裝流程管理。",
+      "statement": "Python dependency由 pyproject.toml與uv.lock管理，Nuxt dependency由apps/showcase/package.json與package-lock.json管理，而yt-dlp由Make/Docker安裝流程管理。",
       "evidence": [
         {
           "resource": "repo://Makefile#L10-L13",
-          "version": "repo-lines-v1:sha256:bfa9781c49ed30cabbe86cac15b429540a70063c9ca1a1f5a43671e4397a1bc4:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWEyMTM5Y2M3MDIyMDc2Zjc3NmFhM2VlZjgyYjE4MGZhNDJlOTcyOGExOTU0YzRmMTc0ZmEwNTU5Mjk0OGE4NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjNlMjE2NTBkNTI0YTliNzM3MzhlYjE3NGZhMzA4YmE3ZTUzYjhiOTk5NTFkNzQxZjkzYjNhOTgxOTI0YWZlOCJ9"
+          "version": "repo-lines-v1:sha256:557822cbcbbaacbb33ddc39f4dc70616879ce63ab8896020411c8baf9c4bb8e9:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjg4MTM0YjM4ODc1YzllNjBlZGYyMjNkOWI5MjA0OGM0ZjA2ZDVmMGJjOGY1MjU1ZDg5YmU2MDUyYjVjMGM1MyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWZiZGU0ZmVlMjY3NGIxNjVmZjI0MzZiMWE1ZjcxMWQ1ODlmMDVjYWZkMjE1MmJjYjczYmY0NDBjNmY1YzQ5ZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMDA1NzFjMTg4MmY3ZjBmMzk1OTUxZTUyM2Y0MTJjYWI0ZjRkY2U3YzQ4NzdlMWUzMWRmZmI1OTBhMTQxNzhjZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMTA2ZTBkM2FkZGFjOTMxZTgzZTQxNTEzZGQ0YzEwMTRkZTg5NTM5ZTkwNDFiZjYyNWY3MzJkOTMzOGRjMzIyNSJ9"
+        },
+        {
+          "resource": "repo://apps/showcase/package.json#L1-L25",
+          "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
         },
         {
           "resource": "repo://compose.yaml#L15-L21",
           "version": "repo-lines-v1:sha256:c24fb4b13cee0f15b702241b170e9223a68681f92a811b985167fc5dffd9d89b:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmE3M2ZjY2RjOTllYTgzNTk2N2M3ZGVlN2VmYmVkMWYzY2E4NzI2MGQ5MjkzMTg1MGZkZDY2ZGE4Y2IxMmYxZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmE4MTFjMWJjZWQwYmVjZTU4MmQ1MWMxYzU5MzlhZTA3OTcxZTM3ZjA4ZjdhMmE2NjBkZGIyNjM5N2YwNmY0NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzE2NTViY2E0Mzc1MGM3NzYzMTE5M2RmODY2YWM5MWQ3MTEyNmI0NjExMGQzYzIzM2I3M2Q5ODRhZDYxZTVmZSJ9"
-        },
-        {
-          "resource": "repo://frontend/nuxt-showcase/package.json#L1-L25",
-          "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
         },
         {
           "resource": "repo://pyproject.toml#L1-L25",
@@ -121,7 +125,7 @@
       "statement": "Nuxt production dependencies是Nuxt與markdown-it，TypeScript、Vitest、jsdom、Vue Test Utils與Vite Vue plugin列為development dependencies；Python dev group則包含flake8與httpx。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/package.json#L14-L25",
+          "resource": "repo://apps/showcase/package.json#L14-L25",
           "version": "repo-lines-v1:sha256:aee2b5a340eb509b5e9c6412d3698c6e7501b9652fe978f11b0ce1e820487e42:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRkNWNkMmZiNGYzZGY4ODQ1MTUyNTViMzk1MjNmMmY4YjU0NzJiZWVhOWY1NjZmZmNhMjA0ZGI4MDI1NjEwNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjlmNDcxMDYxYTZhYjJkNjU5N2NmNzFmZmM0ZDZhMjFiNDExNjM4NDhmM2EyYWFjNWM4Y2MyMmRmYTVmNzM1NzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
         },
         {
@@ -155,6 +159,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:09:43.292Z"
+    "at": "2026-09-07T16:12:01.072Z"
   }
 }

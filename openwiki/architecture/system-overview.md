@@ -3,16 +3,13 @@ type: architecture
 title: 系統架構與端到端資料流
 description: 說明任務輸入、API、背景 worker、持久層、外部整合與成果展示之間的責任邊界及完整資料流。
 tags: [architecture, pipeline, api, streamlit, extension, nuxt]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
 sources:
+  - id: openwiki-source-f987324e0612a557c62a85fb
+    resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-7c8ae95541eb7e7de0873e3d
+    resource: repo://apps/showcase/server/utils/notion.ts
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-  - id: openwiki-source-0030f56752f8cbf5e90a9d68
-    resource: repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts
-  - id: openwiki-source-59891cd71dd0c8a50b5690a9
-    resource: repo://frontend/nuxt-showcase/server/utils/notion.ts
   - id: openwiki-source-822793b105256e659707b60b
     resource: repo://src/apps/api/main.py
   - id: openwiki-source-a7e947ed28796c0a02e849d0
@@ -23,7 +20,10 @@ sources:
     resource: repo://src/services/pipeline/processing_runner.py
   - id: openwiki-source-0b294e3f86f4bc3838cb6ca2
     resource: repo://src/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # 系統架構與端到端資料流
@@ -38,7 +38,7 @@ generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 | Streamlit `src/apps/ui/streamlit_app.py` | 互動式建立、瀏覽與操作任務；把畫面和 session state 分派給 `ui_*` 模組 | `make streamlit`，預設 port 8501 |
 | CLI `src.apps.workers.cli` | 選擇 SQLite 或 Notion backend，同步執行一次 queue drain，輸出處理統計 | `make run` 或 module invocation |
 | RSS monitor `src.apps.workers.rss_monitor` | 輪詢已啟用的 YouTube channel feed，透過 API 建立新任務 | `make rss-monitor` |
-| Browser Extension | 從 YouTube 影片、連結或 channel context 呼叫 task/RSS API；在瀏覽器顯示 badge 與通知 | 載入 `src/apps/extension` 的 unpacked Manifest V3 extension |
+| Browser Extension | 從 YouTube 影片、連結或 channel context 呼叫 task/RSS API；在瀏覽器顯示 badge 與通知 | 載入 `apps/browser-extension` 的 unpacked Manifest V3 extension |
 | Nuxt Showcase | 以 server routes 查詢 Notion，提供成果列表與詳細頁 | `npm run dev`，預設 port 3000 |
 
 Docker Compose 只編排 Python 側的 `api`、`streamlit` 與 `rss-monitor`。三者共用 repository volume 與 `.env`；Streamlit 和 RSS monitor 以 `http://api:8080` 連向 API。Nuxt showcase 不在此 Compose topology 中，通常獨立開發或部署。

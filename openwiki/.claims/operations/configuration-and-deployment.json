@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:011bdedd47f166e9efb09cfbd7bf64a5885b7c02270232eaac1a181ca9ed21b3",
+  "pageVersion": "sha256:7a9343298664b24d650a6383fcec58edb56beeb8ef49f655aadb8a60b10178b9",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -41,11 +41,11 @@
       "statement": "Showcase 設定優先使用 runtime config，再依序使用標準環境變數與 NUXT fallback；無效 cache TTL 回退 3600 秒。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/config.ts#L29-L70",
+          "resource": "repo://apps/showcase/server/utils/config.ts#L29-L70",
           "version": "repo-lines-v1:sha256:affb5f0b34c9a4ea819bc481955468e308bb3c60d22d379b8fe60cc0c39033d5:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1NjQ3MGRmZmJlNzFiNGY0MzA3ZjAxZjkzOTdjM2UyMzAxZDhkZWY4MmQxZDI4NzE4ZTE1N2Y5YjU5ZjVhNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRmZTAxOTUyNmVlMDZiODNiZjk4NjhmNDdjODMzNDk3ZTE2MzQzNjY4MDAwMjA4ODg5NTIxNDI1MDcwNGNlMjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNlNmIzOGYzNDBjNjE2ODFmYzdlYWFmODViZjRlMDcyNzA0YWVhODhkNGY0NjNmZGEyYzJkOTFlZmEyOTAwYTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMwYjc0NTE2MjkzYmVmZGU2YjFlNDI5Y2MwNTg0Y2U4MjM1MWIzMjFmNTAzYjRlZDRkZGQ3M2EyMDZlZTcxMjYifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/config.ts#L93-L110",
+          "resource": "repo://apps/showcase/server/utils/config.ts#L93-L110",
           "version": "repo-lines-v1:sha256:bdf1f6a2d60f4a40e58f86ade167b56b7e01300cbb55a539422a7dd202fc66cc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkZDA2MzgwZDAwMmNmMzIxZjRkOTMyNWU1OTY1NTFjN2U0MmUzMjlmNTZkODIxNjUxODAxNDMzNTU4OGRkMzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1MzM2NzA5ODc5Y2E5YTY5NWQ4YjAzNTA4ZmUwMWM3NzA0ZjFhY2E3ODU3Y2I2YTJiNGI3MjQ2YTFhMjE3MmUifQ"
         }
       ]
@@ -55,7 +55,7 @@
       "statement": "Production Showcase list route 使用同一 TTL 設定 Nitro SWR 與 public s-maxage/stale-while-revalidate cache header。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/config.ts#L113-L134",
+          "resource": "repo://apps/showcase/server/utils/config.ts#L113-L134",
           "version": "repo-lines-v1:sha256:e8f7667e3c2406bfede1fac0bb1073b7ef7b3c9fe7f753390102c0d01b3b5d99:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5ZTRkODJiOTE0ZDkxNTQwMzhmMjhhMjM3ODQ0MjNmNTAyODIwNDM1OTMzZjRmMjc3OGNjNTZkMjkzMDcwNzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
@@ -65,7 +65,7 @@
       "statement": "Nuxt private runtime config 保存 Notion 設定，public runtime config 只包含 build date 與 commit SHA。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/nuxt.config.ts#L38-L52",
+          "resource": "repo://apps/showcase/nuxt.config.ts#L38-L52",
           "version": "repo-lines-v1:sha256:98e92a1830c3e6655d7b3fda6fdc7fd6df79517ea55682ad7383fa317e8cf8fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNjU3MTI1NDdhNGU1NmFmZmVmOTE0MDUxYjRhNzg3NjkyMGRiNjQ4N2I1OWE1YWQ2ZTg4MjRhY2ViOTRmYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlMzYyNWM1NDczZmMyZWVjZWQwNDYxODNiOTUxY2JmMzI1ZGU0NDRjYTY5NTEyNmJkOWJiYzc3OWE3ODZlNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwOWU2ZjJiNjg0YzI2YTViYjMyMGNkOWQ4YjI5NDEzZTIyZWJiOTMwOWI3MTZiNTZjZjkwYjMzMjhmNDA0NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
         }
       ]
@@ -75,7 +75,7 @@
       "statement": "Showcase check-env 只輸出設定來源、解析值與 key 是否存在，不輸出 Notion secret 的實際內容。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/scripts/check-env.mjs#L28-L65",
+          "resource": "repo://apps/showcase/scripts/check-env.mjs#L28-L65",
           "version": "repo-lines-v1:sha256:f97faa2ff14013abf7e719f052c7f892579af7d4fddea0581130ade4c4f55d72:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyNThkMjJlNWJmODlmYzM0MTUzMDhjNzE0YTI5YjBiOGVhNzUzZWM1MzlmZDEwNmIxNDY1ZDZiODEzNTllYWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5YjliNDllY2UwMzc5ZTRiZWE1MjY2ZjFmNzBlZjVmMWUyZGU1NGE5YjA0MDc4NTY3MmQ0ZDA3MWIzOTYwN2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4ZTdhN2IxNDRhYjc1MDVlYmQzNTQ2MTNhMzg0YTljNDQ0Yjk4MzFmZWZjOTA5MjZiMWRhYzAwZmI3NTQxZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
@@ -110,7 +110,7 @@
       "evidence": [
         {
           "resource": "repo://.betterleaks.toml#L1-L14",
-          "version": "repo-lines-v1:sha256:23430dd42d4e1a7ee29640676fbda4a7fb2b953b2b4ba9f0d86142ea9792d26e:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZGMzNTQxZjhmODc2YzA4MjA4OWIyYmQyYTc0ZjM0ZTYyYzNiZTg4MGZjZWNjNGNmZmIyMTNmYWYxYTRhNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2M2FhZTM5YWQ1OWZhZjMyZDNhMDQ1OGI4OTM0NmU4ZTg4ZTkxZmRkNDA0NTQwM2E4OGEwNjdlYjU2Mjk5NjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNDJhZGZmNjBhNThmYjI3YjczYjUzNWZjNjBlZWJkZmEzMTljMzQ0ZThkZGVkNGMyNWNjM2YxZjEyNmYxZmUifQ"
+          "version": "repo-lines-v1:sha256:7554a65946784542ed5655e7e416ab5b7ea0a9a76bb5b76526e240d87979190c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZGMzNTQxZjhmODc2YzA4MjA4OWIyYmQyYTc0ZjM0ZTYyYzNiZTg4MGZjZWNjNGNmZmIyMTNmYWYxYTRhNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2M2FhZTM5YWQ1OWZhZjMyZDNhMDQ1OGI4OTM0NmU4ZTg4ZTkxZmRkNDA0NTQwM2E4OGEwNjdlYjU2Mjk5NjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjNDJhZGZmNjBhNThmYjI3YjczYjUzNWZjNjBlZWJkZmEzMTljMzQ0ZThkZGVkNGMyNWNjM2YxZjEyNmYxZmUifQ"
         },
         {
           "resource": "repo://.betterleaks.toml#L47-L48",
@@ -124,7 +124,7 @@
       "evidence": [
         {
           "resource": "repo://.betterleaks.toml#L17-L44",
-          "version": "repo-lines-v1:sha256:d03c3cda21222cfd6a90cb8f643de63e16d1bd9d5154f4c77c4ef56ade049ca1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiZTk0MmJlNWYxNjQ4M2QxMWYwYTA0NWRiNTdlN2IzNzUzNjRkNmI4MDdjMDIzOWUyNGJmNGE2NzMwMjhhZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmJhMDUyN2MzOTUzYzRiNmUwZTViNTczOWJhODM2MTJmODA1M2JjZGM5NDY2NzMwMTkzY2QxZDU5MGI0MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMTVjMjJlNWIwNmEzNjRkODE2NDEwZTU4MTk4MDFkN2JkODIyZmJjZTcxYTQxM2JjNjc3ZDVhZGJkMjExNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkYTE4YWJkOGRkYjgxZjE0MGJhMTI5NGFhMTY5MWQ0NGUwOGMzMGVhZTRmODYzZDIwZWE1Y2M2YmMxZjhjMDAifQ"
+          "version": "repo-lines-v1:sha256:555f42214cabda669294997481ac84af34171c32778402d51561952da9fb193b:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiZTk0MmJlNWYxNjQ4M2QxMWYwYTA0NWRiNTdlN2IzNzUzNjRkNmI4MDdjMDIzOWUyNGJmNGE2NzMwMjhhZTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmJhMDUyN2MzOTUzYzRiNmUwZTViNTczOWJhODM2MTJmODA1M2JjZGM5NDY2NzMwMTkzY2QxZDU5MGI0MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjMTVjMjJlNWIwNmEzNjRkODE2NDEwZTU4MTk4MDFkN2JkODIyZmJjZTcxYTQxM2JjNjc3ZDVhZGJkMjExNDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVkYTE4YWJkOGRkYjgxZjE0MGJhMTI5NGFhMTY5MWQ0NGUwOGMzMGVhZTRmODYzZDIwZWE1Y2M2YmMxZjhjMDAifQ"
         }
       ]
     },
@@ -162,14 +162,14 @@
     },
     {
       "id": "claim_f38b98dd2b484f64a84f63f30f3af50f",
-      "statement": "check-env 在獨立程序中優先讀 frontend .env、再 fallback root .env，保留既有環境值；make showcase 會 export 選定檔案的值再啟動開發站。",
+      "statement": "check-env 在獨立程序中優先讀 apps/showcase .env、再 fallback root .env，保留既有環境值；make showcase 會 export 選定檔案的值再啟動開發站。",
       "evidence": [
         {
           "resource": "repo://Makefile#L45-L58",
-          "version": "repo-lines-v1:sha256:3b8fe1655c4423a1ee11557e0452f401a94e6cbf9b7cd9491c7e49be603d1995:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiZjZjMGJlZjkwY2FjZDdlNDI4MGI1NjZmYjU2ZjM3MmI2ZTY3YWY0YTRhMzEwZmM5NTFhNjQ2MTA5ZDQwMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwMWYzNGViMzkyNDBiMThkMTFhY2UzNzViZDVlYjBiNDE4NTkxNTVkOGMwZTk3YzE5NjM5MjRjOGUyZTE4ZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzMDRkMDkzZjRhNDg4MDg3ZTFmZDc4N2M3NTQ1ZTE5NDdlMTk3ZjUyYWIyZTMxODVhZTU5MDIxZjAwNzhmZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkZjVkYTJmMmU5MDA1NjJiODRkNGRhMmE5MWQ1YzkwYmNmNmJiMjJkMzc2MGZlYTBjZDc3Mjg4ODAwNjdiNGIifQ"
+          "version": "repo-lines-v1:sha256:f039c3803ac80d3301b2046f9d11572a3d9ce28fbd971f9581961eafb04dd53c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1Y2UzODRhN2RhNjFmYjc3YTU5MWUzOTdmZDIyODE3ODg0NmE3NGI3ZTFmODNmNmU0YWY3Mzk2NWI1OGUyNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNmNiYTY2MGFiNzkzNjZlMDQ2N2FkM2UxNGU1Y2Q3ZWY5NGQ2YjIzNDM2YzQ1NmVlNjQzZGQzNzRkNmE4YzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhNGZlZmQ4OGI5NTUxZjQwNmFhNjlhNjY2ZmFlOGJmNDk5MWFjNzQxYTU2ODdjNDBlODhkOWE5MzkyNDZlZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlMzU0MWZkNzUxNTlkODg5M2U3YzdmNDY4OWUxYzIzNjI3YzQxYWZiMTM1NDk4NGU3ZDVlYTc3MmJmMDIzMzUifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/scripts/check-env.mjs#L1-L32",
+          "resource": "repo://apps/showcase/scripts/check-env.mjs#L1-L32",
           "version": "repo-lines-v1:sha256:d9901ef4ff5f47eb929c1560bb0415fa4d1b27ec2e73c1e20788c5fad1c2c1a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmYjQ4NTA3YTRiOWNkNmFlMTBkNGRjZWM1NGJhYjI5NWUyM2UwNWUwOGZmNjk5ZWIxOWNjYWM3NDRkMTBlMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZjhhZmRkMGQwNjExNDc0NjBmOWQ2YzFlZjFkMjM3NDE3ODNhYzI0OGM0NmRjZGQ5YzcxODdjYzQ3Njc5ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjk4YTNkZDA2ZTI2ZjY3ZTIyMGU1YzY3MjA2YzNjOGY4OGM0YmY4MjllMDJmMDhjOGNkMjZmNzNhY2ZlZWMifQ"
         }
       ]
@@ -225,6 +225,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:09:43.292Z"
+    "at": "2026-09-07T16:12:01.072Z"
   }
 }

@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:7d59faf32598b0c4781eb0a258feae2e4404f395153214003d09fe7dd48d9ef5",
+  "pageVersion": "sha256:bbcc22807c34b26b59cc9cd9fa2fedef09083af6ee410ce14ec44afd6c2d962e",
   "claims": [
     {
       "id": "claim_b49be5796ebb45d68855fac7f4755cef",
       "statement": "Showcase 首頁與詳細頁都透過 server-side useFetch 呼叫內部 API；首頁在 client 端去重、搜尋並把未讀結果排在前面。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/index.vue#L17-L67",
+          "resource": "repo://apps/showcase/pages/index.vue#L17-L67",
           "version": "repo-lines-v1:sha256:5795c2534c263775621aef3a3da00d8217f0cb219ae808b19a9e060f18e78194:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1YmQ5YWE2YjY2MTU4NGI0ZWQ4ODExNWM2OTljYWU2MTYyMzY5MzFmMTFhODcyN2VlYWI4ZDQ5ODlhYmRmNjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwOGY4YzNmYThjNGM5NjAxZWQ2YWJkNzJiMjcyYmM5MGI3ODQyM2E3Yzg1NmJkZTcwNTdlNjAyZDNhM2MwYjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2NDZmMTcwN2RkOTczMjhiZGIzYjJkZDlkZWMzMTNhZWJkMTgyODYwMGY5MGVkYzdjNTRiN2M0MWE0YzYwZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4MmI3MGRhMGVhZTkzNWRjNDk1Yzc0NjllOGU4MDk1ZGNiMjc2NjM2YWJjMTMyMmQ3OTdjZTNlOGIyODk2OTIifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/results/%5Bid%5D.vue#L11-L24",
+          "resource": "repo://apps/showcase/pages/results/%5Bid%5D.vue#L11-L24",
           "version": "repo-lines-v1:sha256:e89b55630eac8b9a975dfcac3ee3a80eb8ed7c7d112a2247a69535d732f422a5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1YmQ5YWE2YjY2MTU4NGI0ZWQ4ODExNWM2OTljYWU2MTYyMzY5MzFmMTFhODcyN2VlYWI4ZDQ5ODlhYmRmNjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjYmU2YWM3NzAyNzMxZmRmMzczYTJlNjE1ZGY3Njg4YTdmMmZlZWQ0YzQ5OTQ5MGQ5NTFmNjJhZTJlMmY2YjIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczMTY0OWVlNTc1YTA3ZTUwNDM1YTYwOWNmZGI0NjAxZWNhOWUzMmZmZTNlYjJiZTQyNzk1ZmI5NDdmYTI2NjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlZGI3NGRlZGIzYzQ0NWY5ODkyODA4ZDE1ZDU4MjkyZGQ1ODM5Zjg2NjVlZjU4Y2JlOTA1NTRlYjNhM2UxZjkifQ"
         }
       ]
@@ -21,11 +21,11 @@
       "statement": "已讀狀態在 SSR 安全的 Nuxt state 中管理，browser 可用時同步 localStorage，儲存失敗不影響 session 記憶體狀態，且最多保留 500 筆。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/composables/useReadResults.ts#L3-L93",
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L3-L93",
           "version": "repo-lines-v1:sha256:f641fdb703d7efdbb7c41db2a018e63b990c9c42a8f2d268b0403b0354ac66cf:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlNTRlYTc0NWI0OGE5ZjA2ZDMyMTAyNTMxMzAyMGQzZmZjYWI4YzZhMjRmM2ZkNGI4OTQzMjM5MjI0ODQyMTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYjVhYjVlY2VmMGE0MTVhY2YzYzY3MDRiYWU1YzkyNzJhMzJlMmEwOWNjN2Q1MWZhOTdmMWMwNTgzZWVkZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3ZWM1MWVjNTVmZmMzNzA0YjFiNmRiODEyZjM2MjViYWJjOThiOWY5OTNhMmI0YzVhMWJiZTNkNGY0ZDVlMzcifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/composables/useReadResults.ts#L95-L182",
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L95-L182",
           "version": "repo-lines-v1:sha256:ae49defde736d07f433326078ee480f9b6abca509f0e321a9701fcacb3e1c8c8:eyJzZWxlY3RlZExpbmVDb3VudCI6ODgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNmMwNTI3NTM0YWE2MDIzYmRmZmUzZjc2MDg5MGIzODRlNzE3NWQxZDlhMDQ3OWZkMTg1YmFjOTMxZjU3N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkMGYyZDNhM2FhZGEyNzU4NjQ1NzhkMGE0MzkxNTYzOGQ1NDNmZWNhMmM5NDg1OGRiOTQxMjExZTg2Y2VmMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5NDRjODhmNDg0MmY0YmZhNWZiYWM2MmY0YzFkNzA2ZTMyYThjN2NjODAwMmMxYTgwYTFlMjQ1ZWFmMWYzMmEifQ"
         }
       ]
@@ -35,11 +35,11 @@
       "statement": "首頁在 activation、mount、focus、visibility change、BFCache pageshow 與返回列表 route 時同步已讀狀態，並在資料 stale 時刷新。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/index.vue#L138-L196",
+          "resource": "repo://apps/showcase/pages/index.vue#L138-L196",
           "version": "repo-lines-v1:sha256:4a353b6caa3012bcbacaa8ce2d1291e96114eddf5d846812636a1a1dacdddb2d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlNGQxMzlkNWU3YmNkZDdkMDg4NTBmOGFhODQzMjFiYjA4YTA0M2FhNWM5ZGUzMGUxYWQ4NTFlNjI4YmNhMzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNmNmFkMzMxYTRlZGZjMDdjNmI0MTUxYTcwMmZlMDE2NTA3NDBmZDI5YTYxODEzMGE0NTY4ZjJiNDY3OWViMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY0ZTdhNjZlNTRkNjUwYmQwNzJhOGFkNDk0YjgwNTVlNzIyYmMxMmRhYjJhYzRkMDJiZDE3OTBiYTM4YmU4NDQifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/index.vue#L95-L110",
+          "resource": "repo://apps/showcase/pages/index.vue#L95-L110",
           "version": "repo-lines-v1:sha256:ac3d8ee57edd6b151b0ab796c248c50053fdcca858a2a295dec4a5625a7bcfd4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0YmNiY2ZhMTJiNTU5NzMzNTg3YTNiMmFjZTdmODk1OGY2NDVjZDU4MTJjOWI2ZDYyZTRlNDk5NmE4ZGQ1N2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MjI4YmQ3M2Q1Mjg5NjE3YjE4MDhjNzBiYTIzZmZhYzU4NDkzNDAxMWVjZmRhZGE1ZmU2NWI2MjU5ZDBiNTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0YmMyNGJmNmM3YzgxNjFmOWQ3MjVlMGE4MGM4NDhjOWNiMDczM2JjMTg4NDU3Y2EzZWNlODEzZDFmZDdjYjAifQ"
         }
       ]
@@ -49,7 +49,7 @@
       "statement": "SWR cache 對 fresh snapshot 直接回傳，對 stale snapshot 立即回傳並背景刷新，沒有 snapshot 時等待 fetch；背景刷新失敗時可保留既有 snapshot。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/swr-cache.ts#L19-L78",
+          "resource": "repo://apps/showcase/server/utils/swr-cache.ts#L19-L78",
           "version": "repo-lines-v1:sha256:a02346a0984d22c212518aa5537f13fea3384fd2440a560099a6af3d096412e6:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjZmFlYjIwMWRkZjhkZDE3NWQ0ZDYxYWViZDk5MzE0ZGYzYzc2Njg5M2ZhN2EzNWRmYTVhOGM2YzZlMGU5NGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFkNzkxODQ0MmJlOTZjZmE4MGJkYTIzOWI3OTFmNTFiZTBkZDlhZTQ5N2MwMDNmYjkyYzZiM2Q0MjAzZmVjYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEifQ"
         }
       ]
@@ -59,11 +59,11 @@
       "statement": "Forced refresh 不重用 stale background refresh，且只有最新啟動的 refresh 可以更新 snapshot，避免舊請求覆蓋新資料。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/swr-cache.ts#L19-L52",
+          "resource": "repo://apps/showcase/server/utils/swr-cache.ts#L19-L52",
           "version": "repo-lines-v1:sha256:5e3baeb1805ac3c769bec525e4a2e6aa19d3317add2d451300ceb31fd9297ba4:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhjZmFlYjIwMWRkZjhkZDE3NWQ0ZDYxYWViZDk5MzE0ZGYzYzc2Njg5M2ZhN2EzNWRmYTVhOGM2YzZlMGU5NGUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NTNkOGY0MTcxZmQyZTdhMzVlZGE2MDZhNjNhZDNlNjNhOWM3OTYyOThhMzU0NGUxZGI0MDBjNzVkOTI2N2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFkNzkxODQ0MmJlOTZjZmE4MGJkYTIzOWI3OTFmNTFiZTBkZDlhZTQ5N2MwMDNmYjkyYzZiM2Q0MjAzZmVjYWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVlMTMyNzQ1ZTNlN2IyZGU2NTI1NTM5NTc1Y2NlNDE3ZmQwZjJhNTVkMjRkZDA1ODNlZjczYjE1NDA3ZDAyOTYifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/tests/swr-cache.test.ts#L64-L92",
+          "resource": "repo://apps/showcase/tests/swr-cache.test.ts#L64-L92",
           "version": "repo-lines-v1:sha256:60e664c226b3bce84afed49c16c3fbd36ed6231d70dd5cf94e5aa85373c6d052:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJhZmU4ZDhlMjlmYTNiMmJiODRiMGY0NTRhNjQ1ZTc1NDRlYjlkY2UxMTdjNDc2MWViMWU4ZWIwODhlODg5NjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhM2U0NmY5NDI3NmI2ZjZmNGVkMWYwMmFmNzhiZWY2YTJlZTFjNDM5ZGQ1NTg0Yjk3Mzk0ODMxMzIxNGQyYjciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZmMGM2NDA5OTQ2ZGI4ZGYxYjE0NTRjZWQzNmQ5NTEwMWVhZDA4OGJkNjgzZjYyMTllM2I5NmQwN2YyOWQzM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFjMzMyMGM4NjkwZDg4OWMwYWFmZmJmY2FlNzcwYThhM2Q3NGZiNzJkZDM2NTk5NDgyZGYyZjNhYjlmYTFlMzUifQ"
         }
       ]
@@ -73,11 +73,11 @@
       "statement": "列表 API 的 refresh=1 會強制刷新並回傳 no-store；Notion fetch 失敗時優先回退 snapshot，沒有 snapshot 才回 502。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L17-L29",
+          "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L17-L29",
           "version": "repo-lines-v1:sha256:f6fbb91476734d7f1f2336926d1e6bacc0cb64c548bc6a7236ab073a7fd01170:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1YzNkZDZjNWY5NGYzZjJkY2RlZDNhMzMyNjk1NzM4MDQ5NTVmNDI4MGI3YmMzMzM5MjgwMWM2OTMxODE3MDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImM5MGEzMTEwZTBhMjU2NTVhMzFiYzg2NmZiMTEwY2FlY2FmYWI0ZGQ3NjU0NTIzNDczMWYzNTExZjJjMzc5OTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3MDdiMzRhZjgzNWUwMTQ0ODc4YmYxNDNiYjU5ZGQ2NWE3YTdjMmRkZDI2MWRiYjIzZDJlY2U5ZjJkOWJkNTMifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L40-L89",
+          "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L40-L89",
           "version": "repo-lines-v1:sha256:de1c3c28dd75538befec98d9cd592292fc6ce6336dc3af3641c317c57ac63dd1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNGE0OTIwY2ZiNzdkOTRiMGZlYmEzYTY3ZGNmZGRkM2Y3YmYyYzdlYTk1MGUxYTViMzAzMTQ3MDE1M2VlMTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
         }
       ]
@@ -87,15 +87,15 @@
       "statement": "詳細頁成功取得結果後會標記已讀、呈現 Markdown，並只為可解析的 YouTube URL 建立 youtube-nocookie embed。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/results/%5Bid%5D.vue#L138-L170",
+          "resource": "repo://apps/showcase/pages/results/%5Bid%5D.vue#L138-L170",
           "version": "repo-lines-v1:sha256:9e4ff82a5c0c13573ddf0ade00bcfda2a4b6160633b4b90c1e1d049fcb943dbb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxNjI5NjdjN2FkMTdiN2IwOWJlZGIwOWFkNjk0ZWYwMmMyMWYxZGU4NDczODE0NmI3Mzk5MjI5ZTcyZDA5YmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlZDQzNGNkMzJkNDU4OGYyMjE2Yzg3MGE3MjliZTdiZDcxMmMwNjdjZDMzYzc1MGExMTQ4MTY4ZWQxNGUzZTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY0ZTdhNjZlNTRkNjUwYmQwNzJhOGFkNDk0YjgwNTVlNzIyYmMxMmRhYjJhYzRkMDJiZDE3OTBiYTM4YmU4NDQifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/results/%5Bid%5D.vue#L180-L210",
+          "resource": "repo://apps/showcase/pages/results/%5Bid%5D.vue#L180-L210",
           "version": "repo-lines-v1:sha256:42a23d645fb9248c2faa965ec01722a98908ca3e50ce812d9fb79ba8575ff3da:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzZWFhZDc1OWU0NmIzZjQwNDE2ZDE1MTMwNzdhZTYxMzUwN2U3YmQ1NWM2NzYxOGM4Y2ZiOWYyYmYwNjljNWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVkNTYzYWRlZGI0OTQ0MzAwN2I4NjlmZDZhNWE3YjlmYTg1ZjlmMzBkYjk2NTVjMjI5YWI5NDIwYzUyZDlhZGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiMWIzZjY0NWZkMjZjMzA2YmZkYWI0M2RiNjM4ZDUwOTlkYWI3ZGNlOTUzNWNkZWMwYjA4ZjI1N2VhYTJlZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRkZjJkNWI2MjUzNTdjYTgyMjkwZTFlZGE5ZWVlMDRlYmJlZTA2MmRjNGJmMDk3NzNkZTg4ZmQ4NDZiMDU5ODYifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/pages/results/%5Bid%5D.vue#L50-L63",
+          "resource": "repo://apps/showcase/pages/results/%5Bid%5D.vue#L50-L63",
           "version": "repo-lines-v1:sha256:6f7ca1a73bf1ba65d5443f98cfdaf7e01820ffff5a25af841fbf7ed718bbb223:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkMjM1MDA5MjQ1OGJkYmMxZWY5ZWZiMTRiZDhlM2Y4ZTU0YjVhNWFhMTllNTMyYzViZjg2YWY1MzdlNGNkYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImViMWVhMTVhMGY3YjFkNzc0MWMwOTJkZTgwMmQzOWZkYTQ0MzRlY2YwNWY5NDM1OGM2ZjM2OWNhOTExNmUyMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxYmFiNzQyMzRlYjIwMTU0MzZjNmRlNmJhNjkyN2YzYjZmNDVhMjhlYTU2YTg3YzMzYjk2ZTFiYzliYjZlYTAifQ"
         }
       ]
@@ -103,6 +103,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:09:43.292Z"
+    "at": "2026-09-07T16:12:01.072Z"
   }
 }

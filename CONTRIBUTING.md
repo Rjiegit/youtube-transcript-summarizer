@@ -32,7 +32,7 @@ docker compose up -d
 - `src/infrastructure/`：LLM、媒體、通知、儲存與 persistence adapters。
 - `src/apps/`：FastAPI、Streamlit、CLI 與 RSS monitor 等 Python 入口。
 - `apps/browser-extension/`：獨立 Chrome／Edge Manifest V3 client。
-- `frontend/nuxt-showcase/`：獨立 Nuxt 3 成果展示站。
+- `apps/showcase/`：獨立 Nuxt 3 成果展示站。
 
 新增抽象時放在 `src/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `src/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
 
@@ -44,7 +44,7 @@ docker compose up -d
 - 新增或修改的公開介面優先補上 type hints。
 - 保持模組與函式聚焦，不為未發生的需求預先建立抽象。
 
-Nuxt 的 TypeScript、Vue、測試與命名規則請遵循 `frontend/nuxt-showcase/AGENTS.md`。
+Nuxt 的 TypeScript、Vue、測試與命名規則請遵循 `apps/showcase/AGENTS.md`。
 
 Browser Extension 不屬於 Python package。修改後需確認 `manifest.json` 引用的檔案存在、JavaScript 語法有效，並以瀏覽器 Load unpacked 驗證主要互動。
 
@@ -62,8 +62,8 @@ uv run flake8 .
 Nuxt 驗證：
 
 ```bash
-npm --prefix frontend/nuxt-showcase run test
-npm --prefix frontend/nuxt-showcase run build
+npm --prefix apps/showcase run test
+npm --prefix apps/showcase run build
 ```
 
 提交前執行與變更風險相符的最小完整驗證；完整測試策略見 `openwiki/testing/test-strategy.md`。

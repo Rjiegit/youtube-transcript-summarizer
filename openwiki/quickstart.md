@@ -3,30 +3,27 @@ type: quickstart
 title: 快速開始與開發導覽
 description: 從環境設定、安裝、啟動與測試開始，並依開發任務導向架構、API、持久層與整合文件。
 tags: [quickstart, setup, navigation]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-07T14:32:56.222Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
+  - id: openwiki-source-fd915a0411f41f59671049a8
+    resource: repo://apps/browser-extension/manifest.json
+  - id: openwiki-source-7f09da405ad8b6929dbd0daf
+    resource: repo://apps/browser-extension/options.js
+  - id: openwiki-source-3f302af29bc8e91334af86aa
+    resource: repo://apps/browser-extension/service_worker.js
+  - id: openwiki-source-bbc421d322d74564a269df19
+    resource: repo://apps/showcase/package.json
+  - id: openwiki-source-d2d7610281b3f0057b9f9314
+    resource: repo://apps/showcase/scripts/check-env.mjs
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-  - id: openwiki-source-27a43165fe079c2f44e8c6f5
-    resource: repo://frontend/nuxt-showcase/package.json
-  - id: openwiki-source-8c08a854bf0339fc3de677b0
-    resource: repo://frontend/nuxt-showcase/scripts/check-env.mjs
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-05ccef8d4cf1698187f20464
     resource: repo://pyproject.toml
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-  - id: openwiki-source-224f65803d3de46b7fae180b
-    resource: repo://src/apps/extension/manifest.json
-  - id: openwiki-source-48e217db31524d96d35dbecd
-    resource: repo://src/apps/extension/options.js
-  - id: openwiki-source-0520e948964d45782d02b5a3
-    resource: repo://src/apps/extension/service_worker.js
   - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
     resource: repo://src/core/config.py
   - id: openwiki-source-36d48d46c256392dc902bc2d
@@ -35,12 +32,15 @@ sources:
     resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T14:32:56.222Z" }
+generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # 快速開始與開發導覽
 
-這個 repository 包含 Python 3.14 的 YouTube 轉錄/摘要平台、`frontend/nuxt-showcase` 的獨立 Nuxt 3 成果展示站，以及 `src/apps/extension` 的 Chrome/Edge Manifest V3 client。Python 側提供 FastAPI、Streamlit、queue worker 和 RSS monitor；Extension 呼叫 FastAPI；Nuxt server routes 直接讀取 Notion。
+這個 repository 包含 Python 3.14 的 YouTube 轉錄/摘要平台、`apps/showcase` 的獨立 Nuxt 3 成果展示站，以及 `apps/browser-extension` 的 Chrome/Edge Manifest V3 client。Python 側提供 FastAPI、Streamlit、queue worker 和 RSS monitor；Extension 呼叫 FastAPI；Nuxt server routes 直接讀取 Notion。
 
 ## 最短本機啟動路徑
 
@@ -79,7 +79,7 @@ docker compose up -d
 ## Nuxt Showcase
 
 ```bash
-cd frontend/nuxt-showcase
+cd apps/showcase
 npm install
 npm run check-env
 npm run dev
@@ -92,7 +92,7 @@ npm run dev
 先啟動 FastAPI，再到 Chrome/Edge 擴充功能頁啟用開發者模式，選擇「載入未封裝項目」並指向：
 
 ```text
-src/apps/extension
+apps/browser-extension
 ```
 
 Options page 的 API Base URL 預設為 `http://localhost:8080`。Extension 可從 YouTube 影片頁/連結建立 SQLite task，也可從 channel context 建立 RSS subscription；它不包含 worker 或 Notion credentials。
@@ -119,8 +119,8 @@ uv run flake8 .
 執行 Nuxt suite 與 production build：
 
 ```bash
-npm --prefix frontend/nuxt-showcase run test
-npm --prefix frontend/nuxt-showcase run build
+npm --prefix apps/showcase run test
+npm --prefix apps/showcase run build
 ```
 
 ## 依任務找文件

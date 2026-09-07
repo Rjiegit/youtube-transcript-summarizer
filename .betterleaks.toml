@@ -9,7 +9,7 @@ prefilter = '''
 filter.matchesAny(get(attributes, "path", ""), [
   `^(?:\./)?\.git(?:/|$)`,
   `^(?:\./)?data(?:/|$)`,
-  `^(?:\./)?frontend/nuxt-showcase/(?:node_modules|\.nuxt|\.output|coverage|dist)(?:/|$)`,
+  `^(?:\./)?apps/showcase/(?:node_modules|\.nuxt|\.output|coverage|dist)(?:/|$)`,
   `^(?:\./)?(?:\.venv|venv|env|__pycache__|\.ruff_cache|\.pytest_cache|\.mypy_cache)(?:/|$)`,
 ])
 '''
@@ -24,7 +24,7 @@ let secret = finding["secret"];
 (
   filter.matchesAny(path, [
     `^(?:\./)?tests/`,
-    `^(?:\./)?frontend/nuxt-showcase/(?:tests|test-data)/`,
+    `^(?:\./)?apps/showcase/(?:tests|test-data)/`,
     `^(?:\./)?\.archive/(?:tests/|test_)`,
   ]) &&
   filter.matchesAny(secret, [
@@ -38,7 +38,7 @@ let secret = finding["secret"];
 (
   filter.matchesAny(path, [
     `^(?:\./)?\.env\.example$`,
-    `^(?:\./)?frontend/nuxt-showcase/\.env\.example$`,
+    `^(?:\./)?apps/showcase/\.env\.example$`,
   ]) &&
   secret == "example-maintainer-token"
 )

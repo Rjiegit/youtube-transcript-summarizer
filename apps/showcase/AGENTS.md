@@ -11,7 +11,7 @@
 - `npm run test`：執行一次 Vitest 測試。
 - `npm run check-env`：檢查 showcase 所需的環境變數是否存在。
 
-請在專案根目錄 `frontend/nuxt-showcase/` 下執行以上指令。
+請在專案根目錄 `apps/showcase/` 下執行以上指令。
 
 ## Coding Style & Naming Conventions
 請一致使用 TypeScript 與 Vue Single File Components。遵循既有風格：`.ts` 與 `.vue` 使用 2 spaces 縮排，變數與函式採 `camelCase`，元件採 `PascalCase`，檔名則延續既有慣例，不任意改寫命名風格（例如 `ShowcaseCard.vue`、`useReadResults.ts`）。Server 端工具函式應維持單一職責；格式化或資料轉換邏輯優先抽成 `utils/` 內的小型純函式。

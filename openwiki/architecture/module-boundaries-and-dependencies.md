@@ -5,20 +5,24 @@ description: 說明 Python 分層的依賴方向，以及 Python、Nuxt、外部
 tags: [architecture, dependencies, python, nuxt, integrations]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
+    at: 2026-09-07T16:12:01.072Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
   - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
     resource: repo://.github/workflows/main.yml
+  - id: openwiki-source-3f302af29bc8e91334af86aa
+    resource: repo://apps/browser-extension/service_worker.js
+  - id: openwiki-source-820d12d8c5440c6adcd393be
+    resource: repo://apps/README.md
+  - id: openwiki-source-bbc421d322d74564a269df19
+    resource: repo://apps/showcase/package.json
+  - id: openwiki-source-f987324e0612a557c62a85fb
+    resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
   - id: openwiki-source-f317ee207e1653d2033c81a4
     resource: repo://CONTRIBUTING.md
-  - id: openwiki-source-27a43165fe079c2f44e8c6f5
-    resource: repo://frontend/nuxt-showcase/package.json
-  - id: openwiki-source-0030f56752f8cbf5e90a9d68
-    resource: repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-05ccef8d4cf1698187f20464
@@ -27,8 +31,6 @@ sources:
     resource: repo://scripts/install-git-hooks.sh
   - id: openwiki-source-822793b105256e659707b60b
     resource: repo://src/apps/api/main.py
-  - id: openwiki-source-0520e948964d45782d02b5a3
-    resource: repo://src/apps/extension/service_worker.js
   - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
     resource: repo://src/core/config.py
   - id: openwiki-source-bd11e0e09048def2f9ec2ff6
@@ -39,7 +41,7 @@ sources:
     resource: repo://src/services/pipeline/processing_runner.py
   - id: openwiki-source-1eb6a61d042052ba1402c2eb
     resource: repo://uv.lock
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -50,16 +52,16 @@ Python 主系統以 `src` 為 package root；規範性的責任分層由入口�
 
 ```mermaid
 flowchart TD
-    Apps["apps — FastAPI / Streamlit / CLI / RSS monitor"] --> Services["services — task creation / scheduling / pipeline / RSS"]
+    Apps["src/apps — FastAPI / Streamlit / CLI / RSS monitor"] --> Services["services — task creation / scheduling / pipeline / RSS"]
     Services --> Domain["domain — Task、RSS、media models 與抽象 interfaces"]
     Infrastructure["infrastructure — SQLite、Notion、media、LLM、storage、notification adapters"] --> Domain
 ```
 
-`CONTRIBUTING.md` 將這套分層定義為現行開發規則：`domain` 保存 models 與 typed interfaces、`services` 負責 use-case orchestration、`infrastructure` 接觸 SQLite、Notion、yt-dlp、Whisper、LLM SDK 與 Discord，`apps` 則承接 HTTP、UI、CLI、RSS 與 Extension 等入口。`core` 另提供環境設定、prompt、logging、時間與 URL/filename 工具。這是維護方向，不代表 framework 會自動阻止跨層 import；review 仍需檢查新依賴是否放在正確邊界。
+`CONTRIBUTING.md` 將這套分層定義為現行開發規則：`domain` 保存 models 與 typed interfaces、`services` 負責 use-case orchestration、`infrastructure` 接觸 SQLite、Notion、yt-dlp、Whisper、LLM SDK 與 Discord，`src/apps` 承接 Python 的 HTTP、UI、CLI 與 RSS 入口。top-level `apps/` 目前則放置獨立的 Browser Extension 與 Nuxt Showcase。`core` 另提供環境設定、prompt、logging、時間與 URL/filename 工具。這是維護方向，不代表 framework 會自動阻止跨層 import；review 仍需檢查新依賴是否放在正確邊界。
 
 這個方向不是完全由 framework 強制，但 `ProcessingWorker` 的 constructor factories 是最重要的邊界：downloader、transcriber、summarizer、summary storage、file manager、notifier 與 config 都可替換。測試因此能使用小型 fake，而不必真的下載影片、載入模型或呼叫外部 API。新增 adapter 時應實作既有小介面或 factory contract，避免把 provider-specific branch 放進 orchestration loop。
 
-Nuxt Showcase 與 Browser Extension 不屬於這個 Python package graph。Showcase 是獨立 npm application，透過 Nitro server 直接讀 Notion；Extension 使用瀏覽器 API 呼叫 FastAPI。它們與 Python 的整合契約分別是 Notion schema 與 HTTP API，而不是 source-level imports。
+Nuxt Showcase 與 Browser Extension 不屬於這個 Python package graph。Showcase 位於 `apps/showcase/`，是獨立 npm application，透過 Nitro server 直接讀 Notion；Extension 位於 `apps/browser-extension/`，使用瀏覽器 API 呼叫 FastAPI。它們與 Python 的整合契約分別是 Notion schema 與 HTTP API，而不是 source-level imports。
 
 ## Python runtime dependencies
 
@@ -95,7 +97,7 @@ Betterleaks 是另一個 PATH 上的本機開發工具，不屬於 Python、Nuxt
 
 ## Nuxt 與開發依賴
 
-`frontend/nuxt-showcase/package.json` 是獨立 dependency boundary。Production dependencies 只有 Nuxt 與 `markdown-it`；Vue 由 Nuxt ecosystem 提供。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 屬於 development/test dependencies。Python 開發依賴則是 flake8 與供 FastAPI TestClient 使用的 httpx。
+`apps/showcase/package.json` 是獨立 dependency boundary。Production dependencies 只有 Nuxt 與 `markdown-it`；Vue 由 Nuxt ecosystem 提供。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 屬於 development/test dependencies。Python 開發依賴則是 flake8 與供 FastAPI TestClient 使用的 httpx。
 
 因此變更依賴時要更新正確的 lock boundary：Python 使用 `pyproject.toml` 與 `uv.lock`，Showcase 使用 `package.json` 與 `package-lock.json`，yt-dlp 則由 Make/Docker 安裝流程管理。不要以其中一個 lockfile 推論另一個 runtime 已可用。
 

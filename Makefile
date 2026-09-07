@@ -39,13 +39,13 @@ api:
 	uv run uvicorn src.apps.api.main:app --reload --reload-dir /usr/src/app/src --host 0.0.0.0 --port 8080
 
 showcase-install:
-	npm --prefix frontend/nuxt-showcase install
+	npm --prefix apps/showcase install
 
 showcase-check:
-	npm --prefix frontend/nuxt-showcase run check-env
+	npm --prefix apps/showcase run check-env
 
 showcase:
-	@env_file="frontend/nuxt-showcase/.env"; \
+	@env_file="apps/showcase/.env"; \
 	if [ ! -f "$$env_file" ] && [ -f .env ]; then \
 		env_file=".env"; \
 	fi; \
@@ -57,10 +57,10 @@ showcase:
 			esac; \
 		done < "$$env_file"; \
 	fi; \
-	npm --prefix frontend/nuxt-showcase run dev
+	npm --prefix apps/showcase run dev
 
 showcase-test:
-	npm --prefix frontend/nuxt-showcase run test
+	npm --prefix apps/showcase run test
 
 test:
 	uv run python -m unittest discover -s . -p "test*.py" -v

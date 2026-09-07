@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:7a30cf61b1daa4e90f61648f0f4a0cdd548205a2065589c2bd12d90c42328432",
+  "pageVersion": "sha256:a78e05dd1622af4b27c8e00ee43fa82f3c2d4615c9ce3c5cb214a10b0d05a71e",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
       "statement": "Repository包含 Python 3.14 的轉錄摘要系統與獨立 Nuxt 3 Showcase；Python dependencies由 uv管理，Nuxt dependencies由 npm管理。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/package.json#L1-L25",
+          "resource": "repo://apps/showcase/package.json#L1-L25",
           "version": "repo-lines-v1:sha256:735e5711c754118712f484c219fafe8574c5a06b7a150fb5dc13693613112c27:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2ZmIwOGZkYTFhY2I5NTdiNjExNmJkMzc4MTFhMWZlNDFhMDE2MTFjMDYzMWVkYmY3ODZkNjg4OWEyN2E1NWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJjZWRhMzNiMzA2YzBmNDUzZTE2Yjk4NTAyNmU0ZmM3OWY5OTY5NjRiNzJhZDE2YmNiY2Y0MGY5NmUwNWFkYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYxNTliYTc3MTlkZTZiZjQxZGY3YjFjMzUxNzQ3ZDA5NDZiZjgwNWQxNTlhNjQyNzIwOTNlODIyM2Y3MzAzZDEifQ"
         },
         {
@@ -41,7 +41,7 @@
       "statement": "Nuxt Showcase提供 dev、build、preview、test及 check-env scripts，development server固定使用 port 3000。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/package.json#L5-L13",
+          "resource": "repo://apps/showcase/package.json#L5-L13",
           "version": "repo-lines-v1:sha256:c5245520a1b50616b0e00ae78345573465eca9ae3917ceabe299c0c53c12df48:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNmMzMjM3NGQ1ZjAyNjAxOTllNTkwMmFlOGY1MjBmYTk3NTZlOGI3ODY2MTBjYjVhYTcxMTIzM2Q0OWFmYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmNjOTcxNzkwNDg3NWYwMzc1OTNlNGU3ZWZmOWMwYmE2YTIzZWNhNDUyNTQzMzRkNTk2OWZkNGQxM2QxMjAzNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTQxZjZhMmYyYjBmM2RjMDVkNDVmZDA5YTQyNTNiMDhhNWI1OTYxOTkzZWM5ZGY5Y2MzMjkxYzVjYmU4NmJmZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDJmZjIxNjNiMzQyNzM1MGMwNzEyNGRjODg5NWFhMzM4MWQ1ZmQ2Y2EzMGRlMTg5YTdiYzU3ZjhmZDMxOGFlYyJ9"
         }
       ]
@@ -52,7 +52,7 @@
       "evidence": [
         {
           "resource": "repo://Makefile#L39-L64",
-          "version": "repo-lines-v1:sha256:861ffb6eef4c119bc089f2b2f45b5eb6ce76fe84b6b06e55d782cda03729888e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYzIwMTNkMjFhZGU5YzYyNTc0YWYwZDA2OGM2MzRkYTM5NDk5MWIyNzcxZDUwZjUyMDI0MGM5NTkzODY5N2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4Nzk2ZWYxZTY1M2UzYjEyZDZlMzUwMWVkNTdlYWRiMGRlZjcyMDk4NzdiN2FhNzZkZmI0YmQ4NDg2OGJkY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxOTc5NTdlOWU0YTdhZjljZGM2MDk4ZTY4YWFhZTNiMTBkZDIxMzJjYjRhOTQ5YTAwZDJlZDU5YWMyOWQ4ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNWFiN2NkNjNiMDlkMmUzZGVhYzk0OTRlNGVmNGFmZmQ3MzE0MmUzM2Q5NDVlYzViZThmOWVhY2YxOGNiOWUifQ"
+          "version": "repo-lines-v1:sha256:e70253094ddd066123a4b11342404255642102fc15224cf54361c97617e07db8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYzIwMTNkMjFhZGU5YzYyNTc0YWYwZDA2OGM2MzRkYTM5NDk5MWIyNzcxZDUwZjUyMDI0MGM5NTkzODY5N2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4Nzk2ZWYxZTY1M2UzYjEyZDZlMzUwMWVkNTdlYWRiMGRlZjcyMDk4NzdiN2FhNzZkZmI0YmQ4NDg2OGJkY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxOTc5NTdlOWU0YTdhZjljZGM2MDk4ZTY4YWFhZTNiMTBkZDIxMzJjYjRhOTQ5YTAwZDJlZDU5YWMyOWQ4ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNWFiN2NkNjNiMDlkMmUzZGVhYzk0OTRlNGVmNGFmZmQ3MzE0MmUzM2Q5NDVlYzViZThmOWVhY2YxOGNiOWUifQ"
         }
       ]
     },
@@ -81,15 +81,15 @@
       "statement": "Repository另包含可載入Chrome/Edge的Manifest V3 extension，預設呼叫http://localhost:8080並可建立SQLite task或RSS subscription。",
       "evidence": [
         {
-          "resource": "repo://src/apps/extension/manifest.json",
+          "resource": "repo://apps/browser-extension/manifest.json",
           "version": "repo-file-v1:sha256:6493e32b17ff6717c07c280a59caa821ef536afffd85ae803d01489d07ae3560"
         },
         {
-          "resource": "repo://src/apps/extension/options.js#L1-L48",
+          "resource": "repo://apps/browser-extension/options.js#L1-L48",
           "version": "repo-lines-v1:sha256:6947be67ceab6d8d96ca44493131cf538b06938943f54bacc377f2d85a5a760b:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyM2NmMzFiMjgzNGUwNDMyYWRiOWE5ZTY5Njg4Y2VhYjE0M2MwYWFiZjgzNWYzZTZiYTJjMGRiNjVlZWMwZDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://src/apps/extension/service_worker.js#L178-L282",
+          "resource": "repo://apps/browser-extension/service_worker.js#L178-L282",
           "version": "repo-lines-v1:sha256:935cb2a055542e716cd89e1922b06dbc5fbb361ca3e6006ee412fdb08190c16d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiYTI4OTFiNGNhODdlMmVkNGI4OTI3NGU3NWNhNDcxODU5MmI4ODRhMTllNjkxNzBhMGMzOTdmOGVkMjYwZGZkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0MTJjYTM0NWNjZjc1YmY5YzA4MDZiY2U2OTViZThkZTgwOGI3OTk4NDI1MWE3YTU0ZDIwMmNmNjEwMWRkNDUxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJiOGI0YmVkYTYwY2FiYTU5NjY4YTVmNGM0NjQ3MGZlNGFiZjkyMGRmZGZmNGI5MTExYTY1Yjk2YjRhMDFiYWFiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI4ZTJmM2Q0NWY1YjBiZjk2MGMxZDVhYjZjY2Q5MWQ4NWYxYzM0YTM2ZDUxZGRkZWY3OTA5YjJjMzkzNGMwZWU3In0"
         }
       ]
@@ -114,14 +114,14 @@
     },
     {
       "id": "claim_3cc828a010b74e35b0b5d57093111504",
-      "statement": "check-env 在獨立程序中優先讀 frontend .env、再 fallback root .env，保留既有環境值；make showcase 會 export 選定檔案的值再啟動開發站。",
+      "statement": "check-env 在獨立程序中優先讀 apps/showcase .env、再 fallback root .env，保留既有環境值；make showcase 會 export 選定檔案的值再啟動開發站。",
       "evidence": [
         {
           "resource": "repo://Makefile#L45-L58",
-          "version": "repo-lines-v1:sha256:3b8fe1655c4423a1ee11557e0452f401a94e6cbf9b7cd9491c7e49be603d1995:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiZjZjMGJlZjkwY2FjZDdlNDI4MGI1NjZmYjU2ZjM3MmI2ZTY3YWY0YTRhMzEwZmM5NTFhNjQ2MTA5ZDQwMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwMWYzNGViMzkyNDBiMThkMTFhY2UzNzViZDVlYjBiNDE4NTkxNTVkOGMwZTk3YzE5NjM5MjRjOGUyZTE4ZDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImMzMDRkMDkzZjRhNDg4MDg3ZTFmZDc4N2M3NTQ1ZTE5NDdlMTk3ZjUyYWIyZTMxODVhZTU5MDIxZjAwNzhmZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRkZjVkYTJmMmU5MDA1NjJiODRkNGRhMmE5MWQ1YzkwYmNmNmJiMjJkMzc2MGZlYTBjZDc3Mjg4ODAwNjdiNGIifQ"
+          "version": "repo-lines-v1:sha256:f039c3803ac80d3301b2046f9d11572a3d9ce28fbd971f9581961eafb04dd53c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1Y2UzODRhN2RhNjFmYjc3YTU5MWUzOTdmZDIyODE3ODg0NmE3NGI3ZTFmODNmNmU0YWY3Mzk2NWI1OGUyNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNmNiYTY2MGFiNzkzNjZlMDQ2N2FkM2UxNGU1Y2Q3ZWY5NGQ2YjIzNDM2YzQ1NmVlNjQzZGQzNzRkNmE4YzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhNGZlZmQ4OGI5NTUxZjQwNmFhNjlhNjY2ZmFlOGJmNDk5MWFjNzQxYTU2ODdjNDBlODhkOWE5MzkyNDZlZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlMzU0MWZkNzUxNTlkODg5M2U3YzdmNDY4OWUxYzIzNjI3YzQxYWZiMTM1NDk4NGU3ZDVlYTc3MmJmMDIzMzUifQ"
         },
         {
-          "resource": "repo://frontend/nuxt-showcase/scripts/check-env.mjs#L1-L32",
+          "resource": "repo://apps/showcase/scripts/check-env.mjs#L1-L32",
           "version": "repo-lines-v1:sha256:d9901ef4ff5f47eb929c1560bb0415fa4d1b27ec2e73c1e20788c5fad1c2c1a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmYjQ4NTA3YTRiOWNkNmFlMTBkNGRjZWM1NGJhYjI5NWUyM2UwNWUwOGZmNjk5ZWIxOWNjYWM3NDRkMTBlMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZjhhZmRkMGQwNjExNDc0NjBmOWQ2YzFlZjFkMjM3NDE3ODNhYzI0OGM0NmRjZGQ5YzcxODdjYzQ3Njc5ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjk4YTNkZDA2ZTI2ZjY3ZTIyMGU1YzY3MjA2YzNjOGY4OGM0YmY4MjllMDJmMDhjOGNkMjZmNzNhY2ZlZWMifQ"
         }
       ]
@@ -161,6 +161,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:32:56.222Z"
+    "at": "2026-09-07T16:12:01.072Z"
   }
 }

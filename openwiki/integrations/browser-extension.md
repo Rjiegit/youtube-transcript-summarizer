@@ -3,19 +3,19 @@ type: integration
 title: Browser Extension 任務與 RSS 入口
 description: 說明 Manifest V3 extension 如何辨識 YouTube context、建立摘要任務或 RSS 訂閱，以及設定、權限與失敗回饋。
 tags: [browser-extension, chrome, youtube, api, rss]
+sources:
+  - id: openwiki-source-68335af7c13a3fb661ff132a
+    resource: repo://apps/browser-extension/content_script.js
+  - id: openwiki-source-fd915a0411f41f59671049a8
+    resource: repo://apps/browser-extension/manifest.json
+  - id: openwiki-source-7f09da405ad8b6929dbd0daf
+    resource: repo://apps/browser-extension/options.js
+  - id: openwiki-source-3f302af29bc8e91334af86aa
+    resource: repo://apps/browser-extension/service_worker.js
+generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
-sources:
-  - id: openwiki-source-c297a6919354a0aef232d787
-    resource: repo://src/apps/extension/content_script.js
-  - id: openwiki-source-224f65803d3de46b7fae180b
-    resource: repo://src/apps/extension/manifest.json
-  - id: openwiki-source-48e217db31524d96d35dbecd
-    resource: repo://src/apps/extension/options.js
-  - id: openwiki-source-0520e948964d45782d02b5a3
-    resource: repo://src/apps/extension/service_worker.js
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # Browser Extension 任務與 RSS 入口
@@ -24,7 +24,7 @@ Browser Extension 是 FastAPI 的 public client，讓使用者不必複製 URL�
 
 ## 組成與權限
 
-`src/apps/extension` 是可直接載入 Chrome/Edge 的 Manifest V3 extension：
+`apps/browser-extension` 是可直接載入 Chrome/Edge 的 Manifest V3 extension：
 
 - service worker 建立 context menus、處理 toolbar action、呼叫 FastAPI 並顯示 badge/notification；
 - content script 在 YouTube DOM 中找 channel id、channel title 與 page type；
@@ -60,7 +60,7 @@ service worker 若無法與 content script 通訊，會再從 URL 做有限 fall
 
 API base URL 預設是 `http://localhost:8080`。Options page 只接受可由 `URL` 解析且 protocol 為 HTTP/HTTPS 的值，保存前不測試 connectivity，也不附 authentication token。若 API 暴露到非本機環境，TLS、CORS/網路存取政策與 task submission protection 必須由部署層處理；Extension 目前只對 processing lock 等管理端點完全不提供操作能力。
 
-開發安裝使用瀏覽器的「載入未封裝項目」指向 `src/apps/extension`。此 repository 目前沒有 extension 專用 automated test suite，因此修改 URL routing、DOM selectors、permissions 或 status handling 時，除 code review 外還需要在 Chrome/Edge 手動驗證影片頁、列表 link、channel page、timeout、duplicate 與無法偵測 channel 等情境。
+開發安裝使用瀏覽器的「載入未封裝項目」指向 `apps/browser-extension`。此 repository 目前沒有 extension 專用 automated test suite，因此修改 URL routing、DOM selectors、permissions 或 status handling 時，除 code review 外還需要在 Chrome/Edge 手動驗證影片頁、列表 link、channel page、timeout、duplicate 與無法偵測 channel 等情境。
 
 ## 延伸閱讀
 

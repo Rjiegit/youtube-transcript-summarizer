@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:4b05d59624ef397baa1d05244da5de28ff57b2efe179d47ecdd8a579e0dc9acc",
+  "pageVersion": "sha256:500b63213b6d3a88dce66387d41991f67d454e2ebf12d26e520d9fcab979634a",
   "claims": [
     {
       "id": "claim_e58d32757ef34b6a8caff1e6252ae528",
       "statement": "Python 主系統提供 FastAPI、Streamlit、CLI 與 RSS monitor 等入口，而 Nuxt Showcase 是從 Notion 讀取完成成果的獨立展示應用。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/utils/notion.ts#L522-L585",
-          "version": "repo-lines-v1:sha256:0c7d67349dc8e74540bd24a0eb406918231ce018875bd3ce0552967db790d017:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyYjY1MjI3ZDVkNzIyYjA1NTU0NDViYzc3Njc2OTE4YTNhOTU1MTQxZTAwMzYyODRlNGEwNTBiZDU0MjcwMzkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkyMDQwZTA5NWE5NGUyYWRhNzRlNDIxZjM3MTg3NTFhOTFhODEwYmZkNjZmNDhmNGU5MzljN2I3NDgwZWI2NzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/utils/notion.ts#L522-L585",
+          "version": "repo-lines-v1:sha256:b0f2e52eacb4c602efbe7dafc6e8f51717b905acc3cc4c5682655f3b52fa5fd6:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlMGQyNjdjNTVkYmE3YTIwNTA5MTQ4ODlhMDRjNzE5NWI3MTNjZjA4MWUxYjNjYzA4ZjEwZWZhYzg5YWY5OTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlNjczYWJkNDU3YTk3ZWVhMTdhNjAwNjJlYjBmYWVhNmJkZjA5NDg2OGNjNmI4ZjhjMGViZGEyZjYxZWQ0MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjNzc0OWViODk3ODQ5YzlkOTkxZGM3Mjc1OWFhY2NhZDQ0ZTRmODY3OWIxNDY3YjhmYmEzYThkZTZiMDlkYjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQyNDBlYmM5MmZiOTM5N2I2MzVjZmZkYWE5ZThjMWQ1M2VmYWM4ZjIzOGUxNmEwNGJmNWJlYjRhYmVmOTdhNWQifQ"
         },
         {
           "resource": "repo://src/apps/api/main.py#L330-L335",
@@ -63,7 +63,7 @@
       "statement": "RSS monitor透過Task API建立SQLite task而不直接執行media pipeline；Nuxt Showcase則直接從Notion讀取，完全不呼叫Python Task API。",
       "evidence": [
         {
-          "resource": "repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts#L40-L89",
+          "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L40-L89",
           "version": "repo-lines-v1:sha256:de1c3c28dd75538befec98d9cd592292fc6ce6336dc3af3641c317c57ac63dd1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNGE0OTIwY2ZiNzdkOTRiMGZlYmEzYTY3ZGNmZGRkM2Y3YmYyYzdlYTk1MGUxYTViMzAzMTQ3MDE1M2VlMTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
         },
         {
@@ -75,6 +75,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:09:43.292Z"
+    "at": "2026-09-07T16:12:01.072Z"
   }
 }

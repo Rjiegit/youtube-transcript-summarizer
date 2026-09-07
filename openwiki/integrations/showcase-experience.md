@@ -3,23 +3,23 @@ type: integration
 title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
 tags: [nuxt, showcase, swr, caching, ux]
+sources:
+  - id: openwiki-source-6b1be9f1b66868fbfe965160
+    resource: repo://apps/showcase/composables/useReadResults.ts
+  - id: openwiki-source-8f9c3fc6564a596df49d04e9
+    resource: repo://apps/showcase/pages/index.vue
+  - id: openwiki-source-714810166c8a4a2d54858dbf
+    resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
+  - id: openwiki-source-f987324e0612a557c62a85fb
+    resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-acc677c60f44374b1f2d50cf
+    resource: repo://apps/showcase/server/utils/swr-cache.ts
+  - id: openwiki-source-c2ec24a0ccca33febfd50837
+    resource: repo://apps/showcase/tests/swr-cache.test.ts
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
-sources:
-  - id: openwiki-source-a2ee3d44daa07a05306e975e
-    resource: repo://frontend/nuxt-showcase/composables/useReadResults.ts
-  - id: openwiki-source-733fe84338ea973667cce511
-    resource: repo://frontend/nuxt-showcase/pages/index.vue
-  - id: openwiki-source-42e33c0d6107dd607fab1d17
-    resource: repo://frontend/nuxt-showcase/pages/results/%5Bid%5D.vue
-  - id: openwiki-source-0030f56752f8cbf5e90a9d68
-    resource: repo://frontend/nuxt-showcase/server/api/showcase/results.get.ts
-  - id: openwiki-source-fd5007644f26258bb86db843
-    resource: repo://frontend/nuxt-showcase/server/utils/swr-cache.ts
-  - id: openwiki-source-6f3d5ab2255c7aff38623726
-    resource: repo://frontend/nuxt-showcase/tests/swr-cache.test.ts
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取

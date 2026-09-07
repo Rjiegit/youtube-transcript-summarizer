@@ -14,14 +14,14 @@ sources:
     resource: repo://.github/workflows/main.yml
   - id: openwiki-source-6d4b4e707b8d60b6ccfa3425
     resource: repo://.github/workflows/openwiki-update.yml
+  - id: openwiki-source-dac0a79ee8362683638fa30e
+    resource: repo://apps/showcase/nuxt.config.ts
+  - id: openwiki-source-d2d7610281b3f0057b9f9314
+    resource: repo://apps/showcase/scripts/check-env.mjs
+  - id: openwiki-source-bae0c48de5dc6743f6dddd59
+    resource: repo://apps/showcase/server/utils/config.ts
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-  - id: openwiki-source-a5853bfe60c0ac906f6ab533
-    resource: repo://frontend/nuxt-showcase/nuxt.config.ts
-  - id: openwiki-source-8c08a854bf0339fc3de677b0
-    resource: repo://frontend/nuxt-showcase/scripts/check-env.mjs
-  - id: openwiki-source-d3847a8af5c5a244f228a0ca
-    resource: repo://frontend/nuxt-showcase/server/utils/config.ts
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
@@ -34,10 +34,10 @@ sources:
     resource: repo://src/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-df04114da62d5e054970a89f
     resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
+    at: 2026-09-07T16:12:01.072Z
 ---
 
 # 設定、執行與部署
@@ -77,7 +77,7 @@ processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-proc
 
 ## Nuxt Showcase
 
-在 `frontend/nuxt-showcase` 執行 `npm install`、`npm run dev`、`npm run test`、`npm run build`。`make showcase` 優先載入 frontend `.env`，不存在才使用 repository root `.env`。
+在 `apps/showcase` 執行 `npm install`、`npm run dev`、`npm run test`、`npm run build`。`make showcase` 優先載入 frontend `.env`，不存在才使用 repository root `.env`。
 
 Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 同時設定 Nitro SWR 與 `public, s-maxage=<ttl>, stale-while-revalidate=<ttl>`。
 
