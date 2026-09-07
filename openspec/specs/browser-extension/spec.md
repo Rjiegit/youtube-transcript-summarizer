@@ -1,7 +1,7 @@
 # browser-extension Specification
 
 ## Purpose
-TBD - created by archiving change add-browser-extension. Update Purpose after archive.
+定義 Browser Extension 將 YouTube URL 安全送入後端任務流程時的必要行為、設定方式與使用者回饋，確保送出成功、重複任務及連線失敗都有一致且可理解的結果。
 ## Requirements
 ### Requirement: Browser Extension Sends YouTube URLs
 系統 SHALL 提供 Chrome/Edge (Manifest V3) 外掛，能將 YouTube 影片 URL 送至後端 `/tasks`。
@@ -38,4 +38,3 @@ TBD - created by archiving change add-browser-extension. Update Purpose after ar
 #### Scenario: 無效 URL 阻止送出
 - **WHEN** 使用者在非 YouTube 影片頁或無效連結觸發送出
 - **THEN** 外掛不送出請求並顯示錯誤通知
-

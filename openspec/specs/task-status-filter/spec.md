@@ -1,7 +1,7 @@
 # task-status-filter Specification
 
 ## Purpose
-TBD - created by archiving change add-task-status-filter. Update Purpose after archive.
+定義 Streamlit 任務列表依資料庫現有狀態進行多選篩選與分頁計算的行為，確保切換資料來源、空結果及頁碼超出範圍時仍呈現一致且有效的列表。
 ## Requirements
 ### Requirement: UI Task List Status Filter
 系統 SHALL 在「Tasks in Database」列表提供可多選的狀態篩選，選項 SHALL 依所選資料庫的現有任務狀態動態產生，且預設為全部狀態。篩選結果 SHALL 影響列表顯示與分頁計算。
@@ -13,4 +13,3 @@ TBD - created by archiving change add-task-status-filter. Update Purpose after a
 #### Scenario: Filter limits list and pagination
 - **WHEN** 使用者僅選取特定狀態（例如 Failed）
 - **THEN** 列表僅顯示符合狀態的任務，分頁計算僅基於篩選後任務數量
-

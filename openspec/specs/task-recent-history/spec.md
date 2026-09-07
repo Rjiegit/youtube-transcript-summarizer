@@ -1,7 +1,7 @@
 # task-recent-history Specification
 
 ## Purpose
-TBD - created by archiving change add-task-recent-history. Update Purpose after archive.
+定義 Streamlit 最近瀏覽任務的排序、去重、保存期限與 SQLite 持久化行為，讓使用者能快速回到近期結果，同時限制紀錄範圍並清除過期資料。
 ## Requirements
 ### Requirement: UI Task Recent History
 系統 SHALL 在 Streamlit UI 記錄使用者近期開啟過的任務，並以最近開啟者優先排序且去重複。紀錄 SHALL 僅保存 `task_id` 與 `viewed_at`，並持久化於 SQLite 資料庫。
@@ -31,4 +31,3 @@ TBD - created by archiving change add-task-recent-history. Update Purpose after 
 #### Scenario: Re-open task moves it to the top without duplication
 - **WHEN** 使用者再次開啟已存在於近期記錄的任務
 - **THEN** 記錄僅保留一筆該任務並移至最前面
-

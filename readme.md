@@ -123,7 +123,7 @@ npm --prefix frontend/nuxt-showcase run build
 2. `openwiki/`：目前架構、流程、整合與維運說明。
 3. `CONTRIBUTING.md`、`AGENTS.md`：人類與 AI 開發規則。
 4. `openspec/`：功能規格、提案與決策歷史。
-5. `.docs/`、`memory-bank/`：歷史資料，不代表目前實作。
+5. `.docs/`：仍需保留但尚未整併的補充設計資料；目前行為仍以程式碼、測試與 OpenWiki 為準。
 
 建議的新手閱讀順序：
 

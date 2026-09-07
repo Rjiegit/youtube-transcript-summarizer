@@ -1,7 +1,7 @@
 # processing-lock-admin Specification
 
 ## Purpose
-TBD - created by archiving change remove-maintainer-token-input. Update Purpose after archive.
+定義 processing lock 維運操作的預先設定憑證、請求標頭與介面安全邊界，避免向一般介面使用者收集或顯示 maintainer token，並維持可控的管理能力。
 ## Requirements
 ### Requirement: Processing Lock Admin Token Is Preconfigured
 Processing lock 維運操作 MUST 直接使用環境變數 `PROCESSING_LOCK_ADMIN_TOKEN` 設定的值作為 `X-Maintainer-Token`，不應要求介面使用者手動輸入。
@@ -15,4 +15,3 @@ Processing lock 維運操作 MUST 直接使用環境變數 `PROCESSING_LOCK_ADMI
 - **GIVEN** 維運介面啟動時無法取得 `PROCESSING_LOCK_ADMIN_TOKEN`
 - **WHEN** 使用者嘗試查詢或釋放 processing lock
 - **THEN** UI MUST 顯示缺少維運 token 的警告並 MUST NOT 送出請求
-

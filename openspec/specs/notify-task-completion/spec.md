@@ -1,7 +1,7 @@
 # notify-task-completion Specification
 
 ## Purpose
-TBD - created by archiving change add-discord-task-notification. Update Purpose after archive.
+定義任務完成後透過 Discord webhook 發送摘要結果與相關來源連結的通知行為，確保缺少選填連結或通知服務失敗時不會破壞主要處理流程。
 ## Requirements
 ### Requirement: Discord Notification On Task Completion
 當任務轉錄與摘要流程成功完成並更新為 `Completed` 時，系統 MUST 透過 `DISCORD_WEBHOOK_URL` 指定的 Discord webhook 發送通知，內容需包含任務標題、原始 YouTube URL，以及在具備任務 ID 與環境變數 `NOTION_URL` 時組合出的 Notion 頁面連結（格式：`{NOTION_URL}/{task_id}`）。
@@ -30,4 +30,3 @@ TBD - created by archiving change add-discord-task-notification. Update Purpose 
 - **WHEN** 系統發送 Discord 通知
 - **THEN** 訊息 MUST 僅包含任務標題與原始 YouTube URL
 - **AND** 系統 SHOULD 記錄訊息指出未附加 Notion 連結
-

@@ -1,7 +1,7 @@
 # gemini-weighted-model-selection Specification
 
 ## Purpose
-TBD - created by archiving change add-weighted-gemini-model-selection. Update Purpose after archive.
+定義 Gemini backend 依設定權重選擇模型，以分散請求並降低單一模型 rate limit 的影響，同時規範權重無效或候選模型不可用時的安全 fallback 行為。
 ## Requirements
 ### Requirement: Use weighted Gemini model selection
 The system SHALL select a Gemini model per request using weighted random selection among a code-defined set of Gemini model identifiers and weights.
@@ -31,4 +31,3 @@ If the weighted model list is invalid (e.g., total weight is not positive), the 
 - **GIVEN** the weighted model list contains no valid positive weights
 - **WHEN** the summarizer uses the Gemini backend
 - **THEN** it falls back to the existing default Gemini model configuration
-
