@@ -112,7 +112,7 @@ npm --prefix frontend/nuxt-showcase run build
 | `src/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
 | `src/infrastructure/llm/` | LLM provider、候選模型與 failover |
 | `src/infrastructure/persistence/` | SQLite 與 Notion adapters |
-| `src/apps/extension/` | Chrome／Edge Manifest V3 client |
+| `apps/browser-extension/` | Chrome／Edge Manifest V3 client |
 | `frontend/nuxt-showcase/` | 從 Notion 讀取成果的 Nuxt 展示站 |
 
 ## 文件怎麼讀
@@ -147,5 +147,6 @@ npm --prefix frontend/nuxt-showcase run build
 ## 子專案
 
 - [Nuxt Showcase README](frontend/nuxt-showcase/README.md)：Nuxt 開發、環境變數、cache 與 diagnostics。
-- [Browser Extension 文件](openwiki/integrations/browser-extension.md)：Extension 安裝、API 設定與安全邊界。
+- [Browser Extension README](apps/browser-extension/README.md)：本機載入、整合邊界與驗證方式。
+- [Browser Extension 架構文件](openwiki/integrations/browser-extension.md)：Extension API 設定與安全邊界；OpenWiki 下次更新時會同步新路徑。
 - [OpenSpec](openspec/project.md)：規格與變更提案入口。

@@ -12,6 +12,7 @@
   - `src/infrastructure/storage/summary_storage.py`
   - `src/core/config.py`
 - Data & storage: `data/` (inputs/outputs), `src/infrastructure/persistence/` (Notion/SQLite adapters), `src/domain/interfaces/` (typed interfaces).
+- Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `src/`）。
 - Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`, `openspec/`（規格與變更提案）。
 
 ## Build, Test, and Development Commands
