@@ -2,6 +2,7 @@ import os
 import sqlite3
 import tempfile
 import unittest
+import warnings
 
 from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
 
@@ -54,6 +55,13 @@ class TestSQLiteClient(unittest.TestCase):
         self.assertEqual(got.retry_of_task_id, None)
         self.assertEqual(got.retry_reason, "")
         self.assertEqual(got.notion_page_id, "page-123")
+
+    def test_update_task_status_does_not_use_deprecated_datetime_adapter(self):
+        task = self.db.add_task("https://youtu.be/no-deprecated-adapter")
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", DeprecationWarning)
+            self.db.update_task_status(task.id, status="Completed")
 
     def test_create_retry_task(self):
         url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"

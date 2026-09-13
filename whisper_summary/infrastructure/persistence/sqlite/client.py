@@ -356,10 +356,10 @@ class SQLiteDB(BaseDB):
         """Updates the status and other fields of a task."""
         conn = self._get_connection()
         cursor = conn.cursor()
-        now = utc_now_naive()
+        now_str = utc_now_naive().strftime("%Y-%m-%d %H:%M:%S")
 
         set_clauses = ["status = ?", "updated_at = ?"]
-        params: list[object] = [status, now]
+        params: list[object] = [status, now_str]
 
         if title is not None:
             set_clauses.append("title = ?")
