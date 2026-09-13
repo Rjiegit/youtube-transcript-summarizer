@@ -1,3 +1,6 @@
+import traceback
+
+
 class Logger:
     @staticmethod
     def info(msg):
@@ -10,6 +13,11 @@ class Logger:
     @staticmethod
     def error(msg):
         print(f"[ERROR] {msg}")
+
+    @staticmethod
+    def exception(msg):
+        print(f"[ERROR] {msg}")
+        traceback.print_exc()
 
 
 logger = Logger()

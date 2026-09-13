@@ -18,8 +18,9 @@ class TestDedicatedProcessingWorker(unittest.TestCase):
         create_database.assert_called_once_with("sqlite")
         processor.assert_called_once_with(db=db, worker_id="processing-worker")
 
+    @patch("whisper_summary.apps.workers.processing_worker.logger")
     @patch("whisper_summary.apps.workers.processing_worker.create_database")
-    def test_poll_loop_survives_failed_cycle(self, create_database) -> None:
+    def test_poll_loop_survives_failed_cycle(self, create_database, logger) -> None:
         stop_event = threading.Event()
         calls = 0
 
@@ -32,3 +33,6 @@ class TestDedicatedProcessingWorker(unittest.TestCase):
 
         run_forever(stop_event=stop_event, processor=processor, poll_interval_seconds=0.1)
         self.assertEqual(calls, 2)
+        logger.exception.assert_called_once_with(
+            "Processing worker processing-worker cycle failed (RuntimeError): RuntimeError('temporary failure')"
+        )

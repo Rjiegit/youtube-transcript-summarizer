@@ -27,7 +27,10 @@ def run_forever(
         try:
             processor(db=db, worker_id=worker_id)
         except Exception as exc:  # pragma: no cover - defensive process boundary
-            logger.error(f"Processing worker {worker_id} cycle failed: {exc}")
+            logger.exception(
+                f"Processing worker {worker_id} cycle failed "
+                f"({type(exc).__name__}): {exc!r}"
+            )
         stopper.wait(max(0.1, poll_interval_seconds))
 
 

@@ -4,6 +4,8 @@ x-python-app: &python-app
     dockerfile: .docker/Dockerfile
   environment:
     TZ: Asia/Taipei
+    UV_FROZEN: "1"
+    UV_NO_SYNC: "1"
   working_dir: /usr/src/app
   volumes:
     - ./:/usr/src/app
@@ -38,6 +40,8 @@ services:
     environment:
       TZ: Asia/Taipei
       TASK_API_BASE_URL: "http://api:8080"
+      UV_FROZEN: "1"
+      UV_NO_SYNC: "1"
     ports:
       - "8501:8501"
 
@@ -51,6 +55,8 @@ services:
     environment:
       TZ: Asia/Taipei
       TASK_API_BASE_URL: "http://api:8080"
+      UV_FROZEN: "1"
+      UV_NO_SYNC: "1"
 
   processing-worker:
     <<: *python-app
