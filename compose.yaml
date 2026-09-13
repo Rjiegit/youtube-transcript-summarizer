@@ -15,12 +15,20 @@ x-python-app: &python-app
 services:
   api:
     <<: *python-app
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: api
     command: ["bash", "-lc", "make yt-dlp-update && make api"]
     ports:
       - "8080:8080"
 
   streamlit:
     <<: *python-app
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: ui
     command:
       [
         "bash",
@@ -35,7 +43,21 @@ services:
 
   rss-monitor:
     <<: *python-app
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: worker
     command: ["bash", "-lc", "uv run python -m src.apps.workers.rss_monitor"]
     environment:
       TZ: Asia/Taipei
       TASK_API_BASE_URL: "http://api:8080"
+
+  processing-worker:
+    <<: *python-app
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      target: worker
+    command: ["bash", "-lc", "make yt-dlp-update && uv run python -m src.apps.workers.processing_worker"]
+    depends_on:
+      - api

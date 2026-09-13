@@ -67,8 +67,9 @@ docker compose up -d
 
 預設啟動：
 
-- `api`：Task API 與 background processing
+- `api`：Task API
 - `streamlit`：主要操作介面
+- `processing-worker`：持續輪詢 SQLite queue 並執行 processing pipeline
 - `rss-monitor`：RSS polling process；需設定 `RSS_MONITOR_ENABLED=true` 才會輪詢
 
 Nuxt Showcase 不在此 Compose topology 中。
@@ -81,6 +82,7 @@ make yt-dlp url="<YOUTUBE_URL>"
 
 # 處理 SQLite queue
 make run
+make processing-worker
 
 # 下載後立即處理
 make auto url="<YOUTUBE_URL>"
@@ -117,6 +119,7 @@ make extension-check
 | `src/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
 | `src/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
 | `src/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
+| `src/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
 | `src/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
 | `src/services/pipeline/processing_runner.py` | 下載、轉錄、摘要、儲存與通知的 orchestration |
 | `src/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |

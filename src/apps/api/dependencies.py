@@ -6,7 +6,10 @@ from fastapi import HTTPException, status
 
 from src.domain.ports.repositories import RSSSubscriptionRepository
 from src.infrastructure.repository_composition import create_database, create_rss_repository
-from src.services.tasks.processing_scheduler import SchedulingResult, schedule_processing_job
+from src.services.tasks.processing_scheduler import SchedulingResult
+
+# Compatibility patch seam for older callers; API execution no longer invokes it.
+schedule_processing_job = None
 
 REQUIRED_NOTION_ENV_VARS: tuple[str, ...] = ("NOTION_API_KEY", "NOTION_DATABASE_ID")
 
@@ -37,7 +40,9 @@ def get_rss_repository() -> RSSSubscriptionRepository:
 
 
 def schedule_job(*, db_type: str, db, worker_id: str | None = None) -> SchedulingResult:
-    try:
-        return schedule_processing_job(db_type=db_type, db=db, worker_id=worker_id)
-    except RuntimeError as exc:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(exc)) from exc
+    """Report dedicated-worker mode without spawning work in the API process."""
+    return SchedulingResult(
+        accepted=False,
+        worker_id=None,
+        message="Task queued for the dedicated processing worker.",
+    )

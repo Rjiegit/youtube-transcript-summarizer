@@ -23,6 +23,7 @@
 - Run Streamlit app: `make streamlit`（等同 `uv run streamlit run src/apps/ui/streamlit_app.py`）
 - Run API: `make api`
 - Run worker CLI（SQLite）: `make run`
+- Run dedicated processing worker: `make processing-worker`
 - Docker (dev): `docker compose up -d`（或 `make docker-up`）啟動 `streamlit(:8501)` + `api(:8080)`（Makefile 會自動相容 `docker-compose` 舊指令）
 - 在 container 中執行指令：`docker compose exec streamlit bash -lc "<COMMAND>"` 或 `docker compose exec api bash -lc "<COMMAND>"`（依要操作的 service 選擇）
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`

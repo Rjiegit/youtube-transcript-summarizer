@@ -4,7 +4,7 @@ import os
 
 from fastapi import APIRouter, Header, HTTPException, status
 
-from src.apps.api.dependencies import ensure_db_configuration, get_database, schedule_job
+from src.apps.api.dependencies import ensure_db_configuration, get_database
 from src.apps.api.schemas import (
     ProcessingJobCreateRequest,
     ProcessingJobCreateResponse,
@@ -51,28 +51,14 @@ def build_lock_snapshot(info: ProcessingLockInfo) -> ProcessingLockSnapshot:
 def create_processing_job_endpoint(
     payload: ProcessingJobCreateRequest,
 ) -> ProcessingJobCreateResponse:
-    """Schedule the background worker that drains the task queue."""
+    """Confirm that the persisted queue is handled by the dedicated worker."""
 
     ensure_db_configuration(payload.db_type)
-    db = get_database(payload.db_type)
-
-    scheduling_result = schedule_job(
-        db_type=payload.db_type,
-        db=db,
-        worker_id=payload.worker_id,
-    )
-
-    if not scheduling_result.accepted:
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail=scheduling_result.message,
-        )
-
     return ProcessingJobCreateResponse(
-        worker_id=scheduling_result.worker_id or "",
+        worker_id=payload.worker_id or "processing-worker",
         db_type=payload.db_type,
         accepted=True,
-        message=scheduling_result.message,
+        message="Dedicated processing worker polls the persisted queue.",
     )
 
 
@@ -191,4 +177,3 @@ def delete_processing_lock(
         before=before_snapshot,
         after=after_snapshot,
     )
-

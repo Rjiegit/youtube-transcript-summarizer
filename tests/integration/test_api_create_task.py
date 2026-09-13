@@ -81,9 +81,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertEqual(payload["task_id"], "42")
         self.assertEqual(payload["status"], "Pending")
         self.assertEqual(payload["db_type"], "sqlite")
-        self.assertTrue(payload["processing_started"])
-        self.assertEqual(payload["processing_worker_id"], "api-worker-123")
-        self.assertIn("Processing worker scheduled", payload["message"])
+        self.assertFalse(payload["processing_started"])
+        self.assertIsNone(payload["processing_worker_id"])
+        self.assertIn("dedicated processing worker", payload["message"])
         self.assertEqual(mock_get_db.call_count, 1)
         mock_get_db.assert_called_once_with("sqlite")
         mock_db.add_task.assert_called_once_with(
@@ -91,7 +91,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             source_type="manual",
             source_channel_id=None,
         )
-        mock_schedule.assert_called_once_with(db_type="sqlite", db=mock_db, worker_id=None)
+        mock_schedule.assert_not_called()
 
     def test_create_task_invalid_url(self) -> None:
         with patch("src.apps.api.dependencies.create_database") as mock_get_db:
@@ -211,9 +211,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         payload = response.json()
         self.assertEqual(payload["db_type"], "notion")
         self.assertEqual(payload["task_id"], "abc")
-        self.assertTrue(payload["processing_started"])
-        self.assertEqual(payload["processing_worker_id"], "api-worker-notion")
-        self.assertIn("Processing worker scheduled", payload["message"])
+        self.assertFalse(payload["processing_started"])
+        self.assertIsNone(payload["processing_worker_id"])
+        self.assertIn("dedicated processing worker", payload["message"])
         self.assertEqual(mock_get_db.call_count, 1)
         mock_get_db.assert_called_once_with("notion")
         mock_db.add_task.assert_called_once_with(
@@ -221,7 +221,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             source_type="manual",
             source_channel_id=None,
         )
-        mock_schedule.assert_called_once_with(db_type="notion", db=mock_db, worker_id=None)
+        mock_schedule.assert_not_called()
 
     def test_create_task_db_factory_error(self) -> None:
         with patch(
@@ -274,8 +274,8 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         payload = response.json()
         self.assertFalse(payload["processing_started"])
         self.assertIsNone(payload["processing_worker_id"])
-        self.assertIn("Processing already running", payload["message"])
-        mock_schedule.assert_called_once()
+        self.assertIn("dedicated processing worker", payload["message"])
+        mock_schedule.assert_not_called()
 
     def test_create_task_handles_scheduling_http_exception(self) -> None:
         mock_db = MagicMock()
@@ -298,7 +298,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertIsNone(payload["processing_worker_id"])
         self.assertIn("Failed to schedule processing worker", payload["message"])
 
-    def test_run_processing_endpoint_schedules_worker(self) -> None:
+    def test_processing_endpoint_reports_dedicated_worker(self) -> None:
         mock_db = MagicMock()
 
         with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
@@ -321,14 +321,10 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         self.assertEqual(payload["worker_id"], "api-worker-123")
         self.assertEqual(payload["db_type"], "sqlite")
 
-        mock_get_db.assert_called_once_with("sqlite")
-        mock_schedule.assert_called_once_with(
-            db_type="sqlite",
-            db=mock_db,
-            worker_id="api-worker-123",
-        )
+        mock_get_db.assert_not_called()
+        mock_schedule.assert_not_called()
 
-    def test_run_processing_endpoint_conflict_when_locked(self) -> None:
+    def test_processing_endpoint_is_independent_of_current_lock(self) -> None:
         mock_db = MagicMock()
 
         with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
@@ -345,8 +341,8 @@ class TestCreateTaskEndpoint(unittest.TestCase):
                     json={"db_type": "sqlite"},
                 )
 
-        self.assertEqual(response.status_code, 409)
-        self.assertEqual(response.json()["detail"], "Processing already running.")
+        self.assertEqual(response.status_code, 202)
+        self.assertTrue(response.json()["accepted"])
         mock_db.release_processing_lock.assert_not_called()
 
     def test_create_task_cached_completed_within_ttl(self) -> None:

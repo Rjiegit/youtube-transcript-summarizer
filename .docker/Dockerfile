@@ -1,5 +1,5 @@
 # 選擇基礎映像
-FROM python:3.14-slim
+FROM python:3.14-slim AS runtime
 
 # 安裝必要的程式和 pip cache 優化
 RUN apt update && \
@@ -38,8 +38,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     pip install --upgrade pip && \
     pip install --retries 5 --timeout 120 uv
 
+FROM runtime AS api
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --no-dev
+    uv sync --frozen --no-install-project --no-default-groups --group api
 
-# 設置預設指令
-# CMD ["python", "main.py"]
+FROM runtime AS ui
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --no-default-groups --group ui
+
+FROM runtime AS worker
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --no-default-groups --group worker

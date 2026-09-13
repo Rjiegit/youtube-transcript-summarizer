@@ -1,4 +1,4 @@
-.PHONY: install install-hooks betterleaks-staged run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 VIDEO_RETENTION_DAYS ?= 7
@@ -25,6 +25,9 @@ freeze:
 
 run:
 	uv run python -m src.apps.workers.cli --db-type sqlite
+
+processing-worker:
+	uv run python -m src.apps.workers.processing_worker
 
 rss-monitor:
 	uv run python -m src.apps.workers.rss_monitor
