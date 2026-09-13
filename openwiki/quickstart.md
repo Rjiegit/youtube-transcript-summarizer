@@ -3,6 +3,9 @@ type: quickstart
 title: 快速開始與開發導覽
 description: 從環境設定、安裝、啟動與測試開始，並依開發任務導向架構、API、持久層與整合文件。
 tags: [quickstart, setup, navigation]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-13T10:51:33.281Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -24,18 +27,19 @@ sources:
     resource: repo://pyproject.toml
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-  - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
-    resource: repo://src/core/config.py
-  - id: openwiki-source-36d48d46c256392dc902bc2d
-    resource: repo://src/infrastructure/llm/model_options.py
-  - id: openwiki-source-791a1bcc2cae6ed2d067dedb
-    resource: repo://src/infrastructure/llm/weighted_selection.py
-  - id: openwiki-source-df04114da62d5e054970a89f
-    resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-07T16:12:01.072Z
+  - id: openwiki-source-ad4df8250d444175a5c8ddb3
+    resource: repo://whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-4796880dadec1e10c195387c
+    resource: repo://whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-f60b7b12c706e6741d8191c8
+    resource: repo://whisper_summary/core/config.py
+  - id: openwiki-source-0d97e8e2b8e9528f009e0d8b
+    resource: repo://whisper_summary/infrastructure/llm/model_options.py
+  - id: openwiki-source-72911afd713a01e09bd32b6a
+    resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-aaaf86d61afa929bb997ee28
+    resource: repo://whisper_summary/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 ---
 
 # 快速開始與開發導覽
@@ -60,7 +64,13 @@ make streamlit
 
 API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。預設自動摘要池目前只有 Gemini，`.env` 請提供 `GOOGLE_GEMINI_API_KEY`。`Config.validate()` 雖接受任一摘要 provider key，但只有 OpenAI 或 Ollama key 仍無法使用目前的預設候選池；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `.env`。
 
-建立 task 後 API 通常會自動排程 background worker；也可手動同步 drain SQLite queue：
+建立 task 後 API 會把工作寫入 SQLite queue。另開 terminal 啟動常駐 processing worker：
+
+```bash
+make processing-worker
+```
+
+需要一次同步處理目前 queue 時，可執行：
 
 ```bash
 make run
@@ -74,7 +84,7 @@ make run
 docker compose up -d
 ```
 
-這會啟動 API、Streamlit 與 RSS monitor。API container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
+這會啟動 API、Streamlit、processing worker 與 RSS monitor，對外提供 API `:8080` 與 Streamlit `:8501`。API 與 processing worker container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
 
 ## Nuxt Showcase
 
@@ -114,7 +124,7 @@ make test
 uv run flake8 .
 ```
 
-上述為一般本機檢查；CI 實際採兩階段 lint，完整指令與阻擋條件見[開發規則與測試策略](operations/development-and-testing.md)。
+也可依測試層級分開執行 `make test-unit` 與 `make test-integration`。Browser Extension 的靜態驗證使用 `make extension-check`。CI 分別驗證 Python、Nuxt Showcase 與 Browser Extension；完整指令與阻擋條件見[開發規則與測試策略](operations/development-and-testing.md)。
 
 執行 Nuxt suite 與 production build：
 
@@ -145,6 +155,6 @@ npm --prefix apps/showcase run build
 
 - Showcase 顯示缺少設定：先執行 `npm run check-env`，再查看 `/api/showcase/diagnostics`。
 - diagnostics 正常但無資料：查看 `/api/showcase/health`，確認 Notion integration 權限、database id 與 status schema。
-- task 已 Pending 但未開始：呼叫 `POST /processing-jobs` 或執行 `make run`；先確認是否已有 processing lock。
+- task 已 Pending 但未開始：確認 dedicated processing worker 正在執行，或用 `make processing-worker` 啟動；`POST /processing-jobs` 只會確認目前採 dedicated mode，`make run` 則會同步處理一次 queue。再確認是否已有 processing lock。
 - Extension 無法送出：確認 Options API Base URL、API connectivity 與頁面是否為支援的 YouTube URL；channel handle 還需要 DOM 提供 channel id。
 - RSS 沒有建立舊影片 tasks：首次 poll 只 seed watermark，這是避免回填整個歷史 feed 的預期行為。

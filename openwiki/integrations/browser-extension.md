@@ -4,6 +4,8 @@ title: Browser Extension 任務與 RSS 入口
 description: 說明 Manifest V3 extension 如何辨識 YouTube context、建立摘要任務或 RSS 訂閱，以及設定、權限與失敗回饋。
 tags: [browser-extension, chrome, youtube, api, rss]
 sources:
+  - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
+    resource: repo://.github/workflows/main.yml
   - id: openwiki-source-68335af7c13a3fb661ff132a
     resource: repo://apps/browser-extension/content_script.js
   - id: openwiki-source-fd915a0411f41f59671049a8
@@ -12,10 +14,12 @@ sources:
     resource: repo://apps/browser-extension/options.js
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
-generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
+  - id: openwiki-source-e7e3216f0a331a89b855c12c
+    resource: repo://scripts/validate-browser-extension.mjs
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T16:12:01.072Z
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # Browser Extension 任務與 RSS 入口
@@ -63,6 +67,10 @@ API base URL 預設是 `http://localhost:8080`。Options page 只接受可由 `U
 開發安裝使用瀏覽器的「載入未封裝項目」指向 `apps/browser-extension`。此 repository 目前沒有 extension 專用 automated test suite，因此修改 URL routing、DOM selectors、permissions 或 status handling 時，除 code review 外還需要在 Chrome/Edge 手動驗證影片頁、列表 link、channel page、timeout、duplicate 與無法偵測 channel 等情境。
 
 ## 延伸閱讀
+
+## 自動化驗證
+
+`make extension-check` 會檢查 Manifest V3、manifest 引用的 assets、HTML references 與 JavaScript 語法；GitHub Actions 的 `browser-extension` job 也會執行同一支 validator。實際瀏覽器權限與互動仍應以 Load unpacked 補充驗證。
 
 - [HTTP API 與 Client 契約](http-api-and-clients.md)
 - [YouTube RSS 自動化](../workflows/rss-automation.md)

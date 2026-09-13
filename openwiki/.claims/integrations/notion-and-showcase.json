@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:69bea2a77d533b6b5ca2fc0405395afd1dce6d675288e157808689e804cb7e33",
+  "pageVersion": "sha256:b73d3b0708e08865def99caaae99b44a335d4d9a3dbb2aa3bc79ae09c48fc703",
   "claims": [
     {
       "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
       "statement": "NotionDB 可將 Notion database 當作任務 queue，使用 URL、Name、Status 建立與更新任務。",
       "evidence": [
         {
-          "resource": "repo://src/infrastructure/persistence/notion/client.py#L12-L49",
-          "version": "repo-lines-v1:sha256:665b5fc4d6a52769ef74024d6c6de9ab6a6d2e032e54f6b6fb61ae7c165acd09:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmODRhMjE5NDI4NDM2YjEzNzEyNTE2ODE3MzkyMjRjZTA4NmM3MDZjZmU3MWU4NjFhY2E1MDBmYTE3YWZkMmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0ODIzNzM1MTYwNWM2YWM1NjkwOTUzZmU3NjgxZjE4NWM5OGEwMmM0M2Y4Nzc1NTMzNGY0OWNkZmFjN2M2NzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY2NWFmOThiODBjNzk1MDFiMjVhY2JlYzY3MzY3MGQxNDc2ZGFiOWIyNTBlY2IyMDE3ZmNkNDE2ZGMyOTAzYTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNjIxZDQyYWY3MDI4N2ZjZDRhN2FiN2EyMzMyOTk1MjU4NjA0MDM1NzRjM2U2MzYzMDM5M2E1ZDJmNzkxMzkifQ"
+          "resource": "repo://whisper_summary/infrastructure/persistence/notion/client.py#L12-L49",
+          "version": "repo-lines-v1:sha256:665b5fc4d6a52769ef74024d6c6de9ab6a6d2e032e54f6b6fb61ae7c165acd09:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmODRhMjE5NDI4NDM2YjEzNzEyNTE2ODE3MzkyMjRjZTA4NmM3MDZjZmU3MWU4NjFhY2E1MDBmYTE3YWZkMmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM0ODIzNzM1MTYwNWM2YWM1NjkwOTUzZmU3NjgxZjE4NWM5OGEwMmM0M2Y4Nzc1NTMzNGY0OWNkZmFjN2M2NzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUwZmU3YTYyMjBmOTc1NTFlYTc4YTc4NDM2N2JkOWE1NDM2ZTZjM2I5YjRlY2VkMmZiOWQzNTI3NDU1ZmIwNzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEzNjIxZDQyYWY3MDI4N2ZjZDRhN2FiN2EyMzMyOTk1MjU4NjA0MDM1NzRjM2U2MzYzMDM5M2E1ZDJmNzkxMzkifQ"
         },
         {
-          "resource": "repo://src/infrastructure/persistence/notion/client.py#L124-L148",
+          "resource": "repo://whisper_summary/infrastructure/persistence/notion/client.py#L124-L148",
           "version": "repo-lines-v1:sha256:96bdca85059c8fb91561eb38adefa0be44cd777c33815b60668de187a01522b9:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRiNmMwNTVmODI4OTE1NDJlNTNmOGVhNTNlYWNkMjU0YzhjNGIzOTBlZTc1ZTI3ZjhlMWM4M2Q0MjI0NGUxOGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUwMmQxYTk2MjdkNGJlMDljZjcxMjBjMjUzNzliYzMyYWEzMGEzYmQwODE3MTIxZjAzOWYyZTE4MjYwZTFmZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjOWMyYjVjMmViNmJkMzU4MjQ0MTYyMTZhYzBmOWZmMDk5YTQ4ZDg1NTgwNWE1Y2NlZDg5NzI4MmE4NzVjNWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIwOGU1YmQ4ZGQ5NDJmNDUwODE2OThkZGIxMmVmNGY0MjMwMWM4N2M4MTA5MGU3ODU2NzQ0MzhlN2I0ZDY3YzMifQ"
         }
       ]
@@ -21,7 +21,7 @@
       "statement": "SummaryStorage 建立含 Title、URL、Model、預設非公開 Public 欄位的 Notion page，並將摘要分塊為 paragraph children。",
       "evidence": [
         {
-          "resource": "repo://src/infrastructure/storage/summary_storage.py#L109-L159",
+          "resource": "repo://whisper_summary/infrastructure/storage/summary_storage.py#L109-L159",
           "version": "repo-lines-v1:sha256:a727ac2752da90460b7c6ea57eab8e5dc2fc3f67e5f96f711d731adc899c303c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NjMzMWY1ZTVjNjlkZjc4ODYwNGI0YTAxNTdmN2Q2YjI4MzY5YTM2YTcwN2ZkZWY2ZTJjODQ4OGJlMzAzMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMjVmMjdiYjBjYWEwNWM1OGMyODkwZTZiYjNiMWU2YmQwOTRhMmMzMzk1MmNiNDQyOWQyNWI3MGM1NzdhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiMDRlNWVhMzliYmExODRjZjNjNzRjNDcyZDI1ZjJiZTgzMWFiODUwYmU5OWYyM2M4YmUyZDI0ZDhjZmFlZmQifQ"
         }
       ]
@@ -73,10 +73,28 @@
           "version": "repo-lines-v1:sha256:c8083821f1694d3ba49d9ad7c1bf7384095eb59b2e0b38e24b9bc51e33fe1553:eyJzZWxlY3RlZExpbmVDb3VudCI6ODMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxM2IyYTQ1MWQxYWRlZTA5MDcyMmU0YzQ5NTdlZjg0MGE2ZmVmZGM3MTE5MWM5NTVkMzgwYTkzYjFkZmE0N2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiMjYzNDYyYzk0M2RjMjIzNWJjMDgwODBmZTg4YjExOWJmODA5ODM5YTFkMTFiYTU1NzU2ODM2MWU5NzAwYmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2MjgxNWMyMDQxODEwN2I3MTk3NTQ2YzFlMGFiMzBhMDlkYzIzODRjNmE4NTM1MDRlZmE0ZTNlNzEwYmQ3YWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQxZWY4YWYwNmY0NjU0NzcwYTllODcwMDhmNWQ0YWY3YmUzZjliN2Q3MWNkODBkZWQ1MTVmY2ZiMmFhNmE5ZjEifQ"
         }
       ]
+    },
+    {
+      "id": "claim_162a5eb58fc74d3b9537e3a6d0ab5b05",
+      "statement": "Python writer與Nuxt reader測試共同使用Notion Completed page fixture，以驗證跨runtime schema contract。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/tests/showcase-notion-contract.test.ts#L1-L19",
+          "version": "repo-lines-v1:sha256:721721602711fb5bd1b3e2a86895a3cf69fb07d298cc673bf3a9df658abe3435:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiOTUwNmIyMWY0ODNkYzk1ZGYyZjJiMzVmNzBjMGE0NDNiMDUzYTdiOTY0OWY3NzQ2N2U2ODhhMzMyMDA0MDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://tests/fixtures/notion_completed_page.json",
+          "version": "repo-file-v1:sha256:5fa53a3e1a2851fe9f6d07d80646b25b62ca44db0e53459c30332b965d748522"
+        },
+        {
+          "resource": "repo://tests/unit/test_notion_contract.py#L1-L30",
+          "version": "repo-lines-v1:sha256:b8759cc7c2678e963af7b5b99b06060d3af2f6d190b0bb58ca48cf8f3888467c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2MWE5MTEyYTI5MThlMmFiYTAzZTE5YTJmMjIxYTAyN2FiNGI2ZjllOTQ2YTZjMzk4MTRmNTRlMThlMDdkZmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmOWUyYThmOTMyMDBkNWU0ZTNkNzFlMmMxOTIyNWFiZjM5MzY0MzhkZDBiMGFlZDg5MzVmY2ExYTc0Njg0NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T16:12:01.072Z"
+    "at": "2026-09-13T10:51:33.281Z"
   }
 }

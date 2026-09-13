@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:bbcc22807c34b26b59cc9cd9fa2fedef09083af6ee410ce14ec44afd6c2d962e",
+  "pageVersion": "sha256:c3393420fe5b70a607167c0bad4b959d491cc2aa3a0dcc53487b280ae17b8d9b",
   "claims": [
     {
       "id": "claim_b49be5796ebb45d68855fac7f4755cef",
@@ -99,10 +99,24 @@
           "version": "repo-lines-v1:sha256:6f7ca1a73bf1ba65d5443f98cfdaf7e01820ffff5a25af841fbf7ed718bbb223:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkMjM1MDA5MjQ1OGJkYmMxZWY5ZWZiMTRiZDhlM2Y4ZTU0YjVhNWFhMTllNTMyYzViZjg2YWY1MzdlNGNkYjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImViMWVhMTVhMGY3YjFkNzc0MWMwOTJkZTgwMmQzOWZkYTQ0MzRlY2YwNWY5NDM1OGM2ZjM2OWNhOTExNmUyMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImIxYmFiNzQyMzRlYjIwMTU0MzZjNmRlNmJhNjkyN2YzYjZmNDVhMjhlYTU2YTg3YzMzYjk2ZTFiYzliYjZlYTAifQ"
         }
       ]
+    },
+    {
+      "id": "claim_d3652cdecd454d32948d60708f3e957b",
+      "statement": "Showcase diagnostics只回報設定存在與解析狀態而不揭露secret，health endpoint則實際查詢Notion。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/server/api/showcase/diagnostics.get.ts",
+          "version": "repo-file-v1:sha256:d0e7d4776198485fc77a1a879eaea18c1ff457fbe8c88ca0b706cb73f3ea69b4"
+        },
+        {
+          "resource": "repo://apps/showcase/server/api/showcase/health.get.ts",
+          "version": "repo-file-v1:sha256:2d58c7526975ba5d67b379885757eca19bbcd7ef99aa6a40ffdb39f270c95700"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T16:12:01.072Z"
+    "at": "2026-09-13T10:51:33.281Z"
   }
 }

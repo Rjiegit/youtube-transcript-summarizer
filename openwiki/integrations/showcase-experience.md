@@ -10,6 +10,10 @@ sources:
     resource: repo://apps/showcase/pages/index.vue
   - id: openwiki-source-714810166c8a4a2d54858dbf
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
+  - id: openwiki-source-a3da7cc10ec9db071df60002
+    resource: repo://apps/showcase/server/api/showcase/diagnostics.get.ts
+  - id: openwiki-source-8622a3965ca73ed99b52ff8c
+    resource: repo://apps/showcase/server/api/showcase/health.get.ts
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-acc677c60f44374b1f2d50cf
@@ -19,7 +23,7 @@ sources:
 generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T16:12:01.072Z
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取

@@ -3,23 +3,25 @@ type: integration
 title: LLM Providers、選擇與 Failover
 description: 說明 Gemini、OpenAI、Ollama 的候選資格、加權選擇、provider 呼叫與一次性 transient failover。
 tags: [llm, gemini, openai, ollama, failover]
+sources:
+  - id: openwiki-source-68a25612112798dab8afa5ab
+    resource: repo://tests/unit/test_summarizer_service.py
+  - id: openwiki-source-62ef829d90d6d48b1c1355be
+    resource: repo://tests/unit/test_weighted_selection.py
+  - id: openwiki-source-0d97e8e2b8e9528f009e0d8b
+    resource: repo://whisper_summary/infrastructure/llm/model_options.py
+  - id: openwiki-source-a5639578dff19ab6856c946c
+    resource: repo://whisper_summary/infrastructure/llm/prompt_context.py
+  - id: openwiki-source-9ecbd3cd291b4efc7e52f344
+    resource: repo://whisper_summary/infrastructure/llm/summarizer_service.py
+  - id: openwiki-source-72911afd713a01e09bd32b6a
+    resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-aaaf86d61afa929bb997ee28
+    resource: repo://whisper_summary/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
-sources:
-  - id: openwiki-source-36d48d46c256392dc902bc2d
-    resource: repo://src/infrastructure/llm/model_options.py
-  - id: openwiki-source-a1071f6de2071698b70c8d14
-    resource: repo://src/infrastructure/llm/summarizer_service.py
-  - id: openwiki-source-791a1bcc2cae6ed2d067dedb
-    resource: repo://src/infrastructure/llm/weighted_selection.py
-  - id: openwiki-source-df04114da62d5e054970a89f
-    resource: repo://src/services/pipeline/processing_runner.py
-  - id: openwiki-source-7def47d9e5d7b25e40812c7c
-    resource: repo://tests/test_summarizer_service.py
-  - id: openwiki-source-e2ee026fbcf730652e2c0e63
-    resource: repo://tests/test_weighted_selection.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # LLM Providers、選擇與 Failover

@@ -1,44 +1,66 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:50f8f467210448205591c88c87a3fb7e4f08dc429e6b0e88624220b466d7c611",
+  "pageVersion": "sha256:fc06be890f37491e2cca041918f018481543a78c9005a602c000669f34451c07",
   "claims": [
     {
       "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
       "statement": "相同 URL 的 Pending/Processing task 會被視為 active duplicate；Completed task 可依 block_existing 永久阻擋或在 cache TTL 內回傳 cached result。",
       "evidence": [
         {
-          "resource": "repo://src/services/tasks/task_creation.py#L22-L72",
-          "version": "repo-lines-v1:sha256:b58ca20ea6aab9034bbabfbb0f8b10cb2dee478d42137f12d957eecc1415ce43:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/services/tasks/task_creation.py#L22-L72",
+          "version": "repo-lines-v1:sha256:fce6d55704bc0c905abc4a782492c6579fcfd9ef6a7c50c83040f99ca3a27d8c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
     {
       "id": "claim_5cebfa29cd9542708b925d08c18713be",
-      "statement": "Scheduler 在建立 daemon worker thread 前先取得全域 processing lock；已有 worker 時拒絕排程，thread 啟動失敗時釋放 lease。",
+      "statement": "Dedicated processing worker依polling interval反覆執行queue drain；API process不啟動daemon thread，單次cycle失敗不終止常駐worker。",
       "evidence": [
         {
-          "resource": "repo://src/services/tasks/processing_scheduler.py#L39-L75",
-          "version": "repo-lines-v1:sha256:7b263514a792e1b1551be4f78cbd08c72b613eb91ba0b0bd1d6693a9b0588ca1:eyJzZWxlY3RlZExpbmVDb3VudCI6MzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlYzg4YTFkYTQ5ZGUyZWM1NTM1Y2ZhNzVhNWM0N2FjNDhlMmU3NmU1ZDMwYWJlNWVkZTc0YjYxOTdhNWE0MDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiODI0MTY4OTRlNmJhMzk5ZGVjOGViZGQ0MTc4NWY5NDYxMDFlZjAzNmJlOTFlYTM4MjMxNDk2MTIzOWM0MzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/apps/api/dependencies.py#L42-L48",
+          "version": "repo-lines-v1:sha256:4c9fbed5b6c2cda23dd7dc8d0ee32aedc9c0daf08dc1a360ec57ab547f3ec443:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmRmYzBlODUzODJlOTVlMDUzYjNkNTA2YTg4NzI2OGIwM2EwYjk1YTFmZTA2ZmU0OTE4YTAwZWIzZGFiYjhkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzk4ZTg4OTQzNmQyMjY4OTlmMzJiYTI2ZTZlYjU0ZjE0NTQwOWM5ODkzM2ExZmY2NGQxMmY4NDg0NDNlOTI5ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://whisper_summary/apps/workers/processing_worker.py#L15-L48",
+          "version": "repo-lines-v1:sha256:95c52750b28ab897cd3a6fb72026447661618bf15f656966b6c8bc2cf64ef515:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyOTBjNDU3YmVlODlkZTg1Y2EyOTU1ZTA2N2JiNzg2Y2VjY2JjMzUyMmQyMjNjYjYzZjNhMDYzNjI5YzE5YWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmZTc1YmNlM2QxZDAzYzNkNzVlZDRlOWIxZTUwNzQ4MWRmYjA2NjRhM2Q5NGM3Nzc0YTVlOTNlYzg5YmQzYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
     {
       "id": "claim_6d40e85eeeba486cb96a9825eb0082ba",
-      "statement": "Retry endpoint 只接受 Failed task，建立關聯的新 Pending retry task並把 source改為 Failed Retry Created；endpoint 沒有排程 worker。",
+      "statement": "Retry endpoint 只接受 Failed task，建立關聯的新 Pending retry task並把 source改為 Failed Retry Created；retry等待dedicated worker後續取得。",
       "evidence": [
         {
-          "resource": "repo://src/apps/api/main.py#L580-L624",
-          "version": "repo-lines-v1:sha256:627d429ed7b6bf88605520e56880e4fbe5abb095b7b01364f1eacfb6b679b166:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQxNjAzOGZhZjAxNjQ1M2Y4YTRiNTRjYzEzZDQ1MjgwZjlkN2U2Y2QxYWEyZDcwMjEwNTE3NjQzMDRjNWVhYmQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY2YmJlNTAwZGUxN2FjZDI5ZmRkNjdjYmUyZTZjN2JlMWIwOGRkMDZhMmRhM2E1YTdiMzdlOGZmZDdkZmY3ZGQifQ"
+          "resource": "repo://whisper_summary/apps/api/routers/tasks.py#L123-L174",
+          "version": "repo-lines-v1:sha256:9eeef625c903482c8cceec9577fafbab3faa2137339cb4b162715803bad557c6:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NGZjM2FjNDMzZTFjMmM0NDAzZDljNjZkNTk3ZWJiODI1OTAzZTFhZjZmNjJiNDBlMDQ5MzUyZjM2MTE1NmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxOWExNzY4OTY1MzE2YTNiY2RhZmMxMTA0MmU1YjkzZGI3YjAyYTY3MjhmYjNmY2EzZDg3YjFiNTJhOWNkZjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhM2NmNTE5MjM1NGY3MTYxNWFjNTEwMzRiM2U5N2MyMGVkYTk5NjQzZmNhZjViYmU2ZDQxYWQ1OWJkMTIxNjcifQ"
         },
         {
-          "resource": "repo://src/infrastructure/persistence/sqlite/client.py#L494-L520",
-          "version": "repo-lines-v1:sha256:bd9f8967a5dfde7ed7006a63d4c463317c940a2a2c324f1ca03311b133fe051e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyMTBiZTYzNjUxY2E3NmE0ZDk4ZGFkZTdlNzcxMzU3YTA2ZDA5YjZlYmIzNTY4YTNjZjg0ZmNmY2VjNDA3ZGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkYmExMmRjNjgzMWEzMWU5NzdjMTMzMDU0NWZiMzZhMTFjYjE2MDQ5YjQ5ZGYwN2MzYjAyNjM4YjIwNzA2YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZjNzYyOTQxN2VkMWJiMWQwMDQ0ZTk3NjBmZDlhYjg0YjhmZTg5NGNkNTk5ZTE4NWFjOTUyOGUzY2I1MDcwY2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L380-L410",
+          "version": "repo-lines-v1:sha256:e238cccca8bb16e8d9a5314cce1e4939776840e5a5a3fec32eab8709fb894fe8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxZWYwNzllYTYzZWE4ZjU0YmI3MzI2NmZiNDExZWYxNjI0ZWQ0NDkzN2FlNzQ3NjFhZjMwMTNjYTJhOGEyOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4ODQ1YThiN2FlMWNlZTUwMGI1ZWE5YTE5ZmMxOTY4N2NlOGQxMDY1ZjdlMjllYTY3MzYyM2VmMmRhZDIyM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1ZTRlNDFjNGIxM2Y3OGZjNzg5NTAzODA3NmJiNTgwMjdkYjY5NDA5NWFkNGMyOWQwY2EzZmI3ZWM3YTk2NjMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f22d0b95300842b69a6d3eb48bd8c3a9",
+      "statement": "ProcessingWorker先取得並refresh全域processing lock，再由SQLite atomic claim最舊Pending或stale Processing task，避免多worker重複處理。",
+      "evidence": [
+        {
+          "resource": "repo://tests/unit/test_sqlite_client.py",
+          "version": "repo-file-v1:sha256:ce1a41ff010f404d6bc03b55944e6f8c7486a0f0f71e212bdc603cb703f34574"
+        },
+        {
+          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L130-L205",
+          "version": "repo-lines-v1:sha256:61d1cd7cac0458dbe16743d80c92f3b26c0cdb3b6ce123e2dfe199725c4caafb:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5ZjRhZmI0YzU4OGQzOTYzZWI3YTViYjVlZGY2YzJiMjFjNzUzMTQ4OTQyY2ZjOGRjYjBhYTEwMmVjZDdiZTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZmUyZDU3ZDg2M2U1YzhlN2M0MTIyNDg1YjIyMTliN2IzOTZlNGE2NGFlZWE4YzMzMzEwMWQ2Mjg0NjhlOTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxYjFiZjM3YzQ3MTBlZGI3MjQ2NjNkZjk0Y2NhZmIwOGQ4ZDRkNWM5YjJhMWE3ODE1MTk5YTE0ZTE1NWYxZDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxZTBlMDk0NmMzNDI1NDQyYWI0Mzc2Y2U5MzZkMmVmYjRhNWFiOGNiOWNhMjJjZjgzMzVmNzRmNThiZjg5ZjIifQ"
+        },
+        {
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L119-L180",
+          "version": "repo-lines-v1:sha256:9a0906300cbcbd540317f0f0647dfa950bd96fa84d3bc792d1579edc4a51892c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwNzQ0NmFjYzI5NDIxNDMxY2Q1YWQ1N2Y1ZjQ2MTE2ZTk3YTQ5N2NjODRjMDhiNGFjOWJhNTY4NDMzMjhhYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5ZTUwMDA2ZDUwYjA3MzNmMjdiNzRmZjcyNGM1YzI0MjM5MjM4NmZlOTUyMWVlYjhkNmIwMjA1ODJjMWUwYTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYzFkYzk0ZmY5NzBlOTlkZGNjODEyYmZmMDg1OTMwMjEwNDZkYzc2ZTc4NTYxYWY0MWUwZWMxMDIwYTg2ODQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzMmRhZjM1NWQ1YTQyNzVlZWIzODM1MDYxOTRlZTcwNmE5ZTZjYmI4MzZlNzQ1OTNmNjcwOTA5YTI1YjRmNzAifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T14:09:43.292Z"
+    "at": "2026-09-13T10:51:33.281Z"
   }
 }

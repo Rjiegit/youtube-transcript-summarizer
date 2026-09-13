@@ -6,14 +6,20 @@ tags: [notion, integration, persistence, showcase]
 sources:
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
     resource: repo://apps/showcase/server/utils/notion.ts
-  - id: openwiki-source-71c6fb5bae534b32dd19c0ab
-    resource: repo://src/infrastructure/persistence/notion/client.py
-  - id: openwiki-source-5858a6e533d57781fe90f469
-    resource: repo://src/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+  - id: openwiki-source-db42db5a52daaee659ddab56
+    resource: repo://apps/showcase/tests/showcase-notion-contract.test.ts
+  - id: openwiki-source-17024c380549dc52263226a6
+    resource: repo://tests/fixtures/notion_completed_page.json
+  - id: openwiki-source-486ab8f26c989067e2a915ab
+    resource: repo://tests/unit/test_notion_contract.py
+  - id: openwiki-source-ed7ac39232dcc4e27533dae4
+    resource: repo://whisper_summary/infrastructure/persistence/notion/client.py
+  - id: openwiki-source-16ad15a60707008474d113ec
+    resource: repo://whisper_summary/infrastructure/storage/summary_storage.py
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T16:12:01.072Z
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -47,6 +53,10 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 - Notion queue 與 SQLite 的 consistency 差異由持久化頁維護，本頁不把 Showcase 的 read schema 誤當作 queue locking 保證。
 
 ## 延伸閱讀
+
+## Contract 驗證
+
+Repository 以 `tests/fixtures/notion_completed_page.json` 表示共同的 Completed page contract；Python writer test 與 Nuxt reader test 同時使用它，讓 property 名稱、型別與公開欄位的變更能在兩側被偵測。
 
 - [任務、鎖與結果持久化](../architecture/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)

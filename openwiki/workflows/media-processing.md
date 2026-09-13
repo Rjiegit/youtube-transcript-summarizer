@@ -3,26 +3,34 @@ type: workflow
 title: 媒體轉錄與摘要流程
 description: 追蹤單筆任務的下載、YouTube metadata 擷取、Whisper 轉錄、LLM 選擇、輸出儲存、通知與失敗處理。
 tags: [pipeline, whisper, llm, metadata, storage]
+sources:
+  - id: openwiki-source-a816aff2ae090142dc0071cf
+    resource: repo://tests/unit/test_dedicated_processing_worker.py
+  - id: openwiki-source-d71c441e748ae7289c50b715
+    resource: repo://tests/unit/test_processing_worker.py
+  - id: openwiki-source-4796880dadec1e10c195387c
+    resource: repo://whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-b09a9c01943a6da34cb777d1
+    resource: repo://whisper_summary/core/prompt.py
+  - id: openwiki-source-7975645885c1fae29f87f715
+    resource: repo://whisper_summary/domain/media/models.py
+  - id: openwiki-source-a5639578dff19ab6856c946c
+    resource: repo://whisper_summary/infrastructure/llm/prompt_context.py
+  - id: openwiki-source-9ecbd3cd291b4efc7e52f344
+    resource: repo://whisper_summary/infrastructure/llm/summarizer_service.py
+  - id: openwiki-source-aa9bed27f533a96ebf77433d
+    resource: repo://whisper_summary/infrastructure/media/downloader.py
+  - id: openwiki-source-aaaf86d61afa929bb997ee28
+    resource: repo://whisper_summary/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
-sources:
-  - id: openwiki-source-0fdf5745e1f00e18dd400997
-    resource: repo://src/core/prompt.py
-  - id: openwiki-source-0a31e24491d869302652bc69
-    resource: repo://src/domain/media/models.py
-  - id: openwiki-source-a1071f6de2071698b70c8d14
-    resource: repo://src/infrastructure/llm/summarizer_service.py
-  - id: openwiki-source-bd11e0e09048def2f9ec2ff6
-    resource: repo://src/infrastructure/media/downloader.py
-  - id: openwiki-source-df04114da62d5e054970a89f
-    resource: repo://src/services/pipeline/processing_runner.py
-  - id: openwiki-source-839ded7442c98545a6825769
-    resource: repo://tests/test_processing_worker.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # 媒體轉錄與摘要流程
+
+常駐入口 `whisper_summary.apps.workers.processing_worker` 以可設定間隔輪詢 persisted queue；FastAPI 只建立任務，不執行此重型流程。每一輪由 composition root建立的 dependencies交給 `ProcessingWorker`，cycle失敗會記錄後繼續輪詢。
 
 ## 單筆處理順序
 

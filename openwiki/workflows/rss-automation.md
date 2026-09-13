@@ -3,26 +3,26 @@ type: workflow
 title: YouTube RSS 自動化
 description: 說明 YouTube channel 訂閱、watermark polling、API 入列與 monitor 執行模式。
 tags: [rss, youtube, automation, sqlite]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
 sources:
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-  - id: openwiki-source-822793b105256e659707b60b
-    resource: repo://src/apps/api/main.py
-  - id: openwiki-source-c79e0b87395cb78682a64778
-    resource: repo://src/apps/workers/rss_monitor.py
-  - id: openwiki-source-0b294e3f86f4bc3838cb6ca2
-    resource: repo://src/services/rss/channel_monitor.py
-  - id: openwiki-source-01f22608fdc3c845dfb0f335
-    resource: repo://tests/test_rss_monitor.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+  - id: openwiki-source-7a37609e40334e5fce357765
+    resource: repo://tests/unit/test_rss_monitor.py
+  - id: openwiki-source-d1e2e939cdaa20a1825bddb5
+    resource: repo://whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-35372f5d20dd7b30f834f770
+    resource: repo://whisper_summary/apps/workers/rss_monitor.py
+  - id: openwiki-source-e66f0503669326252cbeb176
+    resource: repo://whisper_summary/services/rss/channel_monitor.py
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # YouTube RSS 自動化
 
-RSS 子系統把「發現影片」與「處理影片」分開：monitor 只解析 feed 並呼叫 FastAPI 建立 SQLite task，下載、轉錄與摘要仍由既有 background worker 負責。
+RSS 子系統把「發現影片」與「處理影片」分開：monitor 只解析 feed 並呼叫 FastAPI 建立 SQLite task，下載、轉錄與摘要仍由既有 dedicated processing worker 負責。
 
 ## 訂閱與儲存
 

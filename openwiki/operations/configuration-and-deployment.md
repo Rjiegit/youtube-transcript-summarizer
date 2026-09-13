@@ -8,6 +8,8 @@ sources:
     resource: repo://.betterleaks-pre-commit.toml
   - id: openwiki-source-6a7b8c07ba8513021d4c75f8
     resource: repo://.betterleaks.toml
+  - id: openwiki-source-269e1e25890c094aaa09d0a0
+    resource: repo://.docker/Dockerfile
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
   - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
@@ -24,20 +26,22 @@ sources:
     resource: repo://compose.yaml
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
+  - id: openwiki-source-05ccef8d4cf1698187f20464
+    resource: repo://pyproject.toml
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-  - id: openwiki-source-526d4ed1a7d9ebdeb9c244a6
-    resource: repo://src/core/config.py
-  - id: openwiki-source-36d48d46c256392dc902bc2d
-    resource: repo://src/infrastructure/llm/model_options.py
-  - id: openwiki-source-791a1bcc2cae6ed2d067dedb
-    resource: repo://src/infrastructure/llm/weighted_selection.py
-  - id: openwiki-source-df04114da62d5e054970a89f
-    resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
+  - id: openwiki-source-f60b7b12c706e6741d8191c8
+    resource: repo://whisper_summary/core/config.py
+  - id: openwiki-source-0d97e8e2b8e9528f009e0d8b
+    resource: repo://whisper_summary/infrastructure/llm/model_options.py
+  - id: openwiki-source-72911afd713a01e09bd32b6a
+    resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-aaaf86d61afa929bb997ee28
+    resource: repo://whisper_summary/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T16:12:01.072Z
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # 設定、執行與部署
@@ -56,6 +60,7 @@ verified:
 | API | `make api` |
 | Streamlit | `make streamlit` |
 | SQLite worker 一次 | `make run` |
+| Dedicated processing worker | `make processing-worker` |
 | RSS monitor | `make rss-monitor` / `make rss-monitor-once` |
 | 預覽過期 data 容量 | `make cleanup-data-dry-run` |
 | 刪除過期 data | `make cleanup-data` |
@@ -63,7 +68,7 @@ verified:
 
 `make install` 還會寫入 `/usr/local/bin/yt-dlp`，本機可能需要權限，不應把它視為純 dependency sync。API 的開發命令綁定 `0.0.0.0:8080` 並啟用 reload。
 
-Docker Compose 以同一 image、`.env` 與 bind-mounted repository 啟動 api、streamlit、rss-monitor。API 暴露 8080、Streamlit 暴露 8501；後兩者的 `TASK_API_BASE_URL` 指向 Docker DNS 名稱 `api`。API 啟動時預設更新 yt-dlp，可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0` 停用；僅在主機 shell 設定此值，不會由目前的 Compose 設定自動傳入 container。
+Docker Compose 以共用 runtime base、`.env` 與 bind-mounted repository 啟動 api、streamlit、processing-worker、rss-monitor。Dockerfile 以 `api`、`ui`、`worker` targets 分別安裝對應 dependency group。API 暴露 8080、Streamlit 暴露 8501；Streamlit 與 RSS monitor 的 `TASK_API_BASE_URL` 指向 Docker DNS 名稱 `api`，processing worker直接輪詢 persisted queue。API 與 processing worker啟動時預設更新 yt-dlp，可用 `YTDLP_AUTO_UPDATE=0` 停用。
 
 processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-processing-lock` 會從 environment 或 root `.env` 取 token 並送出 force release；執行前應先用 GET/dry-run 確認目標 backend 與 lock age，避免中斷活躍 worker。
 

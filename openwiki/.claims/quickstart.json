@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:a78e05dd1622af4b27c8e00ee43fa82f3c2d4615c9ce3c5cb214a10b0d05a71e",
+  "pageVersion": "sha256:0195d68006760be07e1788aa04b12c8b30b6e1d3a19fac738d0c412f7e18bc66",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -12,27 +12,27 @@
         },
         {
           "resource": "repo://pyproject.toml#L1-L21",
-          "version": "repo-lines-v1:sha256:8639e0c24b21f6124ad009533153321b851dcec7c164f09372d2c8e8cd111613:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwMmE4MWMzODM2ZWRlZjJkMGJhMTFkMjM1M2ZiNmRhYmM3NzcxNTBhN2NhODNlYTBkOWU5YTcwMzEzZmVhYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYjc0OTliMWNlMWM0ZjRiMjUyN2YzYTMyODRjYWM2YjZhMWUzYmY0OTg4YjU2Nzk4MmMzZGM4ZTlhMTdmMjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFhMzc4YzY5ZmJlYWM2MjIwYzQwNWQ3YmYyZWU3ZGE3NTA4NzViYzRkYzIwNzk3MDI4YzE2MTIwNGExMjYzMTYifQ"
+          "version": "repo-lines-v1:sha256:fcd9bc36e04dd3830dd4e5bcad03836fa9ca465a40ac9bdbcca7e59ac3662a6e:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwMmE4MWMzODM2ZWRlZjJkMGJhMTFkMjM1M2ZiNmRhYmM3NzcxNTBhN2NhODNlYTBkOWU5YTcwMzEzZmVhYmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY5NDE2ZTA5Zjc4YmEzMTZjMDMyNTY4MjEzYjg1NWVlNzU2ZTQxNTY1ZDkxOGYwOTUxOWM4MWZkNjIwZjQwNjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFhMzc4YzY5ZmJlYWM2MjIwYzQwNWQ3YmYyZWU3ZGE3NTA4NzViYzRkYzIwNzk3MDI4YzE2MTIwNGExMjYzMTYifQ"
         }
       ]
     },
     {
       "id": "claim_f9811ce536bb4b659a807a50e05d2f61",
-      "statement": "本機 Python 入口包括 FastAPI、Streamlit與 SQLite worker，對應 make api、make streamlit及 make run。",
+      "statement": "本機 Python 入口包括 FastAPI、Streamlit、同步 SQLite worker、dedicated processing worker與 RSS monitor，並由對應的 Makefile targets啟動。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L24-L37",
-          "version": "repo-lines-v1:sha256:42495596be49ee3178fc26f6c6730b40f4907b874e40645252e4a41a49303870:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzYThiYTkzMzc4ZDBlZTE4ODU5Yzk3MDBkOGMyOGY3ZjU3MGE5YzJjMThhZWI5OWQwZGIxODk4YzkxZTI1MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4YmQ4YjQyNDYyZTJjMTRiNmJmODBlYmZiYmEzMDE0MGEzNjE4NmEwYTQzYzU1YTM5MzFjNGFlOGI2YTYzMWEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjOGYxNmQxNmFiNjQwZjFhZmU4NTk1OWE4OWMwZjE1N2QwOTY4NjhjZDBjZWZhMDc5YWY2MDdhMzlmNzVjOTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQyZTQ2YTU0MDQ4MTE5YTc4ZWNhMGQ5ZWI5NzhlNWU3ZGYxMDczNmU1NzdiYzE4MzA0N2M5YjEzZjI0Y2FmN2MifQ"
+          "resource": "repo://Makefile#L26-L42",
+          "version": "repo-lines-v1:sha256:eccd47a0dbaf58d70eeb4995be2b3f1a4b2a97e7c7486afa5475f2226f6f2ecd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzYThiYTkzMzc4ZDBlZTE4ODU5Yzk3MDBkOGMyOGY3ZjU3MGE5YzJjMThhZWI5OWQwZGIxODk4YzkxZTI1MGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwMTAzODY2NzI2NjJmOWM4YzEyOTU4MDgzMzJjNDMzZTNiOWViOTgwN2UxNzJhZGQ5NTlmMjM2ZDNhMjRmYTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJjOGYxNmQxNmFiNjQwZjFhZmU4NTk1OWE4OWMwZjE1N2QwOTY4NjhjZDBjZWZhMDc5YWY2MDdhMzlmNzVjOTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI3ODU2YzJjOGYyMzMxZjdjNjMyMzZhMjkwN2RlZDZlN2RiZDU2NGY2ODRkYjU4YTMwMTc1ZTJlZmRmZGQ0YjgifQ"
         }
       ]
     },
     {
       "id": "claim_e66c3bd5a9dc40cc994cd542a55d8ff1",
-      "statement": "Docker Compose 啟動 api、streamlit與 rss-monitor，對外提供 API 8080及 Streamlit 8501。",
+      "statement": "Docker Compose啟動 api、streamlit、processing-worker與 rss-monitor，對外提供 API 8080及 Streamlit 8501。",
       "evidence": [
         {
-          "resource": "repo://compose.yaml#L15-L41",
-          "version": "repo-lines-v1:sha256:9e495d25c88a405be64514a0da8f3fd985198c0dc7231c2cbad404a430270599:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwNWJlNjc1MThlYzNhODQ3NzE0MzlkMGE1YzBmOTNiYmJlMzZhYjBlYzAxMmEyMGRkYjdlMDQxODY2OTY2MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhODExYzFiY2VkMGJlY2U1ODJkNTFjMWM1OTM5YWUwNzk3MWUzN2YwOGY3YTJhNjYwZGRiMjYzOTdmMDZmNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://compose.yaml#L15-L63",
+          "version": "repo-lines-v1:sha256:86ff612321f3151f029d065abe984088e1bf8577d0374483b94647305d32707c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhNzNmY2NkYzk5ZWE4MzU5NjdjN2RlZTdlZmJlZDFmM2NhODcyNjBkOTI5MzE4NTBmZGQ2NmRhOGNiMTJmMWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExYzNhZGFmOGQ1YTA3ZmQxNjI1NzkxMTU4ZGYxM2NkYjhlODFkMzI1ODUyMWJlZjYyYmZmMmEwMmY0NWYzMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZhODExYzFiY2VkMGJlY2U1ODJkNTFjMWM1OTM5YWUwNzk3MWUzN2YwOGY3YTJhNjYwZGRiMjYzOTdmMDZmNDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -48,11 +48,11 @@
     },
     {
       "id": "claim_408be23bb0784e15ae6cae6ec54841b0",
-      "statement": "Python測試使用 unittest discovery，Nuxt測試可由 repository root透過 npm --prefix執行。",
+      "statement": "Python測試透過 Makefile分為完整、unit與 integration unittest discovery；Nuxt測試及 Browser Extension驗證也可從 repository root執行。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L39-L64",
-          "version": "repo-lines-v1:sha256:e70253094ddd066123a4b11342404255642102fc15224cf54361c97617e07db8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyYzIwMTNkMjFhZGU5YzYyNTc0YWYwZDA2OGM2MzRkYTM5NDk5MWIyNzcxZDUwZjUyMDI0MGM5NTkzODY5N2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4Nzk2ZWYxZTY1M2UzYjEyZDZlMzUwMWVkNTdlYWRiMGRlZjcyMDk4NzdiN2FhNzZkZmI0YmQ4NDg2OGJkY2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxOTc5NTdlOWU0YTdhZjljZGM2MDk4ZTY4YWFhZTNiMTBkZDIxMzJjYjRhOTQ5YTAwZDJlZDU5YWMyOWQ4ZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNWFiN2NkNjNiMDlkMmUzZGVhYzk0OTRlNGVmNGFmZmQ3MzE0MmUzM2Q5NDVlYzViZThmOWVhY2YxOGNiOWUifQ"
+          "resource": "repo://Makefile#L65-L78",
+          "version": "repo-lines-v1:sha256:96ba35308e0bb3ac7a530674e93042dcfcbe987a1ed1663c8192ca368beaf791:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwNWVlN2ZmNmY0ZmNiYjI3OTdlNzc0ODBiM2UwNGQzYTUwOGViZmUyYzdjMTlhZjRiZTI1YzAzNTY5ZjNiODIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJjN2Q0ZGM4MGY0NmU0MzhiYjhjYjU4MmY4ZGYwZGQ1ZjM5YjBiYWRkNDZjOTlmODY2YTExODc2MjQ2NmQyMTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJlMzU0MWZkNzUxNTlkODg5M2U3YzdmNDY4OWUxYzIzNjI3YzQxYWZiMTM1NDk4NGU3ZDVlYTc3MmJmMDIzMzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzNWFiN2NkNjNiMDlkMmUzZGVhYzk0OTRlNGVmNGFmZmQ3MzE0MmUzM2Q5NDVlYzViZThmOWVhY2YxOGNiOWUifQ"
         }
       ]
     },
@@ -61,18 +61,18 @@
       "statement": "Python Config驗證至少需一個摘要 provider key，且提供 Notion key時必須同時提供 database id。",
       "evidence": [
         {
-          "resource": "repo://src/core/config.py#L94-L115",
+          "resource": "repo://whisper_summary/core/config.py#L94-L115",
           "version": "repo-lines-v1:sha256:09d44b938c6a635817011f72860716cb2f7b9ee6fb28899257a1d1991fcc5fe4:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg2MmE2ODQ1NzVmNTg4YjdmYTQ0YWJiMTY5MGE1NGEyZmFkMzNjYTMxYmY2NjUyMDlhY2E2YTJhODJmMTM0ZjUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4ZmFhZTA1NGRiNThlNmUxM2JjMzQxMjEzMmJmMmU4OTBiODhmMjE0MWE1M2U0MjcwOGJkNDNkMWFlOTg0MjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
     {
       "id": "claim_ce3eb06cd198448fbb91ed6d336ef63d",
-      "statement": "API、Streamlit與 RSS monitor在 Docker 中共享 repository volume與 .env，Streamlit及 RSS monitor透過 API service DNS存取 task API。",
+      "statement": "API、Streamlit、processing worker與 RSS monitor在 Docker 中共享 repository volume與 .env；Streamlit及 RSS monitor透過 API service DNS存取 task API，processing worker直接輪詢 persisted queue。",
       "evidence": [
         {
-          "resource": "repo://compose.yaml#L1-L41",
-          "version": "repo-lines-v1:sha256:8f8c8e105f6f9974a7fdd60d18502b0400d1b1eee7b2895139e42b34b2a07bfa:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyNjVlODc1ZDlkZTRkYzQ2MTRlY2Y1ZDRiMjdjNWQxMTQxOGI3YWE0Yzk1YTdiYTJiM2M3OWU0NmQzZDkxMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwNWJlNjc1MThlYzNhODQ3NzE0MzlkMGE1YzBmOTNiYmJlMzZhYjBlYzAxMmEyMGRkYjdlMDQxODY2OTY2MWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://compose.yaml#L1-L63",
+          "version": "repo-lines-v1:sha256:dc474c3f3a459d8c16b06a9f5370dd6b1dee490432e8c565a31b9050f7049987:eyJzZWxlY3RlZExpbmVDb3VudCI6NjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgyNjVlODc1ZDlkZTRkYzQ2MTRlY2Y1ZDRiMjdjNWQxMTQxOGI3YWE0Yzk1YTdiYTJiM2M3OWU0NmQzZDkxMjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImExYzNhZGFmOGQ1YTA3ZmQxNjI1NzkxMTU4ZGYxM2NkYjhlODFkMzI1ODUyMWJlZjYyYmZmMmEwMmY0NWYzMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -99,16 +99,16 @@
       "statement": "預設 worker 的自動摘要候選池只有 Gemini，僅提供 OpenAI 或 Ollama credential 不足以選出預設候選。",
       "evidence": [
         {
-          "resource": "repo://src/infrastructure/llm/model_options.py#L67-L101",
+          "resource": "repo://whisper_summary/infrastructure/llm/model_options.py#L67-L101",
           "version": "repo-lines-v1:sha256:a047d0526aafcdfbc742f408c9e71f384dd1f9ed1cfc6d33853d10733558803b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhYTZjNGQxN2Y3MGU2ZmUxNGRjMWFhYjQ3M2E1OTY2YjUzZGI4OWM2MDg5OWI1OGMzM2Q0N2M2ZGIzOGY2NWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZhZmJhMDUyN2MzOTUzYzRiNmUwZTViNTczOWJhODM2MTJmODA1M2JjZGM5NDY2NzMwMTkzY2QxZDU5MGI0MDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk4ZGU2YWFlMzliNTUzMzRjZmY1YmQ3MzZjNTU2ZmY0MjAyNjFmYWE5YjZhZTQzNmZkYmQ2OWNkMmQ1ZWNlYzkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://src/infrastructure/llm/weighted_selection.py#L59-L86",
+          "resource": "repo://whisper_summary/infrastructure/llm/weighted_selection.py#L59-L86",
           "version": "repo-lines-v1:sha256:53bf4be2b359f9ab4feed0ceed34e48a3b7eae5d1aaa870ef952a1b0a6c7dbb7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0NmJjYWYzZWUxZWI0MWYwYWJhMGQxZjFiOWE2ZGViMjE0NmZlYzJkZGNjNzY5Njc4YmVmZDJjMGJlOGU4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0ZjViZDEyZjBiYzc2MTg2ZDA1OGRhOGNjMDdhZjBkNjdjMGMxMjRhNzI3MWIzMjIyOTEwNGZmNThjNzI2ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY3OGNhZGY4NzA5Zjc4ZDc0OWIzMzk5MTk5ZDU4NzE4NDE0ZmNjNjFhODIwMDVlNjIxYWQ0M2ExNjU1YTc3NDUifQ"
         },
         {
-          "resource": "repo://src/services/pipeline/processing_runner.py#L260-L274",
-          "version": "repo-lines-v1:sha256:da4589c96b0a66e1b2b48b7c3291d8ced5ea43cbc42c99a0d254fc81c4c424ca:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3N2EzMzBlMThhODljMTc4N2RkZTQ0NDdlMjI4MWMyZTE3MmI4ZDMzMDAxOTJlMGU4MmNjNDVkM2NmZjQ0NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwMDMyNjkyODQwODk5MjQyNTFhZjYzZWViNDhlYWM1OTM3OWVmNDU2YWViZjY1ZTZhZTQ2MDk3ZTM2YTcyMGYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNiMWRjYzQ1ZDVkNjYyNWVjOGEwN2QzYTRjZGUwMWJlZjE3MjdhMTY5MmNhZTEwYWY2MGE1ZjhkM2FkOTI3MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU1YTk5NjNkN2JkNzY1YzA4ZDkyZjY5OGZiMmQzOWZkZjkzNDM4NzkyOWUyNGQwNTBjNTAwOGQ1YTJkNjA5NDQifQ"
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L260-L274",
+          "version": "repo-lines-v1:sha256:09a80d60e6bc995193d042c637c5f15ad5ab754188447a6beb0372fac55c1e06:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVhYWVlZTEyNjUxYmZjZGNkOTY2YTgxNTVjYmQ1YTcwYjdhYWRkZGVhM2Q3NTdlNmY5N2ZhNTM4NWYzZGQ5ODciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxNDNkNmQ4YWU5ZGE1ODliNTg1OGQwOWEzNDkwNzdmYTNiNjlhYTRjNTM5Mjk2MDQyMGUwZGZkNDE4MGU4NzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNkODI3YzFjNGM1NmM1NTNmYzI2YTc1OGNhMTgxYWYzMmU0OWJiOTU1ZTEwMDk1ZTVjOTY5ZWZkZTk5ZTMzOTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYwMDE4MDdhMjMxZTJhNTgwMDM3ZmVlOTZkODMxYzc5NjIwY2M3M2JhNjFlMDdjZDEwMzhjNDZiNjcyZGM4NjYifQ"
         }
       ]
     },
@@ -117,8 +117,8 @@
       "statement": "check-env 在獨立程序中優先讀 apps/showcase .env、再 fallback root .env，保留既有環境值；make showcase 會 export 選定檔案的值再啟動開發站。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L45-L58",
-          "version": "repo-lines-v1:sha256:f039c3803ac80d3301b2046f9d11572a3d9ce28fbd971f9581961eafb04dd53c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1Y2UzODRhN2RhNjFmYjc3YTU5MWUzOTdmZDIyODE3ODg0NmE3NGI3ZTFmODNmNmU0YWY3Mzk2NWI1OGUyNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNmNiYTY2MGFiNzkzNjZlMDQ2N2FkM2UxNGU1Y2Q3ZWY5NGQ2YjIzNDM2YzQ1NmVlNjQzZGQzNzRkNmE4YzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhNGZlZmQ4OGI5NTUxZjQwNmFhNjlhNjY2ZmFlOGJmNDk5MWFjNzQxYTU2ODdjNDBlODhkOWE5MzkyNDZlZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlMzU0MWZkNzUxNTlkODg5M2U3YzdmNDY4OWUxYzIzNjI3YzQxYWZiMTM1NDk4NGU3ZDVlYTc3MmJmMDIzMzUifQ"
+          "resource": "repo://Makefile#L50-L63",
+          "version": "repo-lines-v1:sha256:dd4c420cea7781b42c30bd1a4658e5eece734fcfc6a1e73ca4feff4edd787a75:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiZjZjMGJlZjkwY2FjZDdlNDI4MGI1NjZmYjU2ZjM3MmI2ZTY3YWY0YTRhMzEwZmM5NTFhNjQ2MTA5ZDQwMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MTIzMjVmNjY5MTA4NjM4MTBiMGI2NWZkMThlZDg0ODc4N2EzYjFlNzU5NDg2Y2I0ODczNTZkNmE5YmY0ZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE3ZjYzODc1M2FkYzU5YzlmZjgyMTg0MGQyYjJhZTNmYjUyNzUwOGUwMThlNDE0ZmM0ZmJmYmI4Y2U0NmI2MmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdiYzQxZmVjOTAzNGEyZGY0NTc2ODAxODYwYzg2YjVmYzQ1NWYyMGQwZTc1N2I1YjNkYWU5MjMyMjhkN2UxZmYifQ"
         },
         {
           "resource": "repo://apps/showcase/scripts/check-env.mjs#L1-L32",
@@ -131,12 +131,12 @@
       "statement": "本機媒體下載需要 PATH 上的 yt-dlp；make yt-dlp-update 將執行檔安裝至 /usr/local/bin，uv 的 Python dependency sync 不包含此安裝。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L10-L13",
+          "resource": "repo://Makefile#L12-L15",
           "version": "repo-lines-v1:sha256:bfa9781c49ed30cabbe86cac15b429540a70063c9ca1a1f5a43671e4397a1bc4:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzZjNTgwMTljOTcwZTNiMTczMmFlNjZjOTAwODU2NDM4MjQ2OTUzZjEyY2JhMjlkNjE5YjAwNTcyZmZmMjQ1NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWEyMTM5Y2M3MDIyMDc2Zjc3NmFhM2VlZjgyYjE4MGZhNDJlOTcyOGExOTU0YzRmMTc0ZmEwNTU5Mjk0OGE4NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZGMwMjgwZTZjNzQ1YjhhZWE5ZTY4M2E2MGZmNjJhMDhlYjdmMzJkNWVhNmUwNDYxN2E1NTcwOTk5ODc0Y2U1YyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjNlMjE2NTBkNTI0YTliNzM3MzhlYjE3NGZhMzA4YmE3ZTUzYjhiOTk5NTFkNzQxZjkzYjNhOTgxOTI0YWZlOCJ9"
         },
         {
-          "resource": "repo://Makefile#L79-L83",
-          "version": "repo-lines-v1:sha256:5f0e6debc84c1bdddc22cce7271bef173f0f9e0a917486d0980d9f5dd948ad5b:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmNlNDk4NGU1MGY2ZGI1YTkwYmYzM2VhN2QxM2E3MTcxNTM0MGM5ZGNmNmU0NGVmNmVmMGQyNzRjNzY4NDJiMCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDEyNTczOWJlN2Y1MjIxZjRlYzFkNTVlYmMzMTJiYjI3OTM0NzQ2OGZlMGI1ZWYxYzMwYTI4NTY4ZWZhYjBmZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjQ5YjRlMDg4NmZmYjQ4MTMzNTI0Y2VmY2I3YjRjZjBmZTE2YzM0NGM1NTZjMzVhYmJkYzJkYWI1YTI4NGM4MyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWU4MWNjM2ZmMWYxN2I5ODE1YTliNjBiYzM3YTEwNjI5YTc2OWJkMWRmMmU2NWY1NDRiZjljNTk2YzEzNGY0NCJ9"
+          "resource": "repo://Makefile#L90-L97",
+          "version": "repo-lines-v1:sha256:b36fc0c65e62cd56f19b9ca8c026815ba4b02f37b6a1419ecfa80e8d799d7f3d:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzk0OGU1OGJhMTNkYjBkNTBlN2I5OWFjZGEzYmNlMzc3OTA2ODQ4MDZlY2YxODYxZDllOGY1YjI4NGQ5NDRlNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDEyNTczOWJlN2Y1MjIxZjRlYzFkNTVlYmMzMTJiYjI3OTM0NzQ2OGZlMGI1ZWYxYzMwYTI4NTY4ZWZhYjBmZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDcxMTU3ZTcxY2RmYWRhYjUwNDU3NmRlMWU0YWE2M2ZmMjEwMWI2OTYzNTViMDVkOTY5OGE2NjgyYTY3ZmM4NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMWU4MWNjM2ZmMWYxN2I5ODE1YTliNjBiYzM3YTEwNjI5YTc2OWJkMWRmMmU2NWY1NDRiZjljNTk2YzEzNGY0NCJ9"
         }
       ]
     },
@@ -149,7 +149,7 @@
           "version": "repo-lines-v1:sha256:22ffca03a5259a4962fbc4068a2a517d79b9a90f6e424d75a19cb9c2b2f633f8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxNWRhODM4M2FiZWY0MTJlNTYwOGE1ODVmNjA2ZjExZGE4NjcwYjU1ODMzOGIxZTdhOWMxNzM5Yjc5M2M0NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU4YWVkYWZjODhmYjhhNDcyZWVjODI2MjMyNTMzY2NkNDM5ODlhODAxNmI4MjljNTJjNmJlZDU1MTA3ZmIyNTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4YTk0NWVjMDhkOTIwMzY3OWY3YzM3MDBjZjZhMThhZDZhMzdmNGI0ZGYwYzQzOWEzZjJiYTgzNjNjMDg0NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://Makefile#L15-L19",
+          "resource": "repo://Makefile#L17-L21",
           "version": "repo-lines-v1:sha256:8c8f389f58c42f62507a9dbe1bdeb18d96b12b5a12977050420f8a09782e34a8:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNTQyMDA2ZGQxODYwY2UxOTlmZDM1YjEyNmM5Njc4ZjMyNWM5ZDMwNTcxNDM0MzQ3YjhjMWRmMWRiOGZlMTljYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmEyOGViOTE1OTg0YjMyZDRiOTU0NGZjZTQyZDEzNmU2ZWVhZTc2ZTkzZWJlMDAwOThiMzg3OWVjNDkyMTQ4NyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTA2ZTBkM2FkZGFjOTMxZTgzZTQxNTEzZGQ0YzEwMTRkZTg5NTM5ZTkwNDFiZjYyNWY3MzJkOTMzOGRjMzIyNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiODBmNjE1MWIwMGNiNWIwMzc4ZGQzNjA1NzEzMzZjZjQ5MGJmOTVlYzI0OTU2YmRkMjczYjI0YjVkMTkxYjkyNyJ9"
         },
         {
@@ -157,10 +157,28 @@
           "version": "repo-lines-v1:sha256:42102e9e599b0ce1e4b26ed860e8bd5e4641805b9f38fdc5880b2f090f343f44:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxNWRhODM4M2FiZWY0MTJlNTYwOGE1ODVmNjA2ZjExZGE4NjcwYjU1ODMzOGIxZTdhOWMxNzM5Yjc5M2M0NjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2NzM1N2U4NDQ4MDBkYWU4NDFhNGRjNTc5M2YwOWVmYTZlNWNhNmZkYzBlYzBjNzQ0NjYwMjkxNjcxZjA1YjkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4YTk0NWVjMDhkOTIwMzY3OWY3YzM3MDBjZjZhMThhZDZhMzdmNGI0ZGYwYzQzOWEzZjJiYTgzNjNjMDg0NGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
+    },
+    {
+      "id": "claim_b5cf97f7fbc7419abf34aa80cfb41830",
+      "statement": "Task建立後只會寫入 persisted queue；dedicated processing worker負責持續輪詢，POST /processing-jobs僅回報 dedicated mode，make run則同步處理一次 queue。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L26-L30",
+          "version": "repo-lines-v1:sha256:6d2232457cb261f6a9a178c56723ca54c97dfd5c4e7aa1773a22fe95b5ff7bd0:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDNhOGJhOTMzNzhkMGVlMTg4NTljOTcwMGQ4YzI4ZjdmNTcwYTljMmMxOGFlYjk5ZDBkYjE4OThjOTFlMjUwYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDRkMDNjYWUyNzIyYzRmMzc1NzRkZDI2ZGRjYjllMTg4ZTUzMmExNWRhMjQ5NDZlMDRkOGNkMjRjN2MzMmZmZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM4ZjE2ZDE2YWI2NDBmMWFmZTg1OTU5YTg5YzBmMTU3ZDA5Njg2OGNkMGNlZmEwNzlhZjYwN2EzOWY3NWM5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmE1MzM4ZDYyNzg5YTVlNGM2Njc4YWJmNDEwNjUzNzM0NGMyOTYwOGQ3ZGM1MmUxNmJlMDFiYzc5M2IzMDQ4NCJ9"
+        },
+        {
+          "resource": "repo://whisper_summary/apps/api/routers/processing.py",
+          "version": "repo-file-v1:sha256:f67c482336ea9f05c3866b2ef47772ca5e85c072dbfd01abc83bec81efb9b60f"
+        },
+        {
+          "resource": "repo://whisper_summary/apps/workers/processing_worker.py",
+          "version": "repo-file-v1:sha256:a6b2c3df535570f05bc8d45aa0327b7d6b51ee039f4cc4cfda602732f748382a"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-07T16:12:01.072Z"
+    "at": "2026-09-13T10:51:33.281Z"
   }
 }

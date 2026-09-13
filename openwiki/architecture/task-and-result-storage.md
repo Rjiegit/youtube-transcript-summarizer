@@ -3,25 +3,27 @@ type: architecture
 title: 任務、鎖與結果持久化
 description: 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
+sources:
+  - id: openwiki-source-4d928759c02fb22c29a10d25
+    resource: repo://whisper_summary/domain/interfaces/database.py
+  - id: openwiki-source-ed7ac39232dcc4e27533dae4
+    resource: repo://whisper_summary/infrastructure/persistence/notion/client.py
+  - id: openwiki-source-c85a8f484a8e8883d5abeeba
+    resource: repo://whisper_summary/infrastructure/persistence/sqlite/client.py
+  - id: openwiki-source-fe3294edb24f05e6cb6f9931
+    resource: repo://whisper_summary/infrastructure/persistence/sqlite/schema.py
+  - id: openwiki-source-a0c7c968853d8d9debef46e2
+    resource: repo://whisper_summary/infrastructure/storage/file_storage.py
+  - id: openwiki-source-16ad15a60707008474d113ec
+    resource: repo://whisper_summary/infrastructure/storage/summary_storage.py
+  - id: openwiki-source-63a1690d52d52de32a8e8a93
+    resource: repo://whisper_summary/services/outputs/path_builder.py
+  - id: openwiki-source-aaaf86d61afa929bb997ee28
+    resource: repo://whisper_summary/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T14:09:43.292Z
-sources:
-  - id: openwiki-source-9fbc07b2ec408ab8469cae35
-    resource: repo://src/domain/interfaces/database.py
-  - id: openwiki-source-71c6fb5bae534b32dd19c0ab
-    resource: repo://src/infrastructure/persistence/notion/client.py
-  - id: openwiki-source-84844fa4307e4c928a7cd3d3
-    resource: repo://src/infrastructure/persistence/sqlite/client.py
-  - id: openwiki-source-c58845fdbb50864c91205283
-    resource: repo://src/infrastructure/storage/file_storage.py
-  - id: openwiki-source-5858a6e533d57781fe90f469
-    resource: repo://src/infrastructure/storage/summary_storage.py
-  - id: openwiki-source-d2d5349a26b1726584ff4cde
-    resource: repo://src/services/outputs/path_builder.py
-  - id: openwiki-source-df04114da62d5e054970a89f
-    resource: repo://src/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # 任務、鎖與結果持久化

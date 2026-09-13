@@ -16,23 +16,23 @@ sources:
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-09-07T16:12:01.072Z" }
+generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-07T16:12:01.072Z
+    at: 2026-09-13T10:51:33.281Z
 ---
 
 # 開發規則與測試策略
 
 ## 程式碼分層
 
-- `src/domain/` 放 domain models 與 typed interfaces，不放第三方服務實作。
-- `src/services/` 放 use case 與流程 orchestration。
-- `src/infrastructure/` 放 LLM、媒體、通知、儲存與 SQLite/Notion adapters。
-- `src/apps/` 是 FastAPI、Streamlit、CLI、RSS monitor 等執行入口；入口負責輸入輸出與 use case 組裝。
+- `whisper_summary/domain/` 放 domain models 與 typed interfaces，不放第三方服務實作。
+- `whisper_summary/services/` 放 use case 與流程 orchestration。
+- `whisper_summary/infrastructure/` 放 LLM、媒體、通知、儲存與 SQLite/Notion adapters。
+- `whisper_summary/apps/` 是 FastAPI、Streamlit、CLI、RSS monitor 等執行入口；入口負責輸入輸出與 use case 組裝。
 - `apps/showcase/` 是獨立的 Nuxt 3 展示站，使用自己的 TypeScript、Vue 與 Vitest 規則。
 
-新增抽象放在 `src/domain/interfaces/`，新增 persistence adapter 放在 `src/infrastructure/persistence/`。主要行為應留在 service 層，不要把流程邏輯塞進 route 或 UI handler。
+新增抽象放在 `whisper_summary/domain/interfaces/`，新增 persistence adapter 放在 `whisper_summary/infrastructure/persistence/`。主要行為應留在 service 層，不要把流程邏輯塞進 route 或 UI handler。
 
 ## 常用驗證
 
@@ -49,11 +49,11 @@ Python 依賴使用 `uv sync --frozen --no-install-project`；新增依賴後更
 
 ## 測試策略
 
-Python 使用 `unittest` discovery，測試檔放在 `tests/`，命名為 `test*.py`。優先覆蓋 task lifecycle、processing pipeline、URL validation、storage adapter 與 provider selection；LLM、Notion、Discord、yt-dlp 等網路或重型邊界使用 mock、fake 或 fixture，避免測試依賴外部服務。
+Python 使用 `unittest` discovery；快速隔離測試放在 `tests/unit/`，跨 router、storage 或 UI seam 的測試放在 `tests/integration/`，共享 contract/data放在 `tests/fixtures/`。LLM、Notion、Discord、yt-dlp 等網路或重型邊界使用 mock、fake 或 fixture。
 
 Nuxt 使用 Vitest、Vue Test Utils 與 jsdom；測試放在 `apps/showcase/tests/`，命名為 `*.test.ts`。優先測試資料轉換、日期格式化、API handler、SWR cache 與 read state。
 
-CI 的 Python gate 目前執行 flake8 與 unittest；Betterleaks 主要由本機 pre-commit hook 執行。文件或 UI 變更仍應選擇與風險相符的最小驗證，不要以未執行的測試宣稱完成。
+CI 有三個 jobs：Python執行 Flake8與 unittest，Showcase執行 npm test/build，Browser Extension執行 manifest/assets/JavaScript validator。Betterleaks 主要由本機 pre-commit hook執行。
 
 ## Commit 與文件規則
 
