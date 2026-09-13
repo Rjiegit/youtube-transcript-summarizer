@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime
 from typing import Optional
 
-from src.domain.rss.models import RSSChannelSubscription
+from src.domain.rss.models import RSSChannelSubscription, RSSSubscriptionConflictError
 
 
 def _parse_datetime(value: str | None) -> datetime | None:
@@ -84,13 +84,16 @@ class SQLiteRSSSubscriptionRepository:
         conn = self._get_connection()
         try:
             cursor = conn.cursor()
-            cursor.execute(
-                """
-                INSERT INTO rss_channel_subscriptions (channel_id, feed_url, title, enabled)
-                VALUES (?, ?, ?, ?)
-                """,
-                (channel_id, feed_url, title or "", 1 if enabled else 0),
-            )
+            try:
+                cursor.execute(
+                    """
+                    INSERT INTO rss_channel_subscriptions (channel_id, feed_url, title, enabled)
+                    VALUES (?, ?, ?, ?)
+                    """,
+                    (channel_id, feed_url, title or "", 1 if enabled else 0),
+                )
+            except sqlite3.IntegrityError as exc:
+                raise RSSSubscriptionConflictError("此 channel 已存在。") from exc
             subscription_id = str(cursor.lastrowid)
             conn.commit()
         finally:
@@ -111,18 +114,21 @@ class SQLiteRSSSubscriptionRepository:
     ) -> None:
         conn = self._get_connection()
         try:
-            conn.execute(
-                """
-                UPDATE rss_channel_subscriptions
-                SET channel_id = ?,
-                    feed_url = ?,
-                    title = ?,
-                    enabled = ?,
-                    updated_at = CURRENT_TIMESTAMP
-                WHERE id = ?
-                """,
-                (channel_id, feed_url, title or "", 1 if enabled else 0, subscription_id),
-            )
+            try:
+                conn.execute(
+                    """
+                    UPDATE rss_channel_subscriptions
+                    SET channel_id = ?,
+                        feed_url = ?,
+                        title = ?,
+                        enabled = ?,
+                        updated_at = CURRENT_TIMESTAMP
+                    WHERE id = ?
+                    """,
+                    (channel_id, feed_url, title or "", 1 if enabled else 0, subscription_id),
+                )
+            except sqlite3.IntegrityError as exc:
+                raise RSSSubscriptionConflictError("更新後的 channel 與既有訂閱衝突。") from exc
             conn.commit()
         finally:
             conn.close()

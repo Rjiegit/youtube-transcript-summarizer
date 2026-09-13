@@ -10,10 +10,8 @@ from src.core.logger import logger
 from src.core.time_utils import as_utc, utc_now
 from src.core.utils.url import extract_video_id, normalize_youtube_url
 from src.domain.rss.models import RSSChannelSubscription, RSSPollResult
-from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
-    SQLiteRSSSubscriptionRepository,
-)
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from src.domain.interfaces.database import BaseDB
+from src.domain.ports.repositories import RSSSubscriptionRepository
 
 try:  # pragma: no cover - optional in minimal environments
     import requests
@@ -129,14 +127,19 @@ class TaskAPIClient:
 class RSSChannelMonitor:
     def __init__(
         self,
-        db: SQLiteDB | None = None,
-        repository: SQLiteRSSSubscriptionRepository | None = None,
+        db: BaseDB | None = None,
+        repository: RSSSubscriptionRepository | None = None,
         feed_client: YouTubeRSSFeedClient | None = None,
         task_client: TaskAPIClient | None = None,
         config: Config | None = None,
     ):
-        self.db = db or SQLiteDB()
-        self.repository = repository or SQLiteRSSSubscriptionRepository(self.db.db_path)
+        if db is None or repository is None:
+            from src.infrastructure.repository_composition import create_database, create_rss_repository
+
+            db = db or create_database("sqlite")
+            repository = repository or create_rss_repository(getattr(db, "db_path", "data/tasks.db"))
+        self.db = db
+        self.repository = repository
         self.feed_client = feed_client or YouTubeRSSFeedClient()
         self.config = config or Config()
         self.task_client = task_client or TaskAPIClient(

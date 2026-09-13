@@ -112,6 +112,9 @@ make extension-check
 | `src/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
 | `src/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
 | `src/apps/api/schemas.py` | API request／response models |
+| `src/domain/ports/` | Application services 使用的 repository contracts |
+| `src/infrastructure/composition.py` | Processing pipeline 的 concrete adapter 組裝 |
+| `src/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
 | `src/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
 | `src/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
 | `src/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |

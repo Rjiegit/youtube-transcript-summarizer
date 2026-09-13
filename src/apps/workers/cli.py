@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 
-from src.infrastructure.persistence.factory import DBFactory
+from src.infrastructure.repository_composition import create_database
 from src.services.pipeline.processing_runner import process_pending_tasks
 
 
@@ -23,7 +23,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    db = DBFactory.get_db(args.db_type)
+    db = create_database(args.db_type)
     summary = process_pending_tasks(db=db, worker_id=args.worker_id)
     print(summary.to_dict())
 

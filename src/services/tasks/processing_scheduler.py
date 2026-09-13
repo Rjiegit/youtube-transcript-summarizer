@@ -6,7 +6,7 @@ from contextlib import suppress
 from dataclasses import dataclass
 
 from src.core.logger import logger
-from src.infrastructure.persistence.factory import DBFactory
+from src.infrastructure.repository_composition import create_database
 from src.services.pipeline.processing_runner import (
     PROCESSING_LOCK_TIMEOUT_SECONDS,
     process_pending_tasks,
@@ -21,7 +21,7 @@ class SchedulingResult:
 
 
 def _run_processing_worker(db_type: str, worker_id: str) -> None:
-    db = DBFactory.get_db(db_type)
+    db = create_database(db_type)
     try:
         result = process_pending_tasks(db=db, worker_id=worker_id)
         logger.info(

@@ -46,13 +46,13 @@ class TestProcessingWorker(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    @patch("src.services.pipeline.processing_runner.Config")
-    @patch("src.services.pipeline.processing_runner.send_task_completion_notification")
-    @patch("src.services.pipeline.processing_runner.SummaryStorage")
-    @patch("src.services.pipeline.processing_runner.FileManager.save_text")
-    @patch("src.services.pipeline.processing_runner.Summarizer")
-    @patch("src.services.pipeline.processing_runner.Transcriber")
-    @patch("src.services.pipeline.processing_runner.YouTubeDownloader")
+    @patch("src.infrastructure.composition.Config")
+    @patch("src.infrastructure.composition.send_task_completion_notification")
+    @patch("src.infrastructure.composition.SummaryStorage")
+    @patch("src.infrastructure.composition.FileManager.save_text")
+    @patch("src.infrastructure.composition.Summarizer")
+    @patch("src.infrastructure.composition.Transcriber")
+    @patch("src.infrastructure.composition.YouTubeDownloader")
     def test_worker_processes_all_tasks(
         self,
         mock_downloader,
@@ -134,13 +134,13 @@ class TestProcessingWorker(unittest.TestCase):
             notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
         )
 
-    @patch("src.services.pipeline.processing_runner.Config")
-    @patch("src.services.pipeline.processing_runner.send_task_completion_notification")
-    @patch("src.services.pipeline.processing_runner.SummaryStorage")
-    @patch("src.services.pipeline.processing_runner.FileManager.save_text")
-    @patch("src.services.pipeline.processing_runner.Summarizer")
-    @patch("src.services.pipeline.processing_runner.Transcriber")
-    @patch("src.services.pipeline.processing_runner.YouTubeDownloader")
+    @patch("src.infrastructure.composition.Config")
+    @patch("src.infrastructure.composition.send_task_completion_notification")
+    @patch("src.infrastructure.composition.SummaryStorage")
+    @patch("src.infrastructure.composition.FileManager.save_text")
+    @patch("src.infrastructure.composition.Summarizer")
+    @patch("src.infrastructure.composition.Transcriber")
+    @patch("src.infrastructure.composition.YouTubeDownloader")
     def test_worker_continues_after_failure(
         self,
         mock_downloader,

@@ -5,6 +5,10 @@ from datetime import datetime
 from typing import Optional
 
 
+class RSSSubscriptionConflictError(ValueError):
+    """Raised when a subscription violates a repository uniqueness constraint."""
+
+
 @dataclass
 class RSSChannelSubscription:
     id: str

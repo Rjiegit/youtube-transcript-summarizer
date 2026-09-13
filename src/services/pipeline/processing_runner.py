@@ -5,38 +5,13 @@ import threading
 import time
 import uuid
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import Optional
 
-from src.core.config import Config
 from src.core.logger import logger
 from src.domain.interfaces.database import BaseDB
 from src.domain.media.models import VideoMetadata
 from src.domain.tasks.models import Task
-try:  # pragma: no cover - optional heavy dependencies
-    from src.infrastructure.llm.summarizer_service import Summarizer
-except ModuleNotFoundError:  # pragma: no cover - testing scaffold
-    Summarizer = None  # type: ignore
-
-try:  # pragma: no cover - optional heavy dependencies
-    from src.infrastructure.media.downloader import YouTubeDownloader
-except ModuleNotFoundError:  # pragma: no cover - testing scaffold
-    YouTubeDownloader = None  # type: ignore
-
-try:  # pragma: no cover - optional heavy dependencies
-    from src.infrastructure.media.transcription.transcriber import Transcriber
-except ModuleNotFoundError:  # pragma: no cover - testing scaffold
-    Transcriber = None  # type: ignore
-
-from src.infrastructure.notifications.discord import (
-    send_task_completion_notification,
-)
-from src.infrastructure.persistence.factory import DBFactory
-from src.infrastructure.storage.file_storage import FileManager
-
-try:  # pragma: no cover - optional heavy dependencies
-    from src.infrastructure.storage.summary_storage import SummaryStorage
-except ModuleNotFoundError:  # pragma: no cover - testing scaffold
-    SummaryStorage = None  # type: ignore
+from src.services.pipeline.dependencies import ProcessingDependencies
 from src.services.outputs.path_builder import build_summary_output_path
 
 
@@ -104,15 +79,6 @@ class _ProcessingLockRefresher(threading.Thread):
             )
 
 
-DownloaderFactory = Callable[[str, str], YouTubeDownloader]
-TranscriberFactory = Callable[[str], Transcriber]
-SummarizerFactory = Callable[[], Summarizer]
-SummaryStorageFactory = Callable[[], SummaryStorage]
-FileManagerFactory = Callable[[], FileManager]
-NotifierFunc = Callable[..., bool]
-ConfigFactory = Callable[[], Config]
-
-
 class ProcessingWorker:
     """Background worker that drains the pending task queue."""
 
@@ -124,58 +90,31 @@ class ProcessingWorker:
         processing_lock_timeout_seconds: int = PROCESSING_LOCK_TIMEOUT_SECONDS,
         lock_refresh_interval: int = PROCESSING_LOCK_REFRESH_INTERVAL,
         *,
-        downloader_factory: Optional[DownloaderFactory] = None,
-        transcriber_factory: Optional[TranscriberFactory] = None,
-        summarizer_factory: Optional[SummarizerFactory] = None,
-        summary_storage_factory: Optional[SummaryStorageFactory] = None,
-        file_manager_factory: Optional[FileManagerFactory] = None,
-        notifier: Optional[NotifierFunc] = None,
-        config_factory: Optional[ConfigFactory] = None,
+        dependencies: ProcessingDependencies | None = None,
+        downloader_factory=None,
+        transcriber_factory=None,
+        summarizer_factory=None,
+        summary_storage_factory=None,
+        file_manager_factory=None,
+        notifier=None,
+        config_factory=None,
     ):
+        if dependencies is None:
+            from src.infrastructure.composition import create_processing_dependencies
+
+            dependencies = create_processing_dependencies()
         self.db = db
         self.worker_id = worker_id or f"worker-{uuid.uuid4().hex}"
         self.task_lock_timeout_seconds = task_lock_timeout_seconds
         self.processing_lock_timeout_seconds = processing_lock_timeout_seconds
         self.lock_refresh_interval = lock_refresh_interval
-        self.config = (config_factory or Config)()
-        if downloader_factory is not None:
-            self.downloader_factory = downloader_factory
-        else:
-            if YouTubeDownloader is None:
-                raise RuntimeError(
-                    "YouTube downloader dependency missing. Install yt-dlp-related extras."
-                )
-            self.downloader_factory = lambda url, output_path: YouTubeDownloader(  # type: ignore[misc]
-                url, output_path=output_path
-            )
-        if transcriber_factory is not None:
-            self.transcriber_factory = transcriber_factory
-        else:
-            if Transcriber is None:
-                raise RuntimeError(
-                    "Transcriber dependency missing. Install faster-whisper or provide a custom factory."
-                )
-            self.transcriber_factory = lambda model_size: Transcriber(  # type: ignore[misc]
-                model_size=model_size
-            )
-        if summarizer_factory is not None:
-            self.summarizer_factory = summarizer_factory
-        else:
-            if Summarizer is None:
-                raise RuntimeError(
-                    "Summarizer dependency missing. Install LLM dependencies or provide a custom factory."
-                )
-            self.summarizer_factory = Summarizer  # type: ignore[assignment]
-        if summary_storage_factory is not None:
-            self.summary_storage_factory = summary_storage_factory
-        else:
-            if SummaryStorage is None:
-                raise RuntimeError(
-                    "Summary storage dependency missing. Install Notion client or provide a custom factory."
-                )
-            self.summary_storage_factory = SummaryStorage  # type: ignore[assignment]
-        self.file_manager_factory = file_manager_factory or FileManager
-        self.notifier = notifier or send_task_completion_notification
+        self.config = (config_factory or dependencies.config_factory)()
+        self.downloader_factory = downloader_factory or dependencies.downloader_factory
+        self.transcriber_factory = transcriber_factory or dependencies.transcriber_factory
+        self.summarizer_factory = summarizer_factory or dependencies.summarizer_factory
+        self.summary_storage_factory = summary_storage_factory or dependencies.summary_storage_factory
+        self.file_manager_factory = file_manager_factory or dependencies.file_manager_factory
+        self.notifier = notifier or dependencies.notifier
 
     def run(self) -> ProcessingSummary:
         """Run the worker loop until no executable tasks remain."""
@@ -354,7 +293,9 @@ def get_db_client(db_type: Optional[str] = None) -> BaseDB:
     """Return a database client instance based on configuration."""
     resolved_type = (db_type or os.environ.get("DB_TYPE", "sqlite")).lower()
     logger.info(f"Using {resolved_type} database for processing.")
-    return DBFactory.get_db(resolved_type)
+    from src.infrastructure.repository_composition import create_database
+
+    return create_database(resolved_type)
 
 
 def process_pending_tasks(

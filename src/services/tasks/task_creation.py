@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from src.core.time_utils import as_utc, utc_now
-from src.domain.interfaces.database import BaseDB
+from src.domain.ports.repositories import TaskRepository
 from src.domain.tasks.models import Task
 
 
@@ -21,7 +21,7 @@ class TaskCreationResult:
 
 def create_task_record(
     *,
-    db: BaseDB,
+    db: TaskRepository,
     url: str,
     source_type: str = "manual",
     source_channel_id: str | None = None,

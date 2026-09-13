@@ -65,7 +65,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             status="Pending",
         )
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db) as mock_get_db:
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
             with patch(
                 "src.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
@@ -94,7 +94,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_schedule.assert_called_once_with(db_type="sqlite", db=mock_db, worker_id=None)
 
     def test_create_task_invalid_url(self) -> None:
-        with patch("src.apps.api.dependencies.DBFactory.get_db") as mock_get_db:
+        with patch("src.apps.api.dependencies.create_database") as mock_get_db:
             response = self.client.post("/tasks", json={"url": "not-a-url"})
 
         self.assertEqual(response.status_code, 400)
@@ -112,7 +112,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             source_channel_id="UC1234567890123456789012",
         )
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
                 "src.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
@@ -149,7 +149,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = completed_task
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post(
                 "/tasks",
                 json={
@@ -169,7 +169,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "", "NOTION_DATABASE_ID": ""},
             clear=False,
         ):
-            with patch("src.apps.api.dependencies.DBFactory.get_db") as mock_get_db:
+            with patch("src.apps.api.dependencies.create_database") as mock_get_db:
                 response = self.client.post(
                     "/tasks",
                     json={"url": self.valid_url, "db_type": "notion"},
@@ -193,7 +193,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "token", "NOTION_DATABASE_ID": "db"},
             clear=False,
         ):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db) as mock_get_db:
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
                 with patch(
                     "src.apps.api.dependencies.schedule_processing_job",
                     return_value=SchedulingResult(
@@ -225,7 +225,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_db_factory_error(self) -> None:
         with patch(
-            "src.apps.api.dependencies.DBFactory.get_db",
+            "src.apps.api.dependencies.create_database",
             side_effect=ValueError("Unknown database type: foo"),
         ):
             response = self.client.post("/tasks", json={"url": self.valid_url})
@@ -248,7 +248,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.side_effect = RuntimeError("boom")
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 500)
@@ -259,7 +259,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
                 "src.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
@@ -282,7 +282,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
                 "src.apps.api.routers.tasks.schedule_job",
                 side_effect=HTTPException(
@@ -301,7 +301,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
     def test_run_processing_endpoint_schedules_worker(self) -> None:
         mock_db = MagicMock()
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db) as mock_get_db:
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
             with patch(
                 "src.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
@@ -331,7 +331,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
     def test_run_processing_endpoint_conflict_when_locked(self) -> None:
         mock_db = MagicMock()
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
                 "src.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
@@ -362,7 +362,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = cached_task
 
         with patch("src.apps.api.routers.tasks.TASK_CACHE_TTL_SECONDS", 3600):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 200)
@@ -384,7 +384,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = processing_task
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 409)
@@ -402,7 +402,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = pending_task
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 409)
@@ -424,7 +424,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         )
 
         with patch("src.apps.api.routers.tasks.TASK_CACHE_TTL_SECONDS", 3600):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 with patch(
                     "src.apps.api.dependencies.schedule_processing_job",
                     return_value=SchedulingResult(
@@ -527,7 +527,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         mock_db.get_task_by_id.return_value = source_task
         mock_db.create_retry_task.return_value = retry_task
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post(
                 "/tasks/10/retry",
                 json={"db_type": "sqlite", "retry_reason": "manual"},
@@ -549,7 +549,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.get_task_by_id.return_value = source_task
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks/20/retry", json={"db_type": "sqlite"})
 
         self.assertEqual(response.status_code, 409)
@@ -564,7 +564,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.get_task_by_id.return_value = None
 
-        with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks/missing/retry", json={"db_type": "sqlite"})
 
         self.assertEqual(response.status_code, 404)
@@ -578,7 +578,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "", "NOTION_DATABASE_ID": ""},
             clear=False,
         ):
-            with patch("src.apps.api.dependencies.DBFactory.get_db") as mock_get_db:
+            with patch("src.apps.api.dependencies.create_database") as mock_get_db:
                 response = self.client.post(
                     "/tasks/10/retry",
                     json={"db_type": "notion"},
@@ -611,7 +611,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.get(
                     "/processing-lock",
                     headers={"X-Maintainer-Token": self.admin_token},
@@ -631,7 +631,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -657,7 +657,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.side_effect = [before, after]
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -686,7 +686,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -711,7 +711,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.side_effect = [before, after]
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.DBFactory.get_db", return_value=mock_db):
+            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",

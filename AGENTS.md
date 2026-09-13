@@ -13,6 +13,7 @@
   - `src/core/config.py`
 - FastAPI：`src/apps/api/main.py` 負責 app assembly，feature endpoints 位於 `src/apps/api/routers/`，request／response models 位於 `src/apps/api/schemas.py`。
 - Data & storage: `data/` (inputs/outputs), `src/infrastructure/persistence/` (Notion/SQLite adapters), `src/domain/interfaces/` (typed interfaces).
+- Application-facing repository ports 位於 `src/domain/ports/`；concrete adapter 建立集中於 `src/infrastructure/*composition.py`。
 - Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `src/`）。
 - Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`, `openspec/`（規格與變更提案）。
 

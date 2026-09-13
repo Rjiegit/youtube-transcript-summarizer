@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import sqlite3
 from dataclasses import dataclass
 
 from src.core.utils.url import normalize_youtube_feed_url
-from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
-    SQLiteRSSSubscriptionRepository,
-)
+from src.domain.ports.repositories import RSSSubscriptionRepository
+from src.domain.rss.models import RSSSubscriptionConflictError
 
 
 @dataclass
@@ -31,7 +29,7 @@ def normalize_rss_subscription_input(raw_value: str) -> tuple[str, str]:
 
 
 def create_rss_subscription(
-    repository: SQLiteRSSSubscriptionRepository,
+    repository: RSSSubscriptionRepository,
     *,
     channel_id: str,
     feed_url: str | None = None,
@@ -52,8 +50,8 @@ def create_rss_subscription(
             title=normalized_title,
             enabled=enabled,
         )
-    except sqlite3.IntegrityError as exc:
-        raise ValueError("此 channel 已存在。") from exc
+    except RSSSubscriptionConflictError:
+        raise
 
     return RSSSubscriptionCreateResult(
         created=True,
@@ -67,7 +65,7 @@ def create_rss_subscription(
 
 
 def update_rss_subscription(
-    repository: SQLiteRSSSubscriptionRepository,
+    repository: RSSSubscriptionRepository,
     subscription_id: str,
     raw_value: str,
     title: str = "",
@@ -83,5 +81,5 @@ def update_rss_subscription(
             title=normalized_title,
             enabled=enabled,
         )
-    except sqlite3.IntegrityError as exc:
-        raise ValueError("更新後的 channel 與既有訂閱衝突。") from exc
+    except RSSSubscriptionConflictError:
+        raise
