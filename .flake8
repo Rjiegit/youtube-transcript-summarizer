@@ -1,0 +1,18 @@
+[flake8]
+max-line-length = 127
+max-complexity = 10
+exclude =
+    .git,
+    .venv,
+    .archive,
+    .ruff_cache,
+    __pycache__,
+    apps/showcase/.nuxt,
+    apps/showcase/.output,
+    apps/showcase/node_modules,
+    data
+# Match the errors that block CI. The full style report remains informational.
+select = E9,F63,F7,F82
+show-source = true
+statistics = true
+
