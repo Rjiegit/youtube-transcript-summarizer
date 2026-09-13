@@ -104,7 +104,9 @@ npm --prefix apps/showcase run build
 
 | 元件 | 責任 |
 | --- | --- |
-| `src/apps/api/main.py` | FastAPI task、retry、RSS 與 processing lock endpoints |
+| `src/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
+| `src/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
+| `src/apps/api/schemas.py` | API request／response models |
 | `src/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
 | `src/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
 | `src/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
