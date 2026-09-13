@@ -26,7 +26,7 @@
 - 在 container 中執行指令：`docker compose exec streamlit bash -lc "<COMMAND>"` 或 `docker compose exec api bash -lc "<COMMAND>"`（依要操作的 service 選擇）
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`
 - One-shot download+process: `make auto url="<YOUTUBE_URL>"`
-- Tests (unittest discovery): `make test` 或 `uv run python -m unittest discover -s . -p "test*.py" -v`（避免使用 `python`，有些環境只有 `python3`）
+- Tests (unittest discovery): `make test`；分類執行使用 `make test-unit` 或 `make test-integration`（避免使用 `python`，有些環境只有 `python3`）
 - Lint (CI parity): `uv run flake8 .`（避免直接跑 `flake8 .`，可能不在 PATH）
 
 ## Coding Style & Naming Conventions
@@ -36,7 +36,7 @@
 - Keep modules focused; place abstractions in `src/domain/interfaces/` and adapters in `src/infrastructure/persistence/`.
 
 ## Testing Guidelines
-- Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`) beside the code or under a `tests/` folder.
+- Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`)；隔離測試放在 `tests/unit/`，跨 API／component boundary 的測試放在 `tests/integration/`。
 - Aim for fast, isolated unit tests around `transcriber`, `summarizer`, and `processing` logic; mock network/LLM/Notion.
 - Run locally: `make test`（或 `uv run python -m unittest discover -s . -p "test*.py" -v`）.
 

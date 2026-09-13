@@ -54,6 +54,8 @@ Python 測試使用 `unittest`：
 
 ```bash
 make test
+make test-unit
+make test-integration
 uv run flake8 .
 ```
 

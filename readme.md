@@ -91,6 +91,8 @@ make rss-monitor-once
 
 # Python 測試與 lint
 make test
+make test-unit
+make test-integration
 uv run flake8 .
 
 # Showcase 測試與 build
