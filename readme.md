@@ -98,6 +98,9 @@ uv run flake8 .
 # Showcase 測試與 build
 npm --prefix apps/showcase run test
 npm --prefix apps/showcase run build
+
+# Browser Extension manifest、asset 與 JavaScript validation
+make extension-check
 ```
 
 完整的啟動、環境變數、資料清理與部署說明請看 [設定、執行與部署](openwiki/operations/configuration-and-deployment.md)。

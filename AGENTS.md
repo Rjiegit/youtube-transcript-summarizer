@@ -28,6 +28,7 @@
 - One-shot download+process: `make auto url="<YOUTUBE_URL>"`
 - Tests (unittest discovery): `make test`；分類執行使用 `make test-unit` 或 `make test-integration`（避免使用 `python`，有些環境只有 `python3`）
 - Lint (CI parity): `uv run flake8 .`（避免直接跑 `flake8 .`，可能不在 PATH）
+- Browser Extension validation: `make extension-check`
 
 ## Coding Style & Naming Conventions
 - Follow PEP 8; 4-space indentation; prefer type hints.

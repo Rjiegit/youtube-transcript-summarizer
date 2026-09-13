@@ -1,4 +1,4 @@
-.PHONY: install install-hooks betterleaks-staged run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 VIDEO_RETENTION_DAYS ?= 7
@@ -61,6 +61,9 @@ showcase:
 
 showcase-test:
 	npm --prefix apps/showcase run test
+
+extension-check:
+	node scripts/validate-browser-extension.mjs
 
 test:
 	uv run python -m unittest discover -s . -p "test*.py" -v

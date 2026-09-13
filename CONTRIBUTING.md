@@ -47,6 +47,7 @@ docker compose up -d
 Nuxt 的 TypeScript、Vue、測試與命名規則請遵循 `apps/showcase/AGENTS.md`。
 
 Browser Extension 不屬於 Python package。修改後需確認 `manifest.json` 引用的檔案存在、JavaScript 語法有效，並以瀏覽器 Load unpacked 驗證主要互動。
+可先執行 `make extension-check` 完成自動化檢查。
 
 ## 測試與驗證
 
