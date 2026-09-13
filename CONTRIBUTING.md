@@ -27,14 +27,14 @@ docker compose up -d
 
 ## 程式碼編排
 
-- `src/domain/`：domain models 與 typed interfaces，不放第三方服務實作。
-- `src/services/`：use case 與流程 orchestration。
-- `src/infrastructure/`：LLM、媒體、通知、儲存與 persistence adapters。
-- `src/apps/`：FastAPI、Streamlit、CLI 與 RSS monitor 等 Python 入口。
+- `whisper_summary/domain/`：domain models 與 typed interfaces，不放第三方服務實作。
+- `whisper_summary/services/`：use case 與流程 orchestration。
+- `whisper_summary/infrastructure/`：LLM、媒體、通知、儲存與 persistence adapters。
+- `whisper_summary/apps/`：FastAPI、Streamlit、CLI 與 RSS monitor 等 Python 入口。
 - `apps/browser-extension/`：獨立 Chrome／Edge Manifest V3 client。
 - `apps/showcase/`：獨立 Nuxt 3 成果展示站。
 
-新增抽象時放在 `src/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `src/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
+新增抽象時放在 `whisper_summary/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `whisper_summary/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
 
 ## Python 風格
 

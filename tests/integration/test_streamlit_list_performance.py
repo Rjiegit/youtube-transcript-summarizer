@@ -1,6 +1,6 @@
 import time
 
-from src.apps.ui.streamlit_app import sort_tasks_for_display, get_notion_display
+from whisper_summary.apps.ui.streamlit_app import sort_tasks_for_display, get_notion_display
 from tests.fixtures.processing_jobs import build_task
 
 

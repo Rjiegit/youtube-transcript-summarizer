@@ -1,6 +1,6 @@
 import unittest
 
-from src.apps.ui.ui_views import (
+from whisper_summary.apps.ui.ui_views import (
     build_force_release_payload,
     build_targeted_release_payload,
     get_snapshot_worker_id,

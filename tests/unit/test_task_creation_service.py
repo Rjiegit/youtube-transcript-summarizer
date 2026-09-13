@@ -2,9 +2,9 @@ import unittest
 from datetime import timedelta
 from unittest.mock import MagicMock
 
-from src.core.time_utils import utc_now
-from src.domain.tasks.models import Task
-from src.services.tasks.task_creation import create_task_record
+from whisper_summary.core.time_utils import utc_now
+from whisper_summary.domain.tasks.models import Task
+from whisper_summary.services.tasks.task_creation import create_task_record
 
 
 class TestTaskCreationService(unittest.TestCase):

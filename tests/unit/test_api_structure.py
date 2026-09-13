@@ -3,7 +3,7 @@ import unittest
 
 class TestAPIModuleStructure(unittest.TestCase):
     def test_feature_routers_are_registered(self) -> None:
-        from src.apps.api.main import app
+        from whisper_summary.apps.api.main import app
 
         route_paths = {route.path for route in app.routes}
         self.assertTrue(
@@ -17,8 +17,8 @@ class TestAPIModuleStructure(unittest.TestCase):
         )
 
     def test_api_concerns_live_in_dedicated_modules(self) -> None:
-        from src.apps.api import dependencies, schemas
-        from src.apps.api.routers import processing, rss, tasks
+        from whisper_summary.apps.api import dependencies, schemas
+        from whisper_summary.apps.api.routers import processing, rss, tasks
 
         self.assertTrue(hasattr(dependencies, "get_database"))
         self.assertTrue(hasattr(schemas, "TaskCreateRequest"))

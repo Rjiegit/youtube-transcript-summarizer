@@ -5,7 +5,7 @@ import types
 import unittest
 from unittest.mock import patch
 
-from src.infrastructure.media.downloader import YouTubeDownloader
+from whisper_summary.infrastructure.media.downloader import YouTubeDownloader
 
 
 class TestYouTubeDownloaderMetadata(unittest.TestCase):
@@ -39,7 +39,7 @@ class TestYouTubeDownloaderMetadata(unittest.TestCase):
             )
 
             with patch(
-                "src.infrastructure.media.downloader.subprocess.run",
+                "whisper_summary.infrastructure.media.downloader.subprocess.run",
                 return_value=types.SimpleNamespace(stdout=stdout, stderr=""),
             ) as mock_run:
                 result = YouTubeDownloader(
@@ -79,7 +79,7 @@ class TestYouTubeDownloaderMetadata(unittest.TestCase):
                 ]
             )
             with patch(
-                "src.infrastructure.media.downloader.subprocess.run",
+                "whisper_summary.infrastructure.media.downloader.subprocess.run",
                 return_value=types.SimpleNamespace(stdout=stdout, stderr=""),
             ):
                 result = YouTubeDownloader(

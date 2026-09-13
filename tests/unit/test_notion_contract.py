@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from src.infrastructure.persistence.notion.client import NotionDB
+from whisper_summary.infrastructure.persistence.notion.client import NotionDB
 
 
 class TestNotionCompletedPageContract(unittest.TestCase):

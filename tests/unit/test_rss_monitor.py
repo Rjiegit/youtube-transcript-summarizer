@@ -2,8 +2,8 @@ import unittest
 from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
-from src.domain.rss.models import RSSChannelSubscription
-from src.services.rss.channel_monitor import (
+from whisper_summary.domain.rss.models import RSSChannelSubscription
+from whisper_summary.services.rss.channel_monitor import (
     RSSChannelMonitor,
     TaskEnqueueResult,
     YouTubeRSSFeedClient,

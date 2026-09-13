@@ -67,14 +67,14 @@ if "ollama" not in sys.modules:  # pragma: no cover - testing scaffold
     sys.modules["ollama"] = ollama_stub
 
 
-from src.core.config import Config
-from src.infrastructure.llm.model_options import Backend, ModelCandidate
-from src.infrastructure.llm import summarizer_service
-from src.infrastructure.llm.summarizer_service import Summarizer
-from src.infrastructure.llm.weighted_selection import (
+from whisper_summary.core.config import Config
+from whisper_summary.infrastructure.llm.model_options import Backend, ModelCandidate
+from whisper_summary.infrastructure.llm import summarizer_service
+from whisper_summary.infrastructure.llm.summarizer_service import Summarizer
+from whisper_summary.infrastructure.llm.weighted_selection import (
     NoAvailableModelCandidateError,
 )
-from src.domain.media.models import VideoChapter, VideoMetadata
+from whisper_summary.domain.media.models import VideoChapter, VideoMetadata
 
 
 class _FixedRng:
@@ -410,7 +410,7 @@ class TestSummarizerService(unittest.TestCase):
         fake_client.chat.return_value = fake_response
 
         with patch(
-            "src.infrastructure.llm.summarizer_service.OllamaClient",
+            "whisper_summary.infrastructure.llm.summarizer_service.OllamaClient",
             return_value=fake_client,
         ) as mock_client:
             result = summarizer.summarize_with_ollama(

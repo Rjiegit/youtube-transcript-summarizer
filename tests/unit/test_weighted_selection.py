@@ -1,11 +1,11 @@
 import unittest
 
-from src.infrastructure.llm.model_options import (
+from whisper_summary.infrastructure.llm.model_options import (
     AUTO_MODEL_CANDIDATES,
     Backend,
     ModelCandidate,
 )
-from src.infrastructure.llm.weighted_selection import (
+from whisper_summary.infrastructure.llm.weighted_selection import (
     InvalidModelPoolError,
     NoAvailableModelCandidateError,
     choose_weighted_candidate,

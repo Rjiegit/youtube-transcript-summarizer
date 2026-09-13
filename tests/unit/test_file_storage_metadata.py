@@ -3,7 +3,7 @@ import os
 import tempfile
 import unittest
 
-from src.infrastructure.storage.file_storage import FileManager
+from whisper_summary.infrastructure.storage.file_storage import FileManager
 
 
 class TestFileManagerMetadata(unittest.TestCase):

@@ -29,9 +29,9 @@ if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
     notion_stub.Client = _Client
     sys.modules["notion_client"] = notion_stub
 
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
-from src.domain.media.models import VideoMetadata
-from src.services.pipeline.processing_runner import ProcessingWorker
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.domain.media.models import VideoMetadata
+from whisper_summary.services.pipeline.processing_runner import ProcessingWorker
 
 
 class TestProcessingWorker(unittest.TestCase):
@@ -46,13 +46,13 @@ class TestProcessingWorker(unittest.TestCase):
         except FileNotFoundError:
             pass
 
-    @patch("src.infrastructure.composition.Config")
-    @patch("src.infrastructure.composition.send_task_completion_notification")
-    @patch("src.infrastructure.composition.SummaryStorage")
-    @patch("src.infrastructure.composition.FileManager.save_text")
-    @patch("src.infrastructure.composition.Summarizer")
-    @patch("src.infrastructure.composition.Transcriber")
-    @patch("src.infrastructure.composition.YouTubeDownloader")
+    @patch("whisper_summary.infrastructure.composition.Config")
+    @patch("whisper_summary.infrastructure.composition.send_task_completion_notification")
+    @patch("whisper_summary.infrastructure.composition.SummaryStorage")
+    @patch("whisper_summary.infrastructure.composition.FileManager.save_text")
+    @patch("whisper_summary.infrastructure.composition.Summarizer")
+    @patch("whisper_summary.infrastructure.composition.Transcriber")
+    @patch("whisper_summary.infrastructure.composition.YouTubeDownloader")
     def test_worker_processes_all_tasks(
         self,
         mock_downloader,
@@ -134,13 +134,13 @@ class TestProcessingWorker(unittest.TestCase):
             notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
         )
 
-    @patch("src.infrastructure.composition.Config")
-    @patch("src.infrastructure.composition.send_task_completion_notification")
-    @patch("src.infrastructure.composition.SummaryStorage")
-    @patch("src.infrastructure.composition.FileManager.save_text")
-    @patch("src.infrastructure.composition.Summarizer")
-    @patch("src.infrastructure.composition.Transcriber")
-    @patch("src.infrastructure.composition.YouTubeDownloader")
+    @patch("whisper_summary.infrastructure.composition.Config")
+    @patch("whisper_summary.infrastructure.composition.send_task_completion_notification")
+    @patch("whisper_summary.infrastructure.composition.SummaryStorage")
+    @patch("whisper_summary.infrastructure.composition.FileManager.save_text")
+    @patch("whisper_summary.infrastructure.composition.Summarizer")
+    @patch("whisper_summary.infrastructure.composition.Transcriber")
+    @patch("whisper_summary.infrastructure.composition.YouTubeDownloader")
     def test_worker_continues_after_failure(
         self,
         mock_downloader,

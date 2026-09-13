@@ -3,8 +3,8 @@ import tempfile
 import unittest
 from datetime import datetime
 
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
-from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.infrastructure.persistence.sqlite.rss_subscription_repository import (
     SQLiteRSSSubscriptionRepository,
 )
 

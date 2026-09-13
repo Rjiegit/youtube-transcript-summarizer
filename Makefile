@@ -24,22 +24,22 @@ freeze:
 	uv lock
 
 run:
-	uv run python -m src.apps.workers.cli --db-type sqlite
+	uv run python -m whisper_summary.apps.workers.cli --db-type sqlite
 
 processing-worker:
-	uv run python -m src.apps.workers.processing_worker
+	uv run python -m whisper_summary.apps.workers.processing_worker
 
 rss-monitor:
-	uv run python -m src.apps.workers.rss_monitor
+	uv run python -m whisper_summary.apps.workers.rss_monitor
 
 rss-monitor-once:
-	uv run python -m src.apps.workers.rss_monitor --once
+	uv run python -m whisper_summary.apps.workers.rss_monitor --once
 
 streamlit:
-	uv run streamlit run src/apps/ui/streamlit_app.py
+	uv run streamlit run whisper_summary/apps/ui/streamlit_app.py
 
 api:
-	uv run uvicorn src.apps.api.main:app --reload --reload-dir /usr/src/app/src --host 0.0.0.0 --port 8080
+	uv run uvicorn whisper_summary.apps.api.main:app --reload --reload-dir /usr/src/app/whisper_summary --host 0.0.0.0 --port 8080
 
 showcase-install:
 	npm --prefix apps/showcase install

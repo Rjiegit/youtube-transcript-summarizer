@@ -14,7 +14,7 @@ Chrome／Edge Manifest V3 extension，用來從 YouTube 頁面送出影片摘要
 - `service_worker.js` 呼叫 FastAPI 的 task 與 RSS endpoints。
 - `content_script.js` 只從 YouTube DOM 讀取 channel context。
 - API base URL 儲存在 `chrome.storage.sync`。
-- 本目錄不屬於 Python `src/`，不應直接 import Python implementation。
+- 本目錄不屬於 Python `whisper_summary/` package，不應直接 import Python implementation。
 
 ## 修改後驗證
 

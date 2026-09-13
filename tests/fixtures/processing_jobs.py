@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, timedelta
 
-from src.domain.tasks.models import Task
+from whisper_summary.domain.tasks.models import Task
 
 
 def build_task(

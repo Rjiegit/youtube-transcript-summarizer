@@ -1,4 +1,4 @@
-from src.apps.ui.streamlit_app import sort_tasks_for_display
+from whisper_summary.apps.ui.streamlit_app import sort_tasks_for_display
 from tests.fixtures.processing_jobs import sample_tasks_for_sorting, build_task
 
 

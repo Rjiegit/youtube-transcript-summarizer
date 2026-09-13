@@ -3,14 +3,14 @@ import tempfile
 import unittest
 from types import SimpleNamespace
 
-from src.apps.ui.ui_rss import (
+from whisper_summary.apps.ui.ui_rss import (
     add_rss_subscription,
     format_rss_poll_results,
     normalize_rss_subscription_input,
     trigger_rss_poll_once,
 )
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
-from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.infrastructure.persistence.sqlite.rss_subscription_repository import (
     SQLiteRSSSubscriptionRepository,
 )
 

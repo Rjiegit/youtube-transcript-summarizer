@@ -3,7 +3,7 @@ import sqlite3
 import tempfile
 import unittest
 
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
 class TestSQLiteClient(unittest.TestCase):

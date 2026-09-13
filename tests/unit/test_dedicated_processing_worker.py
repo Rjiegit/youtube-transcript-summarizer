@@ -2,11 +2,11 @@ import threading
 import unittest
 from unittest.mock import MagicMock, patch
 
-from src.apps.workers.processing_worker import run_forever
+from whisper_summary.apps.workers.processing_worker import run_forever
 
 
 class TestDedicatedProcessingWorker(unittest.TestCase):
-    @patch("src.apps.workers.processing_worker.create_database")
+    @patch("whisper_summary.apps.workers.processing_worker.create_database")
     def test_poll_loop_reuses_database_and_stops_cleanly(self, create_database) -> None:
         db = MagicMock()
         create_database.return_value = db
@@ -18,7 +18,7 @@ class TestDedicatedProcessingWorker(unittest.TestCase):
         create_database.assert_called_once_with("sqlite")
         processor.assert_called_once_with(db=db, worker_id="processing-worker")
 
-    @patch("src.apps.workers.processing_worker.create_database")
+    @patch("whisper_summary.apps.workers.processing_worker.create_database")
     def test_poll_loop_survives_failed_cycle(self, create_database) -> None:
         stop_event = threading.Event()
         calls = 0

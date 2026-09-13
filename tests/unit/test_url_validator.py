@@ -1,6 +1,6 @@
 import unittest
 
-from src.core.utils.url import extract_video_id, is_valid_youtube_url, normalize_youtube_url
+from whisper_summary.core.utils.url import extract_video_id, is_valid_youtube_url, normalize_youtube_url
 
 
 class TestURLValidator(unittest.TestCase):

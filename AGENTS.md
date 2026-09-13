@@ -2,25 +2,25 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/apps/ui/streamlit_app.py`: Streamlit UI entry for local use and Docker。
-- Core modules（主要都在 `src/`）：
-  - `src/infrastructure/media/transcription/transcriber.py` (Whisper)
-  - `src/infrastructure/llm/summarizer_service.py` (LLMs)
-  - `src/infrastructure/media/downloader.py`
-  - `src/services/pipeline/processing_runner.py`
-  - `src/infrastructure/storage/file_storage.py`
-  - `src/infrastructure/storage/summary_storage.py`
-  - `src/core/config.py`
-- FastAPI：`src/apps/api/main.py` 負責 app assembly，feature endpoints 位於 `src/apps/api/routers/`，request／response models 位於 `src/apps/api/schemas.py`。
-- Data & storage: `data/` (inputs/outputs), `src/infrastructure/persistence/` (Notion/SQLite adapters), `src/domain/interfaces/` (typed interfaces).
-- Application-facing repository ports 位於 `src/domain/ports/`；concrete adapter 建立集中於 `src/infrastructure/*composition.py`。
-- Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `src/`）。
+- `whisper_summary/apps/ui/streamlit_app.py`: Streamlit UI entry for local use and Docker。
+- Core modules（主要都在 `whisper_summary/`）：
+  - `whisper_summary/infrastructure/media/transcription/transcriber.py` (Whisper)
+  - `whisper_summary/infrastructure/llm/summarizer_service.py` (LLMs)
+  - `whisper_summary/infrastructure/media/downloader.py`
+  - `whisper_summary/services/pipeline/processing_runner.py`
+  - `whisper_summary/infrastructure/storage/file_storage.py`
+  - `whisper_summary/infrastructure/storage/summary_storage.py`
+  - `whisper_summary/core/config.py`
+- FastAPI：`whisper_summary/apps/api/main.py` 負責 app assembly，feature endpoints 位於 `whisper_summary/apps/api/routers/`，request／response models 位於 `whisper_summary/apps/api/schemas.py`。
+- Data & storage: `data/` (inputs/outputs), `whisper_summary/infrastructure/persistence/` (Notion/SQLite adapters), `whisper_summary/domain/interfaces/` (typed interfaces).
+- Application-facing repository ports 位於 `whisper_summary/domain/ports/`；concrete adapter 建立集中於 `whisper_summary/infrastructure/*composition.py`。
+- Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `whisper_summary/`）。
 - Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`, `openspec/`（規格與變更提案）。
 
 ## Build, Test, and Development Commands
 - Install deps（不含安裝專案本體）: `uv sync --frozen --no-install-project`
 - Install/Update yt-dlp（會寫入 `/usr/local/bin/yt-dlp`，可能需要權限；Docker 內較常用）: `make install` 或 `make yt-dlp-update`
-- Run Streamlit app: `make streamlit`（等同 `uv run streamlit run src/apps/ui/streamlit_app.py`）
+- Run Streamlit app: `make streamlit`（等同 `uv run streamlit run whisper_summary/apps/ui/streamlit_app.py`）
 - Run API: `make api`
 - Run worker CLI（SQLite）: `make run`
 - Run dedicated processing worker: `make processing-worker`
@@ -36,7 +36,7 @@
 - Follow PEP 8; 4-space indentation; prefer type hints.
 - Line length: 127 (matches CI’s flake8 config).
 - Naming: `snake_case` for functions/vars, `PascalCase` for classes, `UPPER_SNAKE_CASE` for constants.
-- Keep modules focused; place abstractions in `src/domain/interfaces/` and adapters in `src/infrastructure/persistence/`.
+- Keep modules focused; place abstractions in `whisper_summary/domain/interfaces/` and adapters in `whisper_summary/infrastructure/persistence/`.
 
 ## Testing Guidelines
 - Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`)；隔離測試放在 `tests/unit/`，跨 API／component boundary 的測試放在 `tests/integration/`。

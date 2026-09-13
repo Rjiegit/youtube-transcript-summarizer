@@ -11,9 +11,9 @@
 
 目前只完成 Browser Extension 搬移。以下應用維持原路徑，等後續另行安排，不在本階段搬移：
 
-- FastAPI：`src/apps/api/`。
-- Streamlit operator UI：`src/apps/ui/`。
-- Processing worker 與 RSS monitor：`src/apps/workers/`。
+- FastAPI：`whisper_summary/apps/api/`。
+- Streamlit operator UI：`whisper_summary/apps/ui/`。
+- Processing worker 與 RSS monitor：`whisper_summary/apps/workers/`。
 
 ## 長期規劃
 

@@ -111,20 +111,20 @@ make extension-check
 
 | 元件 | 責任 |
 | --- | --- |
-| `src/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
-| `src/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
-| `src/apps/api/schemas.py` | API request／response models |
-| `src/domain/ports/` | Application services 使用的 repository contracts |
-| `src/infrastructure/composition.py` | Processing pipeline 的 concrete adapter 組裝 |
-| `src/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
-| `src/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
-| `src/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
-| `src/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
-| `src/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
-| `src/services/pipeline/processing_runner.py` | 下載、轉錄、摘要、儲存與通知的 orchestration |
-| `src/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
-| `src/infrastructure/llm/` | LLM provider、候選模型與 failover |
-| `src/infrastructure/persistence/` | SQLite 與 Notion adapters |
+| `whisper_summary/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
+| `whisper_summary/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
+| `whisper_summary/apps/api/schemas.py` | API request／response models |
+| `whisper_summary/domain/ports/` | Application services 使用的 repository contracts |
+| `whisper_summary/infrastructure/composition.py` | Processing pipeline 的 concrete adapter 組裝 |
+| `whisper_summary/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
+| `whisper_summary/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
+| `whisper_summary/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
+| `whisper_summary/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
+| `whisper_summary/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
+| `whisper_summary/services/pipeline/processing_runner.py` | 下載、轉錄、摘要、儲存與通知的 orchestration |
+| `whisper_summary/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
+| `whisper_summary/infrastructure/llm/` | LLM provider、候選模型與 failover |
+| `whisper_summary/infrastructure/persistence/` | SQLite 與 Notion adapters |
 | `apps/browser-extension/` | Chrome／Edge Manifest V3 client |
 | `apps/showcase/` | 從 Notion 讀取成果的 Nuxt 展示站 |
 

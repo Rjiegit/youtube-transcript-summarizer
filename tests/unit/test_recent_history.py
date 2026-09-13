@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from datetime import datetime, timedelta
 
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
 class TestRecentHistorySQLite(unittest.TestCase):

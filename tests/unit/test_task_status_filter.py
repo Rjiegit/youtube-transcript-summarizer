@@ -1,7 +1,7 @@
 import unittest
 from types import SimpleNamespace
 
-from src.apps.ui.streamlit_app import collect_task_status_options, filter_tasks_by_status
+from whisper_summary.apps.ui.streamlit_app import collect_task_status_options, filter_tasks_by_status
 
 
 class TaskStatusFilterTests(unittest.TestCase):

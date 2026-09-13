@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 
-from src.apps.api.dependencies import schedule_job
+from whisper_summary.apps.api.dependencies import schedule_job
 
 
 class TestAPIDedicatedWorkerBoundary(unittest.TestCase):

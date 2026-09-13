@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from src.apps.ui.streamlit_app import build_notion_url, get_notion_display
+from whisper_summary.apps.ui.streamlit_app import build_notion_url, get_notion_display
 from tests.fixtures.processing_jobs import build_task
 
 

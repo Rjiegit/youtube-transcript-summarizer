@@ -5,10 +5,10 @@ from datetime import timedelta
 from types import SimpleNamespace
 from unittest import mock
 
-from src.core.time_utils import utc_now_naive
-from src.apps.ui.streamlit_app import _build_recent_task_entry, _prune_recent_history
-from src.apps.ui.ui_config import RECENT_TASK_HISTORY_TTL_DAYS
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.core.time_utils import utc_now_naive
+from whisper_summary.apps.ui.streamlit_app import _build_recent_task_entry, _prune_recent_history
+from whisper_summary.apps.ui.ui_config import RECENT_TASK_HISTORY_TTL_DAYS
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
 class RecentTaskHistoryTests(unittest.TestCase):
@@ -41,7 +41,7 @@ class RecentTaskHistoryTests(unittest.TestCase):
                 now - timedelta(days=RECENT_TASK_HISTORY_TTL_DAYS + 1),
             )
 
-            with mock.patch("src.apps.ui.ui_history._get_history_db", return_value=db):
+            with mock.patch("whisper_summary.apps.ui.ui_history._get_history_db", return_value=db):
                 _prune_recent_history()
 
             history = db.list_recent_task_history()

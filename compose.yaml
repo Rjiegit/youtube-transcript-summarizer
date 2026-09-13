@@ -33,7 +33,7 @@ services:
       [
         "bash",
         "-lc",
-        "uv run streamlit run src/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
+        "uv run streamlit run whisper_summary/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
       ]
     environment:
       TZ: Asia/Taipei
@@ -47,7 +47,7 @@ services:
       context: .
       dockerfile: .docker/Dockerfile
       target: worker
-    command: ["bash", "-lc", "uv run python -m src.apps.workers.rss_monitor"]
+    command: ["bash", "-lc", "uv run python -m whisper_summary.apps.workers.rss_monitor"]
     environment:
       TZ: Asia/Taipei
       TASK_API_BASE_URL: "http://api:8080"
@@ -58,6 +58,6 @@ services:
       context: .
       dockerfile: .docker/Dockerfile
       target: worker
-    command: ["bash", "-lc", "make yt-dlp-update && uv run python -m src.apps.workers.processing_worker"]
+    command: ["bash", "-lc", "make yt-dlp-update && uv run python -m whisper_summary.apps.workers.processing_worker"]
     depends_on:
       - api

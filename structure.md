@@ -9,4 +9,4 @@
 - [任務生命週期與併發控制](openwiki/workflows/task-lifecycle.md)
 - [開發貢獻指南](CONTRIBUTING.md)
 
-實際結構與行為以 `src/`、`apps/` 及測試為準。
+實際結構與行為以 `whisper_summary/`、`apps/` 及測試為準。

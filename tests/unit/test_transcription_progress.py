@@ -1,6 +1,6 @@
 import unittest
 
-from src.infrastructure.media.transcription.transcriber import Transcriber
+from whisper_summary.infrastructure.media.transcription.transcriber import Transcriber
 
 
 class _InfoWithDuration:

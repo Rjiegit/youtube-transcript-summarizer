@@ -1,4 +1,4 @@
-from src.apps.ui.streamlit_app import get_notion_display
+from whisper_summary.apps.ui.streamlit_app import get_notion_display
 from tests.fixtures.processing_jobs import build_task
 
 

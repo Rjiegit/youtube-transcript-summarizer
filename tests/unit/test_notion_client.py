@@ -15,7 +15,7 @@ if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
     sys.modules["notion_client"] = notion_stub
 
 
-from src.infrastructure.persistence.notion.client import NotionDB
+from whisper_summary.infrastructure.persistence.notion.client import NotionDB
 
 
 class NotionClientTests(unittest.TestCase):

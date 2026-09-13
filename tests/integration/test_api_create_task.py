@@ -5,7 +5,7 @@ import unittest
 from datetime import timedelta
 from unittest.mock import MagicMock, patch
 
-from src.core.time_utils import utc_now
+from whisper_summary.core.time_utils import utc_now
 
 # Provide lightweight stubs for optional dependencies when running in minimal envs.
 if "pytz" not in sys.modules:  # pragma: no cover - testing scaffold
@@ -34,17 +34,17 @@ if "notion_client" not in sys.modules:  # pragma: no cover - testing scaffold
 try:  # pragma: no cover - avoid hard dependency in minimal envs
     from fastapi import HTTPException, status
     from fastapi.testclient import TestClient
-    from src.apps.api.main import app
+    from whisper_summary.apps.api.main import app
 except ModuleNotFoundError:  # pragma: no cover - testing scaffold
     TestClient = None
     app = None
     HTTPException = RuntimeError  # type: ignore
     status = types.SimpleNamespace(HTTP_500_INTERNAL_SERVER_ERROR=500)  # type: ignore
 
-from src.domain.interfaces.database import ProcessingLockInfo
-from src.domain.tasks.models import Task
-from src.services.pipeline.processing_runner import PROCESSING_LOCK_TIMEOUT_SECONDS
-from src.services.tasks.processing_scheduler import SchedulingResult
+from whisper_summary.domain.interfaces.database import ProcessingLockInfo
+from whisper_summary.domain.tasks.models import Task
+from whisper_summary.services.pipeline.processing_runner import PROCESSING_LOCK_TIMEOUT_SECONDS
+from whisper_summary.services.tasks.processing_scheduler import SchedulingResult
 
 
 @unittest.skipIf(TestClient is None, "fastapi is not installed")
@@ -65,9 +65,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             status="Pending",
         )
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
             with patch(
-                "src.apps.api.dependencies.schedule_processing_job",
+                "whisper_summary.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
                     accepted=True,
                     worker_id="api-worker-123",
@@ -94,7 +94,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_schedule.assert_not_called()
 
     def test_create_task_invalid_url(self) -> None:
-        with patch("src.apps.api.dependencies.create_database") as mock_get_db:
+        with patch("whisper_summary.apps.api.dependencies.create_database") as mock_get_db:
             response = self.client.post("/tasks", json={"url": "not-a-url"})
 
         self.assertEqual(response.status_code, 400)
@@ -112,9 +112,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             source_channel_id="UC1234567890123456789012",
         )
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
-                "src.apps.api.dependencies.schedule_processing_job",
+                "whisper_summary.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
                     accepted=True,
                     worker_id="api-worker-rss",
@@ -149,7 +149,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = completed_task
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post(
                 "/tasks",
                 json={
@@ -169,7 +169,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "", "NOTION_DATABASE_ID": ""},
             clear=False,
         ):
-            with patch("src.apps.api.dependencies.create_database") as mock_get_db:
+            with patch("whisper_summary.apps.api.dependencies.create_database") as mock_get_db:
                 response = self.client.post(
                     "/tasks",
                     json={"url": self.valid_url, "db_type": "notion"},
@@ -193,9 +193,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "token", "NOTION_DATABASE_ID": "db"},
             clear=False,
         ):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
                 with patch(
-                    "src.apps.api.dependencies.schedule_processing_job",
+                    "whisper_summary.apps.api.dependencies.schedule_processing_job",
                     return_value=SchedulingResult(
                         accepted=True,
                         worker_id="api-worker-notion",
@@ -225,7 +225,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
 
     def test_create_task_db_factory_error(self) -> None:
         with patch(
-            "src.apps.api.dependencies.create_database",
+            "whisper_summary.apps.api.dependencies.create_database",
             side_effect=ValueError("Unknown database type: foo"),
         ):
             response = self.client.post("/tasks", json={"url": self.valid_url})
@@ -248,7 +248,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.side_effect = RuntimeError("boom")
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 500)
@@ -259,9 +259,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
-                "src.apps.api.dependencies.schedule_processing_job",
+                "whisper_summary.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
                     accepted=False,
                     worker_id=None,
@@ -282,9 +282,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db.find_recent_task_by_url.return_value = None
         mock_db.add_task.return_value = Task(id="1", url=self.normalized_url, status="Pending")
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
-                "src.apps.api.routers.tasks.schedule_job",
+                "whisper_summary.apps.api.routers.tasks.schedule_job",
                 side_effect=HTTPException(
                     status.HTTP_500_INTERNAL_SERVER_ERROR,
                     detail="Failed to schedule processing worker.",
@@ -301,9 +301,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
     def test_processing_endpoint_reports_dedicated_worker(self) -> None:
         mock_db = MagicMock()
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db) as mock_get_db:
             with patch(
-                "src.apps.api.dependencies.schedule_processing_job",
+                "whisper_summary.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
                     accepted=True,
                     worker_id="api-worker-123",
@@ -327,9 +327,9 @@ class TestCreateTaskEndpoint(unittest.TestCase):
     def test_processing_endpoint_is_independent_of_current_lock(self) -> None:
         mock_db = MagicMock()
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             with patch(
-                "src.apps.api.dependencies.schedule_processing_job",
+                "whisper_summary.apps.api.dependencies.schedule_processing_job",
                 return_value=SchedulingResult(
                     accepted=False,
                     worker_id=None,
@@ -357,8 +357,8 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = cached_task
 
-        with patch("src.apps.api.routers.tasks.TASK_CACHE_TTL_SECONDS", 3600):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.routers.tasks.TASK_CACHE_TTL_SECONDS", 3600):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 200)
@@ -380,7 +380,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = processing_task
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 409)
@@ -398,7 +398,7 @@ class TestCreateTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.find_recent_task_by_url.return_value = pending_task
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks", json={"url": self.valid_url})
 
         self.assertEqual(response.status_code, 409)
@@ -419,10 +419,10 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             id="81", url=self.normalized_url, status="Pending"
         )
 
-        with patch("src.apps.api.routers.tasks.TASK_CACHE_TTL_SECONDS", 3600):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.routers.tasks.TASK_CACHE_TTL_SECONDS", 3600):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 with patch(
-                    "src.apps.api.dependencies.schedule_processing_job",
+                    "whisper_summary.apps.api.dependencies.schedule_processing_job",
                     return_value=SchedulingResult(
                         accepted=False,
                         worker_id=None,
@@ -450,9 +450,9 @@ class TestRSSSubscriptionEndpoint(unittest.TestCase):
     def test_create_rss_subscription_success(self) -> None:
         mock_repo = MagicMock()
 
-        with patch("src.apps.api.routers.rss.get_rss_repository", return_value=mock_repo):
+        with patch("whisper_summary.apps.api.routers.rss.get_rss_repository", return_value=mock_repo):
             with patch(
-                "src.apps.api.routers.rss.create_rss_subscription",
+                "whisper_summary.apps.api.routers.rss.create_rss_subscription",
                 return_value=types.SimpleNamespace(
                     subscription_id="1",
                     channel_id="UC1234567890123456789012",
@@ -476,9 +476,9 @@ class TestRSSSubscriptionEndpoint(unittest.TestCase):
         mock_create.assert_called_once()
 
     def test_create_rss_subscription_conflict(self) -> None:
-        with patch("src.apps.api.routers.rss.get_rss_repository", return_value=MagicMock()):
+        with patch("whisper_summary.apps.api.routers.rss.get_rss_repository", return_value=MagicMock()):
             with patch(
-                "src.apps.api.routers.rss.create_rss_subscription",
+                "whisper_summary.apps.api.routers.rss.create_rss_subscription",
                 side_effect=ValueError("此 channel 已存在。"),
             ):
                 response = self.client.post(
@@ -523,7 +523,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         mock_db.get_task_by_id.return_value = source_task
         mock_db.create_retry_task.return_value = retry_task
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post(
                 "/tasks/10/retry",
                 json={"db_type": "sqlite", "retry_reason": "manual"},
@@ -545,7 +545,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.get_task_by_id.return_value = source_task
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks/20/retry", json={"db_type": "sqlite"})
 
         self.assertEqual(response.status_code, 409)
@@ -560,7 +560,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
         mock_db = MagicMock()
         mock_db.get_task_by_id.return_value = None
 
-        with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+        with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
             response = self.client.post("/tasks/missing/retry", json={"db_type": "sqlite"})
 
         self.assertEqual(response.status_code, 404)
@@ -574,7 +574,7 @@ class TestRetryTaskEndpoint(unittest.TestCase):
             {"NOTION_API_KEY": "", "NOTION_DATABASE_ID": ""},
             clear=False,
         ):
-            with patch("src.apps.api.dependencies.create_database") as mock_get_db:
+            with patch("whisper_summary.apps.api.dependencies.create_database") as mock_get_db:
                 response = self.client.post(
                     "/tasks/10/retry",
                     json={"db_type": "notion"},
@@ -607,7 +607,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.get(
                     "/processing-lock",
                     headers={"X-Maintainer-Token": self.admin_token},
@@ -627,7 +627,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -653,7 +653,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.side_effect = [before, after]
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -682,7 +682,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.return_value = lock_info
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",
@@ -707,7 +707,7 @@ class TestProcessingLockEndpoints(unittest.TestCase):
         mock_db.read_processing_lock.side_effect = [before, after]
 
         with patch.dict(os.environ, {"PROCESSING_LOCK_ADMIN_TOKEN": self.admin_token}, clear=False):
-            with patch("src.apps.api.dependencies.create_database", return_value=mock_db):
+            with patch("whisper_summary.apps.api.dependencies.create_database", return_value=mock_db):
                 response = self.client.request(
                     "DELETE",
                     "/processing-lock",

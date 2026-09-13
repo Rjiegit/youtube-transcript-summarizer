@@ -2,11 +2,11 @@ import os
 import tempfile
 import unittest
 
-from src.infrastructure.persistence.sqlite.client import SQLiteDB
-from src.infrastructure.persistence.sqlite.rss_subscription_repository import (
+from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
+from whisper_summary.infrastructure.persistence.sqlite.rss_subscription_repository import (
     SQLiteRSSSubscriptionRepository,
 )
-from src.services.rss.subscription_service import (
+from whisper_summary.services.rss.subscription_service import (
     create_rss_subscription,
     normalize_rss_subscription_input,
 )

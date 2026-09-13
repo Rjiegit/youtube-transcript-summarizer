@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from src.infrastructure.notifications.discord import (
+from whisper_summary.infrastructure.notifications.discord import (
     RequestException,
     send_task_completion_notification,
 )
@@ -72,7 +72,7 @@ class TestDiscordNotifier(unittest.TestCase):
             captured["content"] = json["content"]
             return _StubResponse(204, "ok")
 
-        with patch("src.infrastructure.notifications.discord.logger") as mock_logger:
+        with patch("whisper_summary.infrastructure.notifications.discord.logger") as mock_logger:
             mock_logger.warning = mock_logger.warning  # attribute to avoid AttributeError
             result = send_task_completion_notification(
                 "Title",
