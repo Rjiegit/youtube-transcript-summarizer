@@ -1,4 +1,5 @@
 import os
+import subprocess
 import sys
 import types
 import unittest
@@ -131,16 +132,20 @@ class TestSummarizerService(unittest.TestCase):
         self.assertLess(result.count("長"), 7000)
 
     def test_auto_selects_configured_gemini_candidate(self):
-        with patch.dict(
-            os.environ,
-            {
-                "OPENAI_API_KEY": "openai-key",
-                "GOOGLE_GEMINI_API_KEY": "gemini-key",
-                "OLLAMA_API_KEY": "ollama-key",
-            },
-            clear=False,
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.shutil.which",
+            return_value=None,
         ):
-            summarizer = Summarizer(rng=_FixedRng([0.8]))
+            with patch.dict(
+                os.environ,
+                {
+                    "OPENAI_API_KEY": "openai-key",
+                    "GOOGLE_GEMINI_API_KEY": "gemini-key",
+                    "OLLAMA_API_KEY": "ollama-key",
+                },
+                clear=False,
+            ):
+                summarizer = Summarizer(rng=_FixedRng([0.8]))
 
         with patch.object(
             Summarizer,
@@ -195,15 +200,216 @@ class TestSummarizerService(unittest.TestCase):
         )
 
     def test_provider_key_does_not_enable_model_missing_from_auto_pool(self):
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.shutil.which",
+            return_value=None,
+        ):
+            with patch.dict(
+                os.environ,
+                {"OPENAI_API_KEY": "openai-key"},
+                clear=True,
+            ):
+                summarizer = Summarizer()
+
+        with self.assertRaises(NoAvailableModelCandidateError):
+            summarizer.summarize("title", "text")
+
+    def test_auto_selects_codex_cli_when_binary_is_available(self):
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.shutil.which",
+            return_value="/opt/homebrew/bin/codex",
+        ):
+            with patch.dict(os.environ, {}, clear=True):
+                summarizer = Summarizer(rng=_FixedRng([0.999]))
+
+        with patch.object(
+            summarizer,
+            "summarize_with_codex_cli",
+            return_value="codex-summary",
+        ) as mock_codex:
+            result = summarizer.summarize("title", "text")
+
+        self.assertEqual(result, "codex-summary")
+        self.assertEqual(summarizer.last_backend, "codex_cli")
+        self.assertEqual(
+            summarizer.last_model_label,
+            "codex_cli:gpt-5.6-luna",
+        )
+        mock_codex.assert_called_once_with(
+            "title",
+            "text",
+            model="gpt-5.6-luna",
+        )
+
+    def test_codex_cli_candidate_is_unavailable_without_binary(self):
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.shutil.which",
+            return_value=None,
+        ):
+            with patch.dict(os.environ, {}, clear=True):
+                summarizer = Summarizer(
+                    model_candidates=(
+                        ModelCandidate(
+                            Backend.CODEX_CLI,
+                            "gpt-5.6-luna",
+                            1,
+                        ),
+                    ),
+                )
+
+        with self.assertRaises(NoAvailableModelCandidateError):
+            summarizer.summarize("title", "text")
+
+    def test_summarize_with_codex_cli_uses_stdin_and_read_only_sandbox(self):
         with patch.dict(
             os.environ,
-            {"OPENAI_API_KEY": "openai-key"},
+            {
+                "CODEX_BIN": "custom-codex",
+                "CODEX_TIMEOUT_SECONDS": "321",
+                "GOOGLE_GEMINI_API_KEY": "do-not-inherit",
+                "NOTION_API_KEY": "do-not-inherit",
+            },
             clear=True,
         ):
             summarizer = Summarizer()
 
-        with self.assertRaises(NoAvailableModelCandidateError):
-            summarizer.summarize("title", "text")
+        completed = types.SimpleNamespace(
+            returncode=0,
+            stdout="  codex summary  ",
+            stderr="progress",
+        )
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.subprocess.run",
+            return_value=completed,
+        ) as mock_run:
+            result = summarizer.summarize_with_codex_cli(
+                "title",
+                "transcript",
+                model="gpt-5.6-luna",
+            )
+
+        self.assertEqual(result, "codex summary")
+        self.assertEqual(summarizer.last_backend, "codex_cli")
+        self.assertEqual(
+            summarizer.last_model_label,
+            "codex_cli:gpt-5.6-luna",
+        )
+        command = mock_run.call_args.args[0]
+        self.assertEqual(
+            command,
+            [
+                "custom-codex",
+                "exec",
+                "--ephemeral",
+                "--ignore-user-config",
+                "--sandbox",
+                "read-only",
+                "--model",
+                "gpt-5.6-luna",
+                "-",
+            ],
+        )
+        self.assertIn("title", mock_run.call_args.kwargs["input"])
+        self.assertIn("transcript", mock_run.call_args.kwargs["input"])
+        self.assertEqual(mock_run.call_args.kwargs["timeout"], 321)
+        self.assertTrue(mock_run.call_args.kwargs["text"])
+        self.assertTrue(mock_run.call_args.kwargs["capture_output"])
+        self.assertFalse(mock_run.call_args.kwargs["check"])
+        child_environment = mock_run.call_args.kwargs["env"]
+        self.assertNotIn("GOOGLE_GEMINI_API_KEY", child_environment)
+        self.assertNotIn("NOTION_API_KEY", child_environment)
+
+    def test_summarize_with_codex_cli_rejects_nonzero_exit(self):
+        summarizer = Summarizer()
+        completed = types.SimpleNamespace(
+            returncode=1,
+            stdout="",
+            stderr="authentication failed",
+        )
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.subprocess.run",
+            return_value=completed,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "authentication failed",
+            ):
+                summarizer.summarize_with_codex_cli(
+                    "title",
+                    "text",
+                    model="gpt-5.6-luna",
+                )
+
+    def test_summarize_with_codex_cli_rejects_empty_output(self):
+        summarizer = Summarizer()
+        completed = types.SimpleNamespace(
+            returncode=0,
+            stdout="  ",
+            stderr="",
+        )
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.subprocess.run",
+            return_value=completed,
+        ):
+            with self.assertRaisesRegex(RuntimeError, "empty summary"):
+                summarizer.summarize_with_codex_cli(
+                    "title",
+                    "text",
+                    model="gpt-5.6-luna",
+                )
+
+    def test_codex_cli_timeout_is_transient_for_fallback(self):
+        summarizer = Summarizer()
+
+        self.assertTrue(
+            summarizer._is_transient_provider_error(
+                Backend.CODEX_CLI,
+                subprocess.TimeoutExpired("codex", 900),
+            )
+        )
+
+    def test_codex_cli_timeout_falls_back_to_another_candidate(self):
+        candidates = [
+            ModelCandidate(Backend.GEMINI, "gemini-a", 90),
+            ModelCandidate(Backend.CODEX_CLI, "gpt-5.6-luna", 10),
+        ]
+        with patch(
+            "whisper_summary.infrastructure.llm.summarizer_service.shutil.which",
+            return_value="/opt/homebrew/bin/codex",
+        ):
+            with patch.dict(
+                os.environ,
+                {"GOOGLE_GEMINI_API_KEY": "gemini-key"},
+                clear=True,
+            ):
+                summarizer = Summarizer(
+                    model_candidates=candidates,
+                    rng=_FixedRng([0.99, 0.0]),
+                )
+
+        with patch.object(
+            summarizer,
+            "summarize_with_codex_cli",
+            side_effect=subprocess.TimeoutExpired("codex", 900),
+        ) as mock_codex:
+            with patch.object(
+                summarizer,
+                "summarize_with_google_gemini",
+                return_value="gemini-summary",
+            ) as mock_gemini:
+                result = summarizer.summarize("title", "text")
+
+        self.assertEqual(result, "gemini-summary")
+        mock_codex.assert_called_once_with(
+            "title",
+            "text",
+            model="gpt-5.6-luna",
+        )
+        mock_gemini.assert_called_once_with(
+            "title",
+            "text",
+            model="gemini-a",
+        )
 
     def test_transient_error_reselects_once_and_records_successful_model(self):
         from google.api_core.exceptions import TooManyRequests
@@ -445,6 +651,61 @@ class TestSummarizerService(unittest.TestCase):
             config = Config()
 
         config.validate()
+
+    def test_config_validate_accepts_codex_cli_without_api_keys(self):
+        with patch(
+            "whisper_summary.core.config.shutil.which",
+            return_value="/opt/homebrew/bin/codex",
+        ):
+            with patch.dict(
+                os.environ,
+                {
+                    "OLLAMA_API_KEY": "",
+                    "OPENAI_API_KEY": "",
+                    "GOOGLE_GEMINI_API_KEY": "",
+                    "CODEX_BIN": "codex",
+                },
+                clear=True,
+            ):
+                config = Config()
+                config.validate()
+
+    def test_config_validate_rejects_missing_keys_and_codex_cli(self):
+        with patch(
+            "whisper_summary.core.config.shutil.which",
+            return_value=None,
+        ):
+            with patch(
+                "whisper_summary.core.config.load_dotenv",
+                return_value=False,
+            ):
+                with patch.dict(
+                    os.environ,
+                    {
+                        "OLLAMA_API_KEY": "",
+                        "OPENAI_API_KEY": "",
+                        "GOOGLE_GEMINI_API_KEY": "",
+                        "CODEX_BIN": "codex",
+                    },
+                    clear=True,
+                ):
+                    config = Config()
+                    with self.assertRaisesRegex(ValueError, "Codex CLI"):
+                        config.validate()
+
+    def test_codex_timeout_must_be_a_positive_integer(self):
+        for raw_value in ("0", "invalid"):
+            with self.subTest(raw_value=raw_value):
+                with patch.dict(
+                    os.environ,
+                    {"CODEX_TIMEOUT_SECONDS": raw_value},
+                    clear=True,
+                ):
+                    with self.assertRaisesRegex(
+                        ValueError,
+                        "CODEX_TIMEOUT_SECONDS",
+                    ):
+                        Summarizer()
 
 
 if __name__ == "__main__":

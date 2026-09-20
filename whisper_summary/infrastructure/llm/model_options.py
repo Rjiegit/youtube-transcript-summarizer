@@ -6,6 +6,7 @@ class Backend(str, Enum):
     GEMINI = "gemini"
     OPENAI = "openai"
     OLLAMA = "ollama"
+    CODEX_CLI = "codex_cli"
 
 
 class OpenAIModel(str, Enum):
@@ -25,6 +26,10 @@ class GeminiModel(str, Enum):
 class OllamaModel(str, Enum):
     KIMI_K2_5_CLOUD = "kimi-k2.5:cloud"
     QWEN3_CODER_480B_CLOUD = "qwen3-coder:480b-cloud"
+
+
+class CodexModel(str, Enum):
+    GPT_5_6_LUNA = "gpt-5.6-luna"
 
 
 @dataclass(frozen=True)
@@ -63,6 +68,11 @@ PROVIDER_SETTINGS: dict[Backend, ProviderSettings] = {
 GEMINI_MODEL = PROVIDER_SETTINGS[Backend.GEMINI].default_model
 OPENAI_MODEL = PROVIDER_SETTINGS[Backend.OPENAI].default_model
 OLLAMA_MODEL = PROVIDER_SETTINGS[Backend.OLLAMA].default_model
+CODEX_MODEL = CodexModel.GPT_5_6_LUNA.value
+
+# Existing Gemini candidates total 11. Matching that total gives Codex CLI
+# exactly 50% of the full pool when both Gemini and the local CLI are available.
+CODEX_CLI_WEIGHT = 11
 
 # The single source of truth for auto mode. Weights are relative and do not
 # need to add up to 100. A credential only makes a provider available; models
@@ -97,5 +107,10 @@ AUTO_MODEL_CANDIDATES: tuple[ModelCandidate, ...] = (
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_3_5_FLASH_LITE.value,
         weight=3,
+    ),
+    ModelCandidate(
+        backend=Backend.CODEX_CLI,
+        model=CODEX_MODEL,
+        weight=CODEX_CLI_WEIGHT,
     ),
 )

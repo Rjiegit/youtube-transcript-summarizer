@@ -1,4 +1,5 @@
 import os
+import shutil
 
 try:  # pragma: no cover - fallback for minimal environments
     import pytz
@@ -39,6 +40,7 @@ class Config:
         self.openai_api_key = os.getenv("OPENAI_API_KEY")
         self.google_gemini_api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
         self.ollama_api_key = os.getenv("OLLAMA_API_KEY")
+        self.codex_bin = os.getenv("CODEX_BIN", "codex").strip() or "codex"
         self.notion_api_key = os.getenv("NOTION_API_KEY")
         self.notion_database_id = os.getenv("NOTION_DATABASE_ID")
         self.notion_url = os.getenv("NOTION_URL")
@@ -106,15 +108,17 @@ class Config:
         Validate that required configuration values are set.
         Raises ValueError if validation fails.
         """
-        # Check that at least one API key is set for summarization
+        # A local Codex CLI installation is also a valid summarization backend.
         if (
             not self.openai_api_key
             and not self.google_gemini_api_key
             and not self.ollama_api_key
+            and not shutil.which(self.codex_bin)
         ):
             raise ValueError(
                 "At least one of OPENAI_API_KEY, "
-                "GOOGLE_GEMINI_API_KEY, or OLLAMA_API_KEY must be set"
+                "GOOGLE_GEMINI_API_KEY, or OLLAMA_API_KEY must be set, "
+                "or Codex CLI must be installed"
             )
 
         # Check Notion API key and database ID if using Notion storage

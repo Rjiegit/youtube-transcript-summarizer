@@ -3,6 +3,7 @@ import unittest
 from whisper_summary.infrastructure.llm.model_options import (
     AUTO_MODEL_CANDIDATES,
     Backend,
+    CODEX_CLI_WEIGHT,
     ModelCandidate,
 )
 from whisper_summary.infrastructure.llm.weighted_selection import (
@@ -87,7 +88,27 @@ class TestWeightedSelection(unittest.TestCase):
                     "gemini-3.5-flash-lite",
                     3,
                 ),
+                ModelCandidate(
+                    Backend.CODEX_CLI,
+                    "gpt-5.6-luna",
+                    CODEX_CLI_WEIGHT,
+                ),
             ),
+        )
+
+    def test_codex_cli_receives_half_of_auto_pool(self):
+        total_weight = sum(
+            candidate.weight for candidate in AUTO_MODEL_CANDIDATES
+        )
+        codex_candidate = next(
+            candidate
+            for candidate in AUTO_MODEL_CANDIDATES
+            if candidate.backend == Backend.CODEX_CLI
+        )
+
+        self.assertAlmostEqual(
+            codex_candidate.weight / total_weight,
+            0.50,
         )
 
     def test_filters_unavailable_backends_and_recalculates_weights(self):

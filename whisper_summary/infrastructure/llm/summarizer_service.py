@@ -1,5 +1,7 @@
 import os
 import random
+import shutil
+import subprocess
 import time
 from collections.abc import Iterable
 
@@ -14,6 +16,7 @@ from whisper_summary.domain.media.models import VideoMetadata
 from whisper_summary.infrastructure.llm.model_options import (
     AUTO_MODEL_CANDIDATES,
     Backend,
+    CODEX_MODEL,
     GEMINI_MODEL,
     ModelCandidate,
     OLLAMA_MODEL,
@@ -56,6 +59,18 @@ except ImportError:
 
 load_dotenv()
 
+
+_CODEX_BLOCKED_ENV_VARS = (
+    "DISCORD_WEBHOOK_URL",
+    "GOOGLE_GEMINI_API_KEY",
+    "NOTION_API_KEY",
+    "NOTION_DATABASE_ID",
+    "OLLAMA_API_KEY",
+    "OPENAI_API_KEY",
+    "PROCESSING_LOCK_ADMIN_TOKEN",
+)
+
+
 class Summarizer:
     def __init__(
         self,
@@ -82,6 +97,9 @@ class Summarizer:
         self.google_gemini_api_key = self._api_keys[Backend.GEMINI]
         self.ollama_api_key = self._api_keys[Backend.OLLAMA]
         self.ollama_host = os.getenv("OLLAMA_HOST", "https://ollama.com")
+        self.codex_bin = os.getenv("CODEX_BIN", "codex").strip() or "codex"
+        self.codex_executable = shutil.which(self.codex_bin)
+        self.codex_timeout_seconds = self._get_codex_timeout_seconds()
         self.last_backend = None
         self.last_model_label = None
 
@@ -135,11 +153,36 @@ class Summarizer:
                 raise
 
     def _available_backends(self) -> set[Backend]:
-        return {
+        available = {
             backend
             for backend, api_key in self._api_keys.items()
             if api_key and api_key.strip()
         }
+        if self.codex_executable:
+            available.add(Backend.CODEX_CLI)
+        return available
+
+    @staticmethod
+    def _get_codex_timeout_seconds() -> int:
+        raw_value = os.getenv("CODEX_TIMEOUT_SECONDS", "900")
+        try:
+            timeout_seconds = int(raw_value)
+        except ValueError as error:
+            raise ValueError(
+                "CODEX_TIMEOUT_SECONDS must be a positive integer"
+            ) from error
+        if timeout_seconds <= 0:
+            raise ValueError(
+                "CODEX_TIMEOUT_SECONDS must be a positive integer"
+            )
+        return timeout_seconds
+
+    @staticmethod
+    def _get_codex_environment() -> dict[str, str]:
+        environment = os.environ.copy()
+        for variable_name in _CODEX_BLOCKED_ENV_VARS:
+            environment.pop(variable_name, None)
+        return environment
 
     def _choose_candidate(
         self,
@@ -199,6 +242,11 @@ class Summarizer:
             if metadata is not None:
                 kwargs["metadata"] = metadata
             return self.summarize_with_ollama(title, text, **kwargs)
+        if candidate.backend == Backend.CODEX_CLI:
+            kwargs = {"model": candidate.model}
+            if metadata is not None:
+                kwargs["metadata"] = metadata
+            return self.summarize_with_codex_cli(title, text, **kwargs)
         raise ValueError(f"Unsupported backend: {candidate.backend}")
 
     def _is_transient_provider_error(
@@ -252,6 +300,12 @@ class Summarizer:
             if response_error and isinstance(error, response_error):
                 status_code = getattr(error, "status_code", -1)
                 return status_code == 429 or status_code >= 500
+
+        if backend == Backend.CODEX_CLI:
+            return isinstance(
+                error,
+                (TimeoutError, subprocess.TimeoutExpired),
+            )
 
         return False
 
@@ -423,3 +477,56 @@ class Summarizer:
             ],
         )
         return response.message.content.strip()
+
+    def summarize_with_codex_cli(
+        self,
+        title,
+        text,
+        model: str = CODEX_MODEL,
+        metadata: VideoMetadata | None = None,
+    ):
+        self.last_backend = Backend.CODEX_CLI.value
+        self.last_model_label = self._format_model_label(
+            Backend.CODEX_CLI,
+            model,
+        )
+        logger.info(
+            f"[Codex CLI] Summarize with model={model} "
+            f"timeout={self.codex_timeout_seconds}s"
+        )
+        command = [
+            self.codex_bin,
+            "exec",
+            "--ephemeral",
+            "--ignore-user-config",
+            "--sandbox",
+            "read-only",
+            "--model",
+            model,
+            "-",
+        ]
+        result = subprocess.run(
+            command,
+            input=self.get_prompt(
+                title=title,
+                text=text,
+                metadata=metadata,
+            ),
+            text=True,
+            capture_output=True,
+            timeout=self.codex_timeout_seconds,
+            check=False,
+            env=self._get_codex_environment(),
+        )
+        if result.returncode != 0:
+            error_detail = result.stderr.strip() or "no stderr output"
+            error_detail = error_detail[:2000]
+            raise RuntimeError(
+                f"Codex CLI exited with code {result.returncode}: "
+                f"{error_detail}"
+            )
+
+        summary = result.stdout.strip()
+        if not summary:
+            raise RuntimeError("Codex CLI returned an empty summary")
+        return summary
