@@ -16,6 +16,7 @@ make install-hooks
 make api
 make streamlit
 make run
+make processing-worker
 make rss-monitor
 ```
 
@@ -24,6 +25,10 @@ Docker 開發環境使用：
 ```bash
 docker compose up -d
 ```
+
+`processing-worker` 必須透過 `TASK_API_BASE_URL` claim task lease，不應直接繞過 API
+操作 queue。Docker 與本機 worker 可同時執行；新增 worker entrypoint 時必須使用唯一
+instance ID、定期 heartbeat，並以 lease token 保護 progress／complete／fail 更新。
 
 ## 程式碼編排
 

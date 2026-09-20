@@ -1,4 +1,5 @@
 import sqlite3
+import uuid
 from datetime import datetime, timedelta
 from typing import Optional
 
@@ -164,22 +165,29 @@ class SQLiteDB(BaseDB):
 
         try:
             cursor.execute("BEGIN IMMEDIATE")
+            cursor.execute(
+                """
+                UPDATE tasks
+                SET status = 'Failed',
+                    error_message = 'Worker lease expired; manual retry required',
+                    updated_at = ?
+                WHERE status = 'Processing'
+                  AND (
+                      lease_token IS NULL
+                      OR locked_at IS NULL
+                      OR locked_at <= ?
+                  )
+                """,
+                (now_str, stale_cutoff),
+            )
             candidate = cursor.execute(
                 """
                 SELECT id
                 FROM tasks
                 WHERE status = 'Pending'
-                   OR (
-                        status = 'Processing'
-                        AND (
-                            locked_at IS NULL
-                            OR locked_at <= ?
-                        )
-                   )
                 ORDER BY created_at ASC, id ASC
                 LIMIT 1
                 """,
-                (stale_cutoff,),
             ).fetchone()
 
             if candidate is None:
@@ -187,16 +195,18 @@ class SQLiteDB(BaseDB):
                 return None
 
             task_id = candidate["id"]
+            lease_token = uuid.uuid4().hex
             cursor.execute(
                 """
                 UPDATE tasks
                 SET status = 'Processing',
                     worker_id = ?,
+                    lease_token = ?,
                     locked_at = ?,
                     updated_at = ?
-                WHERE id = ?
+                WHERE id = ? AND status = 'Pending'
                 """,
-                (worker_id, now_str, now_str, task_id),
+                (worker_id, lease_token, now_str, now_str, task_id),
             )
 
             if cursor.rowcount != 1:
@@ -210,6 +220,142 @@ class SQLiteDB(BaseDB):
         except sqlite3.OperationalError:
             cursor.execute("ROLLBACK")
             raise
+        finally:
+            conn.close()
+
+    def refresh_task_lease(
+        self,
+        task_id: str,
+        worker_id: str,
+        lease_token: str,
+    ) -> bool:
+        """Refresh an active task lease owned by the calling worker."""
+        conn = self._get_connection()
+        try:
+            cursor = conn.cursor()
+            now_str = utc_now_naive().strftime("%Y-%m-%d %H:%M:%S")
+            cursor.execute(
+                """
+                UPDATE tasks
+                SET locked_at = ?, updated_at = ?
+                WHERE id = ?
+                  AND status = 'Processing'
+                  AND worker_id = ?
+                  AND lease_token = ?
+                """,
+                (now_str, now_str, task_id, worker_id, lease_token),
+            )
+            conn.commit()
+            return cursor.rowcount == 1
+        finally:
+            conn.close()
+
+    def update_claimed_task(
+        self,
+        task_id: str,
+        worker_id: str,
+        lease_token: str,
+        *,
+        status: str,
+        title: str | None = None,
+        summary: str | None = None,
+        error_message: str | None = None,
+        processing_duration: float | None = None,
+        notion_page_id: str | None = None,
+        processing_engine: str | None = None,
+    ) -> bool:
+        """Update a task only while the caller owns its lease."""
+        conn = self._get_connection()
+        conn.row_factory = sqlite3.Row
+        try:
+            cursor = conn.cursor()
+            existing = cursor.execute(
+                "SELECT status, worker_id, lease_token FROM tasks WHERE id = ?",
+                (task_id,),
+            ).fetchone()
+            if (
+                existing
+                and existing["status"] == status
+                and existing["worker_id"] == worker_id
+                and existing["lease_token"] == lease_token
+                and status != "Processing"
+            ):
+                return True
+
+            now_str = utc_now_naive().strftime("%Y-%m-%d %H:%M:%S")
+            set_clauses = ["status = ?", "updated_at = ?"]
+            params: list[object] = [status, now_str]
+            for column, value in (
+                ("title", title),
+                ("summary", summary),
+                ("error_message", error_message),
+                ("processing_duration", processing_duration),
+                ("notion_page_id", notion_page_id),
+                ("processing_engine", processing_engine),
+            ):
+                if value is not None:
+                    set_clauses.append(f"{column} = ?")
+                    params.append(value)
+            params.extend((task_id, worker_id, lease_token))
+            cursor.execute(
+                f"""
+                UPDATE tasks
+                SET {', '.join(set_clauses)}
+                WHERE id = ?
+                  AND status = 'Processing'
+                  AND worker_id = ?
+                  AND lease_token = ?
+                """,
+                tuple(params),
+            )
+            conn.commit()
+            return cursor.rowcount == 1
+        finally:
+            conn.close()
+
+    def list_processing_tasks(self) -> list[Task]:
+        """List tasks that currently hold an active processing lease."""
+        conn = self._get_connection()
+        conn.row_factory = sqlite3.Row
+        try:
+            rows = conn.execute(
+                """
+                SELECT * FROM tasks
+                WHERE status = 'Processing'
+                ORDER BY locked_at ASC, id ASC
+                """
+            ).fetchall()
+            return [self.adapter.to_task(dict(row)) for row in rows]
+        finally:
+            conn.close()
+
+    def fail_processing_task(
+        self,
+        task_id: str,
+        error_message: str,
+        *,
+        expected_worker_id: str | None = None,
+    ) -> bool:
+        """Mark one active lease failed, optionally fencing by worker id."""
+        conn = self._get_connection()
+        try:
+            cursor = conn.cursor()
+            now_str = utc_now_naive().strftime("%Y-%m-%d %H:%M:%S")
+            params: list[object] = [error_message, now_str, task_id]
+            owner_clause = ""
+            if expected_worker_id is not None:
+                owner_clause = " AND worker_id = ?"
+                params.append(expected_worker_id)
+            cursor.execute(
+                f"""
+                UPDATE tasks
+                SET status = 'Failed', error_message = ?, updated_at = ?
+                WHERE id = ? AND status = 'Processing'{owner_clause}
+                """,
+                tuple(params),
+            )
+            conn.commit()
+            return cursor.rowcount == 1
         finally:
             conn.close()
 

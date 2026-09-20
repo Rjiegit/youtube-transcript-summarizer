@@ -72,6 +72,9 @@ from whisper_summary.core.config import Config
 from whisper_summary.infrastructure.llm.model_options import Backend, ModelCandidate
 from whisper_summary.infrastructure.llm import summarizer_service
 from whisper_summary.infrastructure.llm.summarizer_service import Summarizer
+from whisper_summary.infrastructure.llm.summarizer_service import (
+    log_codex_cli_startup_status,
+)
 from whisper_summary.infrastructure.llm.weighted_selection import (
     NoAvailableModelCandidateError,
 )
@@ -87,6 +90,44 @@ class _FixedRng:
 
 
 class TestSummarizerService(unittest.TestCase):
+    def test_codex_startup_log_reports_available_executable(self):
+        with patch.dict(os.environ, {"CODEX_BIN": "codex"}, clear=True):
+            with patch(
+                "whisper_summary.infrastructure.llm.summarizer_service."
+                "shutil.which",
+                return_value="/opt/homebrew/bin/codex",
+            ):
+                with patch(
+                    "whisper_summary.infrastructure.llm.summarizer_service."
+                    "logger"
+                ) as mock_logger:
+                    log_codex_cli_startup_status()
+
+        mock_logger.info.assert_called_once_with(
+            "Codex CLI startup check: available "
+            "(executable=/opt/homebrew/bin/codex, model=gpt-5.6-luna); "
+            "authentication will be verified on first use"
+        )
+
+    def test_codex_startup_log_reports_unavailable_executable(self):
+        with patch.dict(os.environ, {"CODEX_BIN": "codex"}, clear=True):
+            with patch(
+                "whisper_summary.infrastructure.llm.summarizer_service."
+                "shutil.which",
+                return_value=None,
+            ):
+                with patch(
+                    "whisper_summary.infrastructure.llm.summarizer_service."
+                    "logger"
+                ) as mock_logger:
+                    log_codex_cli_startup_status()
+
+        mock_logger.warning.assert_called_once_with(
+            "Codex CLI startup check: unavailable "
+            "(CODEX_BIN=codex was not found in PATH); "
+            "Codex CLI will be excluded from automatic model selection"
+        )
+
     def test_get_prompt_uses_learning_notes_template(self):
         summarizer = Summarizer()
 
@@ -268,6 +309,7 @@ class TestSummarizerService(unittest.TestCase):
                 "CODEX_TIMEOUT_SECONDS": "321",
                 "GOOGLE_GEMINI_API_KEY": "do-not-inherit",
                 "NOTION_API_KEY": "do-not-inherit",
+                "PROCESSING_WORKER_TOKEN": "do-not-inherit",
             },
             clear=True,
         ):
@@ -318,6 +360,7 @@ class TestSummarizerService(unittest.TestCase):
         child_environment = mock_run.call_args.kwargs["env"]
         self.assertNotIn("GOOGLE_GEMINI_API_KEY", child_environment)
         self.assertNotIn("NOTION_API_KEY", child_environment)
+        self.assertNotIn("PROCESSING_WORKER_TOKEN", child_environment)
 
     def test_summarize_with_codex_cli_rejects_nonzero_exit(self):
         summarizer = Summarizer()

@@ -3,7 +3,9 @@ from __future__ import annotations
 from typing import Any, Dict
 
 from whisper_summary.apps.ui.ui_api import (
+    call_fail_processing_lease,
     call_processing_api,
+    call_processing_leases,
     call_processing_lock_release,
     call_processing_lock_status,
     call_retry_task_api,
@@ -202,5 +204,80 @@ def release_processing_lock_with_payload(
         force_threshold=force_threshold,
     )
 
+
+def render_processing_leases_admin() -> None:
+    """Render lease inspection and fail-safe administration controls."""
+    require_streamlit()
+    with st.expander("Processing Leases 管理（維運專用）"):
+        st.caption(
+            "顯示目前由 Docker 或本機 worker 持有的任務；"
+            "標記失敗不會自動重新執行。"
+        )
+        token = get_processing_lock_admin_token()
+        if not token:
+            st.warning(
+                "尚未設定 PROCESSING_LOCK_ADMIN_TOKEN，維運請求將不會送出。"
+            )
+            return
+
+        if st.button("重新整理 Active Leases", key="lease_status_btn"):
+            try:
+                status, body = call_processing_leases(token)
+            except RequestException as exc:
+                st.error(f"查詢 leases 失敗：{exc}")
+            else:
+                if status == 200:
+                    st.session_state.processing_leases = body.get("leases") or []
+                else:
+                    detail = body.get("detail") or "查詢失敗"
+                    st.error(f"{detail} (status {status})")
+
+        leases = st.session_state.get("processing_leases") or []
+        if not leases:
+            st.info("目前沒有 active task lease。")
+            return
+
+        st.dataframe(leases, use_container_width=True)
+        selected_task_id = st.selectbox(
+            "要標記失敗的 task",
+            options=[str(item["task_id"]) for item in leases],
+            key="lease_task_id",
+        )
+        selected = next(
+            item for item in leases if str(item["task_id"]) == selected_task_id
+        )
+        reason = st.text_input(
+            "失敗理由",
+            value="Manually failed by maintainer",
+            key="lease_fail_reason",
+        )
+        if st.button(
+            "將此 Lease 標記為 Failed",
+            key="lease_fail_btn",
+            type="primary",
+        ):
+            payload = {
+                "expected_worker_id": selected["worker_id"],
+                "reason": reason,
+            }
+            try:
+                status, body = call_fail_processing_lease(
+                    selected_task_id,
+                    payload,
+                    token,
+                )
+            except RequestException as exc:
+                st.error(f"標記 lease 失敗：{exc}")
+            else:
+                if status == 200:
+                    st.success("Task lease 已標記為 Failed，不會自動重跑。")
+                    st.session_state.processing_leases = [
+                        item
+                        for item in leases
+                        if str(item["task_id"]) != selected_task_id
+                    ]
+                else:
+                    detail = body.get("detail") or "操作失敗"
+                    st.error(f"{detail} (status {status})")
 
 

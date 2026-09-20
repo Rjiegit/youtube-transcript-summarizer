@@ -90,3 +90,40 @@ def call_processing_lock_release(
     except ValueError:
         body = {}
     return response.status_code, body
+
+
+def call_processing_leases(
+    maintainer_token: str | None = None,
+) -> tuple[int, Dict[str, Any]]:
+    require_requests()
+    endpoint = f"{API_BASE_URL.rstrip('/')}/processing-leases"
+    token = maintainer_token or get_processing_lock_admin_token()
+    headers = {"X-Maintainer-Token": token} if token else {}
+    response = requests.get(endpoint, headers=headers, timeout=10)
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body
+
+
+def call_fail_processing_lease(
+    task_id: str,
+    payload: Dict[str, Any],
+    maintainer_token: str | None = None,
+) -> tuple[int, Dict[str, Any]]:
+    require_requests()
+    endpoint = f"{API_BASE_URL.rstrip('/')}/processing-leases/{task_id}/fail"
+    token = maintainer_token or get_processing_lock_admin_token()
+    headers = {"X-Maintainer-Token": token} if token else {}
+    response = requests.post(
+        endpoint,
+        headers=headers,
+        json=payload,
+        timeout=10,
+    )
+    try:
+        body: Dict[str, Any] = response.json()
+    except ValueError:
+        body = {}
+    return response.status_code, body

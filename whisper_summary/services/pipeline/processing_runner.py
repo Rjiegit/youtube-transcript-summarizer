@@ -8,7 +8,8 @@ from dataclasses import dataclass
 from typing import Optional
 
 from whisper_summary.core.logger import logger
-from whisper_summary.domain.interfaces.database import BaseDB
+from whisper_summary.domain.ports.task_queue import TaskQueue
+from whisper_summary.domain.tasks.leases import TaskLeaseLostError
 from whisper_summary.domain.tasks.models import Task
 from whisper_summary.services.pipeline.engines import (
     LEGACY_ENGINE,
@@ -26,6 +27,12 @@ PROCESSING_LOCK_TIMEOUT_SECONDS = int(
 PROCESSING_LOCK_REFRESH_INTERVAL = int(
     os.environ.get("PROCESSING_LOCK_REFRESH_INTERVAL", "30")
 )
+TASK_LEASE_HEARTBEAT_SECONDS = int(
+    os.environ.get(
+        "TASK_LEASE_HEARTBEAT_SECONDS",
+        str(PROCESSING_LOCK_REFRESH_INTERVAL),
+    )
+)
 
 
 @dataclass
@@ -35,52 +42,73 @@ class ProcessingSummary:
     worker_id: str
     processed_tasks: int = 0
     failed_tasks: int = 0
-    acquired_lock: bool = False
+    lost_leases: int = 0
 
     def to_dict(self) -> dict[str, object]:
         return {
             "worker_id": self.worker_id,
             "processed_tasks": self.processed_tasks,
             "failed_tasks": self.failed_tasks,
-            "acquired_lock": self.acquired_lock,
+            "lost_leases": self.lost_leases,
         }
 
 
-class _ProcessingLockRefresher(threading.Thread):
-    """Background thread that keeps the global lock alive."""
+class _TaskLeaseRefresher(threading.Thread):
+    """Background thread that keeps one claimed task lease alive."""
 
-    def __init__(self, db: BaseDB, worker_id: str, interval_seconds: int):
+    def __init__(
+        self,
+        db: TaskQueue,
+        task: Task,
+        worker_id: str,
+        interval_seconds: int,
+    ):
         super().__init__(daemon=True)
         self._db = db
+        self._task = task
         self._worker_id = worker_id
         self._interval = max(1, interval_seconds)
         self._stop_event = threading.Event()
+        self.lease_lost = threading.Event()
+
+    def _refresh(self) -> None:
+        if not self._task.lease_token:
+            self.lease_lost.set()
+            return
+        try:
+            refreshed = self._db.refresh_task_lease(
+                self._task.id,
+                self._worker_id,
+                self._task.lease_token,
+            )
+            if not refreshed:
+                self.lease_lost.set()
+                logger.error(
+                    f"Worker {self._worker_id} lost lease for "
+                    f"task {self._task.id}"
+                )
+        except TaskLeaseLostError:
+            self.lease_lost.set()
+            logger.error(
+                f"Worker {self._worker_id} lost lease for task {self._task.id}"
+            )
+        except Exception as exc:
+            logger.warning(
+                f"Failed to refresh task {self._task.id} lease for "
+                f"worker {self._worker_id}: {exc}"
+            )
 
     def run(self) -> None:
         while not self._stop_event.wait(self._interval):
-            try:
-                self._db.refresh_processing_lock(self._worker_id)
-            except Exception as exc:
-                logger.warning(
-                    f"Failed to refresh processing lock for worker {self._worker_id}: {exc}"
-                )
+            self._refresh()
+            if self.lease_lost.is_set():
+                return
 
     def ping(self) -> None:
-        try:
-            self._db.refresh_processing_lock(self._worker_id)
-        except Exception as exc:
-            logger.warning(
-                f"Failed to refresh processing lock (manual ping) for worker {self._worker_id}: {exc}"
-            )
+        self._refresh()
 
     def stop(self) -> None:
         self._stop_event.set()
-        try:
-            self._db.refresh_processing_lock(self._worker_id)
-        except Exception as exc:
-            logger.warning(
-                f"Failed to refresh processing lock on shutdown for worker {self._worker_id}: {exc}"
-            )
 
 
 class ProcessingWorker:
@@ -88,11 +116,10 @@ class ProcessingWorker:
 
     def __init__(
         self,
-        db: BaseDB,
+        db: TaskQueue,
         worker_id: Optional[str] = None,
         task_lock_timeout_seconds: int = TASK_LOCK_TIMEOUT_SECONDS,
-        processing_lock_timeout_seconds: int = PROCESSING_LOCK_TIMEOUT_SECONDS,
-        lock_refresh_interval: int = PROCESSING_LOCK_REFRESH_INTERVAL,
+        task_lease_heartbeat_seconds: int = TASK_LEASE_HEARTBEAT_SECONDS,
         *,
         dependencies: ProcessingDependencies | None = None,
         downloader_factory=None,
@@ -110,8 +137,7 @@ class ProcessingWorker:
         self.db = db
         self.worker_id = worker_id or f"worker-{uuid.uuid4().hex}"
         self.task_lock_timeout_seconds = task_lock_timeout_seconds
-        self.processing_lock_timeout_seconds = processing_lock_timeout_seconds
-        self.lock_refresh_interval = lock_refresh_interval
+        self.task_lease_heartbeat_seconds = task_lease_heartbeat_seconds
         self.config = (config_factory or dependencies.config_factory)()
         self.downloader_factory = downloader_factory or dependencies.downloader_factory
         self.transcriber_factory = transcriber_factory or dependencies.transcriber_factory
@@ -134,55 +160,42 @@ class ProcessingWorker:
     def run(self) -> ProcessingSummary:
         """Run the worker loop until no executable tasks remain."""
         summary = ProcessingSummary(worker_id=self.worker_id)
-        logger.info(f"Worker {self.worker_id} requesting processing lock")
+        while True:
+            try:
+                task = self.db.acquire_next_task(
+                    self.worker_id, self.task_lock_timeout_seconds
+                )
+            except Exception as exc:  # pragma: no cover - defensive guard
+                logger.error(
+                    f"Worker {self.worker_id} encountered an error while "
+                    f"claiming a task: {exc}"
+                )
+                break
 
-        if not self.db.acquire_processing_lock(
-            self.worker_id, self.processing_lock_timeout_seconds
-        ):
-            logger.info(
-                f"Worker {self.worker_id} could not acquire processing lock; another worker is active."
+            if task is None:
+                logger.info(f"Worker {self.worker_id} found no pending tasks; exiting.")
+                break
+
+            refresher = _TaskLeaseRefresher(
+                self.db,
+                task,
+                self.worker_id,
+                self.task_lease_heartbeat_seconds,
             )
-            return summary
-
-        summary.acquired_lock = True
-        refresher = _ProcessingLockRefresher(
-            self.db, self.worker_id, self.lock_refresh_interval
-        )
-        refresher.start()
-
-        try:
-            while True:
-                try:
-                    task = self.db.acquire_next_task(
-                        self.worker_id, self.task_lock_timeout_seconds
-                    )
-                except Exception as exc:  # pragma: no cover - defensive guard
-                    logger.error(
-                        f"Worker {self.worker_id} encountered an error while acquiring tasks: {exc}"
-                    )
-                    break
-
-                if task is None:
-                    logger.info(f"Worker {self.worker_id} found no pending tasks; exiting.")
-                    break
-
-                refresher.ping()
-                success = self._process_task(task)
-                if success:
-                    summary.processed_tasks += 1
-                else:
-                    summary.failed_tasks += 1
-                refresher.ping()
-
-            return summary
-        finally:
+            refresher.start()
+            outcome = self._process_task(task)
             refresher.stop()
-            self.db.release_processing_lock(self.worker_id)
-            logger.info(
-                f"Worker {self.worker_id} released processing lock (processed={summary.processed_tasks}, failed={summary.failed_tasks})"
-            )
+            refresher.join(timeout=1)
+            if outcome == "processed":
+                summary.processed_tasks += 1
+            elif outcome == "lease_lost":
+                summary.lost_leases += 1
+            else:
+                summary.failed_tasks += 1
 
-    def _process_task(self, task: Task) -> bool:
+        return summary
+
+    def _process_task(self, task: Task) -> str:
         """Execute the full processing pipeline for a task."""
         logger.info(
             f"Worker {self.worker_id} processing task {task.id} ({task.url})"
@@ -210,46 +223,48 @@ class ProcessingWorker:
             logger.info(
                 f"Worker {self.worker_id} completed task {task.id} in {duration:.2f} seconds"
             )
-            return True
+            return "processed"
+
+        except TaskLeaseLostError:
+            logger.error(
+                f"Worker {self.worker_id} stopped task {task.id} because "
+                "its lease was lost"
+            )
+            return "lease_lost"
 
         except Exception as exc:  # pragma: no cover - the heavy pipeline is mocked in tests
             duration = time.time() - start_time
             logger.error(
                 f"Worker {self.worker_id} failed to process task {task.id}: {exc}"
             )
-            self.db.update_task_status(
-                task.id,
-                "Failed",
-                error_message=str(exc),
-                processing_duration=duration,
-            )
-            return False
-
-
-def get_db_client(db_type: Optional[str] = None) -> BaseDB:
-    """Return a database client instance based on configuration."""
-    resolved_type = (db_type or os.environ.get("DB_TYPE", "sqlite")).lower()
-    logger.info(f"Using {resolved_type} database for processing.")
-    from whisper_summary.infrastructure.repository_composition import create_database
-
-    return create_database(resolved_type)
+            try:
+                self.db.update_task_status(
+                    task.id,
+                    "Failed",
+                    error_message=str(exc),
+                    processing_duration=duration,
+                )
+            except TaskLeaseLostError:
+                logger.error(
+                    f"Worker {self.worker_id} could not fail task {task.id} "
+                    "because its lease was lost"
+                )
+                return "lease_lost"
+            return "failed"
 
 
 def process_pending_tasks(
     *,
-    db: Optional[BaseDB] = None,
+    db: TaskQueue,
     worker_id: Optional[str] = None,
     task_lock_timeout_seconds: int = TASK_LOCK_TIMEOUT_SECONDS,
-    processing_lock_timeout_seconds: int = PROCESSING_LOCK_TIMEOUT_SECONDS,
-    lock_refresh_interval: int = PROCESSING_LOCK_REFRESH_INTERVAL,
+    task_lease_heartbeat_seconds: int = TASK_LEASE_HEARTBEAT_SECONDS,
 ) -> ProcessingSummary:
-    """Entry point for synchronous processing (Streamlit or scripts)."""
-    db_client = db or get_db_client()
+    """Drain tasks from a lease-aware queue until no work remains."""
     worker = ProcessingWorker(
-        db_client,
+        db,
         worker_id=worker_id,
         task_lock_timeout_seconds=task_lock_timeout_seconds,
-        processing_lock_timeout_seconds=processing_lock_timeout_seconds,
-        lock_refresh_interval=lock_refresh_interval,
+        task_lease_heartbeat_seconds=task_lease_heartbeat_seconds,
     )
     return worker.run()

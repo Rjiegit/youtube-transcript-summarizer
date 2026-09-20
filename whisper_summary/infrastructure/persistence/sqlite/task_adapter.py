@@ -116,6 +116,7 @@ class SQLiteTaskAdapter(TaskAdapter):
             retry_reason=(data.get("retry_reason") or ""),
             locked_at=locked_at,
             worker_id=data.get("worker_id"),
+            lease_token=data.get("lease_token"),
             notion_page_id=notion_page_id,
             notion_url=notion_url,
             source_type=(data.get("source_type") or "manual"),

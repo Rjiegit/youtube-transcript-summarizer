@@ -70,9 +70,9 @@ OPENAI_MODEL = PROVIDER_SETTINGS[Backend.OPENAI].default_model
 OLLAMA_MODEL = PROVIDER_SETTINGS[Backend.OLLAMA].default_model
 CODEX_MODEL = CodexModel.GPT_5_6_LUNA.value
 
-# Existing Gemini candidates total 11. Matching that total gives Codex CLI
-# exactly 50% of the full pool when both Gemini and the local CLI are available.
-CODEX_CLI_WEIGHT = 11
+# Existing Gemini candidates total 11. A weight of 77 / 3 gives Codex CLI
+# exactly 70% of the full pool when both Gemini and the local CLI are available.
+CODEX_CLI_WEIGHT = 77 / 3
 
 # The single source of truth for auto mode. Weights are relative and do not
 # need to add up to 100. A credential only makes a provider available; models

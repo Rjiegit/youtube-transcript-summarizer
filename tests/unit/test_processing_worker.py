@@ -96,14 +96,13 @@ class TestProcessingWorker(unittest.TestCase):
             self.db,
             worker_id="worker-test",
             task_lock_timeout_seconds=1,
-            processing_lock_timeout_seconds=5,
-            lock_refresh_interval=1,
+            task_lease_heartbeat_seconds=1,
         )
         summary = worker.run()
 
-        self.assertTrue(summary.acquired_lock)
         self.assertEqual(summary.processed_tasks, 2)
         self.assertEqual(summary.failed_tasks, 0)
+        self.assertEqual(summary.lost_leases, 0)
 
         tasks = self.db.get_all_tasks()
         self.assertTrue(all(task.status == "Completed" for task in tasks))
@@ -183,12 +182,10 @@ class TestProcessingWorker(unittest.TestCase):
             self.db,
             worker_id="worker-retry",
             task_lock_timeout_seconds=1,
-            processing_lock_timeout_seconds=5,
-            lock_refresh_interval=1,
+            task_lease_heartbeat_seconds=1,
         )
         summary = worker.run()
 
-        self.assertTrue(summary.acquired_lock)
         self.assertEqual(summary.processed_tasks, 1)
         self.assertEqual(summary.failed_tasks, 1)
 
@@ -240,8 +237,7 @@ class TestProcessingWorker(unittest.TestCase):
             self.db,
             worker_id="worker-metadata",
             task_lock_timeout_seconds=1,
-            processing_lock_timeout_seconds=5,
-            lock_refresh_interval=1,
+            task_lease_heartbeat_seconds=1,
             downloader_factory=lambda *_args, **_kwargs: downloader,
             transcriber_factory=lambda *_args, **_kwargs: transcriber,
             summarizer_factory=lambda: summarizer,

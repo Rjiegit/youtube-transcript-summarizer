@@ -4,25 +4,55 @@ from __future__ import annotations
 
 import argparse
 import os
+import socket
 import threading
+import uuid
 from collections.abc import Callable
 
 from whisper_summary.core.logger import logger
-from whisper_summary.infrastructure.repository_composition import create_database
-from whisper_summary.services.pipeline.processing_runner import ProcessingSummary, process_pending_tasks
+from whisper_summary.infrastructure.llm.summarizer_service import (
+    log_codex_cli_startup_status,
+)
+from whisper_summary.infrastructure.task_queue.http_client import HttpTaskQueue
+from whisper_summary.services.pipeline.processing_runner import (
+    TASK_LEASE_HEARTBEAT_SECONDS,
+    ProcessingSummary,
+    process_pending_tasks,
+)
+
+
+def create_task_queue() -> HttpTaskQueue:
+    worker_token = os.getenv("PROCESSING_WORKER_TOKEN") or os.getenv(
+        "PROCESSING_LOCK_ADMIN_TOKEN", ""
+    )
+    return HttpTaskQueue(
+        os.getenv("TASK_API_BASE_URL", "http://localhost:8080"),
+        worker_token,
+    )
+
+
+def build_worker_instance_id(worker_name: str) -> str:
+    return (
+        f"{worker_name}:{socket.gethostname()}:{os.getpid()}:"
+        f"{uuid.uuid4().hex[:8]}"
+    )
 
 
 def run_forever(
     *,
-    db_type: str = "sqlite",
     worker_id: str = "processing-worker",
     poll_interval_seconds: float = 5.0,
     stop_event: threading.Event | None = None,
     processor: Callable[..., ProcessingSummary] = process_pending_tasks,
 ) -> None:
     stopper = stop_event or threading.Event()
-    db = create_database(db_type)
-    logger.info(f"Dedicated processing worker {worker_id} started for {db_type}")
+    log_codex_cli_startup_status()
+    db = create_task_queue()
+    logger.info(
+        f"Dedicated processing worker {worker_id} started "
+        f"with queue={db.base_url} "
+        f"heartbeat={TASK_LEASE_HEARTBEAT_SECONDS}s"
+    )
     while not stopper.is_set():
         try:
             processor(db=db, worker_id=worker_id)
@@ -36,15 +66,20 @@ def run_forever(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run the dedicated processing worker.")
-    parser.add_argument("--db-type", default="sqlite", choices=("sqlite", "notion"))
-    parser.add_argument("--worker-id", default="processing-worker")
+    parser.add_argument(
+        "--worker-name",
+        default=os.environ.get("PROCESSING_WORKER_NAME", "processing-worker"),
+    )
     parser.add_argument(
         "--poll-interval",
         type=float,
         default=float(os.environ.get("PROCESSING_WORKER_POLL_INTERVAL_SECONDS", "5")),
     )
     args = parser.parse_args()
-    run_forever(db_type=args.db_type, worker_id=args.worker_id, poll_interval_seconds=args.poll_interval)
+    run_forever(
+        worker_id=build_worker_instance_id(args.worker_name),
+        poll_interval_seconds=args.poll_interval,
+    )
 
 
 if __name__ == "__main__":

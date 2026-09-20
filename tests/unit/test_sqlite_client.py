@@ -1,6 +1,7 @@
 import os
 import sqlite3
 import tempfile
+import threading
 import unittest
 import warnings
 
@@ -100,11 +101,12 @@ class TestSQLiteClient(unittest.TestCase):
         self.assertEqual(claimed.status, "Processing")
         self.assertEqual(claimed.worker_id, "worker-1")
         self.assertIsNotNone(claimed.locked_at)
+        self.assertIsNotNone(claimed.lease_token)
 
         # No more pending tasks remain.
         self.assertIsNone(self.db.acquire_next_task(worker_id="worker-1"))
 
-    def test_acquire_next_task_reclaims_stale_processing_task(self):
+    def test_acquire_next_task_fails_stale_processing_task(self):
         created = self.db.add_task("https://youtu.be/example2")
         first_claim = self.db.acquire_next_task("worker-2", lock_timeout_seconds=5)
         self.assertIsNotNone(first_claim)
@@ -122,9 +124,85 @@ class TestSQLiteClient(unittest.TestCase):
             conn.close()
 
         reclaimed = self.db.acquire_next_task("worker-3", lock_timeout_seconds=10)
-        self.assertIsNotNone(reclaimed)
-        self.assertEqual(reclaimed.id, created.id)
-        self.assertEqual(reclaimed.worker_id, "worker-3")
+        self.assertIsNone(reclaimed)
+        stale = self.db.get_task_by_id(created.id)
+        self.assertEqual(stale.status, "Failed")
+        self.assertIn("lease expired", stale.error_message.lower())
+
+    def test_concurrent_workers_claim_a_task_only_once(self):
+        created = self.db.add_task("https://youtu.be/only-once")
+        barrier = threading.Barrier(2)
+        claims = []
+
+        def claim(worker_id):
+            barrier.wait()
+            claims.append(self.db.acquire_next_task(worker_id))
+
+        threads = [
+            threading.Thread(target=claim, args=("worker-a",)),
+            threading.Thread(target=claim, args=("worker-b",)),
+        ]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+
+        claimed = [task for task in claims if task is not None]
+        self.assertEqual(len(claimed), 1)
+        self.assertEqual(claimed[0].id, created.id)
+
+    def test_task_lease_updates_require_matching_owner_and_token(self):
+        created = self.db.add_task("https://youtu.be/leased")
+        claimed = self.db.acquire_next_task("worker-a")
+
+        self.assertFalse(
+            self.db.refresh_task_lease(
+                created.id,
+                "worker-b",
+                claimed.lease_token,
+            )
+        )
+        self.assertFalse(
+            self.db.update_claimed_task(
+                created.id,
+                "worker-a",
+                "wrong-token",
+                status="Completed",
+                summary="wrong",
+            )
+        )
+        self.assertTrue(
+            self.db.refresh_task_lease(
+                created.id,
+                "worker-a",
+                claimed.lease_token,
+            )
+        )
+        self.assertTrue(
+            self.db.update_claimed_task(
+                created.id,
+                "worker-a",
+                claimed.lease_token,
+                status="Completed",
+                summary="done",
+            )
+        )
+        completed = self.db.get_task_by_id(created.id)
+        self.assertEqual(completed.status, "Completed")
+        self.assertEqual(completed.summary, "done")
+        self.assertEqual(completed.worker_id, "worker-a")
+        self.assertEqual(completed.lease_token, claimed.lease_token)
+
+        # A lost response can be retried safely with the same terminal state.
+        self.assertTrue(
+            self.db.update_claimed_task(
+                created.id,
+                "worker-a",
+                claimed.lease_token,
+                status="Completed",
+                summary="done",
+            )
+        )
 
     def test_processing_lock_allows_single_worker(self):
         self.assertTrue(

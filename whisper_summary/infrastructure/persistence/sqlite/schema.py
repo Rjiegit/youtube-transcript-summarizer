@@ -20,6 +20,7 @@ def initialize_schema(conn: sqlite3.Connection) -> None:
             retry_reason TEXT,
             locked_at TIMESTAMP,
             worker_id TEXT,
+            lease_token TEXT,
             notion_page_id TEXT,
             source_type TEXT DEFAULT 'manual',
             source_channel_id TEXT,
@@ -79,6 +80,8 @@ def initialize_schema(conn: sqlite3.Connection) -> None:
         cursor.execute("ALTER TABLE tasks ADD COLUMN locked_at TIMESTAMP")
     if "worker_id" not in existing_columns:
         cursor.execute("ALTER TABLE tasks ADD COLUMN worker_id TEXT")
+    if "lease_token" not in existing_columns:
+        cursor.execute("ALTER TABLE tasks ADD COLUMN lease_token TEXT")
     if "notion_page_id" not in existing_columns:
         cursor.execute("ALTER TABLE tasks ADD COLUMN notion_page_id TEXT")
     if "source_type" not in existing_columns:

@@ -68,7 +68,30 @@ _CODEX_BLOCKED_ENV_VARS = (
     "OLLAMA_API_KEY",
     "OPENAI_API_KEY",
     "PROCESSING_LOCK_ADMIN_TOKEN",
+    "PROCESSING_WORKER_TOKEN",
 )
+
+
+def resolve_codex_cli() -> tuple[str, str | None]:
+    codex_bin = os.getenv("CODEX_BIN", "codex").strip() or "codex"
+    return codex_bin, shutil.which(codex_bin)
+
+
+def log_codex_cli_startup_status() -> None:
+    codex_bin, executable = resolve_codex_cli()
+    if executable:
+        logger.info(
+            "Codex CLI startup check: available "
+            f"(executable={executable}, model={CODEX_MODEL}); "
+            "authentication will be verified on first use"
+        )
+        return
+
+    logger.warning(
+        "Codex CLI startup check: unavailable "
+        f"(CODEX_BIN={codex_bin} was not found in PATH); "
+        "Codex CLI will be excluded from automatic model selection"
+    )
 
 
 class Summarizer:
@@ -97,8 +120,7 @@ class Summarizer:
         self.google_gemini_api_key = self._api_keys[Backend.GEMINI]
         self.ollama_api_key = self._api_keys[Backend.OLLAMA]
         self.ollama_host = os.getenv("OLLAMA_HOST", "https://ollama.com")
-        self.codex_bin = os.getenv("CODEX_BIN", "codex").strip() or "codex"
-        self.codex_executable = shutil.which(self.codex_bin)
+        self.codex_bin, self.codex_executable = resolve_codex_cli()
         self.codex_timeout_seconds = self._get_codex_timeout_seconds()
         self.last_backend = None
         self.last_model_label = None

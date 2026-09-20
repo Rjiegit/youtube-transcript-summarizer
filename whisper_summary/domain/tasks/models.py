@@ -17,6 +17,7 @@ class Task:
     retry_reason: str = ""
     locked_at: Optional[datetime] = None
     worker_id: Optional[str] = None
+    lease_token: Optional[str] = None
     notion_page_id: Optional[str] = None
     notion_url: Optional[str] = None
     source_type: str = "manual"

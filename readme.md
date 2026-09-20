@@ -96,7 +96,7 @@ docker compose up -d
 
 - `api`：Task API
 - `streamlit`：主要操作介面
-- `processing-worker`：持續輪詢 SQLite queue 並執行 processing pipeline
+- `processing-worker`：透過 API claim task lease，並執行 processing pipeline
 - `rss-monitor`：RSS polling process；需設定 `RSS_MONITOR_ENABLED=true` 才會輪詢
 
 Nuxt Showcase 不在此 Compose topology 中。
@@ -133,6 +133,36 @@ make extension-check
 ```
 
 完整的啟動、環境變數、資料清理與部署說明請看 [設定、執行與部署](openwiki/operations/configuration-and-deployment.md)。
+
+## 多 Worker 模式
+
+Processing API 是 task lease 的中央協調者。Docker 與本機 worker 可以同時運行；每個
+worker 一次處理一筆任務，而同一筆任務只會由一個 lease owner 取得。
+
+先在 `.env` 設定 worker token（未設定時暫時相容
+`PROCESSING_LOCK_ADMIN_TOKEN`）：
+
+```env
+PROCESSING_WORKER_TOKEN=<random-secret>
+```
+
+Docker worker 使用 Compose 內部 API URL：
+
+```bash
+docker compose up -d api streamlit rss-monitor processing-worker
+```
+
+本機 worker 使用 `TASK_API_BASE_URL`（預設 `http://localhost:8080`），並能使用主機上的
+Codex CLI：
+
+```bash
+make processing-worker
+```
+
+兩者會以唯一 instance ID 競爭任務。Worker 以 heartbeat 維持 lease；lease 過期時任務
+會直接標記為 `Failed`，不會自動交給另一個 worker 重跑。確認舊 worker 已停止後，可透過
+既有 retry 操作建立新任務。Streamlit 的 `Processing Leases` 維運區可查看及手動標記
+active lease 為 Failed。
 
 ## 主要元件
 

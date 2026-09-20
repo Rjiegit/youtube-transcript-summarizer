@@ -24,10 +24,10 @@ freeze:
 	uv lock
 
 run:
-	uv run python -m whisper_summary.apps.workers.cli --db-type sqlite
+	uv run python -m whisper_summary.apps.workers.cli
 
 processing-worker:
-	uv run python -m whisper_summary.apps.workers.processing_worker
+	PROCESSING_WORKER_NAME=local uv run python -m whisper_summary.apps.workers.processing_worker
 
 rss-monitor:
 	uv run python -m whisper_summary.apps.workers.rss_monitor

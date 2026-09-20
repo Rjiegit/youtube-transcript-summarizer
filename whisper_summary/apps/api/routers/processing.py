@@ -1,8 +1,9 @@
 """Processing job and lock administration endpoints."""
 
 import os
+from datetime import timedelta
 
-from fastapi import APIRouter, Header, HTTPException, status
+from fastapi import APIRouter, Header, HTTPException, Response, status
 
 from whisper_summary.apps.api.dependencies import ensure_db_configuration, get_database
 from whisper_summary.apps.api.schemas import (
@@ -12,14 +13,266 @@ from whisper_summary.apps.api.schemas import (
     ProcessingLockReleaseResponse,
     ProcessingLockSnapshot,
     ProcessingLockStatusResponse,
+    ProcessingLeaseFailRequest,
+    ProcessingLeaseFailResponse,
+    ProcessingLeaseSnapshot,
+    ProcessingLeaseStatusResponse,
+    WorkerLeaseRequest,
+    WorkerTaskClaimRequest,
+    WorkerTaskClaimResponse,
+    WorkerTaskCompleteRequest,
+    WorkerTaskFailRequest,
+    WorkerTaskPayload,
+    WorkerTaskProgressRequest,
     normalize_db_type,
 )
 from whisper_summary.core.logger import logger
 from whisper_summary.core.time_utils import as_utc, utc_now
 from whisper_summary.domain.interfaces.database import ProcessingLockInfo
-from whisper_summary.services.pipeline.processing_runner import PROCESSING_LOCK_TIMEOUT_SECONDS
+from whisper_summary.services.pipeline.processing_runner import (
+    PROCESSING_LOCK_TIMEOUT_SECONDS,
+    TASK_LOCK_TIMEOUT_SECONDS,
+)
 
 router = APIRouter()
+
+
+def ensure_worker_token(token: str | None) -> None:
+    expected = os.environ.get("PROCESSING_WORKER_TOKEN") or os.environ.get(
+        "PROCESSING_LOCK_ADMIN_TOKEN"
+    )
+    if not expected:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Processing worker token is not configured.",
+        )
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Missing worker token.",
+        )
+    if token != expected:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid worker token.",
+        )
+
+
+def _require_active_lease(updated: bool) -> None:
+    if not updated:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Task lease is no longer owned by this worker.",
+        )
+
+
+def _build_task_lease_snapshot(task) -> ProcessingLeaseSnapshot:
+    locked_at = as_utc(task.locked_at)
+    age_seconds = max(0.0, (utc_now() - locked_at).total_seconds())
+    return ProcessingLeaseSnapshot(
+        task_id=task.id,
+        title=task.title,
+        worker_id=task.worker_id,
+        locked_at=locked_at,
+        age_seconds=age_seconds,
+        stale=age_seconds >= TASK_LOCK_TIMEOUT_SECONDS,
+    )
+
+
+@router.post("/worker-tasks/claim")
+def claim_worker_task(
+    payload: WorkerTaskClaimRequest,
+    worker_token: str | None = Header(None, alias="X-Worker-Token"),
+):
+    ensure_worker_token(worker_token)
+    db = get_database("sqlite")
+    task = db.acquire_next_task(
+        payload.worker_id,
+        lock_timeout_seconds=TASK_LOCK_TIMEOUT_SECONDS,
+    )
+    if task is None:
+        return Response(status_code=status.HTTP_204_NO_CONTENT)
+    if not task.lease_token or not task.locked_at:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Claimed task is missing lease metadata.",
+        )
+    return WorkerTaskClaimResponse(
+        task=WorkerTaskPayload(
+            id=task.id,
+            url=task.url,
+            status=task.status,
+            title=task.title,
+            notion_page_id=task.notion_page_id,
+            processing_engine=task.processing_engine,
+        ),
+        lease_token=task.lease_token,
+        lease_expires_at=task.locked_at + timedelta(
+            seconds=TASK_LOCK_TIMEOUT_SECONDS
+        ),
+    )
+
+
+@router.post(
+    "/worker-tasks/{task_id}/heartbeat",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def heartbeat_worker_task(
+    task_id: str,
+    payload: WorkerLeaseRequest,
+    worker_token: str | None = Header(None, alias="X-Worker-Token"),
+) -> Response:
+    ensure_worker_token(worker_token)
+    db = get_database("sqlite")
+    _require_active_lease(
+        db.refresh_task_lease(task_id, payload.worker_id, payload.lease_token)
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.patch(
+    "/worker-tasks/{task_id}/progress",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def update_worker_task_progress(
+    task_id: str,
+    payload: WorkerTaskProgressRequest,
+    worker_token: str | None = Header(None, alias="X-Worker-Token"),
+) -> Response:
+    ensure_worker_token(worker_token)
+    db = get_database("sqlite")
+    _require_active_lease(
+        db.update_claimed_task(
+            task_id,
+            payload.worker_id,
+            payload.lease_token,
+            status="Processing",
+            title=payload.title,
+            processing_engine=payload.processing_engine,
+        )
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post(
+    "/worker-tasks/{task_id}/complete",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def complete_worker_task(
+    task_id: str,
+    payload: WorkerTaskCompleteRequest,
+    worker_token: str | None = Header(None, alias="X-Worker-Token"),
+) -> Response:
+    ensure_worker_token(worker_token)
+    db = get_database("sqlite")
+    _require_active_lease(
+        db.update_claimed_task(
+            task_id,
+            payload.worker_id,
+            payload.lease_token,
+            status="Completed",
+            title=payload.title,
+            summary=payload.summary,
+            processing_duration=payload.processing_duration,
+            notion_page_id=payload.notion_page_id,
+            processing_engine=payload.processing_engine,
+        )
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post(
+    "/worker-tasks/{task_id}/fail",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+def fail_worker_task(
+    task_id: str,
+    payload: WorkerTaskFailRequest,
+    worker_token: str | None = Header(None, alias="X-Worker-Token"),
+) -> Response:
+    ensure_worker_token(worker_token)
+    db = get_database("sqlite")
+    _require_active_lease(
+        db.update_claimed_task(
+            task_id,
+            payload.worker_id,
+            payload.lease_token,
+            status="Failed",
+            error_message=payload.error_message,
+            processing_duration=payload.processing_duration,
+        )
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.get(
+    "/processing-leases",
+    response_model=ProcessingLeaseStatusResponse,
+)
+def get_processing_leases(
+    maintainer_token: str | None = Header(None, alias="X-Maintainer-Token"),
+) -> ProcessingLeaseStatusResponse:
+    ensure_maintainer_token(maintainer_token)
+    db = get_database("sqlite")
+    return ProcessingLeaseStatusResponse(
+        leases=[
+            _build_task_lease_snapshot(task)
+            for task in db.list_processing_tasks()
+            if task.worker_id and task.locked_at
+        ]
+    )
+
+
+@router.post(
+    "/processing-leases/{task_id}/fail",
+    response_model=ProcessingLeaseFailResponse,
+)
+def fail_processing_lease(
+    task_id: str,
+    payload: ProcessingLeaseFailRequest,
+    maintainer_token: str | None = Header(None, alias="X-Maintainer-Token"),
+) -> ProcessingLeaseFailResponse:
+    ensure_maintainer_token(maintainer_token)
+    db = get_database("sqlite")
+    task = db.get_task_by_id(task_id)
+    if task is None or task.status != "Processing" or not task.worker_id or not task.locked_at:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Active task lease was not found.",
+        )
+    before = _build_task_lease_snapshot(task)
+    reason = payload.reason or "Manually failed by maintainer"
+    if payload.dry_run:
+        return ProcessingLeaseFailResponse(
+            failed=False,
+            reason=reason,
+            before=before,
+        )
+    if not payload.force and payload.expected_worker_id != task.worker_id:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="expected_worker_id does not match the active lease.",
+        )
+    if payload.force and before.age_seconds < payload.force_threshold_seconds:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Task lease has not aged enough for forced failure.",
+        )
+    updated = db.fail_processing_task(
+        task_id,
+        reason,
+        expected_worker_id=None if payload.force else task.worker_id,
+    )
+    if not updated:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Task lease changed before it could be failed.",
+        )
+    return ProcessingLeaseFailResponse(
+        failed=True,
+        reason=reason,
+        before=before,
+    )
 
 
 def ensure_maintainer_token(token: str | None) -> None:

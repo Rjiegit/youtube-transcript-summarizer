@@ -32,13 +32,7 @@ from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
 
 
 from whisper_summary.apps.ui.ui_processing import (
-    _maybe_show_lock_snapshot,
-    build_force_release_payload,
-    build_targeted_release_payload,
-    get_processing_lock_admin_token,
-    get_snapshot_worker_id,
-    query_processing_lock,
-    release_processing_lock_with_payload,
+    render_processing_leases_admin,
     retry_task_via_api,
     trigger_processing_via_api,
 )
@@ -246,65 +240,7 @@ def main_view() -> None:
         ):
             trigger_processing_via_api(db_choice)
 
-    with st.expander("Processing Lock 管理（維運專用）"):
-        st.caption("Processing Lock 維運請求會自動使用 `.env` 的 PROCESSING_LOCK_ADMIN_TOKEN。")
-        if not get_processing_lock_admin_token():
-            st.warning("尚未設定 PROCESSING_LOCK_ADMIN_TOKEN，維運請求將不會送出。")
-
-        if st.button("查詢 Processing Lock", key="lock_status_btn"):
-            query_processing_lock(db_choice)
-
-        _maybe_show_lock_snapshot()
-        snapshot = st.session_state.get("processing_lock_snapshot") or {}
-        snapshot_worker_id = get_snapshot_worker_id(snapshot)
-
-        st.divider()
-
-        expected_worker = st.text_input(
-            "指定 worker_id（可選，未填則優先使用最近查詢到的 worker）",
-            key="lock_expected_worker",
-        )
-        reason = st.text_input(
-            "釋放理由",
-            key="lock_release_reason",
-        )
-        force_threshold = st.number_input(
-            "強制釋放門檻（秒）",
-            min_value=0,
-            value=1200,
-            step=60,
-            key="lock_force_threshold",
-        )
-
-        action_col_1, action_col_2 = st.columns(2)
-        with action_col_1:
-            if st.button(
-                "釋放目前 worker 的 lock",
-                key="lock_release_targeted_btn",
-                use_container_width=True,
-            ):
-                payload = build_targeted_release_payload(
-                    manual_worker_id=expected_worker,
-                    snapshot_worker_id=snapshot_worker_id,
-                    reason=reason,
-                )
-                if payload is None:
-                    st.warning("請先查詢 lock 狀態，或手動輸入要釋放的 worker_id。")
-                else:
-                    release_processing_lock_with_payload(db_choice, payload)
-
-        with action_col_2:
-            if st.button(
-                "一鍵強制清空 Processing Lock",
-                key="lock_release_force_btn",
-                type="primary",
-                use_container_width=True,
-            ):
-                payload = build_force_release_payload(
-                    reason=reason,
-                    force_threshold=int(force_threshold),
-                )
-                release_processing_lock_with_payload(db_choice, payload)
+    render_processing_leases_admin()
 
     db = create_database(db_choice)
 

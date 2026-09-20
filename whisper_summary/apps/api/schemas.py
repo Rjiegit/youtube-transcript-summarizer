@@ -211,6 +211,91 @@ class ProcessingJobCreateResponse(BaseModel):
     message: str = Field(..., description="Human readable status message.")
 
 
+class WorkerTaskClaimRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    worker_id: str = Field(..., min_length=1)
+
+
+class WorkerLeaseRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    worker_id: str = Field(..., min_length=1)
+    lease_token: str = Field(..., min_length=1)
+
+
+class WorkerTaskPayload(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    id: str
+    url: str
+    status: str
+    title: str = ""
+    notion_page_id: str | None = None
+    processing_engine: str | None = None
+
+
+class WorkerTaskClaimResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    task: WorkerTaskPayload
+    lease_token: str
+    lease_expires_at: datetime
+
+
+class WorkerTaskProgressRequest(WorkerLeaseRequest):
+    title: str | None = None
+    processing_engine: str | None = None
+
+
+class WorkerTaskCompleteRequest(WorkerLeaseRequest):
+    title: str
+    summary: str
+    processing_duration: float = Field(..., ge=0)
+    notion_page_id: str | None = None
+    processing_engine: str | None = None
+
+
+class WorkerTaskFailRequest(WorkerLeaseRequest):
+    error_message: str = Field(..., min_length=1)
+    processing_duration: float = Field(..., ge=0)
+
+
+class ProcessingLeaseSnapshot(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    task_id: str
+    title: str
+    worker_id: str
+    locked_at: datetime
+    age_seconds: float
+    stale: bool
+
+
+class ProcessingLeaseStatusResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    leases: list[ProcessingLeaseSnapshot]
+
+
+class ProcessingLeaseFailRequest(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True, extra="forbid")
+
+    expected_worker_id: str | None = None
+    force: bool = False
+    force_threshold_seconds: int = Field(default=0, ge=0)
+    reason: str | None = None
+    dry_run: bool = False
+
+
+class ProcessingLeaseFailResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    failed: bool
+    reason: str
+    before: ProcessingLeaseSnapshot
+
+
 class ProcessingLockSnapshot(BaseModel):
     """Representation of the processing lock state for inspection."""
 
@@ -313,5 +398,3 @@ class ProcessingLockReleaseResponse(BaseModel):
         ...,
         description="Lock snapshot after taking the requested action.",
     )
-
-
