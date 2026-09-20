@@ -21,6 +21,9 @@ from whisper_summary.services.pipeline.processing_runner import (
 )
 
 
+DEFAULT_POLL_INTERVAL_SECONDS = 60.0
+
+
 def create_task_queue() -> HttpTaskQueue:
     worker_token = os.getenv("PROCESSING_WORKER_TOKEN") or os.getenv(
         "PROCESSING_LOCK_ADMIN_TOKEN", ""
@@ -41,7 +44,7 @@ def build_worker_instance_id(worker_name: str) -> str:
 def run_forever(
     *,
     worker_id: str = "processing-worker",
-    poll_interval_seconds: float = 5.0,
+    poll_interval_seconds: float = DEFAULT_POLL_INTERVAL_SECONDS,
     stop_event: threading.Event | None = None,
     processor: Callable[..., ProcessingSummary] = process_pending_tasks,
 ) -> None:
@@ -73,7 +76,12 @@ def main() -> None:
     parser.add_argument(
         "--poll-interval",
         type=float,
-        default=float(os.environ.get("PROCESSING_WORKER_POLL_INTERVAL_SECONDS", "5")),
+        default=float(
+            os.environ.get(
+                "PROCESSING_WORKER_POLL_INTERVAL_SECONDS",
+                str(DEFAULT_POLL_INTERVAL_SECONDS),
+            )
+        ),
     )
     args = parser.parse_args()
     run_forever(

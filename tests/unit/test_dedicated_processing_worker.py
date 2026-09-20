@@ -2,10 +2,16 @@ import threading
 import unittest
 from unittest.mock import MagicMock, patch
 
-from whisper_summary.apps.workers.processing_worker import run_forever
+from whisper_summary.apps.workers.processing_worker import (
+    DEFAULT_POLL_INTERVAL_SECONDS,
+    run_forever,
+)
 
 
 class TestDedicatedProcessingWorker(unittest.TestCase):
+    def test_default_poll_interval_is_sixty_seconds(self) -> None:
+        self.assertEqual(DEFAULT_POLL_INTERVAL_SECONDS, 60.0)
+
     @patch(
         "whisper_summary.apps.workers.processing_worker."
         "log_codex_cli_startup_status"
