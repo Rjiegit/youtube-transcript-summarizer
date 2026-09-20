@@ -14,10 +14,15 @@ vi.mock("../composables/useReadResults", () => ({
     readIds: { value: [] },
     readMap: { value: {} },
     readRevision: { value: 0 },
+    isRemoteSyncEnabled: { value: false },
+    remoteSyncStatus: { value: "local" },
     markAsRead: vi.fn(),
     markManyAsRead: vi.fn(),
     markAsUnread: vi.fn(),
     refreshReadState: vi.fn(),
+    setRemoteSyncEnabled: vi.fn(),
+    authenticateRemoteSync: vi.fn(),
+    syncRemoteState: vi.fn(),
   }),
 }));
 

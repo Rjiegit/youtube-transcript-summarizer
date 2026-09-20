@@ -2,6 +2,7 @@
 import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import ShowcaseCard from "../components/ShowcaseCard.vue";
+import ReadSyncControl from "../components/ReadSyncControl.vue";
 import { useAppLoading } from "../composables/useAppLoading";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
@@ -211,15 +212,18 @@ onBeforeUnmount(() => {
     <section v-if="!pending && !error && items.length > 0" class="showcase-toolbar" aria-label="展示內容工具列">
       <div class="showcase-toolbar__actions">
         <ClientOnly>
-          <button
-            type="button"
-            class="showcase-toolbar__button"
-            data-testid="mark-all-read-button"
-            :disabled="!canMarkAllRead"
-            @click="markCurrentListAsRead"
-          >
-            全部標記已讀
-          </button>
+          <div class="showcase-toolbar__client-actions">
+            <button
+              type="button"
+              class="showcase-toolbar__button"
+              data-testid="mark-all-read-button"
+              :disabled="!canMarkAllRead"
+              @click="markCurrentListAsRead"
+            >
+              全部標記已讀
+            </button>
+            <ReadSyncControl />
+          </div>
 
           <template #fallback>
             <button type="button" class="showcase-toolbar__button" disabled>全部標記已讀</button>

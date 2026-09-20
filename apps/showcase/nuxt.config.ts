@@ -2,8 +2,10 @@ import {
   getShowcaseRouteRules,
   resolveShowcaseConfig,
 } from "./server/utils/config";
+import { resolveReadSyncConfig } from "./server/utils/read-sync-config";
 
 const showcaseConfig = resolveShowcaseConfig({ env: process.env });
+const readSyncConfig = resolveReadSyncConfig({ env: process.env });
 const CACHE_TTL_SECONDS = showcaseConfig.cacheTtlSeconds;
 const isProduction = process.env.NODE_ENV === "production";
 const buildDate = firstNonEmptyEnvValue("SHOWCASE_BUILD_DATE", "NUXT_SHOWCASE_BUILD_DATE") || formatTaipeiBuildDate();
@@ -44,6 +46,12 @@ export default defineNuxtConfig({
     statusPropertyName: showcaseConfig.statusPropertyName,
     completedStatusValue: showcaseConfig.completedStatusValue,
     showcaseCacheTtlSeconds: CACHE_TTL_SECONDS,
+    readStateSyncEnabled: readSyncConfig.enabled,
+    upstashRedisRestUrl: readSyncConfig.upstashUrl,
+    upstashRedisRestToken: readSyncConfig.upstashToken,
+    readStateSyncAccessToken: readSyncConfig.accessToken,
+    readStateSyncSessionSecret: readSyncConfig.sessionSecret,
+    readStateSyncSpaceId: readSyncConfig.spaceId,
     public: {
       buildDate,
       commitSha,

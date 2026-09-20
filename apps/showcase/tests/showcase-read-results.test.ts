@@ -418,4 +418,99 @@ describe("useReadResults", () => {
     expect(second.isRead("result-from-storage")).toBe(true);
     expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-from-detail");
   });
+
+  it("keeps remote sync disabled by default without changing local behavior", async () => {
+    stubNuxtState();
+    const storage = stubLocalStorage();
+    const fetchMock = vi.fn();
+    vi.stubGlobal("$fetch", fetchMock);
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRemoteSyncEnabled, markAsRead, remoteSyncStatus } = useReadResults();
+    markAsRead("result-local");
+
+    expect(isRemoteSyncEnabled.value).toBe(false);
+    expect(remoteSyncStatus.value).toBe("local");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-local");
+  });
+
+  it("asks for the personal sync code when remote sync is available but unauthenticated", async () => {
+    stubNuxtState();
+    stubLocalStorage();
+    vi.stubGlobal("$fetch", vi.fn().mockResolvedValue({
+      available: true,
+      authenticated: false,
+    }));
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRemoteSyncEnabled, remoteSyncStatus, setRemoteSyncEnabled } = useReadResults();
+    await setRemoteSyncEnabled(true);
+
+    expect(isRemoteSyncEnabled.value).toBe(true);
+    expect(remoteSyncStatus.value).toBe("authentication_required");
+  });
+
+  it("merges remote read and unread entries after authentication", async () => {
+    stubNuxtState();
+    stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify({
+        "local-read": { readAt: "2026-09-20T00:00:00.000Z" },
+        "remote-unread": { readAt: "2026-09-20T00:00:00.000Z" },
+      }),
+    });
+    const fetchMock = vi.fn(async (url: string, options?: { method?: string }) => {
+      if (url === "/api/read-sync/session" && options?.method === "POST") {
+        return { available: true, authenticated: true };
+      }
+      if (url === "/api/read-sync/session") {
+        return { available: true, authenticated: true };
+      }
+      if (url === "/api/read-state") {
+        return {
+          entries: {
+            "remote-read": { status: "read", updatedAt: "2026-09-20T01:00:00.000Z" },
+            "remote-unread": { status: "unread", updatedAt: "2026-09-20T02:00:00.000Z" },
+          },
+        };
+      }
+      if (url === "/api/read-state/mutations") {
+        return {
+          entries: {
+            "local-read": { status: "read", updatedAt: "2026-09-20T00:00:00.000Z" },
+            "remote-read": { status: "read", updatedAt: "2026-09-20T01:00:00.000Z" },
+            "remote-unread": { status: "unread", updatedAt: "2026-09-20T02:00:00.000Z" },
+          },
+        };
+      }
+      throw new Error(`Unexpected request: ${url}`);
+    });
+    vi.stubGlobal("$fetch", fetchMock);
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const result = useReadResults();
+    await result.authenticateRemoteSync("personal-code");
+
+    expect(result.isRead("local-read")).toBe(true);
+    expect(result.isRead("remote-read")).toBe(true);
+    expect(result.isRead("remote-unread")).toBe(false);
+    expect(result.remoteSyncStatus.value).toBe("synced");
+  });
+
+  it("keeps a newer synced unread tombstone when hydrating an older local read", async () => {
+    stubNuxtState();
+    stubLocalStorage({
+      "nuxt-showcase-read-results": JSON.stringify({
+        "result-1": { readAt: "2026-09-20T00:00:00.000Z" },
+      }),
+      "nuxt-showcase-read-sync-state": JSON.stringify({
+        "result-1": { status: "unread", updatedAt: "2026-09-20T01:00:00.000Z" },
+      }),
+    });
+
+    const { useReadResults } = await import("../composables/useReadResults");
+    const { isRead } = useReadResults();
+
+    expect(isRead("result-1")).toBe(false);
+  });
 });

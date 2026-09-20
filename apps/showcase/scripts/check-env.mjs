@@ -47,6 +47,16 @@ const snapshot = {
     statusPropertyName: Boolean(firstNonEmptyEnvValue("NOTION_STATUS_PROPERTY", "NUXT_NOTION_STATUS_PROPERTY")),
     completedStatusValue: firstNonEmptyEnvValue("NOTION_COMPLETED_STATUS", "NUXT_NOTION_COMPLETED_STATUS") || "Completed",
     cacheTtlSeconds: firstNonEmptyEnvValue("SHOWCASE_CACHE_TTL_SECONDS", "NUXT_SHOWCASE_CACHE_TTL_SECONDS") || "3600",
+    readStateSync: {
+      enabled: ["1", "true", "yes", "on"].includes(
+        firstNonEmptyEnvValue("READ_STATE_SYNC_ENABLED").toLowerCase(),
+      ),
+      upstashUrl: Boolean(firstNonEmptyEnvValue("UPSTASH_REDIS_REST_URL")),
+      upstashToken: Boolean(firstNonEmptyEnvValue("UPSTASH_REDIS_REST_TOKEN")),
+      accessToken: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_ACCESS_TOKEN")),
+      sessionSecret: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SESSION_SECRET")),
+      spaceId: firstNonEmptyEnvValue("READ_STATE_SYNC_SPACE_ID") || "personal",
+    },
   },
   processEnv: {
     NOTION_API_KEY: Boolean(firstNonEmptyEnvValue("NOTION_API_KEY")),
@@ -59,6 +69,12 @@ const snapshot = {
     NUXT_NOTION_STATUS_PROPERTY: Boolean(firstNonEmptyEnvValue("NUXT_NOTION_STATUS_PROPERTY")),
     NUXT_NOTION_COMPLETED_STATUS: Boolean(firstNonEmptyEnvValue("NUXT_NOTION_COMPLETED_STATUS")),
     NUXT_SHOWCASE_CACHE_TTL_SECONDS: Boolean(firstNonEmptyEnvValue("NUXT_SHOWCASE_CACHE_TTL_SECONDS")),
+    READ_STATE_SYNC_ENABLED: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_ENABLED")),
+    UPSTASH_REDIS_REST_URL: Boolean(firstNonEmptyEnvValue("UPSTASH_REDIS_REST_URL")),
+    UPSTASH_REDIS_REST_TOKEN: Boolean(firstNonEmptyEnvValue("UPSTASH_REDIS_REST_TOKEN")),
+    READ_STATE_SYNC_ACCESS_TOKEN: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_ACCESS_TOKEN")),
+    READ_STATE_SYNC_SESSION_SECRET: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SESSION_SECRET")),
+    READ_STATE_SYNC_SPACE_ID: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SPACE_ID")),
   },
 };
 

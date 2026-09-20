@@ -13,6 +13,7 @@
   --accent: #0f766e;
   --accent-strong: #0b5f59;
   --accent-soft: #d8f1ee;
+  --danger: #b42318;
   --danger-bg: #fff3f1;
   --danger-line: #f3c5bd;
   --shadow: 0 14px 34px rgba(23, 32, 51, 0.08);
@@ -292,6 +293,94 @@ a {
 .showcase-toolbar__actions {
   display: flex;
   align-items: center;
+}
+
+.showcase-toolbar__client-actions {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.read-sync-control {
+  display: grid;
+  gap: 4px;
+  min-width: 190px;
+}
+
+.read-sync-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.read-sync-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.read-sync-control__status {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.read-sync-auth {
+  display: grid;
+  gap: 6px;
+  width: min(320px, 80vw);
+  margin-top: 6px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.read-sync-auth__label {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.read-sync-auth__fields {
+  display: flex;
+  gap: 8px;
+}
+
+.read-sync-auth__input {
+  min-width: 0;
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.read-sync-auth__button {
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.read-sync-auth__button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+
+.read-sync-auth__error {
+  margin: 0;
+  color: var(--danger);
+  font-size: 0.78rem;
 }
 
 .showcase-search {
@@ -877,7 +966,17 @@ a {
     order: 2;
   }
 
+  .showcase-toolbar__client-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+
   .showcase-toolbar__button {
+    width: 100%;
+  }
+
+  .read-sync-control,
+  .read-sync-auth {
     width: 100%;
   }
 

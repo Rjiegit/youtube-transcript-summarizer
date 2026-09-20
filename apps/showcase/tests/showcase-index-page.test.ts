@@ -231,6 +231,38 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="mark-all-read-button"]').attributes("disabled")).toBeDefined();
   });
 
+  it("lets this device opt into remote read-state sync", async () => {
+    stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(response),
+      pending: ref(false),
+      error: ref(null),
+    });
+    fetchMock.mockResolvedValue({ available: true, authenticated: false });
+
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: { IndexPage: pageModule.default },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: {
+        stubs: {
+          ClientOnly: defineComponent({ template: "<slot />" }),
+          ShowcaseCard: true,
+        },
+      },
+    });
+    await flushPromises();
+
+    await wrapper.get('[data-testid="read-sync-toggle"]').setValue(true);
+    await flushPromises();
+
+    expect(window.localStorage.getItem("nuxt-showcase-read-sync-enabled")).toBe("true");
+    expect(wrapper.find('[data-testid="read-sync-auth-form"]').exists()).toBe(true);
+    wrapper.unmount();
+  });
+
   it("marks only filtered results as read from the toolbar button", async () => {
     stubLocalStorage();
     useFetchMock.mockResolvedValue({
