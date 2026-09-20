@@ -44,6 +44,7 @@ def create_task(payload: TaskCreateRequest, response: Response):
             source_channel_id=payload.source_channel_id,
             cache_ttl_seconds=TASK_CACHE_TTL_SECONDS,
             completed_task_policy=payload.completed_task_policy,
+            processing_engine=payload.processing_engine,
         )
     except RuntimeError as exc:
         raise HTTPException(
@@ -72,6 +73,7 @@ def create_task(payload: TaskCreateRequest, response: Response):
             processing_started=False,
             processing_worker_id=None,
             cached=True,
+            processing_engine=creation.task.processing_engine,
         )
 
     task = creation.task
@@ -122,6 +124,7 @@ def create_task(payload: TaskCreateRequest, response: Response):
         processing_started=scheduling_result.accepted,
         processing_worker_id=scheduling_result.worker_id,
         cached=False,
+        processing_engine=task.processing_engine,
     )
 
 
@@ -172,6 +175,5 @@ def retry_task(task_id: str, payload: TaskRetryRequest) -> TaskRetryResponse:
         db_type=payload.db_type,
         message="Retry task created.",
     )
-
 
 

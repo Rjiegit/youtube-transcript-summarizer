@@ -44,7 +44,7 @@ from whisper_summary.apps.ui.ui_processing import (
 )
 
 
-def add_url_callback(db_choice: str) -> None:
+def add_url_callback(db_choice: str, processing_engine: str | None = None) -> None:
     require_streamlit()
     url = st.session_state.url_input
     if url:
@@ -53,6 +53,8 @@ def add_url_callback(db_choice: str) -> None:
             st.toast("Invalid YouTube URL", icon="❌")
             return
         payload = {"url": normalized, "db_type": db_choice.lower()}
+        if processing_engine:
+            payload["processing_engine"] = processing_engine
         try:
             with st.spinner("正在新增任務並排程背景處理..."):
                 status, body = call_create_task_api(payload)
@@ -215,6 +217,17 @@ def main_view() -> None:
     st.header("Add YouTube URL to Queue")
     db_choice = st.selectbox("Select Database", ["SQLite", "Notion"], key="db_choice")
 
+    processing_engine = st.selectbox(
+        "Processing Engine",
+        [None, "legacy", "langgraph"],
+        format_func=lambda value: {
+            None: "Follow system default",
+            "legacy": "Legacy",
+            "langgraph": "LangGraph",
+        }[value],
+        key="processing_engine_choice",
+    )
+
     st.text_input("Enter YouTube URL", key="url_input")
 
     col1, col2, _ = st.columns([2, 3, 2])
@@ -222,7 +235,7 @@ def main_view() -> None:
         st.button(
             "Add to Queue",
             on_click=add_url_callback,
-            args=(db_choice,),
+            args=(db_choice, processing_engine),
             use_container_width=True,
         )
     with col2:
@@ -367,18 +380,19 @@ def main_view() -> None:
         paginated_tasks = filtered_tasks[start_idx:end_idx]
         viewed_ids = set(get_viewed_task_ids())
 
-        header_cols = st.columns(8)
+        header_cols = st.columns(9)
         header_cols[0].write("**URL**")
         header_cols[1].write("**Title**")
         header_cols[2].write("**Viewed**")
         header_cols[3].write("**Status**")
-        header_cols[4].write("**Created At (Taipei)**")
-        header_cols[5].write("**Duration (s)**")
-        header_cols[6].write("**Notion**")
-        header_cols[7].write("**Action**")
+        header_cols[4].write("**Engine**")
+        header_cols[5].write("**Created At (Taipei)**")
+        header_cols[6].write("**Duration (s)**")
+        header_cols[7].write("**Notion**")
+        header_cols[8].write("**Action**")
 
         for task in paginated_tasks:
-            col1, col2, col3, col4, col5, col6, col7, col8 = st.columns(8)
+            col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns(9)
             col1.write(task.url)
             col2.write(task.title)
             viewed_placeholder = col3.empty()
@@ -386,36 +400,37 @@ def main_view() -> None:
             viewed_label = "已看過" if task_id_str in viewed_ids else "-"
             viewed_placeholder.write(viewed_label)
             col4.write(task.status)
+            col5.write(task.processing_engine or "System default")
             if task.created_at:
                 taipei_time = task.created_at.astimezone(timezone(timedelta(hours=8)))
-                col5.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
-            else:
-                col5.write("-")
-            if task.status == "Completed" and task.processing_duration is not None:
-                col6.write(f"{task.processing_duration:.2f}")
+                col6.write(taipei_time.strftime("%Y-%m-%d %H:%M:%S"))
             else:
                 col6.write("-")
+            if task.status == "Completed" and task.processing_duration is not None:
+                col7.write(f"{task.processing_duration:.2f}")
+            else:
+                col7.write("-")
 
             notion_display = get_notion_display(task, NOTION_BASE_URL)
             if notion_display["status"] == "link":
-                if col7.button("Notion", key=f"notion_{task.id}"):
+                if col8.button("Notion", key=f"notion_{task.id}"):
                     record_recent_task(task, NOTION_BASE_URL)
                     open_notion_link(notion_display["url"])
                     if task_id_str not in viewed_ids:
                         viewed_ids.add(task_id_str)
                         viewed_placeholder.write("已看過")
             elif notion_display["status"] == "invalid":
-                col7.write(f"⚠️ {notion_display['message']}")
+                col8.write(f"⚠️ {notion_display['message']}")
             else:
-                col7.write(notion_display["message"])
+                col8.write(notion_display["message"])
 
-            if col8.button("View", key=f"view_{task.id}"):
+            if col9.button("View", key=f"view_{task.id}"):
                 record_recent_task(task, NOTION_BASE_URL)
                 st.session_state.selected_task_id = task.id
                 st.session_state.selected_db_choice = db_choice
                 st.rerun()
             if task.status == "Failed":
-                if col8.button("Retry", key=f"retry_{task.id}"):
+                if col9.button("Retry", key=f"retry_{task.id}"):
                     retry_task_via_api(task.id, db_choice)
 
         col1, col2, col3 = st.columns([1, 1, 1])
@@ -444,6 +459,7 @@ def detail_view(task_id: str, db_choice: str) -> None:
         st.write(f"**URL:** {task.url}")
         st.write(f"**Title:** {task.title}")
         st.write(f"**Status:** {task.status}")
+        st.write(f"**Processing Engine:** {task.processing_engine or 'System default'}")
         if task.processing_duration is not None:
             st.write(f"**Processing Duration:** {task.processing_duration:.2f} seconds")
         notion_display = get_notion_display(task, NOTION_BASE_URL)

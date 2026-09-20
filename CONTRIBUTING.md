@@ -36,6 +36,10 @@ docker compose up -d
 
 新增抽象時放在 `whisper_summary/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `whisper_summary/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
 
+Processing pipeline 的具體操作集中在 `services/pipeline/engines.py`，legacy 與
+LangGraph engine 必須重用相同 operations。新增或調整 pipeline 步驟時，需同步更新
+兩個 engine 的 parity test，避免切換後出現外部行為差異。
+
 ## Python 風格
 
 - 遵循 PEP 8，使用 4 spaces indentation。

@@ -21,7 +21,10 @@ class TestSQLiteClient(unittest.TestCase):
             pass
 
     def test_add_and_get_pending_tasks(self):
-        created = self.db.add_task("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+        created = self.db.add_task(
+            "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            processing_engine="langgraph",
+        )
         self.assertIsNotNone(created.id)
         self.assertEqual(created.status, "Pending")
         tasks = self.db.get_pending_tasks()
@@ -32,6 +35,7 @@ class TestSQLiteClient(unittest.TestCase):
         self.assertEqual(t.retry_of_task_id, None)
         self.assertEqual(t.retry_reason, "")
         self.assertIsNone(t.notion_page_id)
+        self.assertEqual(t.processing_engine, "langgraph")
 
     def test_update_task_status_and_get_by_id(self):
         self.db.add_task("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
@@ -73,6 +77,7 @@ class TestSQLiteClient(unittest.TestCase):
             original.id,
             status="Failed",
             error_message="Network issue",
+            processing_engine="langgraph",
         )
         failed_task = self.db.get_task_by_id(original.id)
 
@@ -82,6 +87,7 @@ class TestSQLiteClient(unittest.TestCase):
         self.assertEqual(retry_task.url, url)
         self.assertEqual(retry_task.retry_of_task_id, str(original.id))
         self.assertEqual(retry_task.retry_reason, "Network issue")
+        self.assertEqual(retry_task.processing_engine, "langgraph")
 
         # Ensure the retry task is persisted in storage and retrievable.
         persisted = self.db.get_task_by_id(retry_task.id)

@@ -20,6 +20,7 @@ ui = [
 worker = [
   "faster-whisper==1.2.0",
   "google-generativeai==0.8.5",
+  "langgraph==1.2.11",
   "notion-client==2.4.0",
   "ollama==0.6.0",
   "openai==1.109.1",

@@ -90,6 +90,7 @@ class SQLiteDB(BaseDB):
         status: str = "Pending",
         source_type: str = "manual",
         source_channel_id: str | None = None,
+        processing_engine: str | None = None,
     ) -> Task:
         """Adds a new task to the database and returns the stored record."""
         conn = self._get_connection()
@@ -97,10 +98,12 @@ class SQLiteDB(BaseDB):
             cursor = conn.cursor()
             cursor.execute(
                 """
-                INSERT INTO tasks (url, status, title, source_type, source_channel_id)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO tasks (
+                    url, status, title, source_type, source_channel_id, processing_engine
+                )
+                VALUES (?, ?, ?, ?, ?, ?)
                 """,
-                (url, status, url, source_type, source_channel_id),
+                (url, status, url, source_type, source_channel_id, processing_engine),
             )
             new_id = cursor.lastrowid
             conn.commit()
@@ -352,6 +355,7 @@ class SQLiteDB(BaseDB):
         error_message: str = None,
         processing_duration: float = None,
         notion_page_id: Optional[str] = None,
+        processing_engine: Optional[str] = None,
     ) -> None:
         """Updates the status and other fields of a task."""
         conn = self._get_connection()
@@ -376,6 +380,9 @@ class SQLiteDB(BaseDB):
         if notion_page_id is not None:
             set_clauses.append("notion_page_id = ?")
             params.append(notion_page_id)
+        if processing_engine is not None:
+            set_clauses.append("processing_engine = ?")
+            params.append(processing_engine)
 
         if status != "Processing":
             set_clauses.append("locked_at = NULL")
@@ -426,10 +433,18 @@ class SQLiteDB(BaseDB):
         cursor = conn.cursor()
         cursor.execute(
             """
-            INSERT INTO tasks (url, status, title, retry_of_task_id, retry_reason)
-            VALUES (?, 'Pending', ?, ?, ?)
+            INSERT INTO tasks (
+                url, status, title, retry_of_task_id, retry_reason, processing_engine
+            )
+            VALUES (?, 'Pending', ?, ?, ?, ?)
             """,
-            (source_task.url, source_task.title or source_task.url, parent_id, reason),
+            (
+                source_task.url,
+                source_task.title or source_task.url,
+                parent_id,
+                reason,
+                source_task.processing_engine,
+            ),
         )
         new_id = cursor.lastrowid
         conn.commit()

@@ -16,6 +16,7 @@ class TaskRepository(Protocol):
         *,
         source_type: str = "manual",
         source_channel_id: str | None = None,
+        processing_engine: str | None = None,
     ) -> Task: ...
 
 

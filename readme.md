@@ -16,6 +16,10 @@ Streamlit / Extension / RSS monitor / HTTP client
                        ▼
                 ProcessingWorker
                        │
+          ┌────────────┴────────────┐
+          ▼                         ▼
+   Legacy engine             LangGraph engine
+          └────────────┬────────────┘
         yt-dlp → faster-whisper → LLM
                        │
           ┌────────────┼────────────┐
@@ -27,6 +31,29 @@ Streamlit / Extension / RSS monitor / HTTP client
 ```
 
 CLI worker 可以直接處理 backend 中的待辦任務；Nuxt Showcase 則直接讀取 Notion 的完成結果，不會呼叫 Python Task API。
+
+### Processing engine 切換
+
+processing pipeline 支援兩個具有相同外部行為的 orchestration engine：
+
+- `legacy`：既有循序流程，也是未設定時的安全預設。
+- `langgraph`：以 LangGraph `StateGraph` 執行相同的下載、轉錄、摘要、儲存與通知步驟。
+
+在 `.env` 設定全域預設，變更後重啟 processing worker：
+
+```bash
+PROCESSING_ENGINE=legacy
+# 驗證完成後可改為：PROCESSING_ENGINE=langgraph
+```
+
+Streamlit 建立任務時也可選擇 `Legacy` 或 `LangGraph` 覆寫單筆任務；選擇
+`Follow system default` 則使用 worker 的環境變數。API client 可在 `POST /tasks`
+加入 `"processing_engine": "legacy"` 或 `"langgraph"`。回退時將環境變數改回
+`legacy` 即可，已明確指定 engine 的待處理任務仍以任務設定優先。
+
+SQLite 會自動新增 `processing_engine` 欄位。若 Notion task backend 需要使用單筆
+覆寫，請先在 task database 建立名為 `Processing Engine` 的 Select property，選項為
+`Legacy` 與 `LangGraph`；未設定單筆覆寫的既有頁面仍使用全域預設。
 
 ## 快速開始
 
@@ -121,7 +148,9 @@ make extension-check
 | `whisper_summary/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
 | `whisper_summary/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
 | `whisper_summary/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
-| `whisper_summary/services/pipeline/processing_runner.py` | 下載、轉錄、摘要、儲存與通知的 orchestration |
+| `whisper_summary/services/pipeline/processing_runner.py` | Queue、lock 與 processing engine 選擇 |
+| `whisper_summary/services/pipeline/engines.py` | 共用 pipeline operations、legacy engine 與 engine contract |
+| `whisper_summary/services/pipeline/langgraph_engine.py` | LangGraph `StateGraph` orchestration |
 | `whisper_summary/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
 | `whisper_summary/infrastructure/llm/` | LLM provider、候選模型與 failover |
 | `whisper_summary/infrastructure/persistence/` | SQLite 與 Notion adapters |

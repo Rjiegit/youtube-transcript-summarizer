@@ -9,6 +9,10 @@ from whisper_summary.infrastructure.persistence.notion.utils import build_rich_t
 from whisper_summary.infrastructure.persistence.sqlite.task_adapter import NotionTaskAdapter
 
 
+def _notion_engine_label(processing_engine: str) -> str:
+    return "LangGraph" if processing_engine == "langgraph" else "Legacy"
+
+
 class NotionDB(BaseDB):
     """Notion database connector."""
 
@@ -31,6 +35,7 @@ class NotionDB(BaseDB):
         status: str = "Pending",
         source_type: str = "manual",
         source_channel_id: str | None = None,
+        processing_engine: str | None = None,
     ) -> Task:
         """Adds a new task to the Notion database."""
         self._ensure_configuration()
@@ -38,13 +43,19 @@ class NotionDB(BaseDB):
             {"type": "text", "text": {"content": url or ""}}
         ]
 
+        properties = {
+            "URL": {"url": url},
+            "Name": {"title": name_text},
+            "Status": {"select": {"name": status}},
+        }
+        if processing_engine:
+            properties["Processing Engine"] = {
+                "select": {"name": _notion_engine_label(processing_engine)}
+            }
+
         response = self.notion.pages.create(
             parent={"database_id": self.database_id},
-            properties={
-                "URL": {"url": url},
-                "Name": {"title": name_text},
-                "Status": {"select": {"name": status}},
-            },
+            properties=properties,
         )
         return self.adapter.to_task(response)
 
@@ -130,6 +141,7 @@ class NotionDB(BaseDB):
         error_message: str = None,
         processing_duration: float = None,
         notion_page_id: Optional[str] = None,
+        processing_engine: Optional[str] = None,
     ) -> None:
         """Updates the status of a task in the Notion database."""
         self._ensure_configuration()
@@ -144,6 +156,10 @@ class NotionDB(BaseDB):
             }
         if processing_duration is not None:
             properties["Processing Duration"] = {"number": processing_duration}
+        if processing_engine is not None:
+            properties["Processing Engine"] = {
+                "select": {"name": _notion_engine_label(processing_engine)}
+            }
 
         self.notion.pages.update(page_id=task_id, properties=properties)
 
@@ -188,6 +204,10 @@ class NotionDB(BaseDB):
             }
         if source_task.id:
             properties["Retry Of"] = {"relation": [{"id": source_task.id}]}
+        if source_task.processing_engine:
+            properties["Processing Engine"] = {
+                "select": {"name": _notion_engine_label(source_task.processing_engine)}
+            }
 
         response = self.notion.pages.create(
             parent={"database_id": self.database_id},

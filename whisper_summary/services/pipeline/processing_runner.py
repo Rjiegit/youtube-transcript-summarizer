@@ -9,10 +9,14 @@ from typing import Optional
 
 from whisper_summary.core.logger import logger
 from whisper_summary.domain.interfaces.database import BaseDB
-from whisper_summary.domain.media.models import VideoMetadata
 from whisper_summary.domain.tasks.models import Task
+from whisper_summary.services.pipeline.engines import (
+    LEGACY_ENGINE,
+    PipelineRuntime,
+    create_processing_engine,
+    resolve_processing_engine,
+)
 from whisper_summary.services.pipeline.dependencies import ProcessingDependencies
-from whisper_summary.services.outputs.path_builder import build_summary_output_path
 
 
 TASK_LOCK_TIMEOUT_SECONDS = int(os.environ.get("TASK_LOCK_TIMEOUT_SECONDS", "900"))
@@ -115,6 +119,17 @@ class ProcessingWorker:
         self.summary_storage_factory = summary_storage_factory or dependencies.summary_storage_factory
         self.file_manager_factory = file_manager_factory or dependencies.file_manager_factory
         self.notifier = notifier or dependencies.notifier
+        self.pipeline_runtime = PipelineRuntime(
+            db=self.db,
+            config=self.config,
+            downloader_factory=self.downloader_factory,
+            transcriber_factory=self.transcriber_factory,
+            summarizer_factory=self.summarizer_factory,
+            summary_storage_factory=self.summary_storage_factory,
+            file_manager_factory=self.file_manager_factory,
+            notifier=self.notifier,
+        )
+        self._processing_engines = {}
 
     def run(self) -> ProcessingSummary:
         """Run the worker loop until no executable tasks remain."""
@@ -175,101 +190,23 @@ class ProcessingWorker:
         start_time = time.time()
 
         try:
-            downloader = self.downloader_factory(task.url, self.config.data_dir)
-            download_result = downloader.download()
-            file_path = download_result["path"]
-            metadata = download_result.get("metadata")
-            if not isinstance(metadata, VideoMetadata):
-                metadata = None
-            previous_title = task.title
-            task.title = download_result.get("title") or task.title or task.url
+            engine_name = resolve_processing_engine(
+                task.processing_engine,
+                getattr(self.config, "processing_engine", LEGACY_ENGINE),
+            )
             logger.info(
-                f"Resolved task title={task.title} "
-                f"(download_title={download_result.get('title')}, "
-                f"previous_title={previous_title})"
+                f"Worker {self.worker_id} selected {engine_name} engine "
+                f"for task {task.id}"
             )
-
-            # Persist the resolved title while keeping status in Processing.
-            self.db.update_task_status(task.id, "Processing", title=task.title)
-
-            cfg = self.config
-            transcriber = self.transcriber_factory(cfg.transcription_model_size)
-            transcription_text = transcriber.transcribe(file_path)
-
-            summarizer = self.summarizer_factory()
-            if metadata is None:
-                summarized_text = summarizer.summarize(
-                    task.title,
-                    transcription_text,
-                )
-            else:
-                summarized_text = summarizer.summarize(
-                    task.title,
-                    transcription_text,
-                    metadata,
-                )
-
-            summarizer_label = getattr(summarizer, "last_model_label", "unknown")
-            model_label = f"faster-whisper-{cfg.transcription_model_size}+{summarizer_label}"
-
-            output_file = build_summary_output_path(task.title, task.url)
-            file_manager = self.file_manager_factory()
-            summary_file_result = file_manager.save_text(
-                summarized_text,
-                output_file,
-            )
-            if metadata is not None:
-                saved_summary_path = output_file
-                if isinstance(summary_file_result, dict):
-                    result_path = summary_file_result.get("path")
-                    if isinstance(result_path, str) and result_path:
-                        saved_summary_path = result_path
-                metadata_output_file = (
-                    os.path.splitext(saved_summary_path)[0]
-                    + ".metadata.json"
-                )
-                try:
-                    file_manager.save_json(
-                        metadata.to_dict(),
-                        metadata_output_file,
-                    )
-                except Exception as exc:
-                    logger.warning(
-                        "Could not save video metadata sidecar for "
-                        f"task {task.id}: {exc}"
-                    )
-
-            notion_page_id: Optional[str] = task.notion_page_id
-            summary_storage = self.summary_storage_factory()
-            storage_result = summary_storage.save(
-                title=task.title,
-                text=summarized_text,
-                model=model_label,
-                url=task.url,
-            )
-
-            if isinstance(storage_result, dict):
-                raw_page_id = storage_result.get("page_id")
-                if raw_page_id:
-                    notion_page_id = str(raw_page_id)
-                    task.notion_page_id = notion_page_id
-
-            duration = time.time() - start_time
-            self.db.update_task_status(
-                task.id,
-                "Completed",
-                title=task.title,
-                summary=summarized_text,
-                processing_duration=duration,
-                notion_page_id=notion_page_id,
-            )
-            self.notifier(
-                task.title or "untitled",
-                task.url,
-                cfg.discord_webhook_url,
-                notion_url=cfg.notion_url,
-                notion_task_id=notion_page_id,
-            )
+            engine = self._processing_engines.get(engine_name)
+            if engine is None:
+                engine = create_processing_engine(engine_name, self.pipeline_runtime)
+                self._processing_engines[engine_name] = engine
+            result = engine.execute(task)
+            task.title = result.title
+            task.summary = result.summary
+            task.notion_page_id = result.notion_page_id
+            duration = result.processing_duration
             logger.info(
                 f"Worker {self.worker_id} completed task {task.id} in {duration:.2f} seconds"
             )

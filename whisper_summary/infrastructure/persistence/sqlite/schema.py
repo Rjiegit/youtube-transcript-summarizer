@@ -22,7 +22,8 @@ def initialize_schema(conn: sqlite3.Connection) -> None:
             worker_id TEXT,
             notion_page_id TEXT,
             source_type TEXT DEFAULT 'manual',
-            source_channel_id TEXT
+            source_channel_id TEXT,
+            processing_engine TEXT
         )
         """
     )
@@ -84,7 +85,7 @@ def initialize_schema(conn: sqlite3.Connection) -> None:
         cursor.execute("ALTER TABLE tasks ADD COLUMN source_type TEXT DEFAULT 'manual'")
     if "source_channel_id" not in existing_columns:
         cursor.execute("ALTER TABLE tasks ADD COLUMN source_channel_id TEXT")
+    if "processing_engine" not in existing_columns:
+        cursor.execute("ALTER TABLE tasks ADD COLUMN processing_engine TEXT")
 
     conn.commit()
-
-

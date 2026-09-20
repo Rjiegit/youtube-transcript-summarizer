@@ -49,6 +49,14 @@ class NotionTaskAdapter(TaskAdapter):
         retry_relations = properties.get("Retry Of", {}).get("relation", [])
         retry_of_task_id = retry_relations[0]["id"] if retry_relations else None
         processing_duration = properties.get("Processing Duration", {}).get("number")
+        processing_engine_select = properties.get("Processing Engine", {}).get(
+            "select"
+        )
+        processing_engine = (
+            processing_engine_select.get("name", "").lower()
+            if processing_engine_select
+            else None
+        )
 
         notion_id = data.get("id")
         notion_page_id = str(notion_id) if notion_id is not None else None
@@ -68,6 +76,7 @@ class NotionTaskAdapter(TaskAdapter):
             worker_id=None,
             notion_page_id=notion_page_id,
             notion_url=notion_url,
+            processing_engine=processing_engine,
         )
 
 
@@ -111,4 +120,5 @@ class SQLiteTaskAdapter(TaskAdapter):
             notion_url=notion_url,
             source_type=(data.get("source_type") or "manual"),
             source_channel_id=data.get("source_channel_id"),
+            processing_engine=data.get("processing_engine"),
         )

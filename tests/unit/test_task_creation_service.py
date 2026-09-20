@@ -26,6 +26,30 @@ class TestTaskCreationService(unittest.TestCase):
             source_channel_id=None,
         )
 
+    def test_create_task_record_persists_engine_override(self) -> None:
+        db = MagicMock()
+        db.find_recent_task_by_url.return_value = None
+        db.add_task.return_value = Task(
+            id="1",
+            url=self.url,
+            status="Pending",
+            processing_engine="langgraph",
+        )
+
+        result = create_task_record(
+            db=db,
+            url=self.url,
+            processing_engine="langgraph",
+        )
+
+        self.assertEqual(result.task.processing_engine, "langgraph")
+        db.add_task.assert_called_once_with(
+            self.url,
+            source_type="manual",
+            source_channel_id=None,
+            processing_engine="langgraph",
+        )
+
     def test_create_task_record_uses_cache_ttl_for_manual(self) -> None:
         db = MagicMock()
         db.find_recent_task_by_url.return_value = Task(

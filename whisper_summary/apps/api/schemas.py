@@ -5,6 +5,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from whisper_summary.core.utils.url import is_valid_youtube_channel_id
+from whisper_summary.services.pipeline.engines import normalize_processing_engine
 
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
 
@@ -37,6 +38,10 @@ class TaskCreateRequest(BaseModel):
     completed_task_policy: str = Field(
         default="cache_ttl",
         description="Completed-task dedup policy (cache_ttl|block_existing).",
+    )
+    processing_engine: str | None = Field(
+        default=None,
+        description="Optional processing engine override (legacy|langgraph).",
     )
 
     @field_validator("url")
@@ -72,6 +77,11 @@ class TaskCreateRequest(BaseModel):
             )
         return normalized
 
+    @field_validator("processing_engine")
+    @classmethod
+    def validate_processing_engine(cls, value: str | None) -> str | None:
+        return normalize_processing_engine(value)
+
 
 class TaskCreateResponse(BaseModel):
     """Standard response after creating a task."""
@@ -91,6 +101,10 @@ class TaskCreateResponse(BaseModel):
     cached: bool = Field(
         default=False,
         description="True when the response was served from a recent completed task.",
+    )
+    processing_engine: str | None = Field(
+        default=None,
+        description="Task processing engine override, or null for the system default.",
     )
 
 
@@ -299,6 +313,5 @@ class ProcessingLockReleaseResponse(BaseModel):
         ...,
         description="Lock snapshot after taking the requested action.",
     )
-
 
 

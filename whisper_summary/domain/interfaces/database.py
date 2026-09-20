@@ -26,6 +26,7 @@ class BaseDB(ABC):
         status: str = "Pending",
         source_type: str = "manual",
         source_channel_id: str | None = None,
+        processing_engine: str | None = None,
     ) -> Task:
         """Adds a new task to the database and returns its representation.
 
@@ -126,6 +127,7 @@ class BaseDB(ABC):
         error_message: str = None,
         processing_duration: Optional[float] = None,
         notion_page_id: Optional[str] = None,
+        processing_engine: Optional[str] = None,
     ) -> None:
         """Updates the status of a task.
 

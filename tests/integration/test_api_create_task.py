@@ -139,6 +139,51 @@ class TestCreateTaskEndpoint(unittest.TestCase):
             source_channel_id="UC1234567890123456789012",
         )
 
+    def test_create_task_accepts_processing_engine_override(self) -> None:
+        mock_db = MagicMock()
+        mock_db.find_recent_task_by_url.return_value = None
+        mock_db.add_task.return_value = Task(
+            id="78",
+            url=self.normalized_url,
+            status="Pending",
+            processing_engine="langgraph",
+        )
+
+        with patch(
+            "whisper_summary.apps.api.dependencies.create_database",
+            return_value=mock_db,
+        ):
+            response = self.client.post(
+                "/tasks",
+                json={
+                    "url": self.valid_url,
+                    "processing_engine": "LangGraph",
+                },
+            )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.json()["processing_engine"], "langgraph")
+        mock_db.add_task.assert_called_once_with(
+            self.normalized_url,
+            source_type="manual",
+            source_channel_id=None,
+            processing_engine="langgraph",
+        )
+
+    def test_create_task_rejects_unknown_processing_engine(self) -> None:
+        response = self.client.post(
+            "/tasks",
+            json={"url": self.valid_url, "processing_engine": "other"},
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertTrue(
+            any(
+                "processing_engine" in error.get("loc", [])
+                for error in response.json()["detail"]
+            )
+        )
+
     def test_create_task_returns_conflict_for_block_existing_completed_task(self) -> None:
         completed_task = Task(
             id="66",

@@ -27,6 +27,7 @@ def create_task_record(
     source_channel_id: str | None = None,
     cache_ttl_seconds: int = 3600,
     completed_task_policy: str = "cache_ttl",
+    processing_engine: str | None = None,
 ) -> TaskCreationResult:
     existing_task = db.find_recent_task_by_url(url)
     if existing_task is not None:
@@ -60,11 +61,13 @@ def create_task_record(
                         cached=True,
                     )
 
-    task = db.add_task(
-        url,
-        source_type=source_type,
-        source_channel_id=source_channel_id,
-    )
+    create_kwargs = {
+        "source_type": source_type,
+        "source_channel_id": source_channel_id,
+    }
+    if processing_engine is not None:
+        create_kwargs["processing_engine"] = processing_engine
+    task = db.add_task(url, **create_kwargs)
     return TaskCreationResult(
         outcome="created",
         task=task,

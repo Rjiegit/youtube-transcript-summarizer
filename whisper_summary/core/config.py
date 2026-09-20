@@ -47,6 +47,7 @@ class Config:
             "TASK_API_BASE_URL",
             "http://localhost:8080",
         )
+        self.processing_engine = self._get_processing_engine()
 
         # File paths
         self.data_dir = "data"
@@ -90,6 +91,15 @@ class Config:
         os.makedirs(self.data_dir, exist_ok=True)
         os.makedirs(self.videos_dir, exist_ok=True)
         os.makedirs(self.summarized_dir, exist_ok=True)
+
+    @staticmethod
+    def _get_processing_engine() -> str:
+        value = os.getenv("PROCESSING_ENGINE", "legacy").strip().lower()
+        if value not in {"legacy", "langgraph"}:
+            raise ValueError(
+                "PROCESSING_ENGINE must be either 'legacy' or 'langgraph'."
+            )
+        return value
 
     def validate(self):
         """
