@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:62be794f5af911f830d32ec8fd39a9c94a473b1bb78101c55af0867a691517c8",
+  "pageVersion": "sha256:d23b6dd61bbbfa7c75885a61664f77a754692305f00ebd5e312984b4be8d141c",
   "claims": [
     {
       "id": "claim_a541333b266a4705af9012a0abb94745",
@@ -36,7 +36,7 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/apps/api/routers/tasks.py",
-          "version": "repo-file-v1:sha256:aa4390a5c17045fdb6eeaa6ac39042be4554271d6da1ee30aa22249b2d9684b4"
+          "version": "repo-file-v1:sha256:0714a3e92b9fca890d4a5cf3a909a20c79ae184178c9d4fc709a9a28b26077ff"
         },
         {
           "resource": "repo://whisper_summary/services/rss/channel_monitor.py",
@@ -50,7 +50,7 @@
       "evidence": [
         {
           "resource": "repo://compose.yaml",
-          "version": "repo-file-v1:sha256:dc474c3f3a459d8c16b06a9f5370dd6b1dee490432e8c565a31b9050f7049987"
+          "version": "repo-file-v1:sha256:aed3d1d6f774e05e2ef18a3844d5c1342488a450743e105570f44bf43dd8e310"
         },
         {
           "resource": "repo://whisper_summary/apps/workers/rss_monitor.py",
@@ -61,6 +61,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-13T10:51:33.281Z"
+    "at": "2026-09-23T13:19:05.664Z"
   }
 }

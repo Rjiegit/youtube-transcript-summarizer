@@ -4,6 +4,8 @@ title: 任務、鎖與結果持久化
 description: 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
 sources:
+  - id: openwiki-source-ad4df8250d444175a5c8ddb3
+    resource: repo://whisper_summary/apps/api/routers/processing.py
   - id: openwiki-source-4d928759c02fb22c29a10d25
     resource: repo://whisper_summary/domain/interfaces/database.py
   - id: openwiki-source-ed7ac39232dcc4e27533dae4
@@ -20,10 +22,10 @@ sources:
     resource: repo://whisper_summary/services/outputs/path_builder.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # 任務、鎖與結果持久化
@@ -38,9 +40,9 @@ verified:
 | --- | --- | --- |
 | Task CRUD/status | 本機 `tasks` table | Notion database properties |
 | 取得下一筆 | `BEGIN IMMEDIATE` 原子 claim | 讀第一筆 Pending 後 best-effort 改 Processing |
-| Task lease | `locked_at` + `worker_id`，可回收 stale task | 無真正 row lock |
+| Task lease | `locked_at` + `worker_id` + `lease_token`；過期 task 標記 Failed | 無真正 row lock |
 | Global lock | 單列 lease、heartbeat、owner-aware release | methods 為 no-op |
-| Multi-worker | 以 transaction/lease 協調 | 假設單一 worker |
+| Multi-worker | API 集中持有 SQLite queue，以 transaction/lease 協調 | 假設單一 worker |
 
 相同 API 形狀只代表可替換性，不代表相同 consistency guarantee。需要 background concurrency 時，SQLite 是現行具實際鎖保證的 backend。
 
@@ -48,14 +50,14 @@ verified:
 
 預設 database path 是 `data/tasks.db`。初始化會建立：
 
-- `tasks`：URL、status、summary/error、duration、retry relationship、task lease、Notion page id 與來源；
+- `tasks`：URL、status、summary/error、duration、retry relationship、task lease token、processing engine、Notion page id 與來源；
 - `processing_lock`：固定 id=1 的 global worker lease；
 - `recent_task_history`：每個 task 最新的 view timestamp；
 - `rss_channel_subscriptions`：channel、feed、enabled、watermark 與 poll status/error。
 
 Legacy database 會在啟動時以 `ALTER TABLE` 補上已知缺少欄位。這是輕量的 forward migration，沒有 versioned rollback。
 
-Task claim 在 `BEGIN IMMEDIATE` transaction 內選最舊 Pending 或 stale Processing，並在同一 transaction 寫入 Processing、worker id 與 locked time。Global lock 允許同一 owner 續用，其他 worker 只能在 timeout 後接管；heartbeat 與 release 都限制 matching worker id。Task 離開 Processing 時清除 task lease。
+Task claim 在 `BEGIN IMMEDIATE` transaction 內先將過期或缺少 lease 資料的 Processing task 標記 Failed，要求人工重試；接著選最舊 Pending，寫入 Processing、worker id、新 lease token 與 locked time。Heartbeat 和完成／失敗更新都必須匹配 worker id 與 lease token，過期 owner 不能改寫成果。舊的 global lock 資料與管理 API 仍存在，但常駐 worker 目前使用逐 task lease。
 
 Recent history 不是 task status：Streamlit 打開結果時 upsert view time，讀取按最新排序，並依 TTL prune。刪除 history 不會刪除 task 或摘要成果。
 
@@ -78,7 +80,7 @@ Summary output path 預設是 `data/summaries/_summarized_<timestamp>_<video-id>
 - 新增 task 欄位時需同步 domain `Task`、`BaseDB` contract、SQLite schema/migration、task adapter 與 Notion mapping。
 - 改 Notion property 名稱時要同時檢查 queue adapter、SummaryStorage、Nuxt schema detection 與既有 database。
 - 改 output filename 時要維持 Markdown/metadata sidecar pairing，並驗證長 Unicode title。
-- 新增 backend 不能只實作 CRUD；必須明確定義 task claim、global lock、stale recovery 與 retry semantics。
+- 新增 backend 不能只實作 CRUD；必須明確定義 task claim、lease heartbeat、過期處置與 retry semantics。
 
 ## 延伸閱讀
 

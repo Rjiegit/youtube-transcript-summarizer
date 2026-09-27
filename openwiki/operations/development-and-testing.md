@@ -12,14 +12,24 @@ sources:
     resource: repo://AGENTS.md
   - id: openwiki-source-ec214e818e93e527ce43036b
     resource: repo://apps/showcase/AGENTS.md
+  - id: openwiki-source-40202183da1fe23aacead855
+    resource: repo://apps/showcase/tests/read-sync-auth.test.ts
+  - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
+    resource: repo://apps/showcase/tests/upstash-read-state.test.ts
   - id: openwiki-source-f317ee207e1653d2033c81a4
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+  - id: openwiki-source-9398efacd8bb9280dd0ee0b5
+    resource: repo://tests/integration/test_worker_task_leases.py
+  - id: openwiki-source-e4dabfd80c2160d35bf96b4a
+    resource: repo://tests/unit/test_http_task_queue.py
+  - id: openwiki-source-bc6ea497842aa371304db838
+    resource: repo://tests/unit/test_processing_engines.py
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # 開發規則與測試策略
@@ -53,6 +63,8 @@ Python 使用 `unittest` discovery；快速隔離測試放在 `tests/unit/`，�
 
 Nuxt 使用 Vitest、Vue Test Utils 與 jsdom；測試放在 `apps/showcase/tests/`，命名為 `*.test.ts`。優先測試資料轉換、日期格式化、API handler、SWR cache 與 read state。
 
+目前針對多 worker lease 的 API／SQLite 整合測試、HTTP queue adapter、legacy／LangGraph 引擎選擇，以及 Showcase 的同步驗證、設定與 Upstash 合併都有 focused tests。修改這些跨程序契約時，應先執行對應測試，再視變更範圍跑完整 CI 指令。
+
 CI 有三個 jobs：Python執行 Flake8與 unittest，Showcase執行 npm test/build，Browser Extension執行 manifest/assets/JavaScript validator。Betterleaks 主要由本機 pre-commit hook執行。
 
 ## Commit 與文件規則
@@ -66,5 +78,5 @@ Commit subject 使用簡短、現在式的 Conventional Commit 風格，例如 `
 - [快速開始與開發導覽](../quickstart.md)
 - [設定、執行與部署](configuration-and-deployment.md)
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
-<!-- openwiki: broken internal link [../testing/test-strategy.md] file "../testing/test-strategy.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- [測試策略與擴充指南](../testing/test-strategy.md)
+- [任務生命週期與併發控制](../workflows/task-lifecycle.md)
+- [跨裝置已讀同步](../integrations/read-state-sync.md)

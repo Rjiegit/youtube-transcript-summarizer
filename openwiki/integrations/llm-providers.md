@@ -3,6 +3,9 @@ type: integration
 title: LLM Providers、選擇與 Failover
 description: 說明 Gemini、OpenAI、Ollama 的候選資格、加權選擇、provider 呼叫與一次性 transient failover。
 tags: [llm, gemini, openai, ollama, failover]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-27T11:07:35.085Z
 sources:
   - id: openwiki-source-68a25612112798dab8afa5ab
     resource: repo://tests/unit/test_summarizer_service.py
@@ -18,10 +21,7 @@ sources:
     resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+generated: { by: "codex", at: "2026-09-27T11:07:35.085Z" }
 ---
 
 # LLM Providers、選擇與 Failover
@@ -30,19 +30,20 @@ verified:
 
 ## 候選池與資格
 
-每個 `ModelCandidate` 包含 backend、model 與正權重。候選池建構時拒絕空池、未知 backend、空 model、bool/非數字或非正 weight，以及重複的 `provider:model`。實際選擇會先排除本次已失敗的 candidate，再移除沒有 credential 的 backend，最後只對剩餘權重重新計算隨機分布。
+每個 `ModelCandidate` 包含 backend、model 與正權重。候選池建構時拒絕空池、未知 backend、空 model、bool/非數字或非正 weight，以及重複的 `provider:model`。實際選擇會先排除本次已失敗的 candidate，再移除不可用的 backend，最後只對剩餘權重重新計算隨機分布。
 
 Provider 的可用條件是：
 
 - OpenAI：存在 `OPENAI_API_KEY`；
 - Gemini：存在 `GOOGLE_GEMINI_API_KEY`；
 - Ollama：存在 `OLLAMA_API_KEY`，client 另讀取 `OLLAMA_HOST`，預設為 `https://ollama.com`。
+- Codex CLI：`CODEX_BIN` 指向的執行檔可在 PATH 找到；不依賴上述 API keys。
 
 沒有 eligible candidate 時，selector 會以明確錯誤列出 configured candidates 與 unavailable backends。Credential 只讓 backend 具備入選資格，不會自動把 manifest 已安裝 provider 或任意模型加入候選池。
 
 ## 預設 weighted selection
 
-預設自動池目前只有六個 Gemini models，權重是相對機率：
+預設自動池包含六個 Gemini models 及一個 `codex_cli:gpt-6-luna`。只有 Gemini 可用時，權重比例如下；Codex CLI 同時可用時，其權重 `99` 使它占完整候選池 90%，六個 Gemini model 合計 10%。
 
 | Model | Weight | 理論比例 |
 | --- | ---: | ---: |
@@ -52,6 +53,7 @@ Provider 的可用條件是：
 | `gemini-3-flash-preview` | 1 | 9.09% |
 | `gemini-3.1-flash-lite` | 3 | 27.27% |
 | `gemini-3.5-flash-lite` | 3 | 27.27% |
+| `codex_cli:gpt-6-luna` | 99 | 僅與 Gemini 同時可用時為 90% |
 
 Selector 每次 request 做一次 weighted random draw；它沒有紀錄已用 RPM、沒有跨 request quota state，也不保證短期分布。因此 model 註解中的 Max RPM 只是設定權重的依據，這個機制不是 rate limiter 或 quota scheduler。
 
@@ -61,6 +63,8 @@ Selector 每次 request 做一次 weighted random draw；它沒有紀錄已用 R
 
 Ollama import 是 optional guard：套件不可用時會保留明確 runtime error，而不是在 module import 階段讓所有其他 provider 無法使用。
 
+Codex CLI 以 `codex exec --ephemeral --ignore-user-config --sandbox read-only --model ... -` 接收 prompt，並讀取 stdout 作為摘要；執行時移除子程序環境中的敏感 credential 變數。`CODEX_TIMEOUT_SECONDS` 預設 900 秒且必須為正整數。非零結束碼或空輸出會使 task 失敗。
+
 ## 一次性 failover
 
 第一次 candidate 失敗時，只有被分類為 transient 的錯誤才會重選一次，且第二次排除原 candidate：
@@ -68,6 +72,7 @@ Ollama import 是 optional guard：套件不可用時會保留明確 runtime err
 - OpenAI：rate limit、timeout、connection error 或 HTTP 5xx；
 - Gemini：quota/resource exhausted、timeout、temporary unavailable/server 類錯誤；
 - Ollama：timeout、connection、HTTP 429 或 5xx。
+- Codex CLI：timeout；一般非零結束碼不視為 transient。
 
 認證錯誤與一般 4xx 不切換 candidate，直接向上拋出。若沒有另一個 eligible candidate，重拋第一次的原始 exception；若 fallback candidate 也失敗，第二個 error 直接結束，不嘗試第三次。metadata context 在第一與第二個 candidate 間保持一致。
 

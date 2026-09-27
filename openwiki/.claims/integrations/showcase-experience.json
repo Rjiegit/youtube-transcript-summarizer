@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c3393420fe5b70a607167c0bad4b959d491cc2aa3a0dcc53487b280ae17b8d9b",
+  "pageVersion": "sha256:ed73adf198fe67a266d642dcdf5d4b5a8453f262eb304fe833716b0df5cf6323",
   "claims": [
     {
       "id": "claim_b49be5796ebb45d68855fac7f4755cef",
@@ -21,12 +21,12 @@
       "statement": "已讀狀態在 SSR 安全的 Nuxt state 中管理，browser 可用時同步 localStorage，儲存失敗不影響 session 記憶體狀態，且最多保留 500 筆。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L3-L93",
-          "version": "repo-lines-v1:sha256:f641fdb703d7efdbb7c41db2a018e63b990c9c42a8f2d268b0403b0354ac66cf:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlNTRlYTc0NWI0OGE5ZjA2ZDMyMTAyNTMxMzAyMGQzZmZjYWI4YzZhMjRmM2ZkNGI4OTQzMjM5MjI0ODQyMTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYjVhYjVlY2VmMGE0MTVhY2YzYzY3MDRiYWU1YzkyNzJhMzJlMmEwOWNjN2Q1MWZhOTdmMWMwNTgzZWVkZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3ZWM1MWVjNTVmZmMzNzA0YjFiNmRiODEyZjM2MjViYWJjOThiOWY5OTNhMmI0YzVhMWJiZTNkNGY0ZDVlMzcifQ"
+          "resource": "repo://apps/showcase/composables/useReadResults.ts",
+          "version": "repo-file-v1:sha256:81654871abdcb7636d942b87a3b0b28130a7f9ce6fb39aa6c11fc59624daf08b"
         },
         {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L95-L182",
-          "version": "repo-lines-v1:sha256:ae49defde736d07f433326078ee480f9b6abca509f0e321a9701fcacb3e1c8c8:eyJzZWxlY3RlZExpbmVDb3VudCI6ODgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNkNmMwNTI3NTM0YWE2MDIzYmRmZmUzZjc2MDg5MGIzODRlNzE3NWQxZDlhMDQ3OWZkMTg1YmFjOTMxZjU3N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJkMGYyZDNhM2FhZGEyNzU4NjQ1NzhkMGE0MzkxNTYzOGQ1NDNmZWNhMmM5NDg1OGRiOTQxMjExZTg2Y2VmMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI5NDRjODhmNDg0MmY0YmZhNWZiYWM2MmY0YzFkNzA2ZTMyYThjN2NjODAwMmMxYTgwYTFlMjQ1ZWFmMWYzMmEifQ"
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L3-L93",
+          "version": "repo-lines-v1:sha256:9001f5e032146962ad5b65fd8464291e51ea9c00176c9e589e224ec82c714676:eyJzZWxlY3RlZExpbmVDb3VudCI6OTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxYjdmOTA3OGU5ZTRlMWE0OWRiZDk4MmZiZmIxYWU5ZmVlMzU5NDlhNjhhNTdiN2FiNWE4NGE5ZDcyZTA1MmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmZmQxYjIyMTIzZTMzNzhkNTVmNGIzNDY2NWUyMzEzNTQ5ZjZjZGQ2YTZmNTM0NmM4NTkyMGUxNTk5YjJkMTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYjVhYjVlY2VmMGE0MTVhY2YzYzY3MDRiYWU1YzkyNzJhMzJlMmEwOWNjN2Q1MWZhOTdmMWMwNTgzZWVkZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhMTg0ZTllZWM2NzEzZDZkOGQ0NmZmNTgyNWRkMDNkODUyYjkyOGVhOWY3NTFlNGE4MWVlMTEyZmYzZDJiZGUifQ"
         }
       ]
     },
@@ -113,10 +113,28 @@
           "version": "repo-file-v1:sha256:2d58c7526975ba5d67b379885757eca19bbcd7ef99aa6a40ffdb39f270c95700"
         }
       ]
+    },
+    {
+      "id": "claim_cd151f4755d64fecb3b3f370b5f903e4",
+      "statement": "首頁提供選用的跨裝置已讀同步控制，經個人同步碼取得 session 後透過私人 API 同步；遠端故障時保留本機已讀資料。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/components/ReadSyncControl.vue#L1-L95",
+          "version": "repo-lines-v1:sha256:19abea1e676cd223c52a1170e7984ce33fb89155b3ba83d27f3b2fd112236f85:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmNDMzNTYxNDJhMWEyMzRiMWEwMzE5ZmIyNzYzYmU3ZWQxMDhmYjgxYWM5YzNlNmQyNDQ5NmY5MmVhYjk2YWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1MjI4NDBlZDVlYzU4YTM2MmYyMGI3MWI4YWViNjc1ZDdlZmI5NzQzOWM5MGMzZjYxNTVhZmVjNjUyODU5NDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L275-L390",
+          "version": "repo-lines-v1:sha256:93becf83d82f98b9736b0028a27de5bd406dceb796c8a3b25afcc433a64ec830:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyN2U1Nzg4ZDVkOWQ3M2QyNGE4MWRiYzBhNWE3NGJmYTgyYzljM2IzYWY5OWU1MmFmNzk2ZTkwYjQ2OGE4YTNkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJhNmYzNTJmNmE2MGE1M2JhNGU5MzZkMzVkNGVjMzlmOGUyZDJmN2ZmMTA1ZTliMDZlNDBjMzhhMWE0MTc1Mzg5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkYzdmYTdjZDgwYmFlYTk4NzAyMWZkNTNjYjMyOTM5M2FkYjExM2ViOTljMGFlNzI3NDA2NDcyMDUzODU4ZTkzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyODU2ZmY5NThkMjNkNTMzMmJkYzg5NTg5NmY3ZTA2YzIxNzkzZjIzNjQwYzc2ZDBhMzMxODUzMTFlOGM2ZGNlIn0"
+        },
+        {
+          "resource": "repo://apps/showcase/pages/index.vue#L1-L55",
+          "version": "repo-lines-v1:sha256:1d7ab104310489391ca3d1506105300d7da35ca9bd48b60058d639307cb3231a:eyJzZWxlY3RlZExpbmVDb3VudCI6NTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmNDMzNTYxNDJhMWEyMzRiMWEwMzE5ZmIyNzYzYmU3ZWQxMDhmYjgxYWM5YzNlNmQyNDQ5NmY5MmVhYjk2YWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg1OTk5MDYxOTRiMjNiYmZlZWZiOTY0NmE0YzdkNWU5MDJjYTZhZmQ5NmEyM2IzNzRmZmRmMTRlNzNiZTk5MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MTYwNzM1MjllNjBhZTlmMGQ5NDFlOWJkMzJhZDQ4ZWNmNWNiMTc3NjY1NThlOThiMWY3NjM1YzVmZjc4MGYifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-13T10:51:33.281Z"
+    "at": "2026-09-23T13:19:05.664Z"
   }
 }

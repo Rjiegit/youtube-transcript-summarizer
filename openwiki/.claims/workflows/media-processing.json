@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:b06ef87a05d8479c85bc69223d862fca8d14df2bbce497d10e0c98ea8fd9c52e",
+  "pageVersion": "sha256:c82f31f370ac9f2dcb4d26f1228311a89fefa92b558865ab381c6f0ac01126cf",
   "claims": [
     {
       "id": "claim_2c361d6854b0489a9c545d131c871425",
       "statement": "單筆 pipeline 依序執行下載與 metadata 擷取、更新 title、轉錄、metadata-aware 摘要、Markdown 與可選 JSON sidecar 保存、Notion 保存、Completed 狀態更新與 Discord 通知。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L220-L318",
-          "version": "repo-lines-v1:sha256:43ea2c4b53b7102c22b1f6df208e78b467e2236cfbec4c9e5d94333c1c8b42a0:eyJzZWxlY3RlZExpbmVDb3VudCI6OTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmYWNmZmQ3YTdjYWZkZjMxYWEyYmY0Y2M0YjI2OTE4MDk0ODc5YmMxZjM5ODY3NzVkNjU5YTRmZDYzNDllYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmNzA1MzgyZjM0NDU1MzAwMTFjMjNhNzE1YTkwYjU0NmE5MDc3YWMyN2Q0MmY5MjZhYmM3YWM2MzVhY2Y0Y2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
     },
@@ -17,12 +17,8 @@
       "statement": "Pipeline 任一步驟丟出 exception 時 task 會轉為 Failed並保存 error與 duration，worker 可繼續下一筆。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L180-L220",
-          "version": "repo-lines-v1:sha256:f787f5d74e4b5318922fa203aeafb9ae2b65c68061aeb21b80db9a57af6124f9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5ZTUwMDA2ZDUwYjA3MzNmMjdiNzRmZjcyNGM1YzI0MjM5MjM4NmZlOTUyMWVlYjhkNmIwMjA1ODJjMWUwYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE4NWY0ZDkzZjJjODRmMzM3NzY0NDAxZmUzNGM3ZGI5ODQ2NWE1NmNmYWI4MmE0YWViMGRjNmJmMjA5NTFkNTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUxOWQ5YTI2ODM2NjMyNTViY2Q4MDE5YzdmNGIwMDZjMGNlZTMxMTU4MjVlZTlhNWIzNDUxYjRmZGM0YjZkNWQifQ"
-        },
-        {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L280-L318",
-          "version": "repo-lines-v1:sha256:6da53e397f61456174be61979e80d059bbf5a337bf28831c0b3b2d00f98a4ef2:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxN2FjMWExZDBjYTI2YTM4ZGQzMzc3MzNjZGY0M2QwYWE3NjZlYTRjODZkMzVhMTdhMzZhZGQwOTczMDcwOGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmYWNmZmQ3YTdjYWZkZjMxYWEyYmY0Y2M0YjI2OTE4MDk0ODc5YmMxZjM5ODY3NzVkNjU5YTRmZDYzNDllYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwNmJjYjEyNmNiNjk2N2YyYTUwNGMxYjE3MGE1OTg4MDY0MTFiYjEwM2U4NWVkMTAxYzk1YzViNThiOWY0YzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
     },
@@ -32,7 +28,7 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L90-L170",
-          "version": "repo-lines-v1:sha256:51411811b6140809b764e814398fbcf779877a587574053e8373e0b770143277:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYzMjhiZGI5NjIwYzRkOWQyZDFjMTI4MjY4NDU0ZWFkNDViNmQzYmEwYzJjNTUxN2Q3MTA1MmYwZjJlYTg5ZTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2MDljM2YwODFhNTAxMDM4ODAxNGM1MjBlZjAyM2M5MDM1NzFhNzFmNDRhNDRhMGFmODI2MDM1YzFkMjJjNWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUyMDU3MjllNzc4Mjk5NDY5MjFlMTA0NGM4YmFmZGM1M2EzNjM5MmFlNWM2Yjg3MTc1NDljNDU1NDQxYjY0OTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzZTUyOGI5NmU1ZTIzMzEyNmQ4YTBhMzFmOGM5MWY0ZDU2YWQ3MzBmNTczMGE1M2VlZTA2OGJlNjE1OWQ2NGMifQ"
+          "version": "repo-lines-v1:sha256:c69599dbf51776a2888608e4284fe8f531d27da908f0430c03e3f540c703e6b2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmMzI4YmRiOTYyMGM0ZDlkMmQxYzEyODI2ODQ1NGVhZDQ1YjZkM2JhMGMyYzU1MTdkNzEwNTJmMGYyZWE4OWU4IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlNjA5YzNmMDgxYTUwMTAzODgwMTRjNTIwZWYwMjNjOTAzNTcxYTcxZjQ0YTQ0YTBhZjgyNjAzNWMxZDIyYzViIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlMjA1NzI5ZTc3ODI5OTQ2OTIxZTEwNDRjOGJhZmRjNTNhMzYzOTJhZTVjNmI4NzE3NTQ5YzQ1NTQ0MWI2NDk4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwM2U1MjhiOTZlNWUyMzMxMjZkOGEwYTMxZjhjOTFmNGQ1NmFkNzMwZjU3MzBhNTNlZWUwNjhiZTYxNTlkNjRjIn0"
         }
       ]
     },
@@ -42,11 +38,11 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L172-L204",
-          "version": "repo-lines-v1:sha256:8d453eaf69a397da2be85f35186e275bcdf1159fd977908cf3111556c90b0944:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE2ZjdmNjNhYTM4ZDVlMjBhY2Y3M2E0ZWQzMDBmMGYxNzgxMDJkNzNiODI5ZjlhY2U0MTAyNWQyMTY2NGNmNzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzYmVmZGIzMTQ0OTQ3NmI1NDU1YmFkNDU1OTZlNmVmMGY4M2MxNWNiNDBlYTUyMjJjODE2NzU4ZTRjZDM3ZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI2MzE4MGJmM2M0MjMxZGI3OWM1YzkzOGU4YzA2OTlhNDA3NTI2ODM5OGZhOWQxOWRjZWEyZmIwODk4YjY5YjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyZTliMDVmZDgxYzU0OGM0N2RiOThlNTQ1MjM4NjZkOWQzYjI4ZjVmNDAzYTFmMTNlNzE4ZGZjYzIzOGZiNjIifQ"
+          "version": "repo-lines-v1:sha256:975fc32c5287cc11c0a307ba5450d369a2a3147edf4651be6308b49b7bb96371:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzMzBkZGFlOTEzNjc0ZWE2Yzk2ZThlMmRhMWNmYzA1MjJhNTYzZjhmYmJjMDczZTI3OGFiNDA0NmZiZmIyMDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyODliMWJjZTg1MmY4NjhlNmUzN2ZmYWEyNzc0MTZhNmEzNzRjOTQ3MTIwMWE3ODcxNGJhNDQ1YWY5YzczMzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkZjNlN2E0ZTcwNTMxZjQxNmFhNDhjNGE5Yzg4Nzc1YzhmMjlmNmE4OTNmNjg3MzQ1OGEzNzVkMWFmY2UzZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIyMzE4MGVmNGM4NTQzZGNhZjFmMzBkZTFiZjJmYTE1MTNkYmZhNWIzYmZmOGEyZTNhZjFiYzM3OGM3MWRjNjAifQ"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L238-L275",
-          "version": "repo-lines-v1:sha256:c42d745402e0205176987b14a2c0e461f6c2657f3c8ba7b45558c8bd2b023e44:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYxNzhmY2QyZTM5ZmJkZmJlOGIzZmUxYmI5ZWZhOWZjMzEzYzhmZWVlNzg5Zjg2MzA4ZjNiOTNhNTFlYjllNDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdkOWUwNzM4MTY4MDkyZjJiMDhiZjgwYWFjOTA1NTMwZmVhZjVhMDZkNDAyMjljMzZlNTI3YzExYjk3ODI0ODIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBiMjlhMWE2ZWYzYzlmOWE4MTEyYzJkYmRlNzQ1ZTA5NThjNDkwNzdhMGMzMTY0MWM5ZTVkNGFiNjJmY2ZmZTUifQ"
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
     },
@@ -88,11 +84,11 @@
       "evidence": [
         {
           "resource": "repo://tests/unit/test_processing_worker.py#L214-L271",
-          "version": "repo-lines-v1:sha256:e2df4b035af36dd71c099425b912e9541e88a18294c744d38c6db5aceb62aacb:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhZmFiZTQwMTI4YzlhOGZiZmQ4NmRmOGVkMzZmMjU5MDhjYjc2MmZjN2EyYjcwYjBhMzUxZTQwMDU3ZGI5N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmNTA3OGRiOWQ1MGFjNzlhODVmZGViNThkOWRmNWU1MjIxMGY0ZjJmOGI2NTJmYzg2NTJmMGQ3NWFlNzViMzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE1NDA5NmVmMjRiOGVmNTlmYjE0NjI5NmQ0NjBmMWM3MmJjNmMzODMzYWI1MjdmNTAwMzMyZDBlMWE0MTFhNzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+          "version": "repo-lines-v1:sha256:c8ecebca844c487a44a4a127f5918f9d533c813a32d07e1ece1bdc720c241835:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYTRkZTE2Zjc5NTJiYzczMGIzYzY1Y2M2Zjg5YTBkYTk3OWU1M2ZiNDY5MjU5ODM2M2VlMmYxMzNlMTVjMmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlOTNkODkzOTA2ZWVhZjJjYWRjYzY1NTg1OTdiZDkzMzBlMmViNjlkZmI2MGE5YzgxNzUyMTg1MjdlNzI2ODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OGJiMTc5MGYyM2QwMjcyNGM1ZTgwNmUxNDIxMTFhZTQxMDAwOTMwOWFlZGVjOWE5ZDQ5MTM5MWRiODBmOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L250-L318",
-          "version": "repo-lines-v1:sha256:8153588984ea8daf3b47fb09c90a1032de56821d8145b194d692f907e7b968ee:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVmYWNmZmQ3YTdjYWZkZjMxYWEyYmY0Y2M0YjI2OTE4MDk0ODc5YmMxZjM5ODY3NzVkNjU5YTRmZDYzNDllYzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxYTI3NTBjYmM1NjJjNjQ2MmQxODU5NGUzMjJjOWYyOWFhNmIyYTk0NDQxYzViZjMxNDVlNThkOWU3MjE0Y2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
     },
@@ -101,8 +97,8 @@
       "statement": "沒有 VideoMetadata 的 download result 仍使用兩參數 summarize 且不寫 sidecar，維持既有 downloader 與測試替身的相容性。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L220-L280",
-          "version": "repo-lines-v1:sha256:0267e7df88ceffeb1ec246ae22b5b88075232774223e5e488501f6e13c3ded60:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxN2FjMWExZDBjYTI2YTM4ZGQzMzc3MzNjZGY0M2QwYWE3NjZlYTRjODZkMzVhMTdhMzZhZGQwOTczMDcwOGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRmNzA1MzgyZjM0NDU1MzAwMTFjMjNhNzE1YTkwYjU0NmE5MDc3YWMyN2Q0MmY5MjZhYmM3YWM2MzVhY2Y0Y2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJhMjdiY2I5N2NjZGI4MjE0OGUyZTA3NWEyNjUwNDUwYTg5OGY5NzYyY2E5NDZmZDBmMDc3ODJhMDlhMGMyMDkifQ"
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
     },
@@ -112,17 +108,45 @@
       "evidence": [
         {
           "resource": "repo://tests/unit/test_dedicated_processing_worker.py#L1-L34",
-          "version": "repo-lines-v1:sha256:062a00f96bb18c662058bbdbfd680325a167bd6b6ac2832d2f4ed23905fce847:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmZGE4Nzk3ZDA1YTc4OGI1YjViZTI2NzAwNzhkNjNjZjVkZDk0MmY0Nzk2NzlkMjY0NmJlMWQ2NmQ2MzJlZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MDdkM2I2NGI2MmNiYzZjODMzYzUxYWI5YjUzMjBkYjRlZThlYjgwNmMwNWE4NDMwYmMwOTg4OWQzOTI1NGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:1e970b452d851f6b48365601f837138f44c2686dce8f31e7a4603d1b88a16ac9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmZGE4Nzk3ZDA1YTc4OGI1YjViZTI2NzAwNzhkNjNjZjVkZDk0MmY0Nzk2NzlkMjY0NmJlMWQ2NmQ2MzJlZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5Y2I5M2FmM2MwYzZiMmUyYWVkMDM2MmNkMzk2Nzk2MmM1OTU4YzE0YmYzMDE0MWJlMTBlNWEwODg0MWJmZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ5NTk3NjBjOWM4MTQyNmVjNGM2ZTY5ZDYyMDFjZmNiODYzNzc0MTk1YmNmM2U5YjM3YTliNTE3Yzc2M2Y1NDIifQ"
         },
         {
-          "resource": "repo://whisper_summary/apps/workers/processing_worker.py#L15-L48",
-          "version": "repo-lines-v1:sha256:95c52750b28ab897cd3a6fb72026447661618bf15f656966b6c8bc2cf64ef515:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyOTBjNDU3YmVlODlkZTg1Y2EyOTU1ZTA2N2JiNzg2Y2VjY2JjMzUyMmQyMjNjYjYzZjNhMDYzNjI5YzE5YWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmZTc1YmNlM2QxZDAzYzNkNzVlZDRlOWIxZTUwNzQ4MWRmYjA2NjRhM2Q5NGM3Nzc0YTVlOTNlYzg5YmQzYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/apps/workers/processing_worker.py",
+          "version": "repo-file-v1:sha256:26a5371f0360458b78ed083847f354cd54a276c091cdcaacb2c9bedc6b0e9830"
+        }
+      ]
+    },
+    {
+      "id": "claim_33713190a4ab406b8c0db19f92620bb5",
+      "statement": "ProcessingWorker 依 task override、全域設定、legacy 預設的優先序選擇引擎；legacy 與 LangGraph 共用相同 PipelineOperations 順序。",
+      "evidence": [
+        {
+          "resource": "repo://whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:9cc0f4aa5f0f897fca207cc4c68666c57dfaa6ed32d986b0353c30bb59adbd70"
+        },
+        {
+          "resource": "repo://whisper_summary/services/pipeline/langgraph_engine.py",
+          "version": "repo-file-v1:sha256:dfcd67b1b9ee4dd7948fa644d780929a7245827802ec4f107df0f6c2f1af8d27"
+        },
+        {
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L205-L218",
+          "version": "repo-lines-v1:sha256:49886e44631901d3ecd0d574abcdc1ab17918f2cb716ce39d7edf50fb41ffb31:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1NjljYjA5MjgwZWUwNzgxOTQ1ZTQ4ZDQwNDFiZDJkZmFhZTY5MWFkMmVhYmY1ZDNjYmEwODQ2YzcyMTZjYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NjNkNzcyNDExZDM0NWYzMDNkOTAzMWVlYWZkYWRjMzIyMDFiMjdmMGU3MGFiNDM3ZjdlZDA2ZTY3NjIzZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0OThjZWNhZWQ4ZDg2ZjVjZTg0ZGEyNGVkYjRmODZhNGY3OTAwZmFiOWFjODk5N2ZhM2JhNzJlYWQxNmY1YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3MmYxY2Y3NGE3ZWJkYTc0YjRkMzY5ZGFkODE3ZTY4MTM4Y2NjMGQwMmVjYzg5ZTliYmNhOTlmMDY0ODk2ZTkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e95f562049ff4955beacbbe0d02a2042",
+      "statement": "Worker 失去 task lease 時停止該 task 的回寫，避免舊 owner 覆蓋新狀態。",
+      "evidence": [
+        {
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L225-L250",
+          "version": "repo-lines-v1:sha256:18dc19b64aac2da043c1587a5ed2c74c95b6d922a8f9ca26c0c74c1ff02dda79:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1MjM2ZDM4ODQ0MjE5Y2JlZjg0OGRmMjY2ZTNmYjdiZmRlNTZjMTFiZWYzMDY1ZTgzMzkyOTViNTEzZTFhZjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczZmYzOTA4MGYzYzUzMmY1NjRmNDk1ZWYyNTdiMTJiNWIzOTlhNGE0ODUxY2EzZTM2NzAwMzIzNGE0MDQ5MGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ZWI3YTlkNDA5NTNkODRjNDFkZjQyZmI1YWYyM2VmMTM3M2YwZTFlMGIxODdlY2JmZDQ2MmUyNmRjNTk1ZjUifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-13T10:51:33.281Z"
+    "at": "2026-09-23T13:19:05.664Z"
   }
 }

@@ -5,7 +5,7 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-27T11:07:35.085Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -15,10 +15,14 @@ sources:
     resource: repo://apps/browser-extension/options.js
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
+  - id: openwiki-source-bb92958ed21ee9cf0accb45d
+    resource: repo://apps/showcase/components/ReadSyncControl.vue
   - id: openwiki-source-bbc421d322d74564a269df19
     resource: repo://apps/showcase/package.json
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
+  - id: openwiki-source-3b0efe03f5b86982327fa144
+    resource: repo://apps/showcase/server/utils/read-sync-config.ts
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
   - id: openwiki-source-012f2c78e3b1446dfc35803f
@@ -29,6 +33,8 @@ sources:
     resource: repo://scripts/install-git-hooks.sh
   - id: openwiki-source-ad4df8250d444175a5c8ddb3
     resource: repo://whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-f6e59996a2bf7f9d896e2cd5
+    resource: repo://whisper_summary/apps/workers/cli.py
   - id: openwiki-source-4796880dadec1e10c195387c
     resource: repo://whisper_summary/apps/workers/processing_worker.py
   - id: openwiki-source-f60b7b12c706e6741d8191c8
@@ -39,7 +45,7 @@ sources:
     resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 ---
 
 # 快速開始與開發導覽
@@ -62,15 +68,15 @@ make api
 make streamlit
 ```
 
-API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。預設自動摘要池目前只有 Gemini，`.env` 請提供 `GOOGLE_GEMINI_API_KEY`。`Config.validate()` 雖接受任一摘要 provider key，但只有 OpenAI 或 Ollama key 仍無法使用目前的預設候選池；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `.env`。
+API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。預設自動摘要池包含 Gemini 與本機 Codex CLI；`.env` 請提供 `GOOGLE_GEMINI_API_KEY`，或確認 `CODEX_BIN` 指向可用的 Codex CLI。只有 OpenAI 或 Ollama key 仍無法使用目前的預設候選池；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `.env`。
 
-建立 task 後 API 會把工作寫入 SQLite queue。另開 terminal 啟動常駐 processing worker：
+建立 task 後 API 會把工作寫入 SQLite queue。設定 `PROCESSING_WORKER_TOKEN`（或沿用 `PROCESSING_LOCK_ADMIN_TOKEN`），另開 terminal 啟動常駐 processing worker；worker 透過 `TASK_API_BASE_URL` 呼叫 API：
 
 ```bash
 make processing-worker
 ```
 
-需要一次同步處理目前 queue 時，可執行：
+需要一次同步處理目前 queue 時，可在 API 仍執行的狀態下執行：
 
 ```bash
 make run
@@ -84,7 +90,7 @@ make run
 docker compose up -d
 ```
 
-這會啟動 API、Streamlit、processing worker 與 RSS monitor，對外提供 API `:8080` 與 Streamlit `:8501`。API 與 processing worker container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
+這會啟動 API、Streamlit、processing worker 與 RSS monitor，對外提供 API `:8080` 與 Streamlit `:8501`。Streamlit、RSS monitor 與 processing worker 都透過 Compose 內的 `http://api:8080` 存取 API。API 與 processing worker container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
 
 ## Nuxt Showcase
 
@@ -148,6 +154,7 @@ npm --prefix apps/showcase run build
 | 維護 RSS channel automation | [YouTube RSS 自動化](workflows/rss-automation.md) |
 | 修改 Notion schema 或 Python/Nuxt 整合 | [Notion 資料整合](integrations/notion-and-showcase.md) |
 | 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](integrations/showcase-experience.md) |
+| 設定跨裝置已讀同步、session 或 Upstash | [Showcase 跨裝置已讀同步](integrations/read-state-sync.md) |
 | 設定 Docker、env、cache 或部署 | [設定、執行與部署](operations/configuration-and-deployment.md) |
 | 新增或定位測試 | [開發規則與測試策略](operations/development-and-testing.md) |
 
@@ -155,6 +162,6 @@ npm --prefix apps/showcase run build
 
 - Showcase 顯示缺少設定：先執行 `npm run check-env`，再查看 `/api/showcase/diagnostics`。
 - diagnostics 正常但無資料：查看 `/api/showcase/health`，確認 Notion integration 權限、database id 與 status schema。
-- task 已 Pending 但未開始：確認 dedicated processing worker 正在執行，或用 `make processing-worker` 啟動；`POST /processing-jobs` 只會確認目前採 dedicated mode，`make run` 則會同步處理一次 queue。再確認是否已有 processing lock。
+- task 已 Pending 但未開始：確認 dedicated processing worker 正在執行，或用 `make processing-worker` 啟動；`POST /processing-jobs` 只會確認目前採 dedicated mode，`make run` 則會同步處理一次 queue。再以維運端點檢查 active task leases。
 - Extension 無法送出：確認 Options API Base URL、API connectivity 與頁面是否為支援的 YouTube URL；channel handle 還需要 DOM 提供 channel id。
 - RSS 沒有建立舊影片 tasks：首次 poll 只 seed watermark，這是避免回填整個歷史 feed 的預期行為。

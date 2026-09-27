@@ -5,7 +5,7 @@ description: 說明 Python modular monolith、獨立應用、composition roots�
 tags: [architecture, dependencies, python, boundaries]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 sources:
   - id: openwiki-source-269e1e25890c094aaa09d0a0
     resource: repo://.docker/Dockerfile
@@ -31,6 +31,8 @@ sources:
     resource: repo://scripts/install-git-hooks.sh
   - id: openwiki-source-1eb6a61d042052ba1402c2eb
     resource: repo://uv.lock
+  - id: openwiki-source-ad4df8250d444175a5c8ddb3
+    resource: repo://whisper_summary/apps/api/routers/processing.py
   - id: openwiki-source-ea52e4ece41ed31f8a8e2718
     resource: repo://whisper_summary/apps/api/schemas.py
   - id: openwiki-source-7286e0aae9c6fda5397f76b6
@@ -39,11 +41,17 @@ sources:
     resource: repo://whisper_summary/infrastructure/media/downloader.py
   - id: openwiki-source-a5341de1a1a4430b8712b3f3
     resource: repo://whisper_summary/infrastructure/media/transcription/transcriber.py
+  - id: openwiki-source-13ce82e09bf0fdbc5f92e70c
+    resource: repo://whisper_summary/infrastructure/task_queue/http_client.py
   - id: openwiki-source-1b0a5fd67d6b13b8a3a3c17e
     resource: repo://whisper_summary/services/pipeline/dependencies.py
+  - id: openwiki-source-a06d60e26da81a42a77356ad
+    resource: repo://whisper_summary/services/pipeline/engines.py
+  - id: openwiki-source-8596820a9e45786cae4a5524
+    resource: repo://whisper_summary/services/pipeline/langgraph_engine.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -54,13 +62,15 @@ Python 主系統是 `whisper_summary` package：`apps` 放 FastAPI、Streamlit�
 
 Application service 依賴 domain contracts。資料庫與 RSS repository 由 `infrastructure/repository_composition.py` 建立；processing pipeline 的 downloader、transcriber、summarizer、storage、file manager、notifier 與 config factories 集中在 `infrastructure/composition.py`，再以 `ProcessingDependencies` 注入 `ProcessingWorker`。個別 factory 仍可由測試覆寫。
 
+Task queue 的 lease 操作定義在 `domain/ports/task_queue.py`；常駐 worker 透過 `infrastructure/task_queue/http_client.py` 呼叫中央 FastAPI queue。API 持有 SQLite backend，worker 可與 API 分開執行。兩種 processing engine 共用 `services/pipeline/engines.py` 的操作，`langgraph_engine.py` 只負責圖的順序編排。
+
 FastAPI 以 feature routers 組裝 HTTP surface；Streamlit、同步 CLI、processing worker 與 RSS monitor 各有獨立 entrypoint。Nuxt Showcase 的 server routes 直接讀取 Notion，Browser Extension 則以 HTTP 呼叫 FastAPI，因此兩者不 import Python implementation。
 
 ## Runtime dependencies
 
 `pyproject.toml` 將 Python 依賴分成 `api`、`ui`、`worker` 與 `dev` groups；本機預設安裝全部 groups，Docker targets 則只安裝各自需要的 group。Nuxt 使用自己的 `package.json` 與 lockfile。`yt-dlp` 是 downloader 透過 subprocess 呼叫的外部 executable，由 Makefile／Docker 流程安裝，與 Python dependency resolution 分開。
 
-轉錄 adapter 的預設路徑使用 `faster_whisper.WhisperModel`，同時保留 `whisper.load_model` 的 legacy method。API schema 直接使用 Pydantic，而 Pydantic 目前由 FastAPI dependency 帶入；若未來要獨立使用 schemas，應考慮升格為 direct API dependency。
+轉錄 adapter 的預設路徑使用 `faster_whisper.WhisperModel`，同時保留 `whisper.load_model` 的 legacy method。API schema 直接使用 Pydantic，而 Pydantic 目前由 FastAPI dependency 帶入；若未來要獨立使用 schemas，應考慮升格為 direct API dependency。Worker group 另包含 LangGraph，供選用的圖式 orchestration 使用。
 
 ## 驗證邊界
 

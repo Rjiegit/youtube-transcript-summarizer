@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:fc06be890f37491e2cca041918f018481543a78c9005a602c000669f34451c07",
+  "pageVersion": "sha256:843cedb076a813551145dc8889c046bf59738b2b571d64f405fc8a7322314890",
   "claims": [
     {
       "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
@@ -8,7 +8,7 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/services/tasks/task_creation.py#L22-L72",
-          "version": "repo-lines-v1:sha256:fce6d55704bc0c905abc4a782492c6579fcfd9ef6a7c50c83040f99ca3a27d8c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:ec8c5851c820334cf2b15424ff2d7335c6483129840286556a6bc46f7973e371:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -21,8 +21,8 @@
           "version": "repo-lines-v1:sha256:4c9fbed5b6c2cda23dd7dc8d0ee32aedc9c0daf08dc1a360ec57ab547f3ec443:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmRmYzBlODUzODJlOTVlMDUzYjNkNTA2YTg4NzI2OGIwM2EwYjk1YTFmZTA2ZmU0OTE4YTAwZWIzZGFiYjhkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzk4ZTg4OTQzNmQyMjY4OTlmMzJiYTI2ZTZlYjU0ZjE0NTQwOWM5ODkzM2ExZmY2NGQxMmY4NDg0NDNlOTI5ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
         },
         {
-          "resource": "repo://whisper_summary/apps/workers/processing_worker.py#L15-L48",
-          "version": "repo-lines-v1:sha256:95c52750b28ab897cd3a6fb72026447661618bf15f656966b6c8bc2cf64ef515:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyOTBjNDU3YmVlODlkZTg1Y2EyOTU1ZTA2N2JiNzg2Y2VjY2JjMzUyMmQyMjNjYjYzZjNhMDYzNjI5YzE5YWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImJmZTc1YmNlM2QxZDAzYzNkNzVlZDRlOWIxZTUwNzQ4MWRmYjA2NjRhM2Q5NGM3Nzc0YTVlOTNlYzg5YmQzYmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://whisper_summary/apps/workers/processing_worker.py",
+          "version": "repo-file-v1:sha256:26a5371f0360458b78ed083847f354cd54a276c091cdcaacb2c9bedc6b0e9830"
         }
       ]
     },
@@ -31,36 +31,54 @@
       "statement": "Retry endpoint 只接受 Failed task，建立關聯的新 Pending retry task並把 source改為 Failed Retry Created；retry等待dedicated worker後續取得。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/api/routers/tasks.py#L123-L174",
-          "version": "repo-lines-v1:sha256:9eeef625c903482c8cceec9577fafbab3faa2137339cb4b162715803bad557c6:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NGZjM2FjNDMzZTFjMmM0NDAzZDljNjZkNTk3ZWJiODI1OTAzZTFhZjZmNjJiNDBlMDQ5MzUyZjM2MTE1NmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxOWExNzY4OTY1MzE2YTNiY2RhZmMxMTA0MmU1YjkzZGI3YjAyYTY3MjhmYjNmY2EzZDg3YjFiNTJhOWNkZjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhM2NmNTE5MjM1NGY3MTYxNWFjNTEwMzRiM2U5N2MyMGVkYTk5NjQzZmNhZjViYmU2ZDQxYWQ1OWJkMTIxNjcifQ"
+          "resource": "repo://whisper_summary/apps/api/routers/tasks.py",
+          "version": "repo-file-v1:sha256:0714a3e92b9fca890d4a5cf3a909a20c79ae184178c9d4fc709a9a28b26077ff"
         },
         {
           "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L380-L410",
-          "version": "repo-lines-v1:sha256:e238cccca8bb16e8d9a5314cce1e4939776840e5a5a3fec32eab8709fb894fe8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxZWYwNzllYTYzZWE4ZjU0YmI3MzI2NmZiNDExZWYxNjI0ZWQ0NDkzN2FlNzQ3NjFhZjMwMTNjYTJhOGEyOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ4ODQ1YThiN2FlMWNlZTUwMGI1ZWE5YTE5ZmMxOTY4N2NlOGQxMDY1ZjdlMjllYTY3MzYyM2VmMmRhZDIyM2IiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1ZTRlNDFjNGIxM2Y3OGZjNzg5NTAzODA3NmJiNTgwMjdkYjY5NDA5NWFkNGMyOWQwY2EzZmI3ZWM3YTk2NjMifQ"
+          "version": "repo-lines-v1:sha256:dc6497cfbb4b1b324d014f56826c723498a4ec909c49493fd8c4a3d157d1c32b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MDQzYzAwZTJmOTY1MWRkMzJhMDUxYWY2N2JhOGM3YTA2YzUzZjA4OWYzY2I2MmRjZGY3NmU1MDEzMDRhZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZmUyZDU3ZDg2M2U1YzhlN2M0MTIyNDg1YjIyMTliN2IzOTZlNGE2NGFlZWE4YzMzMzEwMWQ2Mjg0NjhlOTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1YzY1Y2FjMjA1NWIzOWE1YzZjNDE0ODAyNDM4YzdiYTZlZTVmMGI2YzQ0NDU3OTRkZWFkNzUwNmQzYThiZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhYzQ1M2EwNTNmYTc0ZjliMjBkYTRkNTgzNjEyZGFmMWY1NDgxOWJmMmE4ZGEzOTIwM2E5MGIxNzQxMzgxNDkifQ"
         }
       ]
     },
     {
       "id": "claim_f22d0b95300842b69a6d3eb48bd8c3a9",
-      "statement": "ProcessingWorker先取得並refresh全域processing lock，再由SQLite atomic claim最舊Pending或stale Processing task，避免多worker重複處理。",
+      "statement": "常駐 worker 透過中央 API 在 SQLite transaction 內 atomic claim 最舊 Pending task；過期 Processing lease 先標記 Failed，避免失效 owner 重複寫入。",
       "evidence": [
         {
           "resource": "repo://tests/unit/test_sqlite_client.py",
-          "version": "repo-file-v1:sha256:ce1a41ff010f404d6bc03b55944e6f8c7486a0f0f71e212bdc603cb703f34574"
+          "version": "repo-file-v1:sha256:3923258451bcc2e9296bca69107e1b1f3ef94e0117b0caf50eb48db9a6525fc0"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L130-L205",
-          "version": "repo-lines-v1:sha256:61d1cd7cac0458dbe16743d80c92f3b26c0cdb3b6ce123e2dfe199725c4caafb:eyJzZWxlY3RlZExpbmVDb3VudCI6NzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5ZjRhZmI0YzU4OGQzOTYzZWI3YTViYjVlZGY2YzJiMjFjNzUzMTQ4OTQyY2ZjOGRjYjBhYTEwMmVjZDdiZTgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZmUyZDU3ZDg2M2U1YzhlN2M0MTIyNDg1YjIyMTliN2IzOTZlNGE2NGFlZWE4YzMzMzEwMWQ2Mjg0NjhlOTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIxYjFiZjM3YzQ3MTBlZGI3MjQ2NjNkZjk0Y2NhZmIwOGQ4ZDRkNWM5YjJhMWE3ODE1MTk5YTE0ZTE1NWYxZDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxZTBlMDk0NmMzNDI1NDQyYWI0Mzc2Y2U5MzZkMmVmYjRhNWFiOGNiOWNhMjJjZjgzMzVmNzRmNThiZjg5ZjIifQ"
+          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py",
+          "version": "repo-file-v1:sha256:dad773c5c50277ff48a767a2d4698f48a3176bf457f6b2cd183e464f7b85c383"
         },
         {
           "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L119-L180",
-          "version": "repo-lines-v1:sha256:9a0906300cbcbd540317f0f0647dfa950bd96fa84d3bc792d1579edc4a51892c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwNzQ0NmFjYzI5NDIxNDMxY2Q1YWQ1N2Y1ZjQ2MTE2ZTk3YTQ5N2NjODRjMDhiNGFjOWJhNTY4NDMzMjhhYmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5ZTUwMDA2ZDUwYjA3MzNmMjdiNzRmZjcyNGM1YzI0MjM5MjM4NmZlOTUyMWVlYjhkNmIwMjA1ODJjMWUwYTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYzFkYzk0ZmY5NzBlOTlkZGNjODEyYmZmMDg1OTMwMjEwNDZkYzc2ZTc4NTYxYWY0MWUwZWMxMDIwYTg2ODQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUzMmRhZjM1NWQ1YTQyNzVlZWIzODM1MDYxOTRlZTcwNmE5ZTZjYmI4MzZlNzQ1OTNmNjcwOTA5YTI1YjRmNzAifQ"
+          "version": "repo-lines-v1:sha256:bd7a9ecc0e9fcc0b813fea3995e45e7bf2137e31e4b140598ee383d99f544cc2:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMzMzJlZjAxYmJiMTdhMDQzMGI5MzJkZjg5MTkxMzc2YmI2YTM2MTBlYTY2ZjA3NzI3YzUzNmI5MzkxYzM2NjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlYjMyMmZmZDQ0MDA5MTM1YWYwNWJiNDlhY2MwNTM1ZjdkNDViMjM1N2IyOTYzMmE0YzhiZGY2YzU0NDIyNjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzMzEwOTVkNWZkOTQ5N2Y0M2RkNjkwMWE5M2Y3NDNiYjY1NTUwNmEwNTBlMTVjMjgxNWJmMWM5ZDRmMTMyOTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzZDk5MTdmNzNmMWRkNDZhZWJjNGY3NDNhOWFmYWI4YzQ1MmEzOTI4ZWJlMjQxZjMzYThmODJmZGU3NzI0OWIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_17d1e07dc4f54ad4b907f0c9c40afd81",
+      "statement": "每筆 task claim 核發 worker id 與 lease token；heartbeat、progress、complete、fail 都需驗證 ownership，失去 lease 時 worker 停止回寫。",
+      "evidence": [
+        {
+          "resource": "repo://whisper_summary/apps/api/routers/processing.py#L116-L205",
+          "version": "repo-lines-v1:sha256:b43d3abc36235820a1ded3a344fbf3c4d170565d31dd5e5f3cdcd27b8cfc8bd3:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1MzI2OTVmZjkxMTMzNTM5M2YyZWMyMjNmYWE0OWMwZTFjNTJjNDU2YzQ3MmU0ZWE0MzkzYmRkMTNmZDgxOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4NDgyNDJkYmRlYTUzNTBjMzhlZjQzNmQ3YzcxYzM0N2Q2YjNlOGUyOWVmNmIxMDg5MzM0OGIzMjAxZGM1YzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiZDE4NmIwMzg4YzA0YmQ0YmUzNjlmODU2NmJhYmI4MmYxZjY5ZGU3MTllYzc2MGU4Mjk1NDhlMmM2Y2U2YWEifQ"
+        },
+        {
+          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L153-L270",
+          "version": "repo-lines-v1:sha256:dac33fc389299d1ce92475f217d6af70e616a04f36a3196b6af37e1fa7cc5afb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwM2ExZDc5NThjMWZhZDZmNzRkYzkxZmI3MTY3MzljODlkY2MyNTk4NTRjZjNjMTRjMDAxODIyNzBiOGU5NDczIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiNTY5Y2IwOTI4MGVlMDc4MTk0NWU0OGQ0MDQxYmQyZGZhYWU2OTFhZDJlYWJmNWQzY2JhMDg0NmM3MjE2Y2FhIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MTk2N2E2MjNmOTkwNzAyOGRhNDczNmZkYzQ5ODEzYjBkNWFjNWZlYzY2ZWQxODEyYmE2YzMxM2RlOWYwMzhlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI2MTZlZGRjZjcyM2U5NzZlNTBkZTMzYTlhMjBjZDI2Nzc0MGQ3Zjk3YzkwMjYyYWY0NWJmMDIzOWI2YTNkN2FhIn0"
+        },
+        {
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L222-L250",
+          "version": "repo-lines-v1:sha256:b2dfe1917137e702bdb36f8b1dc413c93d56f8d9c446ad23a087faff483492b7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MTZkNTE3ZjlmYjE4ZDMwNmZjZjUzYTI2N2YwMWJlNWZjYjI2ZTcyNTA5ZTYzYWU2ZTRhZDE1ODdjZGQ4YTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1MjM2ZDM4ODQ0MjE5Y2JlZjg0OGRmMjY2ZTNmYjdiZmRlNTZjMTFiZWYzMDY1ZTgzMzkyOTViNTEzZTFhZjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM3MmYxY2Y3NGE3ZWJkYTc0YjRkMzY5ZGFkODE3ZTY4MTM4Y2NjMGQwMmVjYzg5ZTliYmNhOTlmMDY0ODk2ZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ZWI3YTlkNDA5NTNkODRjNDFkZjQyZmI1YWYyM2VmMTM3M2YwZTFlMGIxODdlY2JmZDQ2MmUyNmRjNTk1ZjUifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-13T10:51:33.281Z"
+    "at": "2026-09-23T13:19:05.664Z"
   }
 }

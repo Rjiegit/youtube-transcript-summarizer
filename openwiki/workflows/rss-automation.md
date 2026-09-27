@@ -14,10 +14,10 @@ sources:
     resource: repo://whisper_summary/apps/workers/rss_monitor.py
   - id: openwiki-source-e66f0503669326252cbeb176
     resource: repo://whisper_summary/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # YouTube RSS 自動化
@@ -40,7 +40,7 @@ Feed client 以 15 秒 HTTP timeout 取得 Atom XML，解析 video id、title、
 
 CLI 啟動時先檢查 `RSS_MONITOR_ENABLED`；停用時不 polling。`--once` 執行一輪後輸出結果，否則常駐迴圈。實際 interval 為 `max(RSS_MONITOR_POLL_INTERVAL_SECONDS, RSS_MONITOR_MIN_POLL_INTERVAL_SECONDS)`，API timeout 由 `RSS_MONITOR_TASK_TIMEOUT_SECONDS` 控制，API base URL 由 `TASK_API_BASE_URL` 控制。
 
-Docker Compose 的 rss-monitor 使用 `http://api:8080`，並與 API/Streamlit 共用 repository volume，因此使用同一 SQLite database。RSS monitor 本身不支援 Notion queue。
+Docker Compose 的 rss-monitor 使用 `http://api:8080`，由 API 集中存取 SQLite database。RSS monitor 本身不直接開啟 task database，也不支援 Notion queue。
 
 ## 延伸閱讀
 

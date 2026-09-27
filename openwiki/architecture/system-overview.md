@@ -3,9 +3,6 @@ type: architecture
 title: 系統架構與端到端資料流
 description: 說明任務輸入、專用 worker、持久層與獨立前端應用之間的責任和資料流。
 tags: [architecture, pipeline, api, worker, nuxt]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
 sources:
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
@@ -19,6 +16,8 @@ sources:
     resource: repo://whisper_summary/apps/api/dependencies.py
   - id: openwiki-source-ed9cac06ac45a553488b9905
     resource: repo://whisper_summary/apps/api/main.py
+  - id: openwiki-source-ad4df8250d444175a5c8ddb3
+    resource: repo://whisper_summary/apps/api/routers/processing.py
   - id: openwiki-source-d1e2e939cdaa20a1825bddb5
     resource: repo://whisper_summary/apps/api/routers/tasks.py
   - id: openwiki-source-5899750ee6dd474e4a72a34b
@@ -31,7 +30,10 @@ sources:
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-e66f0503669326252cbeb176
     resource: repo://whisper_summary/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # 系統架構與端到端資料流
@@ -50,21 +52,21 @@ generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
 | `apps/browser-extension` | Manifest V3 FastAPI client |
 | `apps/showcase` | 直接讀取 Notion 完成成果的 Nuxt/Nitro app |
 
-Compose 編排 `api`、`streamlit`、`processing-worker` 與 `rss-monitor`。Streamlit 與 RSS monitor 以 `http://api:8080` 連線；processing worker 直接使用 persisted backend。Showcase 不在此 Compose topology。
+Compose 編排 `api`、`streamlit`、`processing-worker` 與 `rss-monitor`。Streamlit、RSS monitor 與 processing worker 都以 `http://api:8080` 連線；task 的 SQLite ownership 集中於 API。Showcase 不在此 Compose topology。
 
 ## 端到端流程
 
 1. Streamlit、Extension、HTTP client 或 RSS monitor 向 FastAPI 送出 YouTube URL。
 2. API 正規化、去重並把 task 持久化；API process 不啟動重型 pipeline。
-3. Dedicated worker 週期性建立 backend，呼叫 `process_pending_tasks`。單次 polling cycle 失敗會記錄後繼續下一輪。
-4. `ProcessingWorker` 取得全域 lock，逐筆 atomic claim task，完成 yt-dlp、faster-whisper、LLM、Markdown/JSON、Notion 與 Discord 流程；單筆失敗標記 Failed，並繼續處理。
+3. Dedicated worker 持續透過受 token 保護的 HTTP queue API claim task；單次 polling cycle 失敗會記錄後繼續下一輪。
+4. API 以 SQLite lease 控制 task ownership，worker 持續 heartbeat，並以設定或 task override 選擇 legacy／LangGraph engine。處理包含 yt-dlp、faster-whisper、LLM、Markdown/JSON、Notion 與 Discord；單筆失敗標記 Failed，失去 lease 時停止更新該 task。
 5. Nuxt Showcase 從 Notion 讀取 Completed 結果，不呼叫 Python Task API，也不把 Notion credential送到瀏覽器。
 
 ```mermaid
 flowchart LR
   UI[Streamlit / Extension / RSS] --> API[FastAPI]
   API --> Queue[SQLite / Notion task backend]
-  Queue --> Worker[Dedicated processing worker]
+  Queue -->|lease API| Worker[Dedicated processing worker]
   Worker --> Media[yt-dlp → faster-whisper → LLM]
   Media --> Files[Markdown / JSON]
   Media --> Notion

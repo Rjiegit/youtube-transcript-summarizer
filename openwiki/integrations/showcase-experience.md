@@ -4,6 +4,8 @@ title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
 tags: [nuxt, showcase, swr, caching, ux]
 sources:
+  - id: openwiki-source-bb92958ed21ee9cf0accb45d
+    resource: repo://apps/showcase/components/ReadSyncControl.vue
   - id: openwiki-source-6b1be9f1b66868fbfe965160
     resource: repo://apps/showcase/composables/useReadResults.ts
   - id: openwiki-source-8f9c3fc6564a596df49d04e9
@@ -20,10 +22,10 @@ sources:
     resource: repo://apps/showcase/server/utils/swr-cache.ts
   - id: openwiki-source-c2ec24a0ccca33febfd50837
     resource: repo://apps/showcase/tests/swr-cache.test.ts
-generated: { by: "codex", at: "2026-09-07T14:09:43.292Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -36,9 +38,11 @@ Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 
 
 首頁和詳細頁都處理 loading、error 與 hydration。詳細頁在沒有 loading、沒有 fetch error 且沒有 item 時產生 404。頁面 title、description 與 social metadata 會跟隨結果內容更新。
 
-## Client-only 已讀狀態
+## 已讀狀態與選用同步
 
 已讀紀錄以 Nuxt `useState` 保留 session 記憶體狀態，並在 browser 可用時同步到 `localStorage`；SSR 階段不讀取 browser API。資料會驗證 shape、合併跨 navigation 狀態，並只保留最近 500 筆。storage quota 或 privacy mode 失敗不阻止本次 session 的 in-memory 行為。
+
+首頁的 `ReadSyncControl` 可選擇連接遠端已讀狀態。啟用後，瀏覽器先以個人同步碼換取 HttpOnly session，再透過 Nuxt 私人 API 與 Upstash 同步 read/unread；遠端故障時保留本機狀態。詳細的驗證、合併與儲存語意見[跨裝置已讀同步](read-state-sync.md)。
 
 首頁在 mounted、activated、focus、重新變為 visible、返回 list route，以及 BFCache `pageshow` 時重新同步已讀狀態。這些事件也會在 server response 已超過自己的 `cache_ttl_seconds` 時觸發資料刷新。
 
@@ -63,5 +67,6 @@ Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗�
 
 - [系統架構與端到端資料流](../architecture/system-overview.md)
 - [Notion 資料整合](notion-and-showcase.md)
+- [跨裝置已讀同步](read-state-sync.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 - [開發規則與測試策略](../operations/development-and-testing.md)

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:b7daf13da87f7296a57b7a61037c54a3ded1c80d024a918b76dd99b2bff9b1ba",
+  "pageVersion": "sha256:e4a950754909039583c110619e5d9c3e0f3abbb4f402e325551e9b8e7d167788",
   "claims": [
     {
       "id": "claim_82bdf561a818463185598d2b75e6f683",
@@ -30,7 +30,7 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/apps/api/routers/tasks.py#L16-L120",
-          "version": "repo-lines-v1:sha256:a61316ccec93a7f72ccf847cb32286d4ff7e22d9ba231fef238469e9674ca314:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzMjYwNDI2MWFjODBjOWQyM2I5NmZjZjI2Yzk1ZjQzZjMzMWVmOTU1NjYyZTVmMjY2NWZlYWJlY2IzOGM1ZjU5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlY2FmYzFiMzk0YjEzMmY2Yjg0MmU3MGE4MGYyYWM1ZDRmMTdiZDBhYmJmNGNlOGI3MmEwNmNjZDk5YWE0MGVkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjNzRjMGVjMzJlMjAwYzE3MTI5MjUxYjMyOGUyZjU2ZTU4NTE4YzcwYjMyYzMzNGEyODk3NWU2NzU2Zjc4NzA2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzOGYzYjIyODE5ZmM1N2U1MzdmMTZhYWE1NTkyYjhhYjYyYzNmY2RmZmU4OWVmYTBhMzZmMjJiYWE3ZDNjYzVjIn0"
+          "version": "repo-lines-v1:sha256:d2a1b5e32ce67dcd5ead1b0c6b123c9d6fee7879634355d009adf8447be80065:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzMjYwNDI2MWFjODBjOWQyM2I5NmZjZjI2Yzk1ZjQzZjMzMWVmOTU1NjYyZTVmMjY2NWZlYWJlY2IzOGM1ZjU5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlY2FmYzFiMzk0YjEzMmY2Yjg0MmU3MGE4MGYyYWM1ZDRmMTdiZDBhYmJmNGNlOGI3MmEwNmNjZDk5YWE0MGVkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjNzRjMGVjMzJlMjAwYzE3MTI5MjUxYjMyOGUyZjU2ZTU4NTE4YzcwYjMyYzMzNGEyODk3NWU2NzU2Zjc4NzA2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzOGYzYjIyODE5ZmM1N2U1MzdmMTZhYWE1NTkyYjhhYjYyYzNmY2RmZmU4OWVmYTBhMzZmMjJiYWE3ZDNjYzVjIn0"
         }
       ]
     },
@@ -53,8 +53,8 @@
       "statement": "Retry endpoint只接受Failed task，建立新Pending retry並更新source狀態，但endpoint本身不啟動processing worker。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/api/routers/tasks.py#L123-L174",
-          "version": "repo-lines-v1:sha256:9eeef625c903482c8cceec9577fafbab3faa2137339cb4b162715803bad557c6:eyJzZWxlY3RlZExpbmVDb3VudCI6NTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3NGZjM2FjNDMzZTFjMmM0NDAzZDljNjZkNTk3ZWJiODI1OTAzZTFhZjZmNjJiNDBlMDQ5MzUyZjM2MTE1NmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkxOWExNzY4OTY1MzE2YTNiY2RhZmMxMTA0MmU1YjkzZGI3YjAyYTY3MjhmYjNmY2EzZDg3YjFiNTJhOWNkZjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZhM2NmNTE5MjM1NGY3MTYxNWFjNTEwMzRiM2U5N2MyMGVkYTk5NjQzZmNhZjViYmU2ZDQxYWQ1OWJkMTIxNjcifQ"
+          "resource": "repo://whisper_summary/apps/api/routers/tasks.py",
+          "version": "repo-file-v1:sha256:0714a3e92b9fca890d4a5cf3a909a20c79ae184178c9d4fc709a9a28b26077ff"
         }
       ]
     },
@@ -92,7 +92,7 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/apps/api/routers/processing.py#L20-L41",
-          "version": "repo-lines-v1:sha256:93d7c87d1871ed1d3e49bfe7a88f78877ad6297f74d360a54ca687e79cc785df:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2MjYxYzBkMjFlYTFiNmExYjQ3NGRiOTBiOGVmYzNkNGRjOWRjZjdkNmM5OGExZDhkNTQxNmIzYjg0M2FlZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYyYWE4YjE5MmE3NGJhNjNjNmRmYzIzODgyYTUzYzY4Mjc2ZGMwZGI2YzVhYTViMTBlNjM1NWE2ZGYzYmI3MmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmN2VhNzFmMjU1OTZlZmVmMmE3OWEzZjI3ZmMyNmVmZGZhYWUwZDgwOGRkNTAxM2YwOGIwYTY3NmQ5ODE2ZTIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAzNTRkYzFlMjc2MGYyZjA5NjNjY2JhNTliOTA5ZmU0NmYyMmNiZTA4YzIyMDQ4YTA2ZTcxMDFlMzE2YWIzZGYifQ"
+          "version": "repo-lines-v1:sha256:7ccc20535552d143975d49f4f5cfb656b42066a97b6b875b56ff3fdb79c74039:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyNDMyMDQxMjQ1OGYzYmYxZjA1NGUzNWUyMzQ5MWMyOTJhNDdiZDRkMTM0ZTVhOTRkMWIyYTZmYzhiZmEyNGQ5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmMmFhOGIxOTJhNzRiYTYzYzZkZmMyMzg4MmE1M2M2ODI3NmRjMGRiNmM1YWE1YjEwZTYzNTVhNmRmM2JiNzJlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJmZjdlYTcxZjI1NTk2ZWZlZjJhNzlhM2YyN2ZjMjZlZmRmYWFlMGQ4MDhkZDUwMTNmMDhiMGE2NzZkOTgxNmUyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwMzU0ZGMxZTI3NjBmMmYwOTYzY2NiYTU5YjkwOWZlNDZmMjJjYmUwOGMyMjA0OGEwNmU3MTAxZTMxNmFiM2RmIn0"
         },
         {
           "resource": "repo://whisper_summary/apps/api/routers/processing.py#L64-L179",
@@ -113,10 +113,44 @@
           "version": "repo-lines-v1:sha256:fda60bfdb8d9b2465540282f5e1f3a696ab660ad80c8d71912f879d0c53ef931:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1ZjE4Nzc5Y2E1NmRkNzhiNjlhMDJjOWJhNjNjMmJmYTE5YmFhMGY0MGUzZTcwMWE1YWQ1YmEyM2NmOTVlODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwZWU3NTlkNzFmNjYzZGExNzcwZGVjZmRjZTczOTk5MjgwNmI1NDczNjE0Mjk1ZmU3M2QxM2VhYjNlY2QyYjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
+    },
+    {
+      "id": "claim_5c14d7077e7d4d6c9b9f89bc7022d3ba",
+      "statement": "POST /tasks 可指定 legacy 或 langgraph 處理引擎，未指定時 worker 使用全域設定。",
+      "evidence": [
+        {
+          "resource": "repo://whisper_summary/apps/api/schemas.py#L20-L84",
+          "version": "repo-lines-v1:sha256:cd93d51593d2012b7ea32b08a8cd939c8e8875d1f251091dd7625e69861d6502:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3NjIyMzM2YTgxYjgxNDNlODI4MjNkODc1ZmY1YWFiMDA2N2RhMTQyMDcwMzE3ZmQwYzJmNmQyMTdhMzkwMGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZkYjI4Yzk1ZTQ0ODE2MmYyN2IzYWM1NjY5ZThmMjU0NTllMjkyMzViZTIyOTFhZGMyNzEzMzkzYzQ3YzAxNGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc2M2FhYjc2MWY0OTE5YzE1MzFlYTIyZjExODc3YWRlYWJmYjIxMGE3NmI2NjZkMGExMDgwYTU0MzA0OWQzYWMifQ"
+        },
+        {
+          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L205-L213",
+          "version": "repo-lines-v1:sha256:96a988957e95ac8062ffd53b53f2d544bb81a26d74effbfd40a1bc295c3b8d1f:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYjU2OWNiMDkyODBlZTA3ODE5NDVlNDhkNDA0MWJkMmRmYWFlNjkxYWQyZWFiZjVkM2NiYTA4NDZjNzIxNmNhYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTUwMzJlOTY0ZDA5MzIzNTFlNWQxODUyNjkyODFiMTcxYTNhMDliMDhiMjg2ZTY2MWVhNDcwMzIzYzgyZWI0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMTQ5OGNlY2FlZDhkODZmNWNlODRkYTI0ZWRiNGY4NmE0Zjc5MDBmYWI5YWM4OTk3ZmEzYmE3MmVhZDE2ZjVhZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNWIzMjI1M2M0NGY2ZWI1ZGFlOWY2NWUwNzA2ZGE4MDk4MWNjY2MzMTlkYjRjOWU3ODU1MjlmZjVmZDAyN2FmMSJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_e3b65c43e8d045b6bdd77b0859fb85ca",
+      "statement": "Worker queue 的 claim、heartbeat、progress、complete、fail 使用 X-Worker-Token；後續寫入需匹配 worker id 與 lease token，失效回 409。",
+      "evidence": [
+        {
+          "resource": "repo://whisper_summary/apps/api/routers/processing.py#L40-L205",
+          "version": "repo-lines-v1:sha256:ba88c79a98808fd57eb988432c1399c6826df3f8df0646552a05ad905bd0db26:eyJzZWxlY3RlZExpbmVDb3VudCI6MTY2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJiNzU2NmE1NjlkMDk2ZWYxYTgwOWRmNzg2ZjNlNTM0ODlmNzRlMWJkOGQ0NTI0OGJjMDY4MmI1ZWNjODgzYWRiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI0ODQ4MjQyZGJkZWE1MzUwYzM4ZWY0MzZkN2M3MWMzNDdkNmIzZThlMjllZjZiMTA4OTMzNDhiMzIwMWRjNWM4IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIwNDhmOGUwZmYxMmFhN2UwMjZiMmFiZWY5ZTMyZmZlNjJmZTUxODk4ZDA5YTY0ZTg2Zjc5OTQzYjk2YWNkMjJiIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0YmQxODZiMDM4OGMwNGJkNGJlMzY5Zjg1NjZiYWJiODJmMWY2OWRlNzE5ZWM3NjBlODI5NTQ4ZTJjNmNlNmFhIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_dd975f3fc7d747c1a24f83ddb146741a",
+      "statement": "維運者可讀取目前 processing leases，並以 dry run、expected worker 或強制 age threshold 對單筆 lease 標記失敗。",
+      "evidence": [
+        {
+          "resource": "repo://whisper_summary/apps/api/routers/processing.py#L208-L275",
+          "version": "repo-lines-v1:sha256:02cdaa1a37cab138b13214755dd5b27b9946c257bf4a4acacdde6375e84ea1d1:eyJzZWxlY3RlZExpbmVDb3VudCI6NjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUxY2Q5OWE1YTFmOWM0N2YzMjg4OTcwYTI2NWVmM2QzNDg3ZDYzMWJiNjY2ODNkN2QxYTRmNzViNmI0NTM4OTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjEyYWUyODNhZWVhNzc2MTkxNzAyOTY2NGQ3MmQ2MWM3YTFlMzZiNmQwMmJlODViMWYzZmExNGM0Y2MzNDM5Y2YiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ2MzI2MjAzMWE1OGZkYTMwOGMwOGI2MTdiY2ZhMTdjNWIzYmUxOTM4ZTQ3M2Q1Yjg0NmYwOWY0OWUyN2FlNGUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-13T10:51:33.281Z"
+    "at": "2026-09-23T13:19:05.664Z"
   }
 }

@@ -16,23 +16,21 @@ sources:
     resource: repo://whisper_summary/infrastructure/persistence/notion/client.py
   - id: openwiki-source-16ad15a60707008474d113ec
     resource: repo://whisper_summary/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # Notion 資料整合與 Showcase 邊界
 
 Notion 在本系統有兩種不同角色：Python `NotionDB` 可把 database 當作任務 queue；`SummaryStorage` 另建立承載完整摘要 blocks 的成果 page。Nuxt Showcase 不建立或更新資料，只用 server-side API 讀取 database schema、完成項目與 page blocks。
 
-<!-- openwiki: broken internal link [../persistence/task-and-result-storage.md] file "../persistence/task-and-result-storage.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-本頁聚焦 Python 與 Nuxt 之間的 Notion schema contract；SQLite transaction、task leases、recent history 與檔案 artifacts 集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
+本頁聚焦 Python 與 Nuxt 之間的 Notion schema contract；SQLite transaction、task leases、recent history 與檔案 artifacts 集中在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)。
 
 ## Python 寫入端
 
-<!-- openwiki: broken internal link [../persistence/task-and-result-storage.md] file "../persistence/task-and-result-storage.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等 properties 管理 task；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public` 與摘要 blocks 的成果 page。兩者共用 credentials/database 設定，但用途與 schema 不完全相同。Queue locking、rich-text chunking 與 storage failure 語意集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
+Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等 properties 管理 task，並將 processing engine 以 `Legacy`／`LangGraph` select 值保存；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public` 與摘要 blocks 的成果 page。兩者共用 credentials/database 設定，但用途與 schema 不完全相同。Queue locking、rich-text chunking 與 storage failure 語意集中在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)。
 
 ## Nuxt 唯讀端
 
@@ -52,11 +50,11 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 - Showcase cache 可在短暫 Notion failure 時回傳最後成功 snapshot，但初次查詢沒有 snapshot 時仍會失敗。
 - Notion queue 與 SQLite 的 consistency 差異由持久化頁維護，本頁不把 Showcase 的 read schema 誤當作 queue locking 保證。
 
-## 延伸閱讀
-
 ## Contract 驗證
 
 Repository 以 `tests/fixtures/notion_completed_page.json` 表示共同的 Completed page contract；Python writer test 與 Nuxt reader test 同時使用它，讓 property 名稱、型別與公開欄位的變更能在兩側被偵測。
+
+## 延伸閱讀
 
 - [任務、鎖與結果持久化](../architecture/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)

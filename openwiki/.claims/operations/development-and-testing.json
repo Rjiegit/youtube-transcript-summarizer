@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:9d14ce2e23c2a2e6c440c55ca473c47138f2a9166958818cec1c06f94884269e",
+  "pageVersion": "sha256:5c3c16376411ae731694b84825f660e423cb131077a6492ed2d1f923cca64279",
   "claims": [
     {
       "id": "claim_18efeaf5a06b4c9cabc9632ffac9ea0f",
@@ -40,7 +40,7 @@
         },
         {
           "resource": "repo://.github/workflows/main.yml#L9-L77",
-          "version": "repo-lines-v1:sha256:61a67c714a1894a0383ce72f66367d75ebb2a59bf8dfccbb5c742b5849a6b71c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYxNjY4YTU2NWQ1YzI4MTE5Y2M3ODUyYTE2OTI5NmUxM2VjZTlkMjNkZDU5ZWNlZWNmMjJhNjI1YjA4OTY4ZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0OWQ3MjZhMGNjZTFjNzg1ZjJjMGZhMzc4OTYzM2Q1MTVkZTk2ZmFkOTcxYTJiNjEwM2YzYTZhYmEzY2QyZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:efb7e627121e6e85fed7d2f1a3b27bee2e09e80462f685ce6de66205b46217d7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYxNjY4YTU2NWQ1YzI4MTE5Y2M3ODUyYTE2OTI5NmUxM2VjZTlkMjNkZDU5ZWNlZWNmMjJhNjI1YjA4OTY4ZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0OWQ3MjZhMGNjZTFjNzg1ZjJjMGZhMzc4OTYzM2Q1MTVkZTk2ZmFkOTcxYTJiNjEwM2YzYTZhYmEzY2QyZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
           "resource": "repo://Makefile#L15-L25",
@@ -68,13 +68,39 @@
       "evidence": [
         {
           "resource": "repo://Makefile#L27-L75",
-          "version": "repo-lines-v1:sha256:548932885d5d8f480ceaffa717de69a239e5fade8d878201ad856ff017e3d8a9:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjZDcyZDEyOWM5NTk3YjQxNzdkNzIzNGIyY2RjNWUyMWJjNTM0NzllOTAxZDY0MTA0ZTMwZTBhZTFmNDgwZjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ZjlmNWU5MWE5ZWU2NWViMDM3Y2UzZWI5ZmI0MTY0NDRkNWFkMzY2MmYwYTMzZGRhN2I5ZTU0ODFjYzhiZDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmYzNmYjdlZTVlZGRlMTIzMjg4ZjdkMjJjZmRhNGM3NWJhOTJiNzQwYWJmYjcwODVjNTU1OWU0YjEwODFmZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg5MzlhODk0Y2QzYjcyZGE4YTA4YzU4NDQ0MGMwODBjM2Q3MjMzMWE2NDg2ZjljZTQxZTVjMDQwY2FjNzU2NTcifQ"
+          "version": "repo-lines-v1:sha256:7f87f1507d736c539090b2ec9814471aedcb91a2bdea59a96be39b5fb33f4893:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NjJjMmM2YTA4YWNhYThmNGQyYjg0ZGE3YjFlNTgzNTkwZDI3NmJkODg5NjlkMGExOTVkMDgzNjMwYTQ5Y2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ZjlmNWU5MWE5ZWU2NWViMDM3Y2UzZWI5ZmI0MTY0NDRkNWFkMzY2MmYwYTMzZGRhN2I5ZTU0ODFjYzhiZDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmYzNmYjdlZTVlZGRlMTIzMjg4ZjdkMjJjZmRhNGM3NWJhOTJiNzQwYWJmYjcwODVjNTU1OWU0YjEwODFmZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg5MzlhODk0Y2QzYjcyZGE4YTA4YzU4NDQ0MGMwODBjM2Q3MjMzMWE2NDg2ZjljZTQxZTVjMDQwY2FjNzU2NTcifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_44a8abc86e7048ca908d823dfd8c32a9",
+      "statement": "Repository 以整合與單元測試涵蓋多 worker lease、HTTP queue adapter、processing engine 選擇，以及 Showcase 同步驗證與 Upstash 合併。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/tests/read-sync-auth.test.ts",
+          "version": "repo-file-v1:sha256:9ac9b1cd7ff69be7ff52eacf492ade347459e8c693023510b211654394821276"
+        },
+        {
+          "resource": "repo://apps/showcase/tests/upstash-read-state.test.ts",
+          "version": "repo-file-v1:sha256:b09aeda94e3fcb46d0c5cd003c4eba8eb8c9f78a0e613172a4713a20e9de3e8a"
+        },
+        {
+          "resource": "repo://tests/integration/test_worker_task_leases.py",
+          "version": "repo-file-v1:sha256:731ad2f61cce526f16260c75be47cafba1a1a0a132f86c07f3294d656697de02"
+        },
+        {
+          "resource": "repo://tests/unit/test_http_task_queue.py",
+          "version": "repo-file-v1:sha256:35ad87087b4a382c0a713db5be5ff8522e599a39420e02d981f96b90b2aa08d5"
+        },
+        {
+          "resource": "repo://tests/unit/test_processing_engines.py",
+          "version": "repo-file-v1:sha256:d5cbafee9461ebd78a42ec7b18d0a0c68f46db3c3e1fdf6fef13e44868002938"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-13T10:51:33.281Z"
+    "at": "2026-09-23T13:19:05.664Z"
   }
 }

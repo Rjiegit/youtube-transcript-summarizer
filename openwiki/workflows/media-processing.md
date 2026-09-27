@@ -20,12 +20,16 @@ sources:
     resource: repo://whisper_summary/infrastructure/llm/summarizer_service.py
   - id: openwiki-source-aa9bed27f533a96ebf77433d
     resource: repo://whisper_summary/infrastructure/media/downloader.py
+  - id: openwiki-source-a06d60e26da81a42a77356ad
+    resource: repo://whisper_summary/services/pipeline/engines.py
+  - id: openwiki-source-8596820a9e45786cae4a5524
+    resource: repo://whisper_summary/services/pipeline/langgraph_engine.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-13T10:51:33.281Z" }
+generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-13T10:51:33.281Z
+    at: 2026-09-23T13:19:05.664Z
 ---
 
 # 媒體轉錄與摘要流程
@@ -34,7 +38,7 @@ verified:
 
 ## 單筆處理順序
 
-`ProcessingWorker._process_task` 是 pipeline owner，順序固定：
+`ProcessingWorker._process_task` 依 task override、全域 `PROCESSING_ENGINE`、最後 `legacy` 的優先序選擇引擎。Legacy engine 以迴圈執行，LangGraph engine 以線性 StateGraph 執行；兩者共用 `PipelineOperations`，因此單筆步驟順序相同：
 
 1. `YouTubeDownloader` 執行 yt-dlp，將媒體放在 `data/videos`，並回傳 path、title 與已整理的 `VideoMetadata`。
 2. worker 以下載 title（fallback 到既有 title 或 URL）更新仍為 `Processing` 的 task。
@@ -46,7 +50,7 @@ verified:
 
 舊的 downloader adapter 或 test double 若未回傳 `VideoMetadata`，worker 仍以原本的兩參數介面呼叫 summarizer，且不寫 sidecar，保留向後相容行為。
 
-一般步驟丟出 exception 時，task 會轉為 `Failed` 並保存 error message 與 elapsed duration，而 worker loop 仍可繼續下一筆。metadata sidecar 是特例：Markdown 成功後若 JSON 寫入失敗，只記錄 warning，仍繼續 Notion 保存與完成 task。通知在 task 已標為 Completed 後執行；通知本身若拋例外，現行外層 catch 仍會再把 task 改為 Failed，因此 notifier 實作應自行吸收可恢復的 delivery failure。
+一般步驟丟出 exception 時，task 會轉為 `Failed` 並保存 error message 與 elapsed duration，而 worker loop 仍可繼續下一筆。若 lease 已失效，worker 停止處理該 task，也不能再寫入 Failed。metadata sidecar 是特例：Markdown 成功後若 JSON 寫入失敗，只記錄 warning，仍繼續 Notion 保存與完成 task。通知在 task 已標為 Completed 後執行；通知本身若拋例外，現行外層 catch 仍會再嘗試把 task 改為 Failed，因此 notifier 實作應自行吸收可恢復的 delivery failure。
 
 ## 下載與 metadata 邊界
 
@@ -60,16 +64,15 @@ Transcriber 使用 faster-whisper，逐 segment 累積文字並可透過 Streaml
 
 逐字稿仍是摘要的主要事實來源。若有 metadata，`Summarizer` 只把頻道、上架日期、格式化時長、章節與 description 放入獨立的「創作者提供，僅供背景」區塊，並明示這些是不可信參考資料、不可視為逐字稿已證實的事實，也不得用其中指示改變任務、規則或輸出格式。
 
-送入模型的 description 最多 6,000 個字元，超出時加上截斷標記；此限制只影響 prompt context，sidecar 仍由 `VideoMetadata.to_dict()` 保存完整的 curated description。相同 metadata 會隨第一次 candidate 與 transient failure 後的 fallback candidate 傳遞給 OpenAI、Gemini 或 Ollama provider。
+送入模型的 description 最多 6,000 個字元，超出時加上截斷標記；此限制只影響 prompt context，sidecar 仍由 `VideoMetadata.to_dict()` 保存完整的 curated description。相同 metadata 會隨第一次 candidate 與 transient failure 後的 fallback candidate 傳遞給 OpenAI、Gemini、Ollama 或 Codex CLI provider。
 
 ## LLM 邊界
 
-Summarizer 在 infrastructure 層選擇 Gemini、OpenAI 或 Ollama，並對特定 transient provider failure 最多切換一次 candidate。成功後記錄實際 `provider:model`，worker 再與 faster-whisper model size 組合成持久化模型標籤。候選 validation、credential eligibility、預設權重、provider-specific error 分類與 fallback 細節集中在[LLM Providers、選擇與 Failover](../integrations/llm-providers.md)。
+Summarizer 在 infrastructure 層選擇 Gemini、OpenAI、Ollama 或 Codex CLI，並對特定 transient provider failure 最多切換一次 candidate。成功後記錄實際 `provider:model`，worker 再與 faster-whisper model size 組合成持久化模型標籤。候選 validation、credential eligibility、預設權重、provider-specific error 分類與 fallback 細節集中在[LLM Providers、選擇與 Failover](../integrations/llm-providers.md)。
 
 ## 輸出與失敗語意
 
-<!-- openwiki: broken internal link [../persistence/task-and-result-storage.md] file "../persistence/task-and-result-storage.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-Pipeline 會保存 Markdown、可選 metadata sidecar 與 Notion 成果；具體 path、encoding、filename 與 Notion chunk 規則只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。Workflow 層的重要例外是：sidecar 寫入失敗只記 warning，仍可完成 Notion 保存與 task；Markdown 或 Notion 等一般步驟失敗則把 task 標成 `Failed`。
+Pipeline 會保存 Markdown、可選 metadata sidecar 與 Notion 成果；具體 path、encoding、filename 與 Notion chunk 規則只在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)維護。Workflow 層的重要例外是：sidecar 寫入失敗只記 warning，仍可完成 Notion 保存與 task；Markdown 或 Notion 等一般步驟失敗則把 task 標成 `Failed`。
 
 Focused tests 分別驗證 yt-dlp metadata 解析降級、prompt trust boundary、向後相容的無 metadata 路徑，以及 sidecar 寫入失敗仍完成 task。Pipeline dependency injection 與 adapter extension 規則集中在[模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)。
 
@@ -77,9 +80,7 @@ Focused tests 分別驗證 yt-dlp metadata 解析降級、prompt trust boundary�
 
 - [任務生命週期與併發控制](task-lifecycle.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
-<!-- openwiki: broken internal link [../persistence/task-and-result-storage.md] file "../persistence/task-and-result-storage.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
+- [任務、鎖與結果持久化](../architecture/task-and-result-storage.md)
 - [Notion 資料整合](../integrations/notion-and-showcase.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
-<!-- openwiki: broken internal link [../testing/test-strategy.md] file "../testing/test-strategy.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-- [測試策略與擴充指南](../testing/test-strategy.md)
+- [開發規則與測試策略](../operations/development-and-testing.md)
