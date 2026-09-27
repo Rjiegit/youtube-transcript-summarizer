@@ -194,8 +194,7 @@ active lease 為 Failed。
 1. 原始碼與測試：實際行為。
 2. `openwiki/`：目前架構、流程、整合與維運說明。
 3. `CONTRIBUTING.md`、`AGENTS.md`：人類與 AI 開發規則。
-4. `openspec/`：功能規格、提案與決策歷史。
-5. `.docs/`：仍需保留但尚未整併的補充設計資料；目前行為仍以程式碼、測試與 OpenWiki 為準。
+4. `.docs/`：仍需保留但尚未整併的補充設計資料；目前行為仍以程式碼、測試與 OpenWiki 為準。
 
 建議的新手閱讀順序：
 
@@ -221,4 +220,3 @@ active lease 為 Failed。
 - [Nuxt Showcase README](apps/showcase/README.md)：Nuxt 開發、環境變數、cache 與 diagnostics。
 - [Browser Extension README](apps/browser-extension/README.md)：本機載入、整合邊界與驗證方式。
 - [Browser Extension 架構文件](openwiki/integrations/browser-extension.md)：Extension API 設定與安全邊界；OpenWiki 下次更新時會同步新路徑。
-- [OpenSpec](openspec/project.md)：規格與變更提案入口。

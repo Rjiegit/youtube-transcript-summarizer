@@ -26,10 +26,10 @@ sources:
     resource: repo://tests/unit/test_http_task_queue.py
   - id: openwiki-source-bc6ea497842aa371304db838
     resource: repo://tests/unit/test_processing_engines.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-27T11:45:16.894Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-27T11:45:16.894Z
 ---
 
 # 開發規則與測試策略
@@ -71,7 +71,7 @@ CI 有三個 jobs：Python執行 Flake8與 unittest，Showcase執行 npm test/bu
 
 Commit subject 使用簡短、現在式的 Conventional Commit 風格，例如 `fix: avoid duplicate task scheduling`。Pull Request 應包含摘要、動機、驗證結果與相關 issue；UI 變更另附畫面。
 
-使用者可見的啟動或操作方式變更時，更新 `readme.md`；架構或流程變更時，透過 OpenWiki lifecycle 更新 generated wiki，不直接編輯 indexes、Claims 或 run metadata。功能需求與設計決策放在 `openspec/`，舊設計必須明確標示為歷史資料。
+使用者可見的啟動或操作方式變更時，更新 `readme.md`；架構或流程變更時，透過 OpenWiki lifecycle 更新 generated wiki，不直接編輯 indexes、Claims 或 run metadata。功能需求與設計決策記錄在對應的 issue 或 Pull Request；持續有效的操作與開發規則同步更新正式文件。舊設計必須明確標示為歷史資料。
 
 ## 延伸閱讀
 

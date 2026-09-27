@@ -15,7 +15,7 @@
 - Data & storage: `data/` (inputs/outputs), `whisper_summary/infrastructure/persistence/` (Notion/SQLite adapters), `whisper_summary/domain/interfaces/` (typed interfaces).
 - Application-facing repository ports 位於 `whisper_summary/domain/ports/`；concrete adapter 建立集中於 `whisper_summary/infrastructure/*composition.py`。
 - Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `whisper_summary/`）。
-- Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`, `openspec/`（規格與變更提案）。
+- Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`。
 
 ## Build, Test, and Development Commands
 - Install deps（不含安裝專案本體）: `uv sync --frozen --no-install-project`

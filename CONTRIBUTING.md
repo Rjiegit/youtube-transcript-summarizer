@@ -99,5 +99,5 @@ npm --prefix apps/showcase run build
 
 - 使用者可見的啟動或操作方式改變時，更新 `readme.md` 與相關 Makefile target。
 - 架構或流程改變時，透過 OpenWiki 更新流程重新產生 `openwiki/`；不要直接修改其 generated indexes、Claims 或 metadata。
-- 功能提案、需求與設計決策放在 `openspec/`。
+- 功能需求與設計決策記錄在對應的 issue 或 Pull Request；持續有效的操作與開發規則同步更新正式文件。
 - 過期設計只能保留為明確標示的歷史文件，不應繼續描述成目前待辦。
