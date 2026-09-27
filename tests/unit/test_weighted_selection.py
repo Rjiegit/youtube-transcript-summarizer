@@ -90,13 +90,13 @@ class TestWeightedSelection(unittest.TestCase):
                 ),
                 ModelCandidate(
                     Backend.CODEX_CLI,
-                    "gpt-5.6-luna",
+                    "gpt-6-luna",
                     CODEX_CLI_WEIGHT,
                 ),
             ),
         )
 
-    def test_codex_cli_receives_seventy_percent_of_auto_pool(self):
+    def test_codex_cli_receives_ninety_percent_of_auto_pool(self):
         total_weight = sum(
             candidate.weight for candidate in AUTO_MODEL_CANDIDATES
         )
@@ -108,7 +108,7 @@ class TestWeightedSelection(unittest.TestCase):
 
         self.assertAlmostEqual(
             codex_candidate.weight / total_weight,
-            0.70,
+            0.90,
         )
 
     def test_filters_unavailable_backends_and_recalculates_weights(self):

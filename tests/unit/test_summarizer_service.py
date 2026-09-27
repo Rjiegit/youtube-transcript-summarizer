@@ -105,7 +105,7 @@ class TestSummarizerService(unittest.TestCase):
 
         mock_logger.info.assert_called_once_with(
             "Codex CLI startup check: available "
-            "(executable=/opt/homebrew/bin/codex, model=gpt-5.6-luna); "
+            "(executable=/opt/homebrew/bin/codex, model=gpt-6-luna); "
             "authentication will be verified on first use"
         )
 
@@ -274,12 +274,12 @@ class TestSummarizerService(unittest.TestCase):
         self.assertEqual(summarizer.last_backend, "codex_cli")
         self.assertEqual(
             summarizer.last_model_label,
-            "codex_cli:gpt-5.6-luna",
+            "codex_cli:gpt-6-luna",
         )
         mock_codex.assert_called_once_with(
             "title",
             "text",
-            model="gpt-5.6-luna",
+            model="gpt-6-luna",
         )
 
     def test_codex_cli_candidate_is_unavailable_without_binary(self):
@@ -327,14 +327,13 @@ class TestSummarizerService(unittest.TestCase):
             result = summarizer.summarize_with_codex_cli(
                 "title",
                 "transcript",
-                model="gpt-5.6-luna",
             )
 
         self.assertEqual(result, "codex summary")
         self.assertEqual(summarizer.last_backend, "codex_cli")
         self.assertEqual(
             summarizer.last_model_label,
-            "codex_cli:gpt-5.6-luna",
+            "codex_cli:gpt-6-luna",
         )
         command = mock_run.call_args.args[0]
         self.assertEqual(
@@ -347,7 +346,7 @@ class TestSummarizerService(unittest.TestCase):
                 "--sandbox",
                 "read-only",
                 "--model",
-                "gpt-5.6-luna",
+                "gpt-6-luna",
                 "-",
             ],
         )
