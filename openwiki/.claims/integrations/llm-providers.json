@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:47f9875b3664768cbe5b586a971280c1a896fd3961a20083ff10f9ef8dd3019e",
+  "pageVersion": "sha256:0dd97c73d78831a233f74ca8b0e3ac72a55802797d352466155a9956dfc05bef",
   "claims": [
     {
       "id": "claim_f60d99543e014db3873ccc8adea4841f",
@@ -28,11 +28,11 @@
     },
     {
       "id": "claim_f3aa71b52889430d8416ee7cd6573d3d",
-      "statement": "預設自動池包含六個 Gemini candidates 與 codex_cli:gpt-6-luna；兩種 backend 都可用時 Codex CLI 的相對權重使其占 90%，selector 不追蹤或強制 RPM。",
+      "statement": "預設自動池包含六個 Gemini candidates 與 codex_cli:gpt-6-luna，權重合計 100；兩種 backend 都可用時 Codex CLI 占 90%、Gemini 合計占 10%，selector 不追蹤或強制 RPM。",
       "evidence": [
         {
           "resource": "repo://whisper_summary/infrastructure/llm/model_options.py",
-          "version": "repo-file-v1:sha256:c9fbf763309a453b3df0f0a85aae3fcf8aae44e5e3249fe3eab12dc20404fdaf"
+          "version": "repo-file-v1:sha256:00effb9e6e83fa92da9a0ce02be6e0836f13cb6172f346216af321192cba8283"
         },
         {
           "resource": "repo://whisper_summary/infrastructure/llm/weighted_selection.py#L59-L96",
@@ -88,7 +88,7 @@
         },
         {
           "resource": "repo://tests/unit/test_weighted_selection.py#L27-L152",
-          "version": "repo-lines-v1:sha256:efa19a508ea19c10ad3f22d1cb5a84086ab14c27a0d2c3491f2e38192ce422f9:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQ2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5ZGFiMWJkMDhmNTUxMDJjNmY1NTQ0OTVkMTMzODRjMzk4ODgwYzBjMDE3NTg5MGNlZTgzN2RiNTMxYjE5ZDZmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1NTAzMmU5NjRkMDkzMjM1MWU1ZDE4NTI2OTI4MWIxNzFhM2EwOWIwOGIyODZlNjYxZWE0NzAzMjNjODJlYjRkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlNjVjOTFkMTBmNTQ5ZjVhMGMyNWFkMDk3Nzg4ZWZiNTFkYzkyYTYwYWYzMzQ2N2JkNzQ2NzhmNWYzYTFhODlkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzZDQxMzQwY2MyMzlhMTU5Y2U5YjYwMjJlOWY2MzIyODMyZTJlYWQ3NmNhZTllNDc1NGQyMTBlYjhmYjZkNWU4In0"
+          "version": "repo-lines-v1:sha256:09b2d2d12a4c6fc47f069e85147d3f1a0b4e95c6aaf86a4afc649c441f14ae22:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQ4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5ZGFiMWJkMDhmNTUxMDJjNmY1NTQ0OTVkMTMzODRjMzk4ODgwYzBjMDE3NTg5MGNlZTgzN2RiNTMxYjE5ZDZmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1NTAzMmU5NjRkMDkzMjM1MWU1ZDE4NTI2OTI4MWIxNzFhM2EwOWIwOGIyODZlNjYxZWE0NzAzMjNjODJlYjRkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlNjVjOTFkMTBmNTQ5ZjVhMGMyNWFkMDk3Nzg4ZWZiNTFkYzkyYTYwYWYzMzQ2N2JkNzQ2NzhmNWYzYTFhODlkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzZDQxMzQwY2MyMzlhMTU5Y2U5YjYwMjJlOWY2MzIyODMyZTJlYWQ3NmNhZTllNDc1NGQyMTBlYjhmYjZkNWU4In0"
         }
       ]
     },
@@ -141,6 +141,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-27T11:07:35.085Z"
+    "at": "2026-09-27T11:42:53.431Z"
   }
 }

@@ -5,7 +5,7 @@ description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topo
 tags: [operations, configuration, docker, deployment]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:07:35.085Z
+    at: 2026-09-27T11:42:53.431Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml

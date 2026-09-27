@@ -70,43 +70,43 @@ OPENAI_MODEL = PROVIDER_SETTINGS[Backend.OPENAI].default_model
 OLLAMA_MODEL = PROVIDER_SETTINGS[Backend.OLLAMA].default_model
 CODEX_MODEL = CodexModel.GPT_6_LUNA.value
 
-# Existing Gemini candidates total 11. A weight of 99 gives Codex CLI
-# exactly 90% of the full pool when both Gemini and the local CLI are available.
-CODEX_CLI_WEIGHT = 99
+# Default Gemini candidates total 10. Codex CLI gets 90 of the 100 total
+# weight points when both Gemini and the local CLI are available.
+CODEX_CLI_WEIGHT = 90
 
-# The single source of truth for auto mode. Weights are relative and do not
-# need to add up to 100. A credential only makes a provider available; models
-# receive auto traffic only when they are explicitly listed here.
+# The single source of truth for auto mode. Default weights add up to 100,
+# but selection renormalizes them for eligible candidates. A credential only
+# makes a provider available; models receive auto traffic only when listed here.
 AUTO_MODEL_CANDIDATES: tuple[ModelCandidate, ...] = (
     ModelCandidate(
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_3_7_FLASH.value,
-        weight=1,
+        weight=0.91,
     ),
     ModelCandidate(
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_2_5_FLASH_LITE.value,
-        weight=2,
+        weight=1.82,
     ),
     ModelCandidate(
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_2_5_FLASH.value,
-        weight=1,
+        weight=0.91,
     ),
     ModelCandidate(
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_3_FLASH_PREVIEW.value,
-        weight=1,
+        weight=0.91,
     ),
     ModelCandidate(
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_3_1_FLASH_LITE.value,
-        weight=3,
+        weight=2.73,
     ),
     ModelCandidate(
         backend=Backend.GEMINI,
         model=GeminiModel.GEMINI_3_5_FLASH_LITE.value,
-        weight=3,
+        weight=2.72,
     ),
     ModelCandidate(
         backend=Backend.CODEX_CLI,

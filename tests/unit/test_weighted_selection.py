@@ -62,31 +62,31 @@ class TestWeightedSelection(unittest.TestCase):
             self.candidates[2],
         )
 
-    def test_auto_model_candidates_match_gemini_rpm_proportions(self):
+    def test_auto_model_candidates_match_percentage_budget(self):
         self.assertEqual(
             AUTO_MODEL_CANDIDATES,
             (
-                ModelCandidate(Backend.GEMINI, "gemini-3.7-flash", 1),
+                ModelCandidate(Backend.GEMINI, "gemini-3.7-flash", 0.91),
                 ModelCandidate(
                     Backend.GEMINI,
                     "gemini-2.5-flash-lite",
-                    2,
+                    1.82,
                 ),
-                ModelCandidate(Backend.GEMINI, "gemini-2.5-flash", 1),
+                ModelCandidate(Backend.GEMINI, "gemini-2.5-flash", 0.91),
                 ModelCandidate(
                     Backend.GEMINI,
                     "gemini-3-flash-preview",
-                    1,
+                    0.91,
                 ),
                 ModelCandidate(
                     Backend.GEMINI,
                     "gemini-3.1-flash-lite",
-                    3,
+                    2.73,
                 ),
                 ModelCandidate(
                     Backend.GEMINI,
                     "gemini-3.5-flash-lite",
-                    3,
+                    2.72,
                 ),
                 ModelCandidate(
                     Backend.CODEX_CLI,
@@ -110,6 +110,8 @@ class TestWeightedSelection(unittest.TestCase):
             codex_candidate.weight / total_weight,
             0.90,
         )
+        self.assertAlmostEqual(total_weight, 100)
+        self.assertAlmostEqual(total_weight - codex_candidate.weight, 10)
 
     def test_filters_unavailable_backends_and_recalculates_weights(self):
         selected = choose_weighted_candidate(

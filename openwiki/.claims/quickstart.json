@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c90a0288ceb55666476b5868a4cc78c264ae6893682830a0f108694df068861e",
+  "pageVersion": "sha256:4d7eb5ade5f7b90c47891a650477f7d635882062852c2f6b5bba1dc1e0a6afcc",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -100,7 +100,7 @@
       "evidence": [
         {
           "resource": "repo://whisper_summary/infrastructure/llm/model_options.py",
-          "version": "repo-file-v1:sha256:c9fbf763309a453b3df0f0a85aae3fcf8aae44e5e3249fe3eab12dc20404fdaf"
+          "version": "repo-file-v1:sha256:00effb9e6e83fa92da9a0ce02be6e0836f13cb6172f346216af321192cba8283"
         },
         {
           "resource": "repo://whisper_summary/infrastructure/llm/weighted_selection.py#L59-L86",
@@ -207,6 +207,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-27T11:07:35.085Z"
+    "at": "2026-09-27T11:42:53.431Z"
   }
 }

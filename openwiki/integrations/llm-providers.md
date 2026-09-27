@@ -1,11 +1,11 @@
 ---
 type: integration
 title: LLM Providers、選擇與 Failover
-description: 說明 Gemini、OpenAI、Ollama 的候選資格、加權選擇、provider 呼叫與一次性 transient failover。
-tags: [llm, gemini, openai, ollama, failover]
+description: 說明 Gemini、OpenAI、Ollama、Codex CLI 的候選資格、加權選擇、provider 呼叫與一次性 transient failover。
+tags: [llm, gemini, openai, ollama, codex, failover]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:07:35.085Z
+    at: 2026-09-27T11:42:53.431Z
 sources:
   - id: openwiki-source-68a25612112798dab8afa5ab
     resource: repo://tests/unit/test_summarizer_service.py
@@ -21,12 +21,12 @@ sources:
     resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-27T11:07:35.085Z" }
+generated: { by: "codex", at: "2026-09-27T11:42:53.431Z" }
 ---
 
 # LLM Providers、選擇與 Failover
 
-`Summarizer` 對 processing pipeline 提供單一 `summarize(title, text, metadata=None)` 能力，內部再選擇 Gemini、OpenAI 或 Ollama。Provider selection、prompt construction 與 transient failover 都由 LLM infrastructure 層擁有，worker 只讀取最後成功的 provider/model label 用於輸出紀錄。
+`Summarizer` 對 processing pipeline 提供單一 `summarize(title, text, metadata=None)` 能力，內部再選擇 Gemini、OpenAI、Ollama 或 Codex CLI。Provider selection、prompt construction 與 transient failover 都由 LLM infrastructure 層擁有，worker 只讀取最後成功的 provider/model label 用於輸出紀錄。
 
 ## 候選池與資格
 
@@ -43,17 +43,17 @@ Provider 的可用條件是：
 
 ## 預設 weighted selection
 
-預設自動池包含六個 Gemini models 及一個 `codex_cli:gpt-6-luna`。只有 Gemini 可用時，權重比例如下；Codex CLI 同時可用時，其權重 `99` 使它占完整候選池 90%，六個 Gemini model 合計 10%。
+預設自動池包含六個 Gemini models 及一個 `codex_cli:gpt-6-luna`，權重合計 100。兩種 backend 都可用時，權重數值可直接讀為初次抽選百分比：Luna 90%，Gemini 合計 10%。只有 Gemini 可用時，六個 Gemini 模型會按其 10 點權重重新正規化。
 
-| Model | Weight | 理論比例 |
-| --- | ---: | ---: |
-| `gemini-3.7-flash` | 1 | 9.09% |
-| `gemini-2.5-flash-lite` | 2 | 18.18% |
-| `gemini-2.5-flash` | 1 | 9.09% |
-| `gemini-3-flash-preview` | 1 | 9.09% |
-| `gemini-3.1-flash-lite` | 3 | 27.27% |
-| `gemini-3.5-flash-lite` | 3 | 27.27% |
-| `codex_cli:gpt-6-luna` | 99 | 僅與 Gemini 同時可用時為 90% |
+| Model | Weight | 兩種 backend 都可用 | 僅 Gemini 可用 |
+| --- | ---: | ---: | ---: |
+| `gemini-3.7-flash` | 0.91 | 0.91% | 9.1% |
+| `gemini-2.5-flash-lite` | 1.82 | 1.82% | 18.2% |
+| `gemini-2.5-flash` | 0.91 | 0.91% | 9.1% |
+| `gemini-3-flash-preview` | 0.91 | 0.91% | 9.1% |
+| `gemini-3.1-flash-lite` | 2.73 | 2.73% | 27.3% |
+| `gemini-3.5-flash-lite` | 2.72 | 2.72% | 27.2% |
+| `codex_cli:gpt-6-luna` | 90 | 90% | 不可用 |
 
 Selector 每次 request 做一次 weighted random draw；它沒有紀錄已用 RPM、沒有跨 request quota state，也不保證短期分布。因此 model 註解中的 Max RPM 只是設定權重的依據，這個機制不是 rate limiter 或 quota scheduler。
 

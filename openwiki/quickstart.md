@@ -5,7 +5,7 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:07:35.085Z
+    at: 2026-09-27T11:42:53.431Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
