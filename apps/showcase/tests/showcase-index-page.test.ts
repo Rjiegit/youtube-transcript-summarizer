@@ -231,14 +231,13 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="mark-all-read-button"]').attributes("disabled")).toBeDefined();
   });
 
-  it("lets this device connect to remote read-state sync", async () => {
+  it("keeps personal sync settings off the public index page", async () => {
     stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
       pending: ref(false),
       error: ref(null),
     });
-    fetchMock.mockResolvedValue({ available: true, authenticated: false });
 
     const pageModule = await loadPageModule();
     const TestHost = defineComponent({
@@ -255,11 +254,8 @@ describe("showcase index page", () => {
     });
     await flushPromises();
 
-    await wrapper.get('[data-testid="read-sync-connect-button"]').trigger("click");
-    await flushPromises();
-
-    expect(window.localStorage.getItem("nuxt-showcase-read-sync-enabled")).toBe("true");
-    expect(wrapper.find('[data-testid="read-sync-auth-form"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="read-sync-control"]').exists()).toBe(false);
+    expect(wrapper.find('[data-testid="read-sync-connect-button"]').exists()).toBe(false);
     wrapper.unmount();
   });
 

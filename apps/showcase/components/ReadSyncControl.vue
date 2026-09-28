@@ -14,6 +14,7 @@ const {
 const accessToken = ref("");
 const authenticationError = ref("");
 const isSubmitting = ref(false);
+const isEnteringAccessToken = ref(false);
 
 const statusLabel = computed(() => {
   switch (remoteSyncStatus.value) {
@@ -38,6 +39,7 @@ async function connectOrRetry(): Promise<void> {
     await syncRemoteState();
     return;
   }
+  isEnteringAccessToken.value = true;
   await setRemoteSyncEnabled(true);
 }
 
@@ -51,6 +53,7 @@ async function submitAccessToken(): Promise<void> {
   const authenticated = await authenticateRemoteSync(candidate);
   if (authenticated) {
     accessToken.value = "";
+    isEnteringAccessToken.value = false;
   } else {
     authenticationError.value = "同步碼無效，或同步服務暫時無法使用。";
   }
@@ -66,17 +69,17 @@ async function submitAccessToken(): Promise<void> {
     </div>
 
     <button
-      v-if="remoteSyncStatus === 'local' || remoteSyncStatus === 'error'"
+      v-if="remoteSyncStatus === 'local' || remoteSyncStatus === 'error' || remoteSyncStatus === 'authentication_required'"
       class="read-sync-control__connect"
       data-testid="read-sync-connect-button"
       type="button"
       @click="connectOrRetry"
     >
-      {{ remoteSyncStatus === "error" ? "重新連線" : "連結這台裝置" }}
+      {{ remoteSyncStatus === "error" ? "重新連線" : remoteSyncStatus === "authentication_required" ? "輸入同步碼" : "連結這台裝置" }}
     </button>
 
     <form
-      v-if="isRemoteSyncEnabled && remoteSyncStatus === 'authentication_required'"
+      v-if="isEnteringAccessToken && remoteSyncStatus !== 'unavailable'"
       class="read-sync-auth"
       data-testid="read-sync-auth-form"
       @submit.prevent="submitAccessToken"

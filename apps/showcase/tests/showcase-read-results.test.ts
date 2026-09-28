@@ -419,19 +419,21 @@ describe("useReadResults", () => {
     expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-from-detail");
   });
 
-  it("keeps remote sync disabled by default without changing local behavior", async () => {
+  it("checks the session automatically and keeps unauthenticated reads local", async () => {
     stubNuxtState();
     const storage = stubLocalStorage();
-    const fetchMock = vi.fn();
+    const fetchMock = vi.fn().mockResolvedValue({ available: true, authenticated: false });
     vi.stubGlobal("$fetch", fetchMock);
 
     const { useReadResults } = await import("../composables/useReadResults");
-    const { isRemoteSyncEnabled, markAsRead, remoteSyncStatus } = useReadResults();
+    const { isRemoteSyncEnabled, markAsRead, remoteSyncStatus, setRemoteSyncEnabled } = useReadResults();
     markAsRead("result-local");
+    await setRemoteSyncEnabled(true);
 
     expect(isRemoteSyncEnabled.value).toBe(false);
-    expect(remoteSyncStatus.value).toBe("local");
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(remoteSyncStatus.value).toBe("authentication_required");
+    expect(fetchMock).toHaveBeenCalledWith("/api/read-sync/session");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(storage.readRaw("nuxt-showcase-read-results")).toContain("result-local");
   });
 
@@ -447,7 +449,7 @@ describe("useReadResults", () => {
     const { isRemoteSyncEnabled, remoteSyncStatus, setRemoteSyncEnabled } = useReadResults();
     await setRemoteSyncEnabled(true);
 
-    expect(isRemoteSyncEnabled.value).toBe(true);
+    expect(isRemoteSyncEnabled.value).toBe(false);
     expect(remoteSyncStatus.value).toBe("authentication_required");
   });
 

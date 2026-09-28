@@ -44,9 +44,9 @@ Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600
 
 搭配 Vercel CDN 做簡易 SWR 快取；server process 內也保留最後成功的資料快照，當 Notion 暫時失敗時可優先回退。這個列表快取 TTL 不影響已讀狀態；Upstash 已讀同步資料另有獨立的閒置到期時間。
 
-## 跨裝置已讀同步（選用）
+## 跨裝置已讀同步
 
-已讀狀態預設仍採原本的 `localStorage` 模式；沒有設定 Upstash，或使用者沒有開啟首頁的「跨裝置同步」toggle 時，行為完全不變。啟用後，Upstash Redis 是裝置間共享的同步來源，`localStorage` 仍保留作為 optimistic UI、離線 fallback 與舊資料遷移來源。
+設定同步服務後，已連結的裝置會自動同步已讀狀態。未連結的瀏覽器維持本機 `localStorage` 狀態，不會因公開瀏覽網站而取得同步權限。新裝置第一次使用時，前往 `/settings/sync` 輸入個人同步碼；驗證後 server 會發出 30 天 HttpOnly session cookie，之後該裝置會自動同步。Upstash Redis 是裝置間共享的同步來源，`localStorage` 仍保留作為 optimistic UI、離線 fallback 與舊資料遷移來源。
 
 ### 1. 建立 Upstash Redis
 
@@ -84,7 +84,7 @@ openssl rand -hex 32
 - `READ_STATE_SYNC_ENABLED`：server-side feature flag。只有 `true` / `1` / `yes` / `on` 會啟用。
 - `UPSTASH_REDIS_REST_URL`：Upstash REST endpoint。
 - `UPSTASH_REDIS_REST_TOKEN`：只允許放在 server environment，不要加到 `runtimeConfig.public`。
-- `READ_STATE_SYNC_ACCESS_TOKEN`：新裝置第一次啟用同步時，在 UI 輸入的個人同步碼。
+- `READ_STATE_SYNC_ACCESS_TOKEN`：新裝置第一次連結時，在 `/settings/sync` 輸入的個人同步碼。
 - `READ_STATE_SYNC_SESSION_SECRET`：簽署 30 天 HttpOnly cookie 的獨立 secret。
 - `READ_STATE_SYNC_SPACE_ID`：已讀資料 namespace。更換 access token 或 session secret 時不要改它，否則會看起來像全新的資料空間。
 - `READ_STATE_SYNC_TTL_SECONDS`：已讀狀態保留期限，單位秒；預設 `2592000`（30 天）。每筆狀態在最後一次更新 30 天後會被清除；伺服器每次讀取或更新時會順便清理過期項目。整個 Hash 連續 30 天沒有同步活動也會過期。每個同步空間最多保留 100 筆狀態，超出時優先移除最舊的項目。
@@ -97,13 +97,12 @@ npm run check-env
 
 輸出只顯示各項是否存在，不會印出 secret。部署到 Vercel 時，請把相同項目設在 Project Environment Variables 後重新部署。
 
-### 3. 過渡期切換行為
+### 3. 同步行為
 
-- Toggle 關閉：只讀寫既有的 `nuxt-showcase-read-results`，不呼叫同步 API。
-- 第一次開啟：檢查 server 設定與 session；尚未驗證時顯示同步碼表單。
-- 驗證成功：先拉取 Redis snapshot，再依 `updatedAt` 合併本機舊資料並補傳本機較新的狀態。
-- Toggle 再次關閉：停止遠端讀寫，但不刪除 localStorage、Redis 或 HttpOnly session。
-- Upstash 暫時失敗或超過額度：畫面繼續使用本機狀態並顯示同步失敗，之後切回頁面會再次嘗試。
+- 每次載入時，前端會檢查裝置 session；已有有效 session 的裝置自動拉取遠端狀態並同步本機較新的狀態。
+- 沒有有效 session 的瀏覽器只使用本機狀態。同步碼只在獨立的 `/settings/sync` 頁面輸入，不在首頁顯示設定控制。
+- 驗證成功後，該裝置會在 session 有效期間自動同步；session 到期後可再次輸入同步碼連結。
+- Upstash 暫時失敗或超過額度：畫面繼續使用本機狀態，後續刷新已讀狀態或重新載入頁面時會再次嘗試。
 
 相關私人 API 一律回傳 `Cache-Control: private, no-store`：
 

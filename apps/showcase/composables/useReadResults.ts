@@ -10,13 +10,12 @@ import type {
 
 const STORAGE_KEY = "nuxt-showcase-read-results";
 const SYNC_STATE_STORAGE_KEY = "nuxt-showcase-read-sync-state";
-const SYNC_ENABLED_STORAGE_KEY = "nuxt-showcase-read-sync-enabled";
 const READ_RESULTS_STATE_KEY = "showcase-read-results";
 const READ_RESULTS_READY_STATE_KEY = "showcase-read-results-ready";
 const READ_RESULTS_REVISION_STATE_KEY = "showcase-read-results-revision";
 const READ_SYNC_STATE_KEY = "showcase-read-sync-state";
 const READ_SYNC_ENABLED_STATE_KEY = "showcase-read-sync-enabled";
-const READ_SYNC_PREFERENCE_READY_STATE_KEY = "showcase-read-sync-preference-ready";
+const READ_SYNC_INITIALIZED_STATE_KEY = "showcase-read-sync-initialized";
 const READ_SYNC_STATUS_STATE_KEY = "showcase-read-sync-status";
 const MAX_READ_ENTRIES = 500;
 const MAX_SYNC_ENTRIES = 100;
@@ -137,28 +136,6 @@ function persistSyncMap(value: SyncedReadMap): void {
   persistJson(SYNC_STATE_STORAGE_KEY, value);
 }
 
-function persistSyncPreference(value: boolean): void {
-  if (!canUseLocalStorage()) {
-    return;
-  }
-  try {
-    window.localStorage.setItem(SYNC_ENABLED_STORAGE_KEY, value ? "true" : "false");
-  } catch {
-    // The preference remains active for this session.
-  }
-}
-
-function readSyncPreference(): boolean {
-  if (!canUseLocalStorage()) {
-    return false;
-  }
-  try {
-    return window.localStorage.getItem(SYNC_ENABLED_STORAGE_KEY) === "true";
-  } catch {
-    return false;
-  }
-}
-
 function mergeReadMaps(left: ReadMap, right: ReadMap): ReadMap {
   return trimReadMap({ ...left, ...right });
 }
@@ -202,7 +179,7 @@ export function useReadResults() {
   const revision = useState<number>(READ_RESULTS_REVISION_STATE_KEY, () => 0);
   const syncState = useState<SyncedReadMap>(READ_SYNC_STATE_KEY, () => ({}));
   const isRemoteSyncEnabled = useState<boolean>(READ_SYNC_ENABLED_STATE_KEY, () => false);
-  const isSyncPreferenceReady = useState<boolean>(READ_SYNC_PREFERENCE_READY_STATE_KEY, () => false);
+  const isRemoteSyncInitialized = useState<boolean>(READ_SYNC_INITIALIZED_STATE_KEY, () => false);
   const remoteSyncStatus = useState<RemoteSyncStatus>(READ_SYNC_STATUS_STATE_KEY, () => "local");
 
   function setReadMapValue(value: unknown, options: { forceRevision?: boolean } = {}): void {
@@ -256,12 +233,6 @@ export function useReadResults() {
     isReady.value = true;
   }
 
-  if (!isSyncPreferenceReady.value && canUseLocalStorage()) {
-    isRemoteSyncEnabled.value = readSyncPreference();
-    isSyncPreferenceReady.value = true;
-    remoteSyncStatus.value = isRemoteSyncEnabled.value ? "connecting" : "local";
-  }
-
   if (!isReady.value) {
     hydrateLocalState();
   }
@@ -271,7 +242,12 @@ export function useReadResults() {
   }
 
   function setRemoteFailureStatus(error: unknown): void {
-    remoteSyncStatus.value = errorStatusCode(error) === 401 ? "authentication_required" : "error";
+    if (errorStatusCode(error) === 401) {
+      isRemoteSyncEnabled.value = false;
+      remoteSyncStatus.value = "authentication_required";
+      return;
+    }
+    remoteSyncStatus.value = "error";
   }
 
   async function pushRemoteMutations(mutations: ReadStateMutation[]): Promise<void> {
@@ -295,13 +271,16 @@ export function useReadResults() {
     remoteSyncStatus.value = "connecting";
     const session = await $fetch<ReadSyncSessionResponse>("/api/read-sync/session");
     if (!session.available) {
+      isRemoteSyncEnabled.value = false;
       remoteSyncStatus.value = "unavailable";
       return;
     }
     if (!session.authenticated) {
+      isRemoteSyncEnabled.value = false;
       remoteSyncStatus.value = "authentication_required";
       return;
     }
+    isRemoteSyncEnabled.value = true;
     const localSnapshot = seedSyncMapFromReads(syncState.value, readMap.value);
     const remoteResponse = await requestRemoteSnapshot();
     const remoteSnapshot = normalizeSyncMap(remoteResponse.entries);
@@ -324,8 +303,8 @@ export function useReadResults() {
     remoteSyncStatus.value = "synced";
   }
 
-  function syncRemoteState(): Promise<void> {
-    if (!isRemoteSyncEnabled.value) {
+  function syncRemoteState(checkSession = false): Promise<void> {
+    if (!isRemoteSyncEnabled.value && !checkSession) {
       remoteSyncStatus.value = "local";
       return Promise.resolve();
     }
@@ -344,17 +323,18 @@ export function useReadResults() {
     hydrateLocalState(options);
     if (isRemoteSyncEnabled.value) {
       void syncRemoteState();
+    } else if (remoteSyncStatus.value === "error") {
+      void syncRemoteState(true);
     }
   }
 
   async function setRemoteSyncEnabled(enabled: boolean): Promise<void> {
-    isRemoteSyncEnabled.value = enabled;
-    persistSyncPreference(enabled);
     if (!enabled) {
+      isRemoteSyncEnabled.value = false;
       remoteSyncStatus.value = "local";
       return;
     }
-    await syncRemoteState();
+    await syncRemoteState(true);
   }
 
   async function authenticateRemoteSync(accessToken: string): Promise<boolean> {
@@ -365,7 +345,6 @@ export function useReadResults() {
         body: { accessToken },
       });
       isRemoteSyncEnabled.value = true;
-      persistSyncPreference(true);
       await syncRemoteState();
       return remoteSyncStatus.value === "synced";
     } catch (error) {
@@ -448,8 +427,9 @@ export function useReadResults() {
     }
   }
 
-  if (isRemoteSyncEnabled.value && remoteSyncStatus.value === "connecting" && !remoteSyncPromise) {
-    void syncRemoteState();
+  if (canUseLocalStorage() && !isRemoteSyncInitialized.value) {
+    isRemoteSyncInitialized.value = true;
+    void syncRemoteState(true);
   }
 
   return {

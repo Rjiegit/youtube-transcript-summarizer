@@ -2,7 +2,6 @@
 import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 import ShowcaseCard from "../components/ShowcaseCard.vue";
-import ReadSyncControl from "../components/ReadSyncControl.vue";
 import { useAppLoading } from "../composables/useAppLoading";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
@@ -222,7 +221,6 @@ onBeforeUnmount(() => {
             >
               全部標記已讀
             </button>
-            <ReadSyncControl />
           </div>
 
           <template #fallback>
