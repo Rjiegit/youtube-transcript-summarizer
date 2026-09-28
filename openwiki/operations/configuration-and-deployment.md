@@ -5,7 +5,7 @@ description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topo
 tags: [operations, configuration, docker, deployment]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:42:53.431Z
+    at: 2026-09-28T12:59:50.272Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -47,7 +47,7 @@ sources:
     resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-23T13:30:04.599Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 ---
 
 # 設定、執行與部署
@@ -96,7 +96,7 @@ Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*
 
 Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅有 build date 與 commit SHA。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
 
-跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../integrations/read-state-sync.md)。
+跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 
 `npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它優先讀 frontend `.env`，不存在才讀 root `.env`，且不覆寫既有 process environment；`make showcase` 則會 export 選定檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`；若依賴 root `.env`，請從 repository root 使用 `make showcase`。執行時另可用 `/api/showcase/diagnostics` 檢查解析，或 `/api/showcase/health` 實際驗證 Notion 存取。
 
@@ -130,6 +130,6 @@ Workflow 使用 Node.js 22，安裝固定版本的 OpenWiki 與可選 Mermaid �
 - [快速開始與開發導覽](../quickstart.md)
 - [系統架構與端到端資料流](../architecture/system-overview.md)
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
-- [HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
-- [Nuxt Showcase 使用體驗與資料快取](../integrations/showcase-experience.md)
+- [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)

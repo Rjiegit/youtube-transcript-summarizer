@@ -14,10 +14,10 @@ sources:
     resource: repo://whisper_summary/apps/workers/rss_monitor.py
   - id: openwiki-source-e66f0503669326252cbeb176
     resource: repo://whisper_summary/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # YouTube RSS 自動化
@@ -45,6 +45,6 @@ Docker Compose 的 rss-monitor 使用 `http://api:8080`，由 API 集中存取 S
 ## 延伸閱讀
 
 - [Browser Extension 任務與 RSS 入口](../integrations/browser-extension.md)
-- [HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
 - [任務生命週期與併發控制](task-lifecycle.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)

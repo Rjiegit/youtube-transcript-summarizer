@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:63a261bee44596aa515a95225c25e757ea6384119dc75f49c2ddbcf2faaecdbf",
+  "pageVersion": "sha256:22aead0b6bd94ee89befbe7187a2676c38f4b5785135b9551754baf346a27f99",
   "claims": [
     {
-      "id": "claim_9933ef8ba5f844c8a3b6f4bcd81c2e46",
+      "id": "claim_83d18f4aaba54cdb8738f93c5a110301",
       "statement": "Showcase 已讀狀態預設保存在 localStorage，跨裝置同步需由使用者啟用；遠端錯誤時仍保留本機狀態並可重試。",
       "evidence": [
         {
@@ -17,7 +17,7 @@
       ]
     },
     {
-      "id": "claim_f374ea02a25344af933e0a2b0a16a305",
+      "id": "claim_0058e9a6ce104ded8053ceb3ff46061b",
       "statement": "Nuxt server 只有在同步 flag 與 Upstash URL/token、個人同步碼、session secret 齊備時才啟用同步，space id 預設 personal。",
       "evidence": [
         {
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "id": "claim_708e0ad69d8b4dc5b97d52f9a531110a",
+      "id": "claim_7d7c398cec224f28acea7bc21f0fcd97",
       "statement": "Upstash 以 space id 分隔 Redis hash，mutation Lua script 只接受較新的 updatedAt，並保存 unread tombstone。",
       "evidence": [
         {
@@ -37,7 +37,7 @@
       ]
     },
     {
-      "id": "claim_3597b296eb87474aacdfb64c3c589227",
+      "id": "claim_71fbc028593c4d3885388c3c1fae4b1c",
       "statement": "個人同步碼驗證後核發 30 天 HMAC session cookie；read-state endpoints 需要有效 session，私人 API 禁止快取。",
       "evidence": [
         {
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "id": "claim_cd79c1533c5e45fc8426f99f0fb01b9d",
+      "id": "claim_5da2d0d324054a0e8057e2ce087d0b8f",
       "statement": "Mutation API 限制每次最多 1000 筆，驗證 content key、read/unread status 與可解析的 timestamp。",
       "evidence": [
         {
@@ -65,7 +65,7 @@
       ]
     },
     {
-      "id": "claim_7e1f341a054b4e3283f487d3dde4daab",
+      "id": "claim_b24767f5b1e54f53ab984210c7500de7",
       "statement": "首次同步會將本機與遠端 snapshot 依 updatedAt 合併，把本機較新的項目補傳；標記 read/unread 時先改本機再送遠端。",
       "evidence": [
         {
@@ -81,6 +81,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-23T13:19:05.664Z"
+    "at": "2026-09-28T12:59:50.272Z"
   }
 }

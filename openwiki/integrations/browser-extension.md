@@ -16,10 +16,10 @@ sources:
     resource: repo://apps/browser-extension/service_worker.js
   - id: openwiki-source-e7e3216f0a331a89b855c12c
     resource: repo://scripts/validate-browser-extension.mjs
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # Browser Extension 任務與 RSS 入口
@@ -72,7 +72,7 @@ API base URL 預設是 `http://localhost:8080`。Options page 只接受可由 `U
 
 ## 延伸閱讀
 
-- [HTTP API 與 Client 契約](http-api-and-clients.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
 - [YouTube RSS 自動化](../workflows/rss-automation.md)
 - [系統架構與端到端資料流](../architecture/system-overview.md)
 - [快速開始與開發導覽](../quickstart.md)

@@ -1,5 +1,5 @@
 ---
-type: integration
+type: interface-guide
 title: HTTP API 與客戶端整合
 description: 說明 FastAPI feature routers、task queue 回應、RSS 與 processing lock API，以及各 client 邊界。
 tags: [api, fastapi, clients, rss, processing-lock]
@@ -28,10 +28,10 @@ sources:
     resource: repo://whisper_summary/services/rss/subscription_service.py
   - id: openwiki-source-8bf1f6c7cf873df06749ede0
     resource: repo://whisper_summary/services/tasks/processing_scheduler.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # HTTP API 與客戶端整合
@@ -60,4 +60,5 @@ verified:
 
 Browser Extension只使用 task與RSS endpoints，不提供 lock管理。Streamlit的 HTTP helpers設定 timeout並把 transport/JSON錯誤轉成可呈現訊息；RSS monitor建立 task但不直接執行media pipeline。
 
+<!-- openwiki: broken internal link [browser-extension.md] file "browser-extension.md" does not exist. Fix the href or restore the target, then delete this comment. -->
 相關閱讀：[任務生命週期](../workflows/task-lifecycle.md)、[Browser Extension](browser-extension.md)。

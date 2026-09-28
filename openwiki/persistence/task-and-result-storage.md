@@ -1,5 +1,5 @@
 ---
-type: architecture
+type: persistence-guide
 title: 任務、鎖與結果持久化
 description: 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
@@ -22,10 +22,10 @@ sources:
     resource: repo://whisper_summary/services/outputs/path_builder.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # 任務、鎖與結果持久化
@@ -87,4 +87,4 @@ Summary output path 預設是 `data/summaries/_summarized_<timestamp>_<video-id>
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
 - [Notion 資料整合與 Showcase 邊界](../integrations/notion-and-showcase.md)
-- [模組邊界與外部依賴](module-boundaries-and-dependencies.md)
+- [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)

@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:ed73adf198fe67a266d642dcdf5d4b5a8453f262eb304fe833716b0df5cf6323",
+  "pageVersion": "sha256:5e10060a81e154c80f0452bd99659494dfd3f3f776e5d5e48e825b171010ab1f",
   "claims": [
     {
-      "id": "claim_b49be5796ebb45d68855fac7f4755cef",
+      "id": "claim_4875a56afdaa46d48f8f363b756ddb8e",
       "statement": "Showcase 首頁與詳細頁都透過 server-side useFetch 呼叫內部 API；首頁在 client 端去重、搜尋並把未讀結果排在前面。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/pages/index.vue#L17-L67",
-          "version": "repo-lines-v1:sha256:5795c2534c263775621aef3a3da00d8217f0cb219ae808b19a9e060f18e78194:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1YmQ5YWE2YjY2MTU4NGI0ZWQ4ODExNWM2OTljYWU2MTYyMzY5MzFmMTFhODcyN2VlYWI4ZDQ5ODlhYmRmNjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwOGY4YzNmYThjNGM5NjAxZWQ2YWJkNzJiMjcyYmM5MGI3ODQyM2E3Yzg1NmJkZTcwNTdlNjAyZDNhM2MwYjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2NDZmMTcwN2RkOTczMjhiZGIzYjJkZDlkZWMzMTNhZWJkMTgyODYwMGY5MGVkYzdjNTRiN2M0MWE0YzYwZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4MmI3MGRhMGVhZTkzNWRjNDk1Yzc0NjllOGU4MDk1ZGNiMjc2NjM2YWJjMTMyMmQ3OTdjZTNlOGIyODk2OTIifQ"
+          "version": "repo-lines-v1:sha256:2e62e5e2a2308eb68cdc82ca4dd5f4237431781a6814991ba87b7ab9e941df17:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkxOGE3YTM0ZGUwMDRiOTk1NWViMzk1YTIzYTNjNDU2NjA5YWRkNTkzYzY4OTQyNGU1YTZiNDI0ZjQyYmJjYTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4MmVhNmYwYWU5Y2ZkZTFlODExZDhmMDY2Y2M5MmZlZDI4MGJiOWZkNjU0ZjRhOTM1M2RhMDAyNDY5ZWFhODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIyYTEwNmI3NzdkY2UyMmQxZmU5OWRkMDYxOTg5MmUwNjAxM2M4ZjM4NjJhN2JmZmExYjZjMjdhMGI2MDE4NTcifQ"
         },
         {
           "resource": "repo://apps/showcase/pages/results/%5Bid%5D.vue#L11-L24",
@@ -17,7 +17,7 @@
       ]
     },
     {
-      "id": "claim_09ea540eea79419a8376d6e4b3e38121",
+      "id": "claim_9b2e034376b045b2b6c3ce57aa20b1bd",
       "statement": "已讀狀態在 SSR 安全的 Nuxt state 中管理，browser 可用時同步 localStorage，儲存失敗不影響 session 記憶體狀態，且最多保留 500 筆。",
       "evidence": [
         {
@@ -31,21 +31,21 @@
       ]
     },
     {
-      "id": "claim_27f9d3114b49447aaa7106f7b31d47d6",
+      "id": "claim_78bb5cbea42e4d4086f7510f86450713",
       "statement": "首頁在 activation、mount、focus、visibility change、BFCache pageshow 與返回列表 route 時同步已讀狀態，並在資料 stale 時刷新。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/pages/index.vue#L138-L196",
-          "version": "repo-lines-v1:sha256:4a353b6caa3012bcbacaa8ce2d1291e96114eddf5d846812636a1a1dacdddb2d:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFlNGQxMzlkNWU3YmNkZDdkMDg4NTBmOGFhODQzMjFiYjA4YTA0M2FhNWM5ZGUzMGUxYWQ4NTFlNjI4YmNhMzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNmNmFkMzMxYTRlZGZjMDdjNmI0MTUxYTcwMmZlMDE2NTA3NDBmZDI5YTYxODEzMGE0NTY4ZjJiNDY3OWViMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY0ZTdhNjZlNTRkNjUwYmQwNzJhOGFkNDk0YjgwNTVlNzIyYmMxMmRhYjJhYzRkMDJiZDE3OTBiYTM4YmU4NDQifQ"
+          "version": "repo-lines-v1:sha256:38e061d80037232c3917b46016404aae8337a65694c639aac5b430746e984d57:eyJzZWxlY3RlZExpbmVDb3VudCI6NTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxYmY5ZjlhOTg1ZTBkMjVkZjM2NDM2NGExNGE0NzM2ZmM3NDY0MDE2ZWJjNzVlZWUzZmQwM2VjNWI5YmI1ODciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM5YzU5MjhmYTNlOGYzMGU4NTJhZWY0ZjczYWNkNmFlNjY0OWMwMTE5MmE1YmVkZDVkZDQyMTI4NzJkN2ZjNTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRlMzU2YmViNjQ1NjYxZmIxYjBkM2U5NGFlOGIyNzM1ZmViM2Y2Y2FjNmYxOGRiZWY3ZWExNTYyZmJiYjRkZTkifQ"
         },
         {
           "resource": "repo://apps/showcase/pages/index.vue#L95-L110",
-          "version": "repo-lines-v1:sha256:ac3d8ee57edd6b151b0ab796c248c50053fdcca858a2a295dec4a5625a7bcfd4:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ0YmNiY2ZhMTJiNTU5NzMzNTg3YTNiMmFjZTdmODk1OGY2NDVjZDU4MTJjOWI2ZDYyZTRlNDk5NmE4ZGQ1N2MiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MjI4YmQ3M2Q1Mjg5NjE3YjE4MDhjNzBiYTIzZmZhYzU4NDkzNDAxMWVjZmRhZGE1ZmU2NWI2MjU5ZDBiNTYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0YmMyNGJmNmM3YzgxNjFmOWQ3MjVlMGE4MGM4NDhjOWNiMDczM2JjMTg4NDU3Y2EzZWNlODEzZDFmZDdjYjAifQ"
+          "version": "repo-lines-v1:sha256:04a58a90c9f9b84b65ed89d7469a9809ed6ee1af35fde99d64eace0a1453ba69:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIyZDExY2FmNDNlOTdlZjM2OWU2YmVlZDFhMjY4YmQwNTgzOGYyOWI5ZGQyNTRiZjY5YmE2NDg4NDE0NzIzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ5MTU4ZmUwYjRlNGZlNmI4ZDY3Y2I0ODUxMTAwMjFmZTAyYTI4NGM4NmI1ODIyMGRkZjYwM2YwNThjOWU1NGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY1OTE0NjJiZDQ0NTEwMDZhZWQ5YjdhMTFiMDIxNTA2NmUxNDFiZWY5YWU4OGQxOTNkYTk0ZmMwNmNiNGY3MWYifQ"
         }
       ]
     },
     {
-      "id": "claim_6b86b700ff4843059a9b25c5a974e1cc",
+      "id": "claim_7f174369e9b54159aaac5383f50334e1",
       "statement": "SWR cache 對 fresh snapshot 直接回傳，對 stale snapshot 立即回傳並背景刷新，沒有 snapshot 時等待 fetch；背景刷新失敗時可保留既有 snapshot。",
       "evidence": [
         {
@@ -55,7 +55,7 @@
       ]
     },
     {
-      "id": "claim_40ad0616381d484499c83b0e1f458353",
+      "id": "claim_e3d0532593e8488fa162c8aa03fcb8df",
       "statement": "Forced refresh 不重用 stale background refresh，且只有最新啟動的 refresh 可以更新 snapshot，避免舊請求覆蓋新資料。",
       "evidence": [
         {
@@ -69,7 +69,7 @@
       ]
     },
     {
-      "id": "claim_588ae728e9e34211837e6df66d0ed68b",
+      "id": "claim_da8ea954d9b14f6ca095712e68aa1c43",
       "statement": "列表 API 的 refresh=1 會強制刷新並回傳 no-store；Notion fetch 失敗時優先回退 snapshot，沒有 snapshot 才回 502。",
       "evidence": [
         {
@@ -83,7 +83,7 @@
       ]
     },
     {
-      "id": "claim_ff402631fe4b49a298ac857ec0353293",
+      "id": "claim_0439e3fc146647bf965ce2f878a31eab",
       "statement": "詳細頁成功取得結果後會標記已讀、呈現 Markdown，並只為可解析的 YouTube URL 建立 youtube-nocookie embed。",
       "evidence": [
         {
@@ -101,7 +101,7 @@
       ]
     },
     {
-      "id": "claim_d3652cdecd454d32948d60708f3e957b",
+      "id": "claim_9792c3cc7cf34fe988ad1fd1533b6fde",
       "statement": "Showcase diagnostics只回報設定存在與解析狀態而不揭露secret，health endpoint則實際查詢Notion。",
       "evidence": [
         {
@@ -115,7 +115,7 @@
       ]
     },
     {
-      "id": "claim_cd151f4755d64fecb3b3f370b5f903e4",
+      "id": "claim_eebdd8af01eb4164b02daac1fec109e0",
       "statement": "首頁提供選用的跨裝置已讀同步控制，經個人同步碼取得 session 後透過私人 API 同步；遠端故障時保留本機已讀資料。",
       "evidence": [
         {
@@ -135,6 +135,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-23T13:19:05.664Z"
+    "at": "2026-09-28T12:59:50.272Z"
   }
 }

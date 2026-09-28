@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:e4a950754909039583c110619e5d9c3e0f3abbb4f402e325551e9b8e7d167788",
+  "pageVersion": "sha256:0c4f78dd9d21f66ebac8fe9818a7ec47969ddbc1920da41f46e56e8d5bb46bc0",
   "claims": [
     {
-      "id": "claim_82bdf561a818463185598d2b75e6f683",
+      "id": "claim_048e0f27efda42cbbc213c3a5b8ee451",
       "statement": "Streamlit、Browser Extension與RSS monitor都是FastAPI clients，而Nuxt Showcase不呼叫Task API並由server route直接查詢Notion。",
       "evidence": [
         {
@@ -25,17 +25,17 @@
       ]
     },
     {
-      "id": "claim_62513b0061c244e395354838227e4e61",
+      "id": "claim_42ac2c4beef94aefa9cadd9307c5f2f8",
       "statement": "POST /tasks對新task回201並留在persisted queue，TTL cached result回200，active或blocked duplicate回409。",
       "evidence": [
         {
           "resource": "repo://whisper_summary/apps/api/routers/tasks.py#L16-L120",
-          "version": "repo-lines-v1:sha256:d2a1b5e32ce67dcd5ead1b0c6b123c9d6fee7879634355d009adf8447be80065:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA3LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzMjYwNDI2MWFjODBjOWQyM2I5NmZjZjI2Yzk1ZjQzZjMzMWVmOTU1NjYyZTVmMjY2NWZlYWJlY2IzOGM1ZjU5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlY2FmYzFiMzk0YjEzMmY2Yjg0MmU3MGE4MGYyYWM1ZDRmMTdiZDBhYmJmNGNlOGI3MmEwNmNjZDk5YWE0MGVkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjNzRjMGVjMzJlMjAwYzE3MTI5MjUxYjMyOGUyZjU2ZTU4NTE4YzcwYjMyYzMzNGEyODk3NWU2NzU2Zjc4NzA2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzOGYzYjIyODE5ZmM1N2U1MzdmMTZhYWE1NTkyYjhhYjYyYzNmY2RmZmU4OWVmYTBhMzZmMjJiYWE3ZDNjYzVjIn0"
+          "version": "repo-lines-v1:sha256:30664c4c3e86ada81b8065905d632547787e9ef3f16902762d6d161e294083be:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIzMjYwNDI2MWFjODBjOWQyM2I5NmZjZjI2Yzk1ZjQzZjMzMWVmOTU1NjYyZTVmMjY2NWZlYWJlY2IzOGM1ZjU5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyMWQzMDk3YzY1NjFjOWMwZTE0NDlmYWYzNzNhMDNlOWIwZGEyYjBkMzI1YzViZDM1YjZhNWQzZDIzMzNjYTcxIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjNzRjMGVjMzJlMjAwYzE3MTI5MjUxYjMyOGUyZjU2ZTU4NTE4YzcwYjMyYzMzNGEyODk3NWU2NzU2Zjc4NzA2IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwYTY2OGQ1MmRjMWMzNDhiNDA1OTYyNjNlM2MyYWIwYjdjNmUyNzUxNjljZmZkZjVlZDRkODIyZmUwNDNhNTVlIn0"
         }
       ]
     },
     {
-      "id": "claim_35de22504e104042a554847891532ae4",
+      "id": "claim_753f1526e7314b9c93bec98a4596479e",
       "statement": "Task持久化後由dedicated processing worker輪詢；API response以processing_started=false表達API process沒有啟動worker。",
       "evidence": [
         {
@@ -44,12 +44,12 @@
         },
         {
           "resource": "repo://whisper_summary/apps/api/routers/tasks.py#L75-L120",
-          "version": "repo-lines-v1:sha256:659a7ac50e489a835ab2c788b595a35b1389091b8d7e398ad8abf8811fd7ded1:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVjYWZjMWIzOTRiMTMyZjZiODQyZTcwYTgwZjJhYzVkNGYxN2JkMGFiYmY0Y2U4YjcyYTA2Y2NkOTlhYTQwZWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjNjOTg5YmNjZGQyNzIxYzJhOWQxMzc4M2FhNDM0MzY3MTZhMzI2N2FlNDdhM2MyYzFlZDcwZDEzOTRiNzdkNTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM4ZjNiMjI4MTlmYzU3ZTUzN2YxNmFhYTU1OTJiOGFiNjJjM2ZjZGZmZTg5ZWZhMGEzNmYyMmJhYTdkM2NjNWMifQ"
+          "version": "repo-lines-v1:sha256:fcbe0da3d07556bcab49b5849eeb9203eccb3a6c81f7492dcd6ed3ee13827fc7:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAzODM5MTE3Y2M3MmUwNmMzMGY3ZmUwZjdmNTJiODU2MTQ4MzUzZGZhODQxZGY5NmY4ZDg5MjZhMDRiMjBkYjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxZDMwOTdjNjU2MWM5YzBlMTQ0OWZhZjM3M2EwM2U5YjBkYTJiMGQzMjVjNWJkMzViNmE1ZDNkMjMzM2NhNzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBlNjFhZTc1MzRjNjBjYTI4YjM1MWFmYWUyMmU3OGZmMzI0OWNkM2Y3MjM0ZDFlMWM4NWJiMGZkNGNhZGYwMTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhNjY4ZDUyZGMxYzM0OGI0MDU5NjI2M2UzYzJhYjBiN2M2ZTI3NTE2OWNmZmRmNWVkNGQ4MjJmZTA0M2E1NWUifQ"
         }
       ]
     },
     {
-      "id": "claim_bd0b74019c2a4c44925aa5409e5afad2",
+      "id": "claim_c9e8a6e5ee2c4ec4a51dc09117a2c933",
       "statement": "Retry endpoint只接受Failed task，建立新Pending retry並更新source狀態，但endpoint本身不啟動processing worker。",
       "evidence": [
         {
@@ -59,12 +59,12 @@
       ]
     },
     {
-      "id": "claim_3ef6885a85b44b689e516080600480e0",
+      "id": "claim_ce63c86cac6b48ee96772bcbe15817fb",
       "statement": "POST /processing-jobs驗證backend設定後回202並告知dedicated worker會輪詢persisted queue；端點不取得global lock或啟動daemon thread。",
       "evidence": [
         {
           "resource": "repo://whisper_summary/apps/api/routers/processing.py#L43-L61",
-          "version": "repo-lines-v1:sha256:0e8529f54bb5e568fd452eb774ce2532eacadf488ff32492b6e98c7bcc676abd:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk2MWYyNjc2MzMyYjJlNzk4NDkwNWEzZmE2NDlkZWNkOWJiMjJlNWFlZGNmZDM4NTcwY2VlMjIyN2IzNjY2MmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4NWViMDhlMmNlYzQ0Mjc2NmVkYmE1MmY2Njg5M2Y4YTU0N2I5ZDBkM2EzZmJiZTMyNWNkYzFiZGIxYTA5YzIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY1ODM4YjhkNDk3ZTM4ZDY1Yjg0MjJmOWE0NzQyZWEyN2QxMThjZmU2ZTY2MTBkNDlmZGVhMjRjNzJjMjM5NzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkifQ"
+          "version": "repo-lines-v1:sha256:7dc0b9c77ed57e96ff44fe31a55f7c5298e901af2a1635be9458d72f4b2e43ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQzZGUxNjVhM2Y0MjJkNzhiMTUxZTE1ZTk0MGI3YzdjMzExOTBmZTE2ZTNlN2M5N2QyNDNiMDUzYTc1NzQ0YTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE4OWIyMWE0OTgwM2ExYzMxOWE4MDc3Yjk0NzZkZjAwNmJkMzcwODE0NWQ5YjIzOTU4ZTQ1MmZhYTBjM2FiNGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjdkYzIyZjgyODUxNjI2NDBiNjJhMWMxYTBhODYyYjVjMWM4YmMwN2Q4YzhjN2FkNjlhYzdhZDFhZjUzNTgwZDQifQ"
         },
         {
           "resource": "repo://whisper_summary/services/tasks/processing_scheduler.py#L1-L13",
@@ -73,7 +73,7 @@
       ]
     },
     {
-      "id": "claim_55c763d024c4404fbb00894493b7fd61",
+      "id": "claim_8f86f3dc1b1e4957b6c36766356744b3",
       "statement": "POST /rss/subscriptions驗證channel input並建立SQLite subscription，成功回201且duplicate回409；RSS subscription沒有Notion backend選項。",
       "evidence": [
         {
@@ -87,21 +87,21 @@
       ]
     },
     {
-      "id": "claim_4c3124cd7fb64b61ad5398f9740ca071",
+      "id": "claim_3a78fdf7a293411fa6919084d404ef19",
       "statement": "Processing lock GET與DELETE都要求X-Maintainer-Token；未設定server token、缺少header與錯誤token分別回503、401與403。",
       "evidence": [
         {
           "resource": "repo://whisper_summary/apps/api/routers/processing.py#L20-L41",
-          "version": "repo-lines-v1:sha256:7ccc20535552d143975d49f4f5cfb656b42066a97b6b875b56ff3fdb79c74039:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyNDMyMDQxMjQ1OGYzYmYxZjA1NGUzNWUyMzQ5MWMyOTJhNDdiZDRkMTM0ZTVhOTRkMWIyYTZmYzhiZmEyNGQ5IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmMmFhOGIxOTJhNzRiYTYzYzZkZmMyMzg4MmE1M2M2ODI3NmRjMGRiNmM1YWE1YjEwZTYzNTVhNmRmM2JiNzJlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJmZjdlYTcxZjI1NTk2ZWZlZjJhNzlhM2YyN2ZjMjZlZmRmYWFlMGQ4MDhkZDUwMTNmMDhiMGE2NzZkOTgxNmUyIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwMzU0ZGMxZTI3NjBmMmYwOTYzY2NiYTU5YjkwOWZlNDZmMjJjYmUwOGMyMjA0OGEwNmU3MTAxZTMxNmFiM2RmIn0"
+          "version": "repo-lines-v1:sha256:bb9d8ec5d434988aeccd4c5533cd1e069a91ee1b0bbd9f1e723cdbb7d4833978:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlODZkMjdkMzYxYTYyOWQ3NTAzNjVkMDllM2M5YTQ4OGE0NzU5MzIyYjliMjkzM2JkMTI3Mjk3N2M5MTkxMWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzNWYxMmY1NmU0ZDc3YjY2NmQ3YjgwYjhmZWY2ZTE4MDVjNGYzYTk0YjQ2Y2Y1Njg5ZWRjMjlmMjMwM2YwMDEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1OGYwZTI4M2M3NGFiNDVhNWE3YzA2ODJmZjM4OGEzNmE2NmM3NTY3N2UzYWM0YWFhOGM5YmYzZDBkYjI2MDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiN2QzZWFjM2Y0MDZiNTNmNDJhNmU4YzY3NjE2ZjJjNGUzZDljNjJkMDEyOGJmZWUzMWFmMTA4MDg2MzIyMDUifQ"
         },
         {
           "resource": "repo://whisper_summary/apps/api/routers/processing.py#L64-L179",
-          "version": "repo-lines-v1:sha256:f69d02cdb899e94f29ede3ce26b4e50e59a44db366300d784e65a98dc8c9932c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIzMGMxZjE4OGYxNDJlZDdhODI0NjgwYjIwNzE3MmM1NTE5YmM2MTRhNDhmZGE3Y2YxNjdlZGI4ZGRmNzk5NTZjIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzYjQ0ZDY2NmJlYzk4OTVlMjA2NmI3OWJmYWI0MzRkYjZhNzI4NzY0MTY0YTk3N2Y0N2RmODU4NWQxZGQxZDE1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+          "version": "repo-lines-v1:sha256:337e17bcc4e7530f09077c1cebf77d41898f3e7185135d214e095566b6611430:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI3MDA2YzA1MzdhOThlZjRhZWU0OTQ5NDZiMTFjNzFkNTg2Y2M3NWNkNmZkNWE0MzVjMTNlNjI3MGM4MDRlZjYzIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1OTA5YTUzYTYxOGQwMjhlMWQzMDAwYzBhN2FiY2VlY2JlNWZiMzdmNGU1MTFlZmU0NjY0M2ZhZDZlNjY4NzJmIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIxNGQ0ODk0MDc0NmEyY2ZiY2M3NGNkNDY4ZTk3OWFiM2FmOTg5MWNhZWNmNTNiZGRlNGUxZjcyYzkyZjBiOGFmIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI3NmMxNDc1YTkwODM5ZTAyNjVlMGJlYjE5Zjg5YmM0N2U5NGZkYjU4ZDdjMDBlZjBkZjI3MjZmYjE1MjdmZGFhIn0"
         }
       ]
     },
     {
-      "id": "claim_b5ee42859fbf44698e190a752e79b508",
+      "id": "claim_81478412086b4d679b5d5b6c020e6320",
       "statement": "Processing lock DELETE支援matching expected worker、force age threshold與dry run snapshots；Browser Extension不實作這些管理端點。",
       "evidence": [
         {
@@ -110,12 +110,12 @@
         },
         {
           "resource": "repo://whisper_summary/apps/api/routers/processing.py#L85-L179",
-          "version": "repo-lines-v1:sha256:fda60bfdb8d9b2465540282f5e1f3a696ab660ad80c8d71912f879d0c53ef931:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc1ZjE4Nzc5Y2E1NmRkNzhiNjlhMDJjOWJhNjNjMmJmYTE5YmFhMGY0MGUzZTcwMWE1YWQ1YmEyM2NmOTVlODMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcwZWU3NTlkNzFmNjYzZGExNzcwZGVjZmRjZTczOTk5MjgwNmI1NDczNjE0Mjk1ZmU3M2QxM2VhYjNlY2QyYjMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:66bc93d3ad17bf4977b053927535447a560812211804857e0760b7f2dc323b83:eyJzZWxlY3RlZExpbmVDb3VudCI6OTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjliOTQ5YjMyZTk5MGY1ZGRlZjVmMzgxN2QzMDJhMWUwMzQ0NmU2NTc3YzFiNmEzNGRlMTE4MDM4NDJjYTYzMzEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUwMmQxNGI3ZTM4NTBiNDk2NTc5YWYwYzhhMDNiMTIxZjIzMzAyY2IyNDg3NDYxMDE0ZDA0YTQxODkxMTFmZDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc2YzE0NzVhOTA4MzllMDI2NWUwYmViMTlmODliYzQ3ZTk0ZmRiNThkN2MwMGVmMGRmMjcyNmZiMTUyN2ZkYWEifQ"
         }
       ]
     },
     {
-      "id": "claim_5c14d7077e7d4d6c9b9f89bc7022d3ba",
+      "id": "claim_3d16f19ada7c4e2d9a4a79e6361b57ac",
       "statement": "POST /tasks 可指定 legacy 或 langgraph 處理引擎，未指定時 worker 使用全域設定。",
       "evidence": [
         {
@@ -129,7 +129,7 @@
       ]
     },
     {
-      "id": "claim_e3b65c43e8d045b6bdd77b0859fb85ca",
+      "id": "claim_56fb11fa07b3445c937d6e1dc2fb3ca3",
       "statement": "Worker queue 的 claim、heartbeat、progress、complete、fail 使用 X-Worker-Token；後續寫入需匹配 worker id 與 lease token，失效回 409。",
       "evidence": [
         {
@@ -139,7 +139,7 @@
       ]
     },
     {
-      "id": "claim_dd975f3fc7d747c1a24f83ddb146741a",
+      "id": "claim_26a853202bf64830bb04e2a8a32a06d3",
       "statement": "維運者可讀取目前 processing leases，並以 dry run、expected worker 或強制 age threshold 對單筆 lease 標記失敗。",
       "evidence": [
         {
@@ -151,6 +151,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-23T13:19:05.664Z"
+    "at": "2026-09-28T12:59:50.272Z"
   }
 }

@@ -26,10 +26,10 @@ sources:
     resource: repo://tests/unit/test_http_task_queue.py
   - id: openwiki-source-bc6ea497842aa371304db838
     resource: repo://tests/unit/test_processing_engines.py
-generated: { by: "codex", at: "2026-09-27T11:45:16.894Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:45:16.894Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # 開發規則與測試策略
@@ -79,4 +79,4 @@ Commit subject 使用簡短、現在式的 Conventional Commit 風格，例如 `
 - [設定、執行與部署](configuration-and-deployment.md)
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
-- [跨裝置已讀同步](../integrations/read-state-sync.md)
+- [跨裝置已讀同步](../frontend/read-state-sync.md)

@@ -26,10 +26,10 @@ sources:
     resource: repo://whisper_summary/services/pipeline/langgraph_engine.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # 媒體轉錄與摘要流程
@@ -72,7 +72,7 @@ Summarizer 在 infrastructure 層選擇 Gemini、OpenAI、Ollama 或 Codex CLI�
 
 ## 輸出與失敗語意
 
-Pipeline 會保存 Markdown、可選 metadata sidecar 與 Notion 成果；具體 path、encoding、filename 與 Notion chunk 規則只在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)維護。Workflow 層的重要例外是：sidecar 寫入失敗只記 warning，仍可完成 Notion 保存與 task；Markdown 或 Notion 等一般步驟失敗則把 task 標成 `Failed`。
+Pipeline 會保存 Markdown、可選 metadata sidecar 與 Notion 成果；具體 path、encoding、filename 與 Notion chunk 規則只在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)維護。Workflow 層的重要例外是：sidecar 寫入失敗只記 warning，仍可完成 Notion 保存與 task；Markdown 或 Notion 等一般步驟失敗則把 task 標成 `Failed`。
 
 Focused tests 分別驗證 yt-dlp metadata 解析降級、prompt trust boundary、向後相容的無 metadata 路徑，以及 sidecar 寫入失敗仍完成 task。Pipeline dependency injection 與 adapter extension 規則集中在[模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)。
 
@@ -80,7 +80,7 @@ Focused tests 分別驗證 yt-dlp metadata 解析降級、prompt trust boundary�
 
 - [任務生命週期與併發控制](task-lifecycle.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
-- [任務、鎖與結果持久化](../architecture/task-and-result-storage.md)
+- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
 - [Notion 資料整合](../integrations/notion-and-showcase.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 - [開發規則與測試策略](../operations/development-and-testing.md)

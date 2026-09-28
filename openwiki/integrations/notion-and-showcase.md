@@ -16,21 +16,21 @@ sources:
     resource: repo://whisper_summary/infrastructure/persistence/notion/client.py
   - id: openwiki-source-16ad15a60707008474d113ec
     resource: repo://whisper_summary/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # Notion 資料整合與 Showcase 邊界
 
 Notion 在本系統有兩種不同角色：Python `NotionDB` 可把 database 當作任務 queue；`SummaryStorage` 另建立承載完整摘要 blocks 的成果 page。Nuxt Showcase 不建立或更新資料，只用 server-side API 讀取 database schema、完成項目與 page blocks。
 
-本頁聚焦 Python 與 Nuxt 之間的 Notion schema contract；SQLite transaction、task leases、recent history 與檔案 artifacts 集中在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)。
+本頁聚焦 Python 與 Nuxt 之間的 Notion schema contract；SQLite transaction、task leases、recent history 與檔案 artifacts 集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## Python 寫入端
 
-Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等 properties 管理 task，並將 processing engine 以 `Legacy`／`LangGraph` select 值保存；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public` 與摘要 blocks 的成果 page。兩者共用 credentials/database 設定，但用途與 schema 不完全相同。Queue locking、rich-text chunking 與 storage failure 語意集中在[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)。
+Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 等 properties 管理 task，並將 processing engine 以 `Legacy`／`LangGraph` select 值保存；`SummaryStorage` 建立含 `Title`、`URL`、`Model`、`Public` 與摘要 blocks 的成果 page。兩者共用 credentials/database 設定，但用途與 schema 不完全相同。Queue locking、rich-text chunking 與 storage failure 語意集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## Nuxt 唯讀端
 
@@ -56,7 +56,7 @@ Repository 以 `tests/fixtures/notion_completed_page.json` 表示共同的 Compl
 
 ## 延伸閱讀
 
-- [任務、鎖與結果持久化](../architecture/task-and-result-storage.md)
+- [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
-- [Nuxt Showcase 使用體驗與資料快取](showcase-experience.md)
+- [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)

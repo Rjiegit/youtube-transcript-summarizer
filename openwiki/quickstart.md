@@ -5,7 +5,7 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:42:53.431Z
+    at: 2026-09-28T12:59:50.272Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -45,7 +45,7 @@ sources:
     resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
   - id: openwiki-source-aaaf86d61afa929bb997ee28
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 ---
 
 # 快速開始與開發導覽
@@ -145,16 +145,16 @@ npm --prefix apps/showcase run build
 | --- | --- |
 | 了解元件責任與跨系統資料流 | [系統架構與端到端資料流](architecture/system-overview.md) |
 | 盤點 Python/npm/executable/遠端服務依賴 | [模組邊界與外部依賴](architecture/module-boundaries-and-dependencies.md) |
-| 修改 API request、status、authentication 或 client | [HTTP API 與 Client 契約](integrations/http-api-and-clients.md) |
-| 修改 SQLite/Notion backend、locks 或輸出 artifacts | [任務、鎖與結果持久化](architecture/task-and-result-storage.md) |
+| 修改 API request、status、authentication 或 client | [HTTP API 與 Client 契約](interfaces/http-api-and-clients.md) |
+| 修改 SQLite/Notion backend、locks 或輸出 artifacts | [任務、鎖與結果持久化](persistence/task-and-result-storage.md) |
 | 修改 task API、dedup、retry 或 locks | [任務生命週期與併發控制](workflows/task-lifecycle.md) |
 | 修改下載、Whisper、LLM 或輸出 | [媒體轉錄與摘要流程](workflows/media-processing.md) |
 | 修改 provider、模型權重或 failover | [LLM Providers、選擇與 Failover](integrations/llm-providers.md) |
 | 修改 Chrome/Edge Extension | [Browser Extension 任務與 RSS 入口](integrations/browser-extension.md) |
 | 維護 RSS channel automation | [YouTube RSS 自動化](workflows/rss-automation.md) |
 | 修改 Notion schema 或 Python/Nuxt 整合 | [Notion 資料整合](integrations/notion-and-showcase.md) |
-| 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](integrations/showcase-experience.md) |
-| 設定跨裝置已讀同步、session 或 Upstash | [Showcase 跨裝置已讀同步](integrations/read-state-sync.md) |
+| 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](frontend/showcase-experience.md) |
+| 設定跨裝置已讀同步、session 或 Upstash | [Showcase 跨裝置已讀同步](frontend/read-state-sync.md) |
 | 設定 Docker、env、cache 或部署 | [設定、執行與部署](operations/configuration-and-deployment.md) |
 | 新增或定位測試 | [開發規則與測試策略](operations/development-and-testing.md) |
 

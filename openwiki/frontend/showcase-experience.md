@@ -1,5 +1,5 @@
 ---
-type: integration
+type: frontend-guide
 title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
 tags: [nuxt, showcase, swr, caching, ux]
@@ -22,10 +22,10 @@ sources:
     resource: repo://apps/showcase/server/utils/swr-cache.ts
   - id: openwiki-source-c2ec24a0ccca33febfd50837
     resource: repo://apps/showcase/tests/swr-cache.test.ts
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -66,7 +66,7 @@ Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗�
 ## 延伸閱讀
 
 - [系統架構與端到端資料流](../architecture/system-overview.md)
-- [Notion 資料整合](notion-and-showcase.md)
+- [Notion 資料整合](../integrations/notion-and-showcase.md)
 - [跨裝置已讀同步](read-state-sync.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 - [開發規則與測試策略](../operations/development-and-testing.md)

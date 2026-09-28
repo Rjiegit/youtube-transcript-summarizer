@@ -20,15 +20,15 @@ sources:
     resource: repo://whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-8ae69ad09984b97cdc0e1fc7
     resource: repo://whisper_summary/services/tasks/task_creation.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+    at: 2026-09-28T12:59:50.272Z
 ---
 
 # 任務生命週期與併發控制
 
-本頁聚焦 task 的狀態與控制流；完整 HTTP status/auth contract 見[HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)，backend schema 與一致性比較見[任務、鎖與結果持久化](../architecture/task-and-result-storage.md)。
+本頁聚焦 task 的狀態與控制流；完整 HTTP status/auth contract 見[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)，backend schema 與一致性比較見[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
 ## 建立與去重
 
@@ -39,13 +39,13 @@ verified:
 - `Completed` + `cache_ttl`：建立時間仍在 TTL 內時重用既有結果；
 - 沒有上述情況：建立新的 `Pending` task。
 
-只有新 task 會寫入 queue；API 不啟動重型處理，cached 或 duplicate 也不建立新 task。HTTP status 與 response 欄位由[HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)統一說明。
+只有新 task 會寫入 queue；API 不啟動重型處理，cached 或 duplicate 也不建立新 task。HTTP status 與 response 欄位由[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)統一說明。
 
 ## Dedicated worker 與 task lease
 
 常駐 `processing-worker` 依 polling interval 反覆呼叫 queue drain，API process 不建立 daemon thread。Worker 透過 `HttpTaskQueue` 呼叫中央 API；API 持有 SQLite queue，所有 worker 的 claim 都在同一 database 內協調。
 
-SQLite 在 `BEGIN IMMEDIATE` 內先把過期或不完整 lease 的 Processing task 標記 Failed，需人工重試；再原子取得最舊 Pending task，核發 worker id、lease token 與 locked time。Worker 處理期間持續 heartbeat，progress、complete、fail 都要匹配 token。失去 lease 時，原 worker 不再更新該 task。全域 processing lock 的資料與管理 API 仍存在，但常駐 worker 不使用它作為 queue ownership。實作細節見[任務與結果儲存](../architecture/task-and-result-storage.md)。
+SQLite 在 `BEGIN IMMEDIATE` 內先把過期或不完整 lease 的 Processing task 標記 Failed，需人工重試；再原子取得最舊 Pending task，核發 worker id、lease token 與 locked time。Worker 處理期間持續 heartbeat，progress、complete、fail 都要匹配 token。失去 lease 時，原 worker 不再更新該 task。全域 processing lock 的資料與管理 API 仍存在，但常駐 worker 不使用它作為 queue ownership。實作細節見[任務與結果儲存](../persistence/task-and-result-storage.md)。
 
 ## 狀態轉移
 
@@ -69,7 +69,7 @@ Retry 只接受現況為 `Failed` 的 source task。它建立有 relationship �
 ## 延伸閱讀
 
 - [系統架構與端到端資料流](../architecture/system-overview.md)
-- [HTTP API 與 Client 契約](../integrations/http-api-and-clients.md)
-- [任務與結果儲存](../architecture/task-and-result-storage.md)
+- [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
+- [任務與結果儲存](../persistence/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](media-processing.md)
 - [YouTube RSS 自動化](rss-automation.md)
