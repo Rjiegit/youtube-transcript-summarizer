@@ -69,16 +69,16 @@ showcase-test:
 	npm --prefix apps/showcase run test
 
 extension-check:
-	node scripts/validate-browser-extension.mjs
+	node apps/browser-extension/scripts/validate-browser-extension.mjs
 
 test:
-	uv run python -m unittest discover -s . -p "test*.py" -v
+	uv run python -m unittest discover -s apps/whisper_summary/tests -t apps -p "test*.py" -v
 
 test-unit:
-	uv run python -m unittest discover -s tests/unit -p "test*.py" -v
+	uv run python -m unittest discover -s apps/whisper_summary/tests/unit -t apps -p "test*.py" -v
 
 test-integration:
-	uv run python -m unittest discover -s tests/integration -p "test*.py" -v
+	uv run python -m unittest discover -s apps/whisper_summary/tests/integration -t apps -p "test*.py" -v
 
 lint:
 	uv run flake8 --config $(PYTHON_PROJECT_DIR)/.flake8 .

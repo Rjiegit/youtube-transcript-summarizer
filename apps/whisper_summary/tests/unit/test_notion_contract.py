@@ -9,7 +9,7 @@ from whisper_summary.infrastructure.persistence.notion.client import NotionDB
 
 class TestNotionCompletedPageContract(unittest.TestCase):
     def test_python_writer_matches_shared_completed_page_fixture(self) -> None:
-        fixture_path = Path(__file__).parents[1] / "fixtures" / "notion_completed_page.json"
+        fixture_path = Path(__file__).resolve().parents[4] / "contracts" / "notion_completed_page.json"
         expected = json.loads(fixture_path.read_text(encoding="utf-8"))["properties"]
         notion = MagicMock()
 

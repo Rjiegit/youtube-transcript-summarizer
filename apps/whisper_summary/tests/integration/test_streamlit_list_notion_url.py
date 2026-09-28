@@ -1,5 +1,5 @@
 from whisper_summary.apps.ui.streamlit_app import get_notion_display
-from tests.fixtures.processing_jobs import sample_tasks_with_notion
+from whisper_summary.tests.fixtures.processing_jobs import sample_tasks_with_notion
 
 
 def test_notion_display_variants():

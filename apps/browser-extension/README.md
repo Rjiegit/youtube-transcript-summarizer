@@ -15,6 +15,7 @@ Chrome／Edge Manifest V3 extension，用來從 YouTube 頁面送出影片摘要
 - `content_script.js` 只從 YouTube DOM 讀取 channel context。
 - API base URL 儲存在 `chrome.storage.sync`。
 - 本目錄不屬於 `apps/whisper_summary/` Python package，不應直接 import Python implementation。
+- Manifest 與資產驗證腳本位於 `scripts/validate-browser-extension.mjs`，可從 repository root 執行 `make extension-check`。
 
 ## 修改後驗證
 

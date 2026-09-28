@@ -23,7 +23,7 @@ let secret = finding["secret"];
 
 (
   filter.matchesAny(path, [
-    `^(?:\./)?tests/`,
+    `^(?:\./)?apps/whisper_summary/tests/`,
     `^(?:\./)?apps/showcase/(?:tests|test-data)/`,
     `^(?:\./)?\.archive/(?:tests/|test_)`,
   ]) &&

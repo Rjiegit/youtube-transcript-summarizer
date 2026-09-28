@@ -1,5 +1,5 @@
 from whisper_summary.apps.ui.streamlit_app import get_notion_display
-from tests.fixtures.processing_jobs import build_task
+from whisper_summary.tests.fixtures.processing_jobs import build_task
 
 
 def test_missing_notion_with_base():

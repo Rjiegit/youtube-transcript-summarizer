@@ -15,6 +15,7 @@
 - Data & storage: `data/` (inputs/outputs), `apps/whisper_summary/infrastructure/persistence/` (Notion/SQLite adapters), `apps/whisper_summary/domain/interfaces/` (typed interfaces).
 - Application-facing repository ports 位於 `apps/whisper_summary/domain/ports/`；concrete adapter 建立集中於 `apps/whisper_summary/infrastructure/*composition.py`。
 - Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `apps/whisper_summary/`）。
+- Tests: Python unit／integration tests 與 fixtures 位於 `apps/whisper_summary/tests/`；Showcase tests 位於 `apps/showcase/tests/`；跨應用契約 fixture 位於 `contracts/`。
 - Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `apps/whisper_summary/pyproject.toml` + `apps/whisper_summary/uv.lock`, `Makefile`。
 
 ## Build, Test, and Development Commands
@@ -39,9 +40,9 @@
 - Keep modules focused; place abstractions in `apps/whisper_summary/domain/interfaces/` and adapters in `apps/whisper_summary/infrastructure/persistence/`.
 
 ## Testing Guidelines
-- Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`)；隔離測試放在 `tests/unit/`，跨 API／component boundary 的測試放在 `tests/integration/`。
+- Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`)；隔離測試放在 `apps/whisper_summary/tests/unit/`，跨 API／component boundary 的測試放在 `apps/whisper_summary/tests/integration/`。
 - Aim for fast, isolated unit tests around `transcriber`, `summarizer`, and `processing` logic; mock network/LLM/Notion.
-- Run locally: `make test`（或 `PYTHONPATH=apps uv run --project apps/whisper_summary python -m unittest discover -s . -p "test*.py" -v`）.
+- Run locally: `make test`（或 `PYTHONPATH=apps uv run --project apps/whisper_summary python -m unittest discover -s apps/whisper_summary/tests -t apps -p "test*.py" -v`）.
 
 ## Commit & Pull Request Guidelines
 - Commits: present-tense, concise subject, optional body. Example: `feat: add Notion status updates in summary_storage`

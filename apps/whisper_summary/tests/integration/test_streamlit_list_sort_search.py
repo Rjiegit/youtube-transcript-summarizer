@@ -1,5 +1,5 @@
 from whisper_summary.apps.ui.streamlit_app import sort_tasks_for_display
-from tests.fixtures.processing_jobs import sample_tasks_for_sorting, build_task
+from whisper_summary.tests.fixtures.processing_jobs import sample_tasks_for_sorting, build_task
 
 
 def test_sorting_preserves_desc_created_at():

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import completedPage from "../../../tests/fixtures/notion_completed_page.json";
+import completedPage from "../../../contracts/notion_completed_page.json";
 import { mapNotionPageToResult } from "../server/utils/notion";
 
 

@@ -69,6 +69,8 @@ make api
 Python 專案設定、lockfile 與 `.env` 位於 `apps/whisper_summary/`。`make` 指令會指定 uv project，
 並把 `apps/` 加入 `PYTHONPATH`；直接執行 Python 模組或 unittest 時，需使用
 `uv run --project apps/whisper_summary` 與 `PYTHONPATH=apps`。
+Python 測試位於 `apps/whisper_summary/tests/`，Showcase 測試位於 `apps/showcase/tests/`；
+兩邊共用的 Notion 契約 fixture 位於 `contracts/`。
 
 另開 terminal 啟動 Streamlit：
 

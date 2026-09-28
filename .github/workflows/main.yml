@@ -40,7 +40,7 @@ jobs:
       run: uv run flake8 --config apps/whisper_summary/.flake8 .
 
     - name: Test with unittest
-      run: PYTHONPATH=apps uv run python -m unittest discover
+      run: PYTHONPATH=apps uv run python -m unittest discover -s apps/whisper_summary/tests -t apps -p 'test*.py'
 
   showcase:
     runs-on: ubuntu-latest
@@ -76,4 +76,4 @@ jobs:
         node-version: "22"
 
     - name: Validate Manifest and assets
-      run: node scripts/validate-browser-extension.mjs
+      run: node apps/browser-extension/scripts/validate-browser-extension.mjs
