@@ -29,6 +29,7 @@ RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && \
 
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONPATH=/usr/src/app/apps
 
 # 先複製 lock 相關檔案（單獨一層，便於 cache）
 COPY pyproject.toml uv.lock /usr/src/app/

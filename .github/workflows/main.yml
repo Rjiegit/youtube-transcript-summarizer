@@ -38,7 +38,7 @@ jobs:
       run: uv run flake8 .
 
     - name: Test with unittest
-      run: uv run python -m unittest discover
+      run: PYTHONPATH=apps uv run python -m unittest discover
 
   showcase:
     runs-on: ubuntu-latest

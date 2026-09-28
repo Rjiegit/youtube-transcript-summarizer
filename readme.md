@@ -66,6 +66,9 @@ make install-hooks
 make api
 ```
 
+Python package 位於 `apps/whisper_summary/`，`make` 指令會把 `apps/` 加入 `PYTHONPATH`。
+若直接執行 `uv run python -m ...` 或 unittest，請先設定 `PYTHONPATH=apps`。
+
 另開 terminal 啟動 Streamlit：
 
 ```bash
@@ -118,6 +121,9 @@ make auto url="<YOUTUBE_URL>"
 make rss-monitor
 make rss-monitor-once
 
+# 查詢 Gemini 可用模型（需要 GOOGLE_GEMINI_API_KEY）
+make list-models
+
 # Python 測試與 lint
 make test
 make test-unit
@@ -168,22 +174,22 @@ active lease 為 Failed。
 
 | 元件 | 責任 |
 | --- | --- |
-| `whisper_summary/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
-| `whisper_summary/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
-| `whisper_summary/apps/api/schemas.py` | API request／response models |
-| `whisper_summary/domain/ports/` | Application services 使用的 repository contracts |
-| `whisper_summary/infrastructure/composition.py` | Processing pipeline 的 concrete adapter 組裝 |
-| `whisper_summary/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
-| `whisper_summary/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
-| `whisper_summary/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
-| `whisper_summary/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
-| `whisper_summary/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
-| `whisper_summary/services/pipeline/processing_runner.py` | Queue、lock 與 processing engine 選擇 |
-| `whisper_summary/services/pipeline/engines.py` | 共用 pipeline operations、legacy engine 與 engine contract |
-| `whisper_summary/services/pipeline/langgraph_engine.py` | LangGraph `StateGraph` orchestration |
-| `whisper_summary/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
-| `whisper_summary/infrastructure/llm/` | LLM provider、候選模型與 failover |
-| `whisper_summary/infrastructure/persistence/` | SQLite 與 Notion adapters |
+| `apps/whisper_summary/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
+| `apps/whisper_summary/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
+| `apps/whisper_summary/apps/api/schemas.py` | API request／response models |
+| `apps/whisper_summary/domain/ports/` | Application services 使用的 repository contracts |
+| `apps/whisper_summary/infrastructure/composition.py` | Processing pipeline 的 concrete adapter 組裝 |
+| `apps/whisper_summary/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
+| `apps/whisper_summary/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
+| `apps/whisper_summary/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
+| `apps/whisper_summary/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
+| `apps/whisper_summary/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
+| `apps/whisper_summary/services/pipeline/processing_runner.py` | Queue、lock 與 processing engine 選擇 |
+| `apps/whisper_summary/services/pipeline/engines.py` | 共用 pipeline operations、legacy engine 與 engine contract |
+| `apps/whisper_summary/services/pipeline/langgraph_engine.py` | LangGraph `StateGraph` orchestration |
+| `apps/whisper_summary/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
+| `apps/whisper_summary/infrastructure/llm/` | LLM provider、候選模型與 failover |
+| `apps/whisper_summary/infrastructure/persistence/` | SQLite 與 Notion adapters |
 | `apps/browser-extension/` | Chrome／Edge Manifest V3 client |
 | `apps/showcase/` | 從 Notion 讀取成果的 Nuxt 展示站 |
 

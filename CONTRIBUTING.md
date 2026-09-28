@@ -32,14 +32,17 @@ instance ID、定期 heartbeat，並以 lease token 保護 progress／complete�
 
 ## 程式碼編排
 
-- `whisper_summary/domain/`：domain models 與 typed interfaces，不放第三方服務實作。
-- `whisper_summary/services/`：use case 與流程 orchestration。
-- `whisper_summary/infrastructure/`：LLM、媒體、通知、儲存與 persistence adapters。
-- `whisper_summary/apps/`：FastAPI、Streamlit、CLI 與 RSS monitor 等 Python 入口。
+- `apps/whisper_summary/domain/`：domain models 與 typed interfaces，不放第三方服務實作。
+- `apps/whisper_summary/services/`：use case 與流程 orchestration。
+- `apps/whisper_summary/infrastructure/`：LLM、媒體、通知、儲存與 persistence adapters。
+- `apps/whisper_summary/apps/`：FastAPI、Streamlit、CLI 與 RSS monitor 等 Python 入口。
 - `apps/browser-extension/`：獨立 Chrome／Edge Manifest V3 client。
 - `apps/showcase/`：獨立 Nuxt 3 成果展示站。
 
-新增抽象時放在 `whisper_summary/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `whisper_summary/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
+Python package 位於 `apps/whisper_summary/`，import 名稱仍是 `whisper_summary`。
+從 repository root 手動執行 Python 模組或測試時，使用 `PYTHONPATH=apps`；Makefile、Docker image 與 CI 已設定。
+
+新增抽象時放在 `apps/whisper_summary/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `apps/whisper_summary/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
 
 Processing pipeline 的具體操作集中在 `services/pipeline/engines.py`，legacy 與
 LangGraph engine 必須重用相同 operations。新增或調整 pipeline 步驟時，需同步更新

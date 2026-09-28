@@ -35,7 +35,7 @@ services:
       [
         "bash",
         "-lc",
-        "uv run streamlit run whisper_summary/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
+        "uv run streamlit run apps/whisper_summary/apps/ui/streamlit_app.py --server.address 0.0.0.0 --server.port 8501 --server.fileWatcherType poll",
       ]
     environment:
       TZ: Asia/Taipei

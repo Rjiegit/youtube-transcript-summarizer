@@ -1,4 +1,4 @@
-.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once list-models yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 VIDEO_RETENTION_DAYS ?= 7
@@ -8,6 +8,7 @@ PROCESSING_LOCK_HOST ?= http://localhost:8080
 PROCESSING_LOCK_PAYLOAD ?= {"force":true,"force_threshold_seconds":0,"reason":"manual release via make clear-processing-lock"}
 
 DOCKER_COMPOSE ?= $(shell if command -v docker-compose >/dev/null 2>&1; then echo docker-compose; else echo "docker compose"; fi)
+export PYTHONPATH := $(CURDIR)/apps$(if $(PYTHONPATH),:$(PYTHONPATH))
 
 install:
 	curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
@@ -35,11 +36,14 @@ rss-monitor:
 rss-monitor-once:
 	uv run python -m whisper_summary.apps.workers.rss_monitor --once
 
+list-models:
+	uv run python scripts/list_models.py
+
 streamlit:
-	uv run streamlit run whisper_summary/apps/ui/streamlit_app.py
+	uv run streamlit run apps/whisper_summary/apps/ui/streamlit_app.py
 
 api:
-	uv run uvicorn whisper_summary.apps.api.main:app --reload --reload-dir /usr/src/app/whisper_summary --host 0.0.0.0 --port 8080
+	uv run uvicorn whisper_summary.apps.api.main:app --reload --reload-dir apps/whisper_summary --host 0.0.0.0 --port 8080
 
 showcase-install:
 	npm --prefix apps/showcase install

@@ -10,9 +10,9 @@ except ModuleNotFoundError:  # pragma: no cover - allow running without python-d
     def load_dotenv(*_args, **_kwargs):
         return False
 
-ROOT_DIR = Path(__file__).resolve().parents[3]
-if str(ROOT_DIR) not in sys.path:  # ensure src package can be imported when run via path
-    sys.path.insert(0, str(ROOT_DIR))
+APPS_DIR = Path(__file__).resolve().parents[3]
+if str(APPS_DIR) not in sys.path:  # allow direct Streamlit execution without PYTHONPATH
+    sys.path.insert(0, str(APPS_DIR))
 
 load_dotenv()
 
