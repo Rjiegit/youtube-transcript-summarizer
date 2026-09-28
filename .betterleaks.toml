@@ -37,7 +37,7 @@ let secret = finding["secret"];
 ||
 (
   filter.matchesAny(path, [
-    `^(?:\./)?\.env\.example$`,
+    `^(?:\./)?apps/whisper_summary/\.env\.example$`,
     `^(?:\./)?apps/showcase/\.env\.example$`,
   ]) &&
   secret == "example-maintainer-token"

@@ -15,12 +15,12 @@
 - Data & storage: `data/` (inputs/outputs), `apps/whisper_summary/infrastructure/persistence/` (Notion/SQLite adapters), `apps/whisper_summary/domain/interfaces/` (typed interfaces).
 - Application-facing repository ports 位於 `apps/whisper_summary/domain/ports/`；concrete adapter 建立集中於 `apps/whisper_summary/infrastructure/*composition.py`。
 - Browser Extension: `apps/browser-extension/`（獨立 Manifest V3 client，不放在 Python `apps/whisper_summary/`）。
-- Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `pyproject.toml` + `uv.lock`, `Makefile`。
+- Tooling: `.github/workflows/main.yml` (CI), `compose.yaml` (Docker services), `apps/whisper_summary/pyproject.toml` + `apps/whisper_summary/uv.lock`, `Makefile`。
 
 ## Build, Test, and Development Commands
-- Install deps（不含安裝專案本體）: `uv sync --frozen --no-install-project`
+- Install deps（不含安裝專案本體）: `uv sync --project apps/whisper_summary --frozen --no-install-project`
 - Install/Update yt-dlp（會寫入 `/usr/local/bin/yt-dlp`，可能需要權限；Docker 內較常用）: `make install` 或 `make yt-dlp-update`
-- Run Streamlit app: `make streamlit`（使用 `PYTHONPATH=apps uv run streamlit run apps/whisper_summary/apps/ui/streamlit_app.py`）
+- Run Streamlit app: `make streamlit`（使用 `apps/whisper_summary/.env`）
 - Run API: `make api`
 - Run worker CLI（SQLite）: `make run`
 - Run dedicated processing worker: `make processing-worker`
@@ -29,7 +29,7 @@
 - Download a video: `make yt-dlp url="<YOUTUBE_URL>"` → saves under `data/videos/`
 - One-shot download+process: `make auto url="<YOUTUBE_URL>"`
 - Tests (unittest discovery): `make test`；分類執行使用 `make test-unit` 或 `make test-integration`（避免使用 `python`，有些環境只有 `python3`）
-- Lint (CI parity): `uv run flake8 .`（避免直接跑 `flake8 .`，可能不在 PATH）
+- Lint (CI parity): `make lint`（等同 `uv run --project apps/whisper_summary flake8 --config apps/whisper_summary/.flake8 .`）
 - Browser Extension validation: `make extension-check`
 
 ## Coding Style & Naming Conventions
@@ -41,7 +41,7 @@
 ## Testing Guidelines
 - Framework: `unittest` (used in CI). Name tests `test_*.py` (or `test*.py`)；隔離測試放在 `tests/unit/`，跨 API／component boundary 的測試放在 `tests/integration/`。
 - Aim for fast, isolated unit tests around `transcriber`, `summarizer`, and `processing` logic; mock network/LLM/Notion.
-- Run locally: `make test`（或 `PYTHONPATH=apps uv run python -m unittest discover -s . -p "test*.py" -v`）.
+- Run locally: `make test`（或 `PYTHONPATH=apps uv run --project apps/whisper_summary python -m unittest discover -s . -p "test*.py" -v`）.
 
 ## Commit & Pull Request Guidelines
 - Commits: present-tense, concise subject, optional body. Example: `feat: add Notion status updates in summary_storage`
@@ -49,7 +49,7 @@
 - CI runs flake8 and unittest on push/PR; keep builds green.
 
 ## Security & Configuration
-- Use `.env` (copy `.env.example`). Common keys:
+- Use `apps/whisper_summary/.env` (copy `apps/whisper_summary/.env.example`). Common keys:
   - LLM: `OPENAI_API_KEY`, `GOOGLE_GEMINI_API_KEY`
   - Notion: `NOTION_API_KEY`, `NOTION_DATABASE_ID`, `NOTION_URL`
   - Ops/Integrations: `DISCORD_WEBHOOK_URL`, `PROCESSING_LOCK_ADMIN_TOKEN`, `TASK_CACHE_TTL_SECONDS`

@@ -28,11 +28,12 @@ RUN ln -snf /usr/share/zoneinfo/${TZ} /etc/localtime && \
     echo ${TZ} > /etc/timezone
 
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv
+ENV UV_PROJECT=/usr/src/app/apps/whisper_summary
 ENV PATH="/opt/venv/bin:$PATH"
 ENV PYTHONPATH=/usr/src/app/apps
 
 # 先複製 lock 相關檔案（單獨一層，便於 cache）
-COPY pyproject.toml uv.lock /usr/src/app/
+COPY apps/whisper_summary/pyproject.toml apps/whisper_summary/uv.lock /usr/src/app/apps/whisper_summary/
 
 # 安裝 Python 套件（不執行應用程式）
 RUN --mount=type=cache,target=/root/.cache/pip \

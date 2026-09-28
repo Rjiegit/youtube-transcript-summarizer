@@ -25,10 +25,8 @@ function loadDotEnv(filePath) {
   return filePath;
 }
 
-const workspaceRoot = path.resolve(process.cwd(), "..", "..");
 const localEnv = path.join(process.cwd(), ".env");
-const rootEnv = path.join(workspaceRoot, ".env");
-const loadedFrom = loadDotEnv(localEnv) ?? loadDotEnv(rootEnv);
+const loadedFrom = loadDotEnv(localEnv);
 const firstNonEmptyEnvValue = (...keys) => {
   for (const key of keys) {
     const value = process.env[key];

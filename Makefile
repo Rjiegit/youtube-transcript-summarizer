@@ -1,4 +1,4 @@
-.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once list-models yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once list-models lint yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 VIDEO_RETENTION_DAYS ?= 7
@@ -8,6 +8,8 @@ PROCESSING_LOCK_HOST ?= http://localhost:8080
 PROCESSING_LOCK_PAYLOAD ?= {"force":true,"force_threshold_seconds":0,"reason":"manual release via make clear-processing-lock"}
 
 DOCKER_COMPOSE ?= $(shell if command -v docker-compose >/dev/null 2>&1; then echo docker-compose; else echo "docker compose"; fi)
+PYTHON_PROJECT_DIR := apps/whisper_summary
+export UV_PROJECT := $(CURDIR)/$(PYTHON_PROJECT_DIR)
 export PYTHONPATH := $(CURDIR)/apps$(if $(PYTHONPATH),:$(PYTHONPATH))
 
 install:
@@ -25,25 +27,25 @@ freeze:
 	uv lock
 
 run:
-	uv run python -m whisper_summary.apps.workers.cli
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env python -m whisper_summary.apps.workers.cli
 
 processing-worker:
-	PROCESSING_WORKER_NAME=local uv run python -m whisper_summary.apps.workers.processing_worker
+	PROCESSING_WORKER_NAME=local uv run --env-file $(PYTHON_PROJECT_DIR)/.env python -m whisper_summary.apps.workers.processing_worker
 
 rss-monitor:
-	uv run python -m whisper_summary.apps.workers.rss_monitor
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env python -m whisper_summary.apps.workers.rss_monitor
 
 rss-monitor-once:
-	uv run python -m whisper_summary.apps.workers.rss_monitor --once
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env python -m whisper_summary.apps.workers.rss_monitor --once
 
 list-models:
-	uv run python scripts/list_models.py
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env python $(PYTHON_PROJECT_DIR)/scripts/list_models.py
 
 streamlit:
-	uv run streamlit run apps/whisper_summary/apps/ui/streamlit_app.py
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env streamlit run $(PYTHON_PROJECT_DIR)/apps/ui/streamlit_app.py
 
 api:
-	uv run uvicorn whisper_summary.apps.api.main:app --reload --reload-dir apps/whisper_summary --host 0.0.0.0 --port 8080
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env uvicorn whisper_summary.apps.api.main:app --reload --reload-dir $(PYTHON_PROJECT_DIR) --host 0.0.0.0 --port 8080
 
 showcase-install:
 	npm --prefix apps/showcase install
@@ -53,9 +55,6 @@ showcase-check:
 
 showcase:
 	@env_file="apps/showcase/.env"; \
-	if [ ! -f "$$env_file" ] && [ -f .env ]; then \
-		env_file=".env"; \
-	fi; \
 	if [ -f "$$env_file" ]; then \
 		while IFS= read -r line || [ -n "$$line" ]; do \
 			case "$$line" in \
@@ -80,6 +79,9 @@ test-unit:
 
 test-integration:
 	uv run python -m unittest discover -s tests/integration -p "test*.py" -v
+
+lint:
+	uv run flake8 --config $(PYTHON_PROJECT_DIR)/.flake8 .
 
 # Docker 相關命令
 docker-build:
@@ -134,11 +136,11 @@ cleanup-data:
 
 clear-processing-lock:
 	@token="$(PROCESSING_LOCK_ADMIN_TOKEN)"; \
-	if [ -z "$$token" ] && [ -f .env ]; then \
-		token="$$(grep -m1 '^PROCESSING_LOCK_ADMIN_TOKEN=' .env | cut -d'=' -f2-)"; \
+	if [ -z "$$token" ] && [ -f "$(PYTHON_PROJECT_DIR)/.env" ]; then \
+		token="$$(grep -m1 '^PROCESSING_LOCK_ADMIN_TOKEN=' "$(PYTHON_PROJECT_DIR)/.env" | cut -d'=' -f2-)"; \
 	fi; \
 	if [ -z "$$token" ]; then \
-		echo "Set PROCESSING_LOCK_ADMIN_TOKEN via env or .env before calling this target."; \
+		echo "Set PROCESSING_LOCK_ADMIN_TOKEN via env or $(PYTHON_PROJECT_DIR)/.env before calling this target."; \
 		exit 1; \
 	fi; \
 	curl -sSf -X DELETE "$(PROCESSING_LOCK_HOST)/processing-lock" \

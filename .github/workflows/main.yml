@@ -9,6 +9,8 @@ on:
 jobs:
   python:
     runs-on: ubuntu-latest
+    env:
+      UV_PROJECT: apps/whisper_summary
 
     steps:
     - uses: actions/checkout@v7
@@ -23,8 +25,8 @@ jobs:
       with:
         path: |
           ~/.cache/uv
-          .venv
-        key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
+          apps/whisper_summary/.venv
+        key: ${{ runner.os }}-uv-${{ hashFiles('apps/whisper_summary/uv.lock') }}
         restore-keys: |
           ${{ runner.os }}-uv-
 
@@ -35,7 +37,7 @@ jobs:
         uv sync --frozen --no-install-project
 
     - name: Lint with flake8
-      run: uv run flake8 .
+      run: uv run flake8 --config apps/whisper_summary/.flake8 .
 
     - name: Test with unittest
       run: PYTHONPATH=apps uv run python -m unittest discover

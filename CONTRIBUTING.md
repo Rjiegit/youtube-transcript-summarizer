@@ -5,8 +5,8 @@
 ## 開發環境
 
 ```bash
-cp .env.example .env
-uv sync --frozen --no-install-project
+cp apps/whisper_summary/.env.example apps/whisper_summary/.env
+uv sync --project apps/whisper_summary --frozen --no-install-project
 make install-hooks
 ```
 
@@ -40,7 +40,8 @@ instance ID、定期 heartbeat，並以 lease token 保護 progress／complete�
 - `apps/showcase/`：獨立 Nuxt 3 成果展示站。
 
 Python package 位於 `apps/whisper_summary/`，import 名稱仍是 `whisper_summary`。
-從 repository root 手動執行 Python 模組或測試時，使用 `PYTHONPATH=apps`；Makefile、Docker image 與 CI 已設定。
+Python 專案設定與 `.env` 也位於同一目錄。從 repository root 手動執行 Python 模組或測試時，
+使用 `uv run --project apps/whisper_summary` 與 `PYTHONPATH=apps`；Makefile、Docker image 與 CI 已設定。
 
 新增抽象時放在 `apps/whisper_summary/domain/interfaces/`；SQLite、Notion 等 adapter 放在 `apps/whisper_summary/infrastructure/persistence/`。入口只負責輸入輸出與 use case 組裝，主要流程應留在 service 層。
 
@@ -69,7 +70,7 @@ Python 測試使用 `unittest`：
 make test
 make test-unit
 make test-integration
-uv run flake8 .
+make lint
 ```
 
 測試檔命名為 `test*.py`，放在 `tests/` 對應的 unit 或 integration 範圍。優先撰寫快速、隔離的單元測試；網路、LLM、Notion、Discord 與 yt-dlp 等外部邊界應使用 mock、fake 或 fixture。
@@ -85,7 +86,7 @@ npm --prefix apps/showcase run build
 
 ## Secrets 與本機資料
 
-- 使用 `.env` 提供 credential，禁止提交 API keys、tokens 或 cookies。
+- 使用 `apps/whisper_summary/.env` 提供 Python app 的 credential，禁止提交 API keys、tokens 或 cookies。
 - 第一次 clone 後執行 `make install-hooks`。
 - 手動掃描 staged changes 可使用 `make betterleaks-staged`。
 - `data/` 用於下載、轉錄與摘要產物，不應提交 generated artifacts。

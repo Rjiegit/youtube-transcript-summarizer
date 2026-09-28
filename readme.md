@@ -39,7 +39,7 @@ processing pipeline 支援兩個具有相同外部行為的 orchestration engine
 - `legacy`：既有循序流程，也是未設定時的安全預設。
 - `langgraph`：以 LangGraph `StateGraph` 執行相同的下載、轉錄、摘要、儲存與通知步驟。
 
-在 `.env` 設定全域預設，變更後重啟 processing worker：
+在 `apps/whisper_summary/.env` 設定全域預設，變更後重啟 processing worker：
 
 ```bash
 PROCESSING_ENGINE=legacy
@@ -60,14 +60,15 @@ SQLite 會自動新增 `processing_engine` 欄位。若 Notion task backend 需�
 需求：Python 3.14、[`uv`](https://docs.astral.sh/uv/)、`yt-dlp`，以及至少一組可供目前自動候選池使用的 LLM credential。完整設定條件請參考 [OpenWiki 快速開始](openwiki/quickstart.md)。
 
 ```bash
-cp .env.example .env
-uv sync --frozen --no-install-project
+cp apps/whisper_summary/.env.example apps/whisper_summary/.env
+uv sync --project apps/whisper_summary --frozen --no-install-project
 make install-hooks
 make api
 ```
 
-Python package 位於 `apps/whisper_summary/`，`make` 指令會把 `apps/` 加入 `PYTHONPATH`。
-若直接執行 `uv run python -m ...` 或 unittest，請先設定 `PYTHONPATH=apps`。
+Python 專案設定、lockfile 與 `.env` 位於 `apps/whisper_summary/`。`make` 指令會指定 uv project，
+並把 `apps/` 加入 `PYTHONPATH`；直接執行 Python 模組或 unittest 時，需使用
+`uv run --project apps/whisper_summary` 與 `PYTHONPATH=apps`。
 
 另開 terminal 啟動 Streamlit：
 
@@ -128,7 +129,7 @@ make list-models
 make test
 make test-unit
 make test-integration
-uv run flake8 .
+make lint
 
 # Showcase 測試與 build
 npm --prefix apps/showcase run test
@@ -145,7 +146,7 @@ make extension-check
 Processing API 是 task lease 的中央協調者。Docker 與本機 worker 可以同時運行；每個
 worker 一次處理一筆任務，而同一筆任務只會由一個 lease owner 取得。
 
-先在 `.env` 設定 worker token（未設定時暫時相容
+先在 `apps/whisper_summary/.env` 設定 worker token（未設定時暫時相容
 `PROCESSING_LOCK_ADMIN_TOKEN`）：
 
 ```env
@@ -215,10 +216,10 @@ active lease 為 Failed。
 
 開始修改前請閱讀 [CONTRIBUTING.md](CONTRIBUTING.md)。重要原則如下：
 
-- 不要提交 `.env`、API key 或其他 secrets。
+- 不要提交 `apps/whisper_summary/.env`、API key 或其他 secrets。
 - 大型下載與產物放在 `data/`，不要提交到 Git。
 - Python 測試使用 `unittest`；外部 API、Notion、LLM 與網路操作應使用 mock 或 fake。
-- 提交前至少執行與變更範圍相符的測試、`uv run flake8 .`，並確認 staged secret scan。
+- 提交前至少執行與變更範圍相符的測試、`make lint`，並確認 staged secret scan。
 - 新增執行入口時，同步更新 README 與 Makefile target。
 
 ## 子專案

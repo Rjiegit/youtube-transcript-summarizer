@@ -8,6 +8,8 @@
 - [`browser-extension/`](browser-extension/)：Chrome／Edge Manifest V3 client，透過 HTTP 呼叫 FastAPI。
 - [`showcase/`](showcase/)：Nuxt 3/Nitro 成果展示站，server routes 直接讀取 Notion。
 
-Python package 的 import 名稱維持 `whisper_summary`。從 repository root 執行 Python 指令時，需將
-`apps/` 放進 `PYTHONPATH`；Makefile、Docker image 與 CI 已設定。手動執行可使用
-`PYTHONPATH=apps uv run python -m whisper_summary.apps.workers.cli`。
+Python 專案的 `pyproject.toml`、`uv.lock`、`.env.example` 與 lint 設定都放在
+`apps/whisper_summary/`；Showcase 使用自己的 `package.json` 與 `.env`。
+Python package 的 import 名稱維持 `whisper_summary`。從 repository root 手動執行時，需指定
+uv project 和 `PYTHONPATH`；Makefile、Docker image 與 CI 已設定。手動執行可使用
+`PYTHONPATH=apps uv run --project apps/whisper_summary --env-file apps/whisper_summary/.env python -m whisper_summary.apps.workers.cli`。

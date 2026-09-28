@@ -12,7 +12,7 @@ x-python-app: &python-app
   tty: true
   restart: unless-stopped
   env_file:
-    - .env
+    - ./apps/whisper_summary/.env
 
 services:
   api:

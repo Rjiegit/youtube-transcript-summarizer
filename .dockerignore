@@ -5,6 +5,7 @@ __pycache__/
 *.pyc
 *.pyo
 .venv/
+apps/whisper_summary/.venv/
 venv/
 env/
 .ruff_cache/
@@ -18,6 +19,7 @@ dist/
 data/
 .env
 .env.*
+apps/whisper_summary/.env
 *.log
 downloads
 transcription.txt

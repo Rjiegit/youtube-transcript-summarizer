@@ -18,14 +18,16 @@ class TestRuntimeEntrypoints(unittest.TestCase):
 
         self.assertIn('UV_FROZEN: "1"', content)
         self.assertIn('UV_NO_SYNC: "1"', content)
+        self.assertIn("./apps/whisper_summary/.env", content)
 
     def test_make_run_uses_current_worker_cli_arguments(self) -> None:
         content = (REPOSITORY_ROOT / "Makefile").read_text(encoding="utf-8")
 
         self.assertIn(
-            "uv run python -m whisper_summary.apps.workers.cli",
+            "uv run --env-file $(PYTHON_PROJECT_DIR)/.env python -m whisper_summary.apps.workers.cli",
             content,
         )
+        self.assertIn("export UV_PROJECT := $(CURDIR)/$(PYTHON_PROJECT_DIR)", content)
         self.assertNotIn("apps.workers.cli --db-type", content)
 
 
