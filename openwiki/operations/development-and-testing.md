@@ -3,6 +3,9 @@ type: development-guide
 title: 開發規則與測試策略
 description: 集中說明 Python 與 Nuxt 的程式碼分層、常用命令、測試邊界、CI 與提交前驗證。
 tags: [development, testing, conventions, ci]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -16,33 +19,30 @@ sources:
     resource: repo://apps/showcase/tests/read-sync-auth.test.ts
   - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
     resource: repo://apps/showcase/tests/upstash-read-state.test.ts
+  - id: openwiki-source-4bb166095eacfb6386b2f861
+    resource: repo://apps/whisper_summary/tests/integration/test_worker_task_leases.py
+  - id: openwiki-source-d28dcebc0da3aee83d630395
+    resource: repo://apps/whisper_summary/tests/unit/test_http_task_queue.py
+  - id: openwiki-source-5d2812b91933bc74fcb0c6d9
+    resource: repo://apps/whisper_summary/tests/unit/test_processing_engines.py
   - id: openwiki-source-f317ee207e1653d2033c81a4
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-  - id: openwiki-source-9398efacd8bb9280dd0ee0b5
-    resource: repo://tests/integration/test_worker_task_leases.py
-  - id: openwiki-source-e4dabfd80c2160d35bf96b4a
-    resource: repo://tests/unit/test_http_task_queue.py
-  - id: openwiki-source-bc6ea497842aa371304db838
-    resource: repo://tests/unit/test_processing_engines.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # 開發規則與測試策略
 
 ## 程式碼分層
 
-- `whisper_summary/domain/` 放 domain models 與 typed interfaces，不放第三方服務實作。
-- `whisper_summary/services/` 放 use case 與流程 orchestration。
-- `whisper_summary/infrastructure/` 放 LLM、媒體、通知、儲存與 SQLite/Notion adapters。
-- `whisper_summary/apps/` 是 FastAPI、Streamlit、CLI、RSS monitor 等執行入口；入口負責輸入輸出與 use case 組裝。
+- `apps/whisper_summary/domain/` 放 domain models 與 typed interfaces，不放第三方服務實作。
+- `apps/whisper_summary/services/` 放 use case 與流程 orchestration。
+- `apps/whisper_summary/infrastructure/` 放 LLM、媒體、通知、儲存與 SQLite/Notion adapters。
+- `apps/whisper_summary/apps/` 是 FastAPI、Streamlit、CLI、RSS monitor 等執行入口；入口負責輸入輸出與 use case 組裝。
 - `apps/showcase/` 是獨立的 Nuxt 3 展示站，使用自己的 TypeScript、Vue 與 Vitest 規則。
 
-新增抽象放在 `whisper_summary/domain/interfaces/`，新增 persistence adapter 放在 `whisper_summary/infrastructure/persistence/`。主要行為應留在 service 層，不要把流程邏輯塞進 route 或 UI handler。
+新增抽象放在 `apps/whisper_summary/domain/interfaces/`，新增 persistence adapter 放在 `apps/whisper_summary/infrastructure/persistence/`。主要行為應留在 service 層，不要把流程邏輯塞進 route 或 UI handler。
 
 ## 常用驗證
 
@@ -50,16 +50,16 @@ verified:
 
 ```bash
 make test
-uv run flake8 .
+make lint
 npm --prefix apps/showcase run test
 npm --prefix apps/showcase run build
 ```
 
-Python 依賴使用 `uv sync --frozen --no-install-project`；新增依賴後更新 `pyproject.toml` 與 `uv.lock`。第一次 checkout 執行 `make install-hooks`，提交前可用 `make betterleaks-staged` 驗證 staged secrets。
+Python 依賴使用 `uv sync --project apps/whisper_summary --frozen --no-install-project`；新增依賴後更新 `apps/whisper_summary/pyproject.toml` 與 `apps/whisper_summary/uv.lock`。第一次 checkout 執行 `make install-hooks`，提交前可用 `make betterleaks-staged` 驗證 staged secrets。
 
 ## 測試策略
 
-Python 使用 `unittest` discovery；快速隔離測試放在 `tests/unit/`，跨 router、storage 或 UI seam 的測試放在 `tests/integration/`，共享 contract/data放在 `tests/fixtures/`。LLM、Notion、Discord、yt-dlp 等網路或重型邊界使用 mock、fake 或 fixture。
+Python 使用 `unittest` discovery；快速隔離測試放在 `apps/whisper_summary/tests/unit/`，跨 router、storage 或 UI seam 的測試放在 `apps/whisper_summary/tests/integration/`，Python 測試資料放在 `apps/whisper_summary/tests/fixtures/`；跨應用 contract fixture 放在 `contracts/`。LLM、Notion、Discord、yt-dlp 等網路或重型邊界使用 mock、fake 或 fixture。
 
 Nuxt 使用 Vitest、Vue Test Utils 與 jsdom；測試放在 `apps/showcase/tests/`，命名為 `*.test.ts`。優先測試資料轉換、日期格式化、API handler、SWR cache 與 read state。
 

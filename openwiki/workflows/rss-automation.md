@@ -3,21 +3,21 @@ type: workflow
 title: YouTube RSS 自動化
 description: 說明 YouTube channel 訂閱、watermark polling、API 入列與 monitor 執行模式。
 tags: [rss, youtube, automation, sqlite]
-sources:
-  - id: openwiki-source-e201e686a785f09b6d899f0b
-    resource: repo://compose.yaml
-  - id: openwiki-source-7a37609e40334e5fce357765
-    resource: repo://tests/unit/test_rss_monitor.py
-  - id: openwiki-source-d1e2e939cdaa20a1825bddb5
-    resource: repo://whisper_summary/apps/api/routers/tasks.py
-  - id: openwiki-source-35372f5d20dd7b30f834f770
-    resource: repo://whisper_summary/apps/workers/rss_monitor.py
-  - id: openwiki-source-e66f0503669326252cbeb176
-    resource: repo://whisper_summary/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+    at: 2026-09-28T16:59:07.681Z
+sources:
+  - id: openwiki-source-2f9fce5f97d840294b957a0b
+    resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-5b22ccf25f2fef52f1cfb83c
+    resource: repo://apps/whisper_summary/apps/workers/rss_monitor.py
+  - id: openwiki-source-daab87d344d0f6ce8a388ee8
+    resource: repo://apps/whisper_summary/services/rss/channel_monitor.py
+  - id: openwiki-source-0aa11cda90812180f21b2dd9
+    resource: repo://apps/whisper_summary/tests/unit/test_rss_monitor.py
+  - id: openwiki-source-e201e686a785f09b6d899f0b
+    resource: repo://compose.yaml
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 ---
 
 # YouTube RSS 自動化

@@ -3,6 +3,9 @@ type: integration
 title: Browser Extension 任務與 RSS 入口
 description: 說明 Manifest V3 extension 如何辨識 YouTube context、建立摘要任務或 RSS 訂閱，以及設定、權限與失敗回饋。
 tags: [browser-extension, chrome, youtube, api, rss]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
     resource: repo://.github/workflows/main.yml
@@ -12,14 +15,11 @@ sources:
     resource: repo://apps/browser-extension/manifest.json
   - id: openwiki-source-7f09da405ad8b6929dbd0daf
     resource: repo://apps/browser-extension/options.js
+  - id: openwiki-source-b431ce39914f6916be11abc6
+    resource: repo://apps/browser-extension/scripts/validate-browser-extension.mjs
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
-  - id: openwiki-source-e7e3216f0a331a89b855c12c
-    resource: repo://scripts/validate-browser-extension.mjs
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # Browser Extension 任務與 RSS 入口
@@ -68,7 +68,7 @@ API base URL 預設是 `http://localhost:8080`。Options page 只接受可由 `U
 
 ## 自動化驗證
 
-`make extension-check` 會檢查 Manifest V3、manifest 引用的 assets、HTML references 與 JavaScript 語法；GitHub Actions 的 `browser-extension` job 也會執行同一支 validator。實際瀏覽器權限與互動仍應以 Load unpacked 補充驗證。
+`make extension-check` 會執行 `apps/browser-extension/scripts/validate-browser-extension.mjs`，檢查 Manifest V3、manifest 引用的 assets、HTML references 與 JavaScript 語法；GitHub Actions 的 `browser-extension` job 也會執行同一支 validator。實際瀏覽器權限與互動仍應以 Load unpacked 補充驗證。
 
 ## 延伸閱讀
 

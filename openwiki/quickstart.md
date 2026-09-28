@@ -5,7 +5,7 @@ description: 從環境設定、安裝、啟動與測試開始，並依開發任�
 tags: [quickstart, setup, navigation]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -19,33 +19,35 @@ sources:
     resource: repo://apps/showcase/components/ReadSyncControl.vue
   - id: openwiki-source-bbc421d322d74564a269df19
     resource: repo://apps/showcase/package.json
+  - id: openwiki-source-36cce2c34e32cbad2ec20271
+    resource: repo://apps/showcase/pages/settings/sync.vue
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
   - id: openwiki-source-3b0efe03f5b86982327fa144
     resource: repo://apps/showcase/server/utils/read-sync-config.ts
+  - id: openwiki-source-8a8f27feb31a478f83017412
+    resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-3510ac90ffbd030c0a1f2f0d
+    resource: repo://apps/whisper_summary/apps/workers/cli.py
+  - id: openwiki-source-fb3a71308a5a59482c2767f3
+    resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-445a1c8f48d3b2e4f898d6be
+    resource: repo://apps/whisper_summary/core/config.py
+  - id: openwiki-source-cd3c19edb3412c855091bcd0
+    resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
+  - id: openwiki-source-25d6d487d3ae6567d7b0397b
+    resource: repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-44f784ddceb054f0c06a5950
+    resource: repo://apps/whisper_summary/pyproject.toml
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-  - id: openwiki-source-05ccef8d4cf1698187f20464
-    resource: repo://pyproject.toml
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-  - id: openwiki-source-ad4df8250d444175a5c8ddb3
-    resource: repo://whisper_summary/apps/api/routers/processing.py
-  - id: openwiki-source-f6e59996a2bf7f9d896e2cd5
-    resource: repo://whisper_summary/apps/workers/cli.py
-  - id: openwiki-source-4796880dadec1e10c195387c
-    resource: repo://whisper_summary/apps/workers/processing_worker.py
-  - id: openwiki-source-f60b7b12c706e6741d8191c8
-    resource: repo://whisper_summary/core/config.py
-  - id: openwiki-source-0d97e8e2b8e9528f009e0d8b
-    resource: repo://whisper_summary/infrastructure/llm/model_options.py
-  - id: openwiki-source-72911afd713a01e09bd32b6a
-    resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # 快速開始與開發導覽
@@ -57,8 +59,8 @@ generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 在 repository root：
 
 ```bash
-cp .env.example .env
-uv sync --frozen --no-install-project
+cp apps/whisper_summary/.env.example apps/whisper_summary/.env
+uv sync --project apps/whisper_summary --frozen --no-install-project
 make api
 ```
 
@@ -68,7 +70,7 @@ make api
 make streamlit
 ```
 
-API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。預設自動摘要池包含 Gemini 與本機 Codex CLI；`.env` 請提供 `GOOGLE_GEMINI_API_KEY`，或確認 `CODEX_BIN` 指向可用的 Codex CLI。只有 OpenAI 或 Ollama key 仍無法使用目前的預設候選池；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `.env`。
+API 預設為 `http://localhost:8080`，Streamlit 預設為 `http://localhost:8501`。預設自動摘要池包含 Gemini 與本機 Codex CLI；`apps/whisper_summary/.env` 請提供 `GOOGLE_GEMINI_API_KEY`，或確認 `CODEX_BIN` 指向可用的 Codex CLI。只有 OpenAI 或 Ollama key 仍無法使用目前的預設候選池；實際 pipeline 會寫入 Notion，因此正常處理也需要 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。不要提交 `apps/whisper_summary/.env`。
 
 建立 task 後 API 會把工作寫入 SQLite queue。設定 `PROCESSING_WORKER_TOKEN`（或沿用 `PROCESSING_LOCK_ADMIN_TOKEN`），另開 terminal 啟動常駐 processing worker；worker 透過 `TASK_API_BASE_URL` 呼叫 API：
 
@@ -90,7 +92,7 @@ make run
 docker compose up -d
 ```
 
-這會啟動 API、Streamlit、processing worker 與 RSS monitor，對外提供 API `:8080` 與 Streamlit `:8501`。Streamlit、RSS monitor 與 processing worker 都透過 Compose 內的 `http://api:8080` 存取 API。API 與 processing worker container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
+這會啟動 API、Streamlit、processing worker 與 RSS monitor，對外提供 API `:8080` 與 Streamlit `:8501`。Streamlit、RSS monitor 與 processing worker 都透過 Compose 內的 `http://api:8080` 存取 API。API 與 processing worker container 啟動時預設更新 yt-dlp；不希望啟動時存取下載來源可在 Compose 載入的 `apps/whisper_summary/.env` 設定 `YTDLP_AUTO_UPDATE=0`。RSS monitor 還需 `RSS_MONITOR_ENABLED=true` 才會實際 polling。
 
 ## Nuxt Showcase
 
@@ -101,7 +103,7 @@ npm run check-env
 npm run dev
 ```
 
-開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。若設定只放在 repository root `.env`，請回 root 執行 `make showcase`，由 Makefile 載入後啟動。`npm run check-env` 自行讀取 root `.env` 的結果不會傳給後續程序。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。
+開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
 
 ## Browser Extension
 
@@ -127,7 +129,7 @@ make install-hooks
 
 ```bash
 make test
-uv run flake8 .
+make lint
 ```
 
 也可依測試層級分開執行 `make test-unit` 與 `make test-integration`。Browser Extension 的靜態驗證使用 `make extension-check`。CI 分別驗證 Python、Nuxt Showcase 與 Browser Extension；完整指令與阻擋條件見[開發規則與測試策略](operations/development-and-testing.md)。

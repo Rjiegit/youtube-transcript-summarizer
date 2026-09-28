@@ -3,27 +3,27 @@ type: workflow
 title: 任務生命週期與併發控制
 description: 說明任務建立、去重、背景排程、SQLite leases、狀態轉移、失敗重試與管理者 lock 操作。
 tags: [tasks, queue, locking, concurrency, retry]
-sources:
-  - id: openwiki-source-1ae6bea59e1f7c46202a8309
-    resource: repo://tests/unit/test_sqlite_client.py
-  - id: openwiki-source-342c9b983ccf76e13ea1243b
-    resource: repo://whisper_summary/apps/api/dependencies.py
-  - id: openwiki-source-ad4df8250d444175a5c8ddb3
-    resource: repo://whisper_summary/apps/api/routers/processing.py
-  - id: openwiki-source-d1e2e939cdaa20a1825bddb5
-    resource: repo://whisper_summary/apps/api/routers/tasks.py
-  - id: openwiki-source-4796880dadec1e10c195387c
-    resource: repo://whisper_summary/apps/workers/processing_worker.py
-  - id: openwiki-source-c85a8f484a8e8883d5abeeba
-    resource: repo://whisper_summary/infrastructure/persistence/sqlite/client.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-  - id: openwiki-source-8ae69ad09984b97cdc0e1fc7
-    resource: repo://whisper_summary/services/tasks/task_creation.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+    at: 2026-09-28T16:59:07.681Z
+sources:
+  - id: openwiki-source-1733e19cd888bc4a90558aa4
+    resource: repo://apps/whisper_summary/apps/api/dependencies.py
+  - id: openwiki-source-8a8f27feb31a478f83017412
+    resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-2f9fce5f97d840294b957a0b
+    resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-fb3a71308a5a59482c2767f3
+    resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-6273858b85e260ea458ff24b
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
+  - id: openwiki-source-ca28727ce4b3dd82b2bdb95e
+    resource: repo://apps/whisper_summary/services/tasks/task_creation.py
+  - id: openwiki-source-af864f870947ae550426a1f1
+    resource: repo://apps/whisper_summary/tests/unit/test_sqlite_client.py
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 ---
 
 # 任務生命週期與併發控制

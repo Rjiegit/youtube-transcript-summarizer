@@ -3,29 +3,29 @@ type: persistence-guide
 title: 任務、鎖與結果持久化
 description: 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
-sources:
-  - id: openwiki-source-ad4df8250d444175a5c8ddb3
-    resource: repo://whisper_summary/apps/api/routers/processing.py
-  - id: openwiki-source-4d928759c02fb22c29a10d25
-    resource: repo://whisper_summary/domain/interfaces/database.py
-  - id: openwiki-source-ed7ac39232dcc4e27533dae4
-    resource: repo://whisper_summary/infrastructure/persistence/notion/client.py
-  - id: openwiki-source-c85a8f484a8e8883d5abeeba
-    resource: repo://whisper_summary/infrastructure/persistence/sqlite/client.py
-  - id: openwiki-source-fe3294edb24f05e6cb6f9931
-    resource: repo://whisper_summary/infrastructure/persistence/sqlite/schema.py
-  - id: openwiki-source-a0c7c968853d8d9debef46e2
-    resource: repo://whisper_summary/infrastructure/storage/file_storage.py
-  - id: openwiki-source-16ad15a60707008474d113ec
-    resource: repo://whisper_summary/infrastructure/storage/summary_storage.py
-  - id: openwiki-source-63a1690d52d52de32a8e8a93
-    resource: repo://whisper_summary/services/outputs/path_builder.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+    at: 2026-09-28T16:59:07.681Z
+sources:
+  - id: openwiki-source-8a8f27feb31a478f83017412
+    resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-8f9eb8eb57207a07e563e910
+    resource: repo://apps/whisper_summary/domain/interfaces/database.py
+  - id: openwiki-source-3dcaeedd9757866ead8ffb84
+    resource: repo://apps/whisper_summary/infrastructure/persistence/notion/client.py
+  - id: openwiki-source-6273858b85e260ea458ff24b
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py
+  - id: openwiki-source-952fb6b7dcfe243a56ab0eb8
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/schema.py
+  - id: openwiki-source-afeda25a549a366dcbddf0d6
+    resource: repo://apps/whisper_summary/infrastructure/storage/file_storage.py
+  - id: openwiki-source-ff0286cd18c5814ca933998b
+    resource: repo://apps/whisper_summary/infrastructure/storage/summary_storage.py
+  - id: openwiki-source-7bf164385bfff987bdd79fd6
+    resource: repo://apps/whisper_summary/services/outputs/path_builder.py
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 ---
 
 # 任務、鎖與結果持久化

@@ -1,28 +1,28 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:176b10e23ea710fae6be5bb60512ad037b632c423a5bed9214e9010154bd1612",
+  "pageVersion": "sha256:32cee10cd73b03e58c5dd01fe4163a3cb796766fc54563749cbc1e3fe969944f",
   "claims": [
     {
       "id": "claim_18efeaf5a06b4c9cabc9632ffac9ea0f",
-      "statement": "Python 程式碼以 domain interfaces、services orchestration、infrastructure adapters 與 whisper_summary/apps entrypoints 分層；SQLite/Notion adapters 位於 whisper_summary/infrastructure/persistence。",
+      "statement": "Python 程式碼位於 apps/whisper_summary，依 domain interfaces、services orchestration、infrastructure adapters 與 apps entrypoints 分層；SQLite/Notion adapters 位於 infrastructure/persistence。",
       "evidence": [
         {
-          "resource": "repo://AGENTS.md#L4-L17",
-          "version": "repo-lines-v1:sha256:8ca8d82cb7b324d0c3abb018cb85598a1eca3d6396a3a3121fcd59cec76efbe3:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY3NmYxY2NlMDU0ZTZlYjE0YTIzZTg4MDI2Mjc0ZmI0YzA0ODM5YTcxYjY2ZmZjY2VhYzkzOWUyZGM0ZjRhYTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVhN2IxZWUxYmY0YzA5MDYxZDMwYmMwMWIwNjhkNGIyYzMzNTRmNDQ5NmY2YWIwNmFiMjY1MTA2NGY4MjU0ZDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI5YzdlZjQyODYwZDViMDFmZDhmNTljNWZiZDExNGE3OTQ5NjJkZGYzMWY5ZDcxOTIzYTZjYzYzNzllNjgwZTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM3NWJmOWE4MmJkM2E3NzU5ZTM3MmViMjVjYTA4YmJiY2VmZjE2NjRkMmI0ZmMwMzc5MDI0YTU2OGEyYTg2NzEifQ"
-        },
-        {
-          "resource": "repo://CONTRIBUTING.md#L28-L37",
-          "version": "repo-lines-v1:sha256:cd960876d9cfae11d1507c1c9557bc8edc3c4609425b363db6d0ae40f22de64d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4M2JhZDkxMDgxZWJhMTVjODRkYzZmNGNjODYzYTEzYThiNmVjNDE3NTU1ODIyYjQ3NTI5NTBjYTM4MDY2YjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQzOTA0NDMxZTc3NjEyZTYxZGY4ZWU2MWY2ZmE0YjYxNGZiNjI4NGE2OTAxMDkwY2MwMmQ3MDNlZWI0NzhlOTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2OTdlNDZjYjQxZDliNTk5ZDg2MzBjZDY0ZDc0MThmMjhhYzZhNzMyMDU1ZDlkOTU3ZGE2ODIxMWY2NGUyYzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3ZDQ0MGE0NGYyM2Q2N2FiOTIwN2QwYjJkNTE2ZWUyYjJlMDViNDlmNmQ1ODc5OWE1NTczNTY3Nzk3MGFkZDQifQ"
+          "resource": "repo://CONTRIBUTING.md#L35-L48",
+          "version": "repo-lines-v1:sha256:33240c2a59e78f2116fba8790f29b402c17291acf00d3ddf5a81172519078e7a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0YWVhYTM1ZjgxZTY5YTM3M2JjODA2YmQ5MWNhZjJmMzM3OWVmODQyZDgxYjM0ZWRhMTNhZjVmZGQ5Y2QzODYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlYmJmNzMxYzhlMWQ3NjlkNzgyMzliZjhiZTExZDM3YzQwZmNkNWJjMjhiMzJmN2MyNGNmNzExNjAwYjI0YWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMTM3NzBmZTEwYjc5NTY4ODE5ZmQ1ODlmNzgxZDk3YTViN2I2NDJjM2U4MzlmYmZiNTUwMDY3ZDM3MDZiMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjUwMTg3Nzc5MmRmYTIxMWY3YWI5ZmI1MWQ2OTFkNTEwMTVmZmQyMTVjZTgxYzU0MzA0MDEyMGFjZjc3ZDQ1ZjEifQ"
         }
       ]
     },
     {
       "id": "claim_f92dbaf7cf1e421d9d59816a14491b6c",
-      "statement": "Python 測試使用 unittest discovery並分為unit、integration與fixtures，對 LLM、Notion、Discord、yt-dlp 等外部邊界使用 mock、fake 或 fixture；Nuxt 使用 Vitest、Vue Test Utils 與 jsdom。",
+      "statement": "Python 測試位於 apps/whisper_summary/tests，使用 unittest discovery 並分為 unit、integration 與 fixtures；跨應用 contract fixture 位於 contracts/；Nuxt 使用 Vitest、Vue Test Utils 與 jsdom。",
       "evidence": [
         {
+          "resource": "repo://CONTRIBUTING.md#L35-L46",
+          "version": "repo-lines-v1:sha256:c3ab958b5785d18746bec80bcf686ba976f1b72d89000c981110b4e7ad8ffabb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0YWVhYTM1ZjgxZTY5YTM3M2JjODA2YmQ5MWNhZjJmMzM3OWVmODQyZDgxYjM0ZWRhMTNhZjVmZGQ5Y2QzODYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1ZTkxMjNlMWNlZGI5ZjIwZDRjYjM0YzY5ZmE0MDcxNjc4ZTNkYjgyNTA1MTFjZGQ0Yjg5OGZjNjYwNGY0ZmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxMTM3NzBmZTEwYjc5NTY4ODE5ZmQ1ODlmNzgxZDk3YTViN2I2NDJjM2U4MzlmYmZiNTUwMDY3ZDM3MDZiMDYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYzYWUzZGJhZTNlOWE1ZTYyNDAzZGM0N2U5MzZjM2UxNzkyNjJlNmEwYTU4Mzk2MmQ5ZTU5MTBlY2YyYTlhZTQifQ"
+        },
+        {
           "resource": "repo://CONTRIBUTING.md#L52-L70",
-          "version": "repo-lines-v1:sha256:b89b8d32ba7b94b9193d1a260938fbfd238bd0eee7b23e3e413571f35c394493:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUyNTcwYjcyNzYwOGI2ZWM1YTFiMGE3YWZjYmNlODJhMDNiMGJlZGU1OTA3NDg3ZmE4NjFhZjRlMjMyYTkwZmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ3YzA2YzU2MWQ1YzMyNzM0MzY4NTI2OGE0NmIzMzkxZjM5OThlZWU4OTBkMmJlNTFmMGQyMWNjNGE1M2FlNmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxZmIwZDc4YmViNWU5OGQ2MzY5NGE5MWJhNjIzYjIxZTVkYmMzNzhjOTJjZjBjMmRjOWE3YWY0ZGY5YzAxMWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjZkMWM5ZTA1YzNhZmM4NDY2MjQyMGU1ODNkN2Q5ZmE5N2M5M2M2MDgxMjFlNmNjODZjMTg3N2E5ZGRmMGRkMGYifQ"
+          "version": "repo-lines-v1:sha256:522f58d91077c04807fadae5088879b2fe295bfedfcae3fc761dd7f607230f1c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwZGViY2M2YmE0MzY3YzJiY2IwY2ZhODMxN2E3MGRmZGQwYTI1NjQyMWU2ZTBjMDAzNjQ3MGM2MTgxMWIyNDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUwMTg3Nzc5MmRmYTIxMWY3YWI5ZmI1MWQ2OTFkNTEwMTVmZmQyMTVjZTgxYzU0MzA0MDEyMGFjZjc3ZDQ1ZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRmNzA5MDUyY2UwZGE5MjZiNTZjYTJkZDc5Yjg4ZTMxMmExZWY4YzE5MDZhMDA0MzA3YzFiODk2ODhmYjFiMDUifQ"
         },
         {
           "resource": "repo://apps/showcase/AGENTS.md#L19-L20",
@@ -40,7 +40,7 @@
         },
         {
           "resource": "repo://.github/workflows/main.yml#L9-L77",
-          "version": "repo-lines-v1:sha256:efb7e627121e6e85fed7d2f1a3b27bee2e09e80462f685ce6de66205b46217d7:eyJzZWxlY3RlZExpbmVDb3VudCI6NjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYxNjY4YTU2NWQ1YzI4MTE5Y2M3ODUyYTE2OTI5NmUxM2VjZTlkMjNkZDU5ZWNlZWNmMjJhNjI1YjA4OTY4ZTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0OWQ3MjZhMGNjZTFjNzg1ZjJjMGZhMzc4OTYzM2Q1MTVkZTk2ZmFkOTcxYTJiNjEwM2YzYTZhYmEzY2QyZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:5aa3de878bfc78d6e3a0d10b92cda5c5a8b1074093cb796c34da1fed440fabb3:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwOWM4ZjUyOGNkOTRkYWNkZDk5MGQ4MWE2OWNhMTEwNmUxZGVkMjAwZmRiYjQwY2E0ZjE0Yzc0NzQzMjI3M2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0OWQ3MjZhMGNjZTFjNzg1ZjJjMGZhMzc4OTYzM2Q1MTVkZTk2ZmFkOTcxYTJiNjEwM2YzYTZhYmEzY2QyZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
           "resource": "repo://Makefile#L15-L25",
@@ -67,8 +67,8 @@
       "statement": "Makefile提供完整、unit與integration三種Python測試入口，並提供Showcase與Extension的專用驗證指令。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L27-L75",
-          "version": "repo-lines-v1:sha256:7f87f1507d736c539090b2ec9814471aedcb91a2bdea59a96be39b5fb33f4893:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1NjJjMmM2YTA4YWNhYThmNGQyYjg0ZGE3YjFlNTgzNTkwZDI3NmJkODg5NjlkMGExOTVkMDgzNjMwYTQ5Y2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1ZjlmNWU5MWE5ZWU2NWViMDM3Y2UzZWI5ZmI0MTY0NDRkNWFkMzY2MmYwYTMzZGRhN2I5ZTU0ODFjYzhiZDYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZmYzNmYjdlZTVlZGRlMTIzMjg4ZjdkMjJjZmRhNGM3NWJhOTJiNzQwYWJmYjcwODVjNTU1OWU0YjEwODFmZDgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg5MzlhODk0Y2QzYjcyZGE4YTA4YzU4NDQ0MGMwODBjM2Q3MjMzMWE2NDg2ZjljZTQxZTVjMDQwY2FjNzU2NTcifQ"
+          "resource": "repo://Makefile#L68-L90",
+          "version": "repo-lines-v1:sha256:999847fa40da725f3a569e03841f5568d226a3909b9d014387ef589a3b182b0c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImYwNWVlN2ZmNmY0ZmNiYjI3OTdlNzc0ODBiM2UwNGQzYTUwOGViZmUyYzdjMTlhZjRiZTI1YzAzNTY5ZjNiODIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlOWQ3NmU0NjQyMjdiOTBjMjVjOWUxMzU5N2EwYTI4MzNhMzZlZDU2NWViYzMxZGIzM2IxYjEyYzRjZTFhOWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJlMzU0MWZkNzUxNTlkODg5M2U3YzdmNDY4OWUxYzIzNjI3YzQxYWZiMTM1NDk4NGU3ZDVlYTc3MmJmMDIzMzUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU4ZmQzNTc2MTIxZTJhMzk3OGVkZjk5NGVlYWE3ZDQ3OWNhZjBjMDIxZjIwNDgxMTI3MDAyOTYwZTAxMzRmMzYifQ"
         }
       ]
     },
@@ -85,15 +85,15 @@
           "version": "repo-file-v1:sha256:b09aeda94e3fcb46d0c5cd003c4eba8eb8c9f78a0e613172a4713a20e9de3e8a"
         },
         {
-          "resource": "repo://tests/integration/test_worker_task_leases.py",
+          "resource": "repo://apps/whisper_summary/tests/integration/test_worker_task_leases.py",
           "version": "repo-file-v1:sha256:731ad2f61cce526f16260c75be47cafba1a1a0a132f86c07f3294d656697de02"
         },
         {
-          "resource": "repo://tests/unit/test_http_task_queue.py",
+          "resource": "repo://apps/whisper_summary/tests/unit/test_http_task_queue.py",
           "version": "repo-file-v1:sha256:35ad87087b4a382c0a713db5be5ff8522e599a39420e02d981f96b90b2aa08d5"
         },
         {
-          "resource": "repo://tests/unit/test_processing_engines.py",
+          "resource": "repo://apps/whisper_summary/tests/unit/test_processing_engines.py",
           "version": "repo-file-v1:sha256:d5cbafee9461ebd78a42ec7b18d0a0c68f46db3c3e1fdf6fef13e44868002938"
         }
       ]
@@ -111,6 +111,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-28T12:59:50.272Z"
+    "at": "2026-09-28T16:59:07.681Z"
   }
 }

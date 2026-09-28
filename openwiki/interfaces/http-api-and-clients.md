@@ -3,35 +3,35 @@ type: interface-guide
 title: HTTP API 與客戶端整合
 description: 說明 FastAPI feature routers、task queue 回應、RSS 與 processing lock API，以及各 client 邊界。
 tags: [api, fastapi, clients, rss, processing-lock]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
-  - id: openwiki-source-342c9b983ccf76e13ea1243b
-    resource: repo://whisper_summary/apps/api/dependencies.py
-  - id: openwiki-source-ad4df8250d444175a5c8ddb3
-    resource: repo://whisper_summary/apps/api/routers/processing.py
-  - id: openwiki-source-eac8fbc35543484334a727f3
-    resource: repo://whisper_summary/apps/api/routers/rss.py
-  - id: openwiki-source-d1e2e939cdaa20a1825bddb5
-    resource: repo://whisper_summary/apps/api/routers/tasks.py
-  - id: openwiki-source-ea52e4ece41ed31f8a8e2718
-    resource: repo://whisper_summary/apps/api/schemas.py
-  - id: openwiki-source-a0e78d9af1e9cc8e35a1baae
-    resource: repo://whisper_summary/apps/ui/ui_api.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-  - id: openwiki-source-e66f0503669326252cbeb176
-    resource: repo://whisper_summary/services/rss/channel_monitor.py
-  - id: openwiki-source-6ddd6777ce5c4b8bba9dcf83
-    resource: repo://whisper_summary/services/rss/subscription_service.py
-  - id: openwiki-source-8bf1f6c7cf873df06749ede0
-    resource: repo://whisper_summary/services/tasks/processing_scheduler.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+  - id: openwiki-source-1733e19cd888bc4a90558aa4
+    resource: repo://apps/whisper_summary/apps/api/dependencies.py
+  - id: openwiki-source-8a8f27feb31a478f83017412
+    resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-47e37d76faef3db362599ed8
+    resource: repo://apps/whisper_summary/apps/api/routers/rss.py
+  - id: openwiki-source-2f9fce5f97d840294b957a0b
+    resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-e8a3e4e8f72c5329a78957ec
+    resource: repo://apps/whisper_summary/apps/api/schemas.py
+  - id: openwiki-source-fe5f0de19ee909f2cb957b09
+    resource: repo://apps/whisper_summary/apps/ui/ui_api.py
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
+  - id: openwiki-source-daab87d344d0f6ce8a388ee8
+    resource: repo://apps/whisper_summary/services/rss/channel_monitor.py
+  - id: openwiki-source-5862fc4af2e29ada3e6abb6a
+    resource: repo://apps/whisper_summary/services/rss/subscription_service.py
+  - id: openwiki-source-4ef6c51002fe401d434edeb5
+    resource: repo://apps/whisper_summary/services/tasks/processing_scheduler.py
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # HTTP API 與客戶端整合
@@ -60,5 +60,4 @@ verified:
 
 Browser Extension只使用 task與RSS endpoints，不提供 lock管理。Streamlit的 HTTP helpers設定 timeout並把 transport/JSON錯誤轉成可呈現訊息；RSS monitor建立 task但不直接執行media pipeline。
 
-<!-- openwiki: broken internal link [browser-extension.md] file "browser-extension.md" does not exist. Fix the href or restore the target, then delete this comment. -->
-相關閱讀：[任務生命週期](../workflows/task-lifecycle.md)、[Browser Extension](browser-extension.md)。
+相關閱讀：[任務生命週期](../workflows/task-lifecycle.md)、[Browser Extension](../integrations/browser-extension.md)。

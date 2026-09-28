@@ -3,33 +3,33 @@ type: workflow
 title: 媒體轉錄與摘要流程
 description: 追蹤單筆任務的下載、YouTube metadata 擷取、Whisper 轉錄、LLM 選擇、輸出儲存、通知與失敗處理。
 tags: [pipeline, whisper, llm, metadata, storage]
-sources:
-  - id: openwiki-source-a816aff2ae090142dc0071cf
-    resource: repo://tests/unit/test_dedicated_processing_worker.py
-  - id: openwiki-source-d71c441e748ae7289c50b715
-    resource: repo://tests/unit/test_processing_worker.py
-  - id: openwiki-source-4796880dadec1e10c195387c
-    resource: repo://whisper_summary/apps/workers/processing_worker.py
-  - id: openwiki-source-b09a9c01943a6da34cb777d1
-    resource: repo://whisper_summary/core/prompt.py
-  - id: openwiki-source-7975645885c1fae29f87f715
-    resource: repo://whisper_summary/domain/media/models.py
-  - id: openwiki-source-a5639578dff19ab6856c946c
-    resource: repo://whisper_summary/infrastructure/llm/prompt_context.py
-  - id: openwiki-source-9ecbd3cd291b4efc7e52f344
-    resource: repo://whisper_summary/infrastructure/llm/summarizer_service.py
-  - id: openwiki-source-aa9bed27f533a96ebf77433d
-    resource: repo://whisper_summary/infrastructure/media/downloader.py
-  - id: openwiki-source-a06d60e26da81a42a77356ad
-    resource: repo://whisper_summary/services/pipeline/engines.py
-  - id: openwiki-source-8596820a9e45786cae4a5524
-    resource: repo://whisper_summary/services/pipeline/langgraph_engine.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+    at: 2026-09-28T16:59:07.681Z
+sources:
+  - id: openwiki-source-fb3a71308a5a59482c2767f3
+    resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-fc48aec9da2b3d8d448354e3
+    resource: repo://apps/whisper_summary/core/prompt.py
+  - id: openwiki-source-62cb02e508ce97877f18e055
+    resource: repo://apps/whisper_summary/domain/media/models.py
+  - id: openwiki-source-ef820dbbe7cff90830a1c016
+    resource: repo://apps/whisper_summary/infrastructure/llm/prompt_context.py
+  - id: openwiki-source-e207b6167639ff1973fe1237
+    resource: repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py
+  - id: openwiki-source-e3deef680a5ed6126a3e663d
+    resource: repo://apps/whisper_summary/infrastructure/media/downloader.py
+  - id: openwiki-source-79006d740abb2f90a0561607
+    resource: repo://apps/whisper_summary/services/pipeline/engines.py
+  - id: openwiki-source-9d74f9961da3fcb79187c2ef
+    resource: repo://apps/whisper_summary/services/pipeline/langgraph_engine.py
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
+  - id: openwiki-source-cd0dc7918ef6cec31d2ebde9
+    resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
+  - id: openwiki-source-e694b4a233a28ca429d8a36e
+    resource: repo://apps/whisper_summary/tests/unit/test_processing_worker.py
+generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 ---
 
 # 媒體轉錄與摘要流程

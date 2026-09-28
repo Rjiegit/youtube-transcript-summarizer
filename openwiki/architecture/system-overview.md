@@ -3,49 +3,49 @@ type: architecture
 title: 系統架構與端到端資料流
 description: 說明任務輸入、專用 worker、持久層與獨立前端應用之間的責任和資料流。
 tags: [architecture, pipeline, api, worker, nuxt]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
     resource: repo://apps/showcase/server/utils/notion.ts
+  - id: openwiki-source-1733e19cd888bc4a90558aa4
+    resource: repo://apps/whisper_summary/apps/api/dependencies.py
+  - id: openwiki-source-e6eed307c821ffad09957373
+    resource: repo://apps/whisper_summary/apps/api/main.py
+  - id: openwiki-source-8a8f27feb31a478f83017412
+    resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-2f9fce5f97d840294b957a0b
+    resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-7332ded4af4c5b8186446177
+    resource: repo://apps/whisper_summary/apps/ui/streamlit_app.py
+  - id: openwiki-source-3510ac90ffbd030c0a1f2f0d
+    resource: repo://apps/whisper_summary/apps/workers/cli.py
+  - id: openwiki-source-fb3a71308a5a59482c2767f3
+    resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
+  - id: openwiki-source-daab87d344d0f6ce8a388ee8
+    resource: repo://apps/whisper_summary/services/rss/channel_monitor.py
+  - id: openwiki-source-cd0dc7918ef6cec31d2ebde9
+    resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-  - id: openwiki-source-a816aff2ae090142dc0071cf
-    resource: repo://tests/unit/test_dedicated_processing_worker.py
-  - id: openwiki-source-342c9b983ccf76e13ea1243b
-    resource: repo://whisper_summary/apps/api/dependencies.py
-  - id: openwiki-source-ed9cac06ac45a553488b9905
-    resource: repo://whisper_summary/apps/api/main.py
-  - id: openwiki-source-ad4df8250d444175a5c8ddb3
-    resource: repo://whisper_summary/apps/api/routers/processing.py
-  - id: openwiki-source-d1e2e939cdaa20a1825bddb5
-    resource: repo://whisper_summary/apps/api/routers/tasks.py
-  - id: openwiki-source-5899750ee6dd474e4a72a34b
-    resource: repo://whisper_summary/apps/ui/streamlit_app.py
-  - id: openwiki-source-f6e59996a2bf7f9d896e2cd5
-    resource: repo://whisper_summary/apps/workers/cli.py
-  - id: openwiki-source-4796880dadec1e10c195387c
-    resource: repo://whisper_summary/apps/workers/processing_worker.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-  - id: openwiki-source-e66f0503669326252cbeb176
-    resource: repo://whisper_summary/services/rss/channel_monitor.py
-generated: { by: "codex", at: "2026-09-23T13:19:05.664Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-23T13:19:05.664Z
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # 系統架構與端到端資料流
 
-本 repository 包含 Python modular monolith、Browser Extension 與 Nuxt Showcase。Python package `whisper_summary` 提供 FastAPI、Streamlit、同步 CLI、dedicated processing worker 與 RSS monitor；Extension 呼叫 FastAPI，Showcase 則由 Nitro server routes 直接讀取 Notion。
+本 repository 的三個應用位於頂層 `apps/`：`apps/whisper_summary/` 是 Python modular monolith，另有 Browser Extension 與 Nuxt Showcase。Python package 的 import 名稱仍是 `whisper_summary`，提供 FastAPI、Streamlit、同步 CLI、dedicated processing worker 與 RSS monitor；Extension 呼叫 FastAPI，Showcase 則由 Nitro server routes 直接讀取 Notion。
 
 ## Runtime
 
 | 入口 | 責任 |
 | --- | --- |
 | `whisper_summary.apps.api.main:app` | 建立／重試 task、RSS 訂閱及 processing lock 維運 API |
-| `whisper_summary/apps/ui/streamlit_app.py` | 操作者 UI，透過 HTTP API 建立任務並檢視狀態 |
+| `apps/whisper_summary/apps/ui/streamlit_app.py` | 操作者 UI，透過 HTTP API 建立任務並檢視狀態 |
 | `whisper_summary.apps.workers.processing_worker` | 持續輪詢 persisted queue，執行重型 pipeline |
 | `whisper_summary.apps.workers.cli` | 同步 drain 一次 queue |
 | `whisper_summary.apps.workers.rss_monitor` | 輪詢 YouTube feeds，透過 Task API 建立任務 |

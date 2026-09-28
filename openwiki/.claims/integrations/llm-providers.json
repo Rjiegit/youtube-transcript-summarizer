@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:0dd97c73d78831a233f74ca8b0e3ac72a55802797d352466155a9956dfc05bef",
+  "pageVersion": "sha256:e165b7db8a1237b5f847a3896b30246a4b1338e8b36322eb82b4b00121a8216e",
   "claims": [
     {
       "id": "claim_f60d99543e014db3873ccc8adea4841f",
       "statement": "LLM 候選池拒絕空池、未知 backend、空 model、非正或非數字 weight 與重複 provider:model，選擇時只對可用且未被排除的候選重新計算權重。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/weighted_selection.py#L23-L96",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py#L23-L96",
           "version": "repo-lines-v1:sha256:150de060a515d2398245f32677d2a278836eedbde4167b05e3d3eb2cf1152443:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwOGUwNmIyNzQxNjRhY2MxMjZjNDU1NjU3MzM0OWEwMDVkYzhiNTYzYzE3OWQ3MDcxMGZhZGM2MjRkZjRlMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4M2ExMWRlZmI1Y2UwYjNjYzc2NWZmZmFmMGFlOTZiZTUzZjQ5OGRlMWE5YWQ1YzQwNmYzMjQ5ZjNmMzE2ZmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2NWZmMjk2NTY0NDU2ODAxMjc0NWRhODBmYWZhNDAzZmU1MWNiMWU0NmViMTAwNGQ1ZmVhZWQzNjNlODQ5MTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
@@ -17,11 +17,11 @@
       "statement": "OpenAI、Gemini與Ollama以各自API key環境變數決定eligibility；Ollama host另由OLLAMA_HOST設定。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py",
           "version": "repo-file-v1:sha256:d2080f5dbb71509a20b40905f64bbb0b64296c618a3504f0879013fc93fd23eb"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L78-L86",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L78-L86",
           "version": "repo-lines-v1:sha256:cc9c9551ae9adb38a34459195aff88ee922f1e4487c1692a69d7b1e6f394e5e1:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNzJiYzM1YzhlOTQ1ZGYzYWRkYWUwNGEwNmYzODAwM2U2NmM1MjQ3MzMxNTBlZWIyODM2NWEzODY5NWE5ZTUyZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMjZiY2M2ODhhMjM4MTMwOTJhNDdjMGM5MTNjMTUzMGJhMzYzMDA3MDkwMDY0NmVmZGFlOTViMzM4ZTdkNTNjZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDhkMWFjNzMxMjU1MTRmMzkzM2UyNTk2NzVlN2NmZWJmMzQ2ZWIyMzNhMzk2YjNjODg0Y2VjMDM3MjU4MmQyMCJ9"
         }
       ]
@@ -31,11 +31,11 @@
       "statement": "預設自動池包含六個 Gemini candidates 與 codex_cli:gpt-6-luna，權重合計 100；兩種 backend 都可用時 Codex CLI 占 90%、Gemini 合計占 10%，selector 不追蹤或強制 RPM。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/model_options.py",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/model_options.py",
           "version": "repo-file-v1:sha256:00effb9e6e83fa92da9a0ce02be6e0836f13cb6172f346216af321192cba8283"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/weighted_selection.py#L59-L96",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py#L59-L96",
           "version": "repo-lines-v1:sha256:6504b96b0d91e300e484112706c1e8ddc01205dfb7e4f59a15ec1e84f0c59027:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0NmJjYWYzZWUxZWI0MWYwYWJhMGQxZjFiOWE2ZGViMjE0NmZlYzJkZGNjNzY5Njc4YmVmZDJjMGJlOGU4ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4M2ExMWRlZmI1Y2UwYjNjYzc2NWZmZmFmMGFlOTZiZTUzZjQ5OGRlMWE5YWQ1YzQwNmYzMjQ5ZjNmMzE2ZmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0ZjViZDEyZjBiYzc2MTg2ZDA1OGRhOGNjMDdhZjBkNjdjMGMxMjRhNzI3MWIzMjIyOTEwNGZmNThjNzI2ZGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
@@ -45,15 +45,15 @@
       "statement": "成功provider call會記錄last_backend與provider:model格式的last_model_label，worker再與faster-whisper model size組合成持久化model label。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L172-L204",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L172-L204",
           "version": "repo-lines-v1:sha256:975fc32c5287cc11c0a307ba5450d369a2a3147edf4651be6308b49b7bb96371:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzMzBkZGFlOTEzNjc0ZWE2Yzk2ZThlMmRhMWNmYzA1MjJhNTYzZjhmYmJjMDczZTI3OGFiNDA0NmZiZmIyMDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyODliMWJjZTg1MmY4NjhlNmUzN2ZmYWEyNzc0MTZhNmEzNzRjOTQ3MTIwMWE3ODcxNGJhNDQ1YWY5YzczMzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkZjNlN2E0ZTcwNTMxZjQxNmFhNDhjNGE5Yzg4Nzc1YzhmMjlmNmE4OTNmNjg3MzQ1OGEzNzVkMWFmY2UzZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIyMzE4MGVmNGM4NTQzZGNhZjFmMzBkZTFiZjJmYTE1MTNkYmZhNWIzYmZmOGEyZTNhZjFiYzM3OGM3MWRjNjAifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L416-L425",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L416-L425",
           "version": "repo-lines-v1:sha256:1663fbb4abf9c01e607710c69d473421b2dd37f409b8c71904da303b446130b6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzZTMzZTBlNWVmN2UzYTM0M2U1OTEwZmExM2MxZTQ0MTViOGM1OTRlYTYxN2IxMDk4ZTM0NWZkMzZjMmZjOTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc1MzdiYzU4NDM4ZjUyNDAwN2ZkNzlmNDg4YWNjNWRjMWJiN2M1YjU0NjFlZTliZmU4ZjExZGIyNzYwZDExNjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNiOWMwNDQyMWRmZTY4YTE0NzkzODdjNTdmYWVhNDQxMjVmMjE0OTA0Y2QzMzU5ZDE0OGYwZWQ3OTg5NTY0ZmYifQ"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
           "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
@@ -63,8 +63,8 @@
       "statement": "Summarizer只在第一次candidate發生transient provider error時排除該candidate並重選一次；一般認證/4xx不failover，fallback再失敗也不嘗試第三次。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L90-L170",
-          "version": "repo-lines-v1:sha256:c69599dbf51776a2888608e4284fe8f531d27da908f0430c03e3f540c703e6b2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmMzI4YmRiOTYyMGM0ZDlkMmQxYzEyODI2ODQ1NGVhZDQ1YjZkM2JhMGMyYzU1MTdkNzEwNTJmMGYyZWE4OWU4IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlNjA5YzNmMDgxYTUwMTAzODgwMTRjNTIwZWYwMjNjOTAzNTcxYTcxZjQ0YTQ0YTBhZjgyNjAzNWMxZDIyYzViIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlMjA1NzI5ZTc3ODI5OTQ2OTIxZTEwNDRjOGJhZmRjNTNhMzYzOTJhZTVjNmI4NzE3NTQ5YzQ1NTQ0MWI2NDk4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwM2U1MjhiOTZlNWUyMzMxMjZkOGEwYTMxZjhjOTFmNGQ1NmFkNzMwZjU3MzBhNTNlZWUwNjhiZTYxNTlkNjRjIn0"
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L90-L170",
+          "version": "repo-lines-v1:sha256:a4376988862b885853d499cc9c0ddde34f090fb12ab0d91af8227b8fc47c577f:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0MThhYTc4MmViN2RmZWIxNjlkOTg0NDA5MmRkZTUzMjA3NjQ4ZDc3ZjBhYzYwNmVmNzNhMWExOTIzYjM3ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhZTY0YjBhNjg0Nzk0Zjk1Y2YzZTNiMmM3YzU4MWQ3YzA1YmE0ODE4YWNlYmJmY2NiOTUyYzg4MzU2ZjgyNDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4ZDFhYzczMTI1NTE0ZjM5MzNlMjU5Njc1ZTdjZmViZjM0NmViMjMzYTM5NmIzYzg4NGNlYzAzNzI1ODJkMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliNzIzNzQ5MzA5NzQ0NjNjMGNjYjc3ODkwNzQ2ZTBmYzlmMGE1MjQxZjNlODYyMjNkY2EyNzJmZTYyNWQ2NTQifQ"
         }
       ]
     },
@@ -73,8 +73,8 @@
       "statement": "Transient分類涵蓋OpenAI rate limit/timeout/connection/5xx、Gemini quota/timeout/server類錯誤與Ollama timeout/connection/429/5xx。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L195-L247",
-          "version": "repo-lines-v1:sha256:fbd683502081d5936195fb4eb1da55f3316511a2e2147219fa7b29aba1b689ec:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQwMzMyOGRjODFhMTY5N2RmNTQyOWY0MDIyZmJiOGQ2MDBmZjNhZTI4MGJjYjZjMDQwNDdjN2JhMDBhMjIzNzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzMjYyNTVlMjQzZjFhM2UyNzYzYTBkNzYzZTZmMWYzMzA1MGVlMmY0MzVhMTJkOWVmYjQ3MjU5ZjUwNzJmNTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZlNzNhYmMzZTVjZWM5MzRiYTM1OTkwM2QwODE1YzNjZWUyZjFiMDZiOWRiMWY4OGNhY2MzY2Y5NWJiZTcyNDAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3NDFiNzVlNzNmZjUwNDAzMDQzMTI5NDAwYTBkNGU5YmI2ZjY5OTIwOWM0M2E5Y2EwMmZkODFmZGZlNzAxZjIifQ"
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L195-L247",
+          "version": "repo-lines-v1:sha256:d8549bc54e7f0aa70f78e3084e94594d5871687221a0cbea9e766a9eb9ca4e10:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YmQyMGYzZTBlMWYwZTdjZDYzMWJiNDU2ZDg1MzZjNDQ0N2QyYzU4NjFkMjQ5NDFhOWFlOWY1Nzc0ZDJiM2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2ZjRjYmUwZjAxYzg3NGM5NWMyNTZhNjllNTIwNzVhOTI4MjZiYTdhYWMyNDQ2ZDcxNzNjZjJmN2Y4MjhhNDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlNzQ0ZTdmNTA5YzI2MDdjNmFmNTgxMDA5NDc2YzdkMDQ2NmZhMzI2ZmEyYjgyYWVjMTUwY2Q3NjRmZjdkMjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MjY3NmQzYzM1YzViZWM5NWE1MGQxNTdiYTZmM2M2NzEwMGRiYThhNDlmZjMxYmE3OWFhNDU2YWExYWJkZjcifQ"
         }
       ]
     },
@@ -83,12 +83,12 @@
       "statement": "Weighted selection tests以deterministic RNG驗證validation、credential filtering、exclusion與權重；Summarizer fallback tests注入最小候選池避免依賴預設pool內容。",
       "evidence": [
         {
-          "resource": "repo://tests/unit/test_summarizer_service.py#L221-L284",
-          "version": "repo-lines-v1:sha256:a6698f225924d884cc67cc342cda6be40fa8da5cfd36c49d945aaafb7e61b211:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhZjQxM2UxOTUyZGE1MDA0NmE5OGFmODFmZDI5N2NiNmQ4NWJjMWE1YmVmNGYyMmQ4ZmE1MWE2NzQxNTcwMDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU2NmY0OGMwODQ3ZmIwMWQ2YmEzZGE0OGFiOTFhNGNjYzNlYWZiNWRmZDQ0MGIzNTk0YTRmN2EwZWYzODVmY2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI1MTVkYjc2Yjg1ZDdkYjIxMGM2YjUxMjQxYzU0MzA3NGU1ZDVkMGQ5ZTdkM2JhMDRiYjQwOTJiYzNlNDhhMzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3NjBiNjRlOGVlZjdiNDk0ZTVmOGZkOGU1YmJkOThhYzA2OWUzYzM5NTQ0ZjI3NTVhZGVlYWZmNmRkNmJlODMifQ"
+          "resource": "repo://apps/whisper_summary/tests/unit/test_summarizer_service.py#L221-L284",
+          "version": "repo-lines-v1:sha256:e3916c8e7964c7620bfe2667ee13f638bc041fb4f718e94253d4f5e1ea68978b:eyJzZWxlY3RlZExpbmVDb3VudCI6NjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlNzcwMDY5NGYxZTY3NTlhYjVmOWU1MWYzMDdlYzYxY2FjNmU4OTkzNzM4NTlkYTQwNzM4MjY1YTE4Mzg4MTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3NjBiNjRlOGVlZjdiNDk0ZTVmOGZkOGU1YmJkOThhYzA2OWUzYzM5NTQ0ZjI3NTVhZGVlYWZmNmRkNmJlODMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImMzNGIyYTk2YzAxOWVkMGRhN2ZkZWViNTNiNzVkOTA2YjgxMzYwNGY4YzlhNjk0MmU5MzEwNWJmZGEwZjVkMzEifQ"
         },
         {
-          "resource": "repo://tests/unit/test_weighted_selection.py#L27-L152",
-          "version": "repo-lines-v1:sha256:09b2d2d12a4c6fc47f069e85147d3f1a0b4e95c6aaf86a4afc649c441f14ae22:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQ4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiI5ZGFiMWJkMDhmNTUxMDJjNmY1NTQ0OTVkMTMzODRjMzk4ODgwYzBjMDE3NTg5MGNlZTgzN2RiNTMxYjE5ZDZmIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI1NTAzMmU5NjRkMDkzMjM1MWU1ZDE4NTI2OTI4MWIxNzFhM2EwOWIwOGIyODZlNjYxZWE0NzAzMjNjODJlYjRkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlNjVjOTFkMTBmNTQ5ZjVhMGMyNWFkMDk3Nzg4ZWZiNTFkYzkyYTYwYWYzMzQ2N2JkNzQ2NzhmNWYzYTFhODlkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzZDQxMzQwY2MyMzlhMTU5Y2U5YjYwMjJlOWY2MzIyODMyZTJlYWQ3NmNhZTllNDc1NGQyMTBlYjhmYjZkNWU4In0"
+          "resource": "repo://apps/whisper_summary/tests/unit/test_weighted_selection.py#L27-L152",
+          "version": "repo-lines-v1:sha256:ce9dd9d7fd2e9a8810903277d0b76970c2dbb2eb750fb46641b30d9df299edfa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTI2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3NGVkZWM1MDNkNDRmMTNkZjYwNmNmOGE2NDdiZmYwNmNlOGNjMWY0MTUxZTE3ZjdmNTI3OWQ5Y2UxMGNiOTM1IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkMmZhMTIzOGU4YWFkOTBlM2I5OWI4NjY0MTI0MDgzMjM1NDIzNmE0NjFhMTNmZWYyYTEzYWUwZjFmMjJiMzc3IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJhMjczMGNhNGIwMWZlN2NjMjEzYmI0MjNiYmZhZGEwZjZmMTYxOTliYmUwNjkyMmRiOTQ0OTI0ODA3OGQ5ZWNjIn0"
         }
       ]
     },
@@ -97,12 +97,12 @@
       "statement": "Summarizer把有限長度且標示為不可信的影片metadata context附加到system prompt，避免description或chapters被當成指令。",
       "evidence": [
         {
-          "resource": "repo://tests/unit/test_summarizer_service.py#L330-L390",
-          "version": "repo-lines-v1:sha256:9fe51f7c207d2c22003af20fd1c9deaf37d203437772f2c55a3065d44c15a59b:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhOTgxNjY3ZDkxODYzMjJkMDhkZmJkYjk0NzNlMjM0NTc1M2QwMTk2NzJjYjQxMjA4YzYyNzJlOTJkNjM5NDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjEyYWI0NTYzNGI5OTRhNTdiYjRlNDdkNTJhYjcxNzczNDlhYmIzZmM1YjlmNmEyZGYxNGM0OTFiOTNjNGRjNDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk2MDVjOWMyZjMyZmUxZTMxYTNmMjEyMjlkYzVkMzRmZWM5YzQ3YTM1YTAxNDM2Mzg3NWQ1ZDgxNmVhY2FjOTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjFhMDQxOWFiMDBkNDYxYzU2M2FlYzYwN2I5OTMwNzVhZDhiMTVjOTNiODg0YjI3MmZiOTEwMWZlMTZjZmU2NTAifQ"
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/prompt_context.py#L1-L50",
+          "version": "repo-lines-v1:sha256:a7f6763a93ffb86a670e648232b2d6c5980d2330f4c4dc1c37984ed02acd34cb:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzM2UyOWNmNmJhYmRmNDA4YWM4MGNmZjY5ZmVlODc5ZTIxNWM5N2E4YTViNmRiY2Q0ZDgwMjFjNmI0MDgzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/prompt_context.py#L1-L50",
-          "version": "repo-lines-v1:sha256:a7f6763a93ffb86a670e648232b2d6c5980d2330f4c4dc1c37984ed02acd34cb:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzM2UyOWNmNmJhYmRmNDA4YWM4MGNmZjY5ZmVlODc5ZTIxNWM5N2E4YTViNmRiY2Q0ZDgwMjFjNmI0MDgzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/whisper_summary/tests/unit/test_summarizer_service.py#L330-L390",
+          "version": "repo-lines-v1:sha256:8de3ab49f269e7ad8ac6426a725d98b21bff1dbd3dc75bfbe390b1a139209d68:eyJzZWxlY3RlZExpbmVDb3VudCI6NjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNkYzExZjNkZGQxOWQ4N2UwNGMyMTBmNjlhZTg5YjBiNzkwMWY4NWFiZmM1ZTMwZGU0OWY2OWRjYWNjN2MzNmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE2NGEwMTBlZjliYTA1MjMwOTBmOWU2NDlmYzU5OGI3NWEyMWE2MTY4ZDE3MzU3MDc1NDgzMTBkYjEyOTE3ZWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4OTFmMjAwNzRmZTJmM2JiMjdiZTk4ZjJkNGNiNThkMjUwNjlmY2Y4ZTA1NDk0OTgzOWRhZWY2YTAyZDI5OTMifQ"
         }
       ]
     },
@@ -111,15 +111,15 @@
       "statement": "Codex CLI 可用性由 CODEX_BIN 的執行檔檢查決定；呼叫使用 ephemeral、忽略使用者設定及 read-only sandbox，並設定 timeout 與移除敏感環境變數。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L183-L209",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L183-L209",
           "version": "repo-lines-v1:sha256:89a9d3080a445765ae5677b07c95df534f0ed95c6953d7a63b83bafbc24fb924:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0NTVhZTRjZTBmYWViMjBiZjRiYzAwNDE0NTM3MmMwMWVmYTk2YTUzZmQyNGY3Njg2NmUxYTRjMGM4NTIyMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0NTEwNjNiZTNmZDY3MGM4YmJjOTdlOGY4NDFiNmU5ZWVlYzk3MTZmMmEwNmE1N2NkYzgyNzZjM2NhZDQ5NjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY4NWQzOGMxNmY1ZWQxYjlmYjJhMmQ4Yjk0N2NkZjJkY2Q5MjgyOTQxYWQ1NGUzMTdlNzk2Mjc5ODZkZjllODYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJkYWNmMzJiNzU1ZmE1NGNkNjI4M2I3NzdhYTYzNWVkMDJlYTU2ZDI4NjJjNWExZjNhNGEyMWM3ZGEwODMyZjYifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L503-L551",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L503-L551",
           "version": "repo-lines-v1:sha256:da86a9cf4bdbc24fbb7c391cff9b72d588b79730c2f2322846181b3d3012f26f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY2NWIxYTliOGUxZGZkMmEzMTBlYzM2MmJiMzkxMjgxYzFmZmMyM2Y3N2UyNTg2Y2NmOWFjNWUwZDIwMDdiMTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkMDZkYzE5ODBhZDNiMGU0ODhiNjlhM2E2ZWFiNzM2OTJhYTg0OTU3OTBhMTEwNzQyNTgxNjcyZDdhNzVlN2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjkzYmYyODE1OWI1YTdiMWM1MWZmZGY0ZjlmMDczYmQwOTE2OGQ2MjdkMWU1MjE5NmY4YjE2NjA5ODRhMjJjYTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIxMTc3YTU2ZjE3NGRhZmM1MjdhZWMyNmI1M2NiNTkyMWI4ZTg0MjkxYTYxYzY3YzFmZGRkYTQyNDg1MjMzMjgifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L75-L95",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L75-L95",
           "version": "repo-lines-v1:sha256:d88ad7fc46653bc34643a2c8de07d9ba996871819430289dbdee0d025525362c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlZWUwZDJmZjNjOGZjMTJiNTQ3YzdkNDU3ZTFmMDM4NDZiOWIyNDI2NWE4NWUyYTM0ODRhYWZjY2Q4OWY1N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE5OGIwNjNkOWI0N2U2NTM3OTYyNTU3MmNjZTE5NzY2OWQ1NzY3ZTEyYzE4YmUwNzU2NTJiOGNkOTgxY2U4ZDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRiZjQ2NzRhYjZjYmMwMTQ3MjMxYjk0YjUzYWU5NjE3MjliYmRlNTRkYzZhZDhkZDYwNmJkNzIyZmQxMGZhM2UifQ"
         }
       ]
@@ -129,11 +129,11 @@
       "statement": "Codex CLI timeout 可觸發一次 fallback，非零 exit code 或空摘要會回報錯誤。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py",
           "version": "repo-file-v1:sha256:d2080f5dbb71509a20b40905f64bbb0b64296c618a3504f0879013fc93fd23eb"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L326-L330",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L326-L330",
           "version": "repo-lines-v1:sha256:ce6c55a46de8c5bed2fdc46ead36301022e3d65787a60b48ea8ec01e9af04f3d:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWI0MWI0MDhiYjhkODcyNWM0NWZkNWI5NDJhMWUyZjUwMzFjMWM1MmRkZDRmYThhYmM5NzE5NmJjMGEzYmYzOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTUwMzJlOTY0ZDA5MzIzNTFlNWQxODUyNjkyODFiMTcxYTNhMDliMDhiMjg2ZTY2MWVhNDcwMzIzYzgyZWI0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjBiYTRhYmQ3OWZkZjQyNjllYmE0ZjAxMzg5ZDg3YjdiNGUwNWRkZDY5YzY4ZmI5NjE1NTgxMWFjYjE4NzU4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTdhODA0MTIzZmVkN2Y3MDMwY2Y3YTIzOTA3YjQyOWFhMzA1OTdlNDRkN2Y0NTMwMzUxZDI4MDliN2UxYWVhYyJ9"
         }
       ]
@@ -141,6 +141,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-27T11:42:53.431Z"
+    "at": "2026-09-28T16:59:07.681Z"
   }
 }

@@ -5,22 +5,22 @@ description: 說明 Gemini、OpenAI、Ollama、Codex CLI 的候選資格、加�
 tags: [llm, gemini, openai, ollama, codex, failover]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-27T11:42:53.431Z
+    at: 2026-09-28T16:59:07.681Z
 sources:
-  - id: openwiki-source-68a25612112798dab8afa5ab
-    resource: repo://tests/unit/test_summarizer_service.py
-  - id: openwiki-source-62ef829d90d6d48b1c1355be
-    resource: repo://tests/unit/test_weighted_selection.py
-  - id: openwiki-source-0d97e8e2b8e9528f009e0d8b
-    resource: repo://whisper_summary/infrastructure/llm/model_options.py
-  - id: openwiki-source-a5639578dff19ab6856c946c
-    resource: repo://whisper_summary/infrastructure/llm/prompt_context.py
-  - id: openwiki-source-9ecbd3cd291b4efc7e52f344
-    resource: repo://whisper_summary/infrastructure/llm/summarizer_service.py
-  - id: openwiki-source-72911afd713a01e09bd32b6a
-    resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
+  - id: openwiki-source-cd3c19edb3412c855091bcd0
+    resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
+  - id: openwiki-source-ef820dbbe7cff90830a1c016
+    resource: repo://apps/whisper_summary/infrastructure/llm/prompt_context.py
+  - id: openwiki-source-e207b6167639ff1973fe1237
+    resource: repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py
+  - id: openwiki-source-25d6d487d3ae6567d7b0397b
+    resource: repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
+  - id: openwiki-source-5882e8a0d3ce6c6d6fd7381f
+    resource: repo://apps/whisper_summary/tests/unit/test_summarizer_service.py
+  - id: openwiki-source-e17149958db116451aa12495
+    resource: repo://apps/whisper_summary/tests/unit/test_weighted_selection.py
 generated: { by: "codex", at: "2026-09-27T11:42:53.431Z" }
 ---
 

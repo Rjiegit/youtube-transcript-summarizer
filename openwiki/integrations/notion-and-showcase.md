@@ -3,23 +3,23 @@ type: integration
 title: Notion 資料整合與 Showcase 邊界
 description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀查詢、schema 映射及可見性邊界。
 tags: [notion, integration, persistence, showcase]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
     resource: repo://apps/showcase/server/utils/notion.ts
   - id: openwiki-source-db42db5a52daaee659ddab56
     resource: repo://apps/showcase/tests/showcase-notion-contract.test.ts
-  - id: openwiki-source-17024c380549dc52263226a6
-    resource: repo://tests/fixtures/notion_completed_page.json
-  - id: openwiki-source-486ab8f26c989067e2a915ab
-    resource: repo://tests/unit/test_notion_contract.py
-  - id: openwiki-source-ed7ac39232dcc4e27533dae4
-    resource: repo://whisper_summary/infrastructure/persistence/notion/client.py
-  - id: openwiki-source-16ad15a60707008474d113ec
-    resource: repo://whisper_summary/infrastructure/storage/summary_storage.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+  - id: openwiki-source-3dcaeedd9757866ead8ffb84
+    resource: repo://apps/whisper_summary/infrastructure/persistence/notion/client.py
+  - id: openwiki-source-ff0286cd18c5814ca933998b
+    resource: repo://apps/whisper_summary/infrastructure/storage/summary_storage.py
+  - id: openwiki-source-9bc2eae428d964ac1917b0b7
+    resource: repo://apps/whisper_summary/tests/unit/test_notion_contract.py
+  - id: openwiki-source-9225efb0c61a21bf97b44e10
+    resource: repo://contracts/notion_completed_page.json
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -52,7 +52,7 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 
 ## Contract 驗證
 
-Repository 以 `tests/fixtures/notion_completed_page.json` 表示共同的 Completed page contract；Python writer test 與 Nuxt reader test 同時使用它，讓 property 名稱、型別與公開欄位的變更能在兩側被偵測。
+Repository 以 `contracts/notion_completed_page.json` 表示共同的 Completed page contract；Python writer test 與 Nuxt reader test 同時使用它，讓 property 名稱、型別與公開欄位的變更能在兩側被偵測。
 
 ## 延伸閱讀
 

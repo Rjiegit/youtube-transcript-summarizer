@@ -3,6 +3,9 @@ type: frontend-guide
 title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
 tags: [nuxt, showcase, swr, caching, ux]
+verified:
+  - by: openwiki/0.4.3
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-bb92958ed21ee9cf0accb45d
     resource: repo://apps/showcase/components/ReadSyncControl.vue
@@ -12,6 +15,8 @@ sources:
     resource: repo://apps/showcase/pages/index.vue
   - id: openwiki-source-714810166c8a4a2d54858dbf
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
+  - id: openwiki-source-36cce2c34e32cbad2ec20271
+    resource: repo://apps/showcase/pages/settings/sync.vue
   - id: openwiki-source-a3da7cc10ec9db071df60002
     resource: repo://apps/showcase/server/api/showcase/diagnostics.get.ts
   - id: openwiki-source-8622a3965ca73ed99b52ff8c
@@ -22,10 +27,7 @@ sources:
     resource: repo://apps/showcase/server/utils/swr-cache.ts
   - id: openwiki-source-c2ec24a0ccca33febfd50837
     resource: repo://apps/showcase/tests/swr-cache.test.ts
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -42,7 +44,7 @@ Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 
 
 已讀紀錄以 Nuxt `useState` 保留 session 記憶體狀態，並在 browser 可用時同步到 `localStorage`；SSR 階段不讀取 browser API。資料會驗證 shape、合併跨 navigation 狀態，並只保留最近 500 筆。storage quota 或 privacy mode 失敗不阻止本次 session 的 in-memory 行為。
 
-首頁的 `ReadSyncControl` 可選擇連接遠端已讀狀態。啟用後，瀏覽器先以個人同步碼換取 HttpOnly session，再透過 Nuxt 私人 API 與 Upstash 同步 read/unread；遠端故障時保留本機狀態。詳細的驗證、合併與儲存語意見[跨裝置已讀同步](read-state-sync.md)。
+首頁提供前往 `/settings/sync` 的入口，由該頁的 `ReadSyncControl` 輸入個人同步碼連結裝置。取得 HttpOnly session 後，瀏覽器透過 Nuxt 私人 API 與 Upstash 同步 read/unread；有效 session 會在頁面載入時自動恢復，遠端故障時保留本機狀態。詳細的驗證、合併與儲存語意見[跨裝置已讀同步](read-state-sync.md)。
 
 首頁在 mounted、activated、focus、重新變為 visible、返回 list route，以及 BFCache `pageshow` 時重新同步已讀狀態。這些事件也會在 server response 已超過自己的 `cache_ttl_seconds` 時觸發資料刷新。
 

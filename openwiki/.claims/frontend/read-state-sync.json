@@ -1,18 +1,22 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:22aead0b6bd94ee89befbe7187a2676c38f4b5785135b9551754baf346a27f99",
+  "pageVersion": "sha256:5a7454a2d2f618d4a454d860f310a43eeeea8394783753b123ec7e354ab311d5",
   "claims": [
     {
       "id": "claim_83d18f4aaba54cdb8738f93c5a110301",
-      "statement": "Showcase 已讀狀態預設保存在 localStorage，跨裝置同步需由使用者啟用；遠端錯誤時仍保留本機狀態並可重試。",
+      "statement": "Showcase 已讀狀態預設保存在 localStorage；有效 session 的裝置在頁面載入時自動恢復遠端同步，驗證入口位於 /settings/sync，遠端錯誤時保留本機狀態。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/composables/useReadResults.ts#L10-L25",
-          "version": "repo-lines-v1:sha256:659e52be5fa1862c3598f137eb65b6aedb72d13c9cbadd57e93f4fa194fc7f66:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxOWJhNzExZjUwZGQwNDk1Y2UxMWNlNjcwODFlOTg5YTVhMTU5NzMwOTA2OTg2ZjE0NGMyODljZGM4MDE1OWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5ZjQ5ZmZiZTRlZjhjMDhhMzkwODVmOTZlYzhiMmI4NDI3YjQ2NGMwZjYzNTdkZTY4MDIzMTA5ZTY3ZTUxYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRhMzU5NjAzN2VhM2EzMzhkNzZiM2Y2YjU3OWZhNGJhZmZiNjNlZWRkOGI3N2ZkMmI0YTg0NTNiMDM1MDE1ZGMifQ"
+          "version": "repo-lines-v1:sha256:d4df5b5831ca75d4b6e0d420ba8759d123a7ae24ad8bdf18dbb7df54eb10b853:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5ZjQ5ZmZiZTRlZjhjMDhhMzkwODVmOTZlYzhiMmI4NDI3YjQ2NGMwZjYzNTdkZTY4MDIzMTA5ZTY3ZTUxYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3NzUzM2NkNjA2ZjBkYzQyNTVkYzY2ODU5NzQwNmY0YzJhYWMzOGYzNDNkZDNiZDc1MzcyNDg3YjYyOTlkYjQifQ"
         },
         {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L275-L390",
-          "version": "repo-lines-v1:sha256:93becf83d82f98b9736b0028a27de5bd406dceb796c8a3b25afcc433a64ec830:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyN2U1Nzg4ZDVkOWQ3M2QyNGE4MWRiYzBhNWE3NGJmYTgyYzljM2IzYWY5OWU1MmFmNzk2ZTkwYjQ2OGE4YTNkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJhNmYzNTJmNmE2MGE1M2JhNGU5MzZkMzVkNGVjMzlmOGUyZDJmN2ZmMTA1ZTliMDZlNDBjMzhhMWE0MTc1Mzg5IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJkYzdmYTdjZDgwYmFlYTk4NzAyMWZkNTNjYjMyOTM5M2FkYjExM2ViOTljMGFlNzI3NDA2NDcyMDUzODU4ZTkzIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIyODU2ZmY5NThkMjNkNTMzMmJkYzg5NTg5NmY3ZTA2YzIxNzkzZjIzNjQwYzc2ZDBhMzMxODUzMTFlOGM2ZGNlIn0"
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L242-L354",
+          "version": "repo-lines-v1:sha256:8c08c7c210f8841249a3a843a83aff969d1f2acaf227033803f8448d1f7522ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIyN2U1Nzg4ZDVkOWQ3M2QyNGE4MWRiYzBhNWE3NGJmYTgyYzljM2IzYWY5OWU1MmFmNzk2ZTkwYjQ2OGE4YTNkIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIyN2U1Nzg4ZDVkOWQ3M2QyNGE4MWRiYzBhNWE3NGJmYTgyYzljM2IzYWY5OWU1MmFmNzk2ZTkwYjQ2OGE4YTNkIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJjZTk2YmEwMzM2ZjU5NTU3N2EyNDdjZTQxNTkwMTEwMzE2ZDZiYzdiNTNiYTYyNTU1MmE2ZTY3NmRhNTMxZjBkIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlYTg2YjU4YjU5ZjYzNmFkMmRkMDlmZjNkMmUwNzMxNzU5Y2I5MjhiOTVlNWE3ZDhmN2MyMTE4MzMzODA5NTJmIn0"
+        },
+        {
+          "resource": "repo://apps/showcase/pages/settings/sync.vue",
+          "version": "repo-file-v1:sha256:48706df8e3039ebf88dc95f22e9d49a165d248ac774b484a2c1ca658b2ed5f8a"
         }
       ]
     },
@@ -22,17 +26,17 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/server/utils/read-sync-config.ts",
-          "version": "repo-file-v1:sha256:bd875fabd8d256f27d0ec356d1a0d06dc612d91831b8b5e504c4477f7cd0f7ac"
+          "version": "repo-file-v1:sha256:026780e7ee8b4ff7537a31b6c23247e3e7b9dad384062ea940c5970678f4f7ce"
         }
       ]
     },
     {
       "id": "claim_7d7c398cec224f28acea7bc21f0fcd97",
-      "statement": "Upstash 以 space id 分隔 Redis hash，mutation Lua script 只接受較新的 updatedAt，並保存 unread tombstone。",
+      "statement": "Upstash 以 space id 分隔 Redis hash，mutation Lua script 只接受較新的 updatedAt、保存 unread tombstone，並清理過期項目與裁切至最多 100 筆。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/server/utils/upstash-read-state.ts#L17-L45",
-          "version": "repo-lines-v1:sha256:399927f25d3eb33a39bfd886f3c6d4ab9163c76b3fcda92fe98bc62dd24dbdd8:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU0MmFiZTdhNzZiNGUxNmE2YWE3MGEwY2IzNjFhODVhNDU0N2E5YTRjMDNlMzA4MDFlMDkzODJhYTJlNWMxMmUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MTBhYzY1MTNhOGJjNDQwNTZlMjkxOTY5OTVmNzU4MzMwM2Y2ZTZhZGFlN2NjMTIwODE1MjBhMmRhODAyYmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5OTAyN2MxNzUwYjk4YTRiNGMxNjEzYmVmMzZiOGI3ZTdlZmJjNWZjMmUzMmVmNGVmYzhmMWI5ZDIzYzI4MmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImM4NTkwOWMwODYyMDgyZWY1ZmNmODk3YWQ3MDQ2OWVlM2NlM2FkOGQxMjA1MmM2ZmI3NzY3ZDQ3OGZmNDgyOTYifQ"
+          "resource": "repo://apps/showcase/server/utils/upstash-read-state.ts#L17-L120",
+          "version": "repo-lines-v1:sha256:23b8042c3f4edaa8deb32fd22ba60ce581caf025841a637e8e5eaba6bc40a42d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNjhiZjUyYjM0OGM4MTY0YzA0MzQzZjkxYmI3MWFmZmZmYTIzZWZlZDQxMzY0NTRiMTYzYTAyMzVkZTM0MWVlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MmEyMjJhYzliNjdkMDE2MWZiOTg0YTkxYzY1MzFhOTgxNjkzNWIzY2MwNWI0YjM5ZWI3ZDE3OWZmNzg3MzM0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0Y2Y4Y2NmNWJjYmUxNTNkNDJiOTM5ZTc3ZWE0YWI4ZThlNzc5M2Q5ZTIxZDlkNjY2NzA1YzQwZWY4YWVjNmUyIn0"
         }
       ]
     },
@@ -56,11 +60,11 @@
     },
     {
       "id": "claim_5da2d0d324054a0e8057e2ce087d0b8f",
-      "statement": "Mutation API 限制每次最多 1000 筆，驗證 content key、read/unread status 與可解析的 timestamp。",
+      "statement": "Mutation API 每次最多接受 1000 筆，驗證 content key、read/unread status 與時間戳，並忽略超過設定 TTL 的舊 mutation。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/server/api/read-state/mutations.post.ts",
-          "version": "repo-file-v1:sha256:4ab67865ca71e8e29f076fe120032eabdbe5df9645d44fe0892024afa86dee69"
+          "resource": "repo://apps/showcase/server/api/read-state/mutations.post.ts#L10-L54",
+          "version": "repo-lines-v1:sha256:fae3c3828bfd8f3c381b844fd617060cd7502b58ecfed6559c4e97f835e8695a:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyYTJjYjI1YTEyMmI0NDIyMWE2MjM0ZWM2NjBhN2I1ZmI3ZjliZGU3YjNiOWUyYjNjNTU5YTBkOTZmYWM3MzkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE5OTc1OTk0YjgwNTRjOTdkNDg2ZWQ3MGM0NzQwZjJkMjU3MGQ3MGMxZGEwMTAzN2QxNzg4N2YyNGNmZjczYWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
         }
       ]
     },
@@ -69,18 +73,36 @@
       "statement": "首次同步會將本機與遠端 snapshot 依 updatedAt 合併，把本機較新的項目補傳；標記 read/unread 時先改本機再送遠端。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L294-L331",
-          "version": "repo-lines-v1:sha256:f80c544016dc5b5cbca81ca5b1975c43ca41f5448f31acb53fc755edca1a77cb:eyJzZWxlY3RlZExpbmVDb3VudCI6MzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgwZTliNDg1OTRiNmY4ODQ3MmIwZWM3NGNiNTFhMDAxNjA1MjA0OGMwMGFkZTcxYjg0NmRhZDYzYjAxNjQ2ZWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImU5MTBlOGQ5YjlmM2UxMDgwY2M4ZjViNTE2YmJmMGMzOWU3NjQ3ZTQwMzY3ZTViM2U1OGI2NDQzZjQyYWNhMzEifQ"
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L271-L304",
+          "version": "repo-lines-v1:sha256:298d983e83f1d3f3abd5971abb69480f61d07d8c470cd66aacbee24e0963f1c3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMxNzUyZTMyMzU5OTIxMWMyNmNiYjlmYjNjNGY0ZGVlZDg5ODdjNjA0NWE5YTJiNDZhMmU3ZmNhMTIyMWJkNmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3ZTU3ODhkNWQ5ZDczZDI0YTgxZGJjMGE1YTc0YmZhODJjOWMzYjNhZjk5ZTUyYWY3OTZlOTBiNDY4YThhM2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZjdlMWQzYjRkYWZiNTcwNDE5NWY2ZDhkODIwNDg3MDA5NzBkOGI2ZmQ0NjMwMzI0ZmZjMjljM2M2YzhkNmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzZTBjZWYyOWFiOGM1ZDhjZTczNGE4NGY4ODE0YWNmN2I1NTUzYzMwYjZkYmVlMmUzMjY1YmY3Zjk3MjRiZmEifQ"
         },
         {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L377-L415",
-          "version": "repo-lines-v1:sha256:fe794891a32ddd087d7aca7cf4a0cbe90ff964360ab63c1fee3ed24d24620e00:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1MWM2MjMzNDcyYjY5YTUwOGYwYTIyODNkM2FkZGIxZTIzZjg1MDgyYjBmMWIwMmIxZjI4OTJjODgxZTNhMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc2ZjIzNWYyMjI2NWYzN2JlNjIwNjNiMzA1Nzk1ZTg0ZTE1MWY0YzllMTlhZGIxZjBkY2MzMzNmNjlhM2VlNjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImI3Njk0ZDM1NWVmZDk3YWJkYzQyZjlkZWEwODM0M2VmZTQ2ODAwYmRiOGZmNWQ0NTFlNTI1YzIyZDJiNTgzMjAifQ"
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L356-L427",
+          "version": "repo-lines-v1:sha256:2a872bd1bed8fedd019387c2b0284c7a013c3569fa8c43afd5edb4984e82244e:eyJzZWxlY3RlZExpbmVDb3VudCI6NzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY1MWM2MjMzNDcyYjY5YTUwOGYwYTIyODNkM2FkZGIxZTIzZjg1MDgyYjBmMWIwMmIxZjI4OTJjODgxZTNhMDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk3ZDg2MzJlNTRlOTI5OGFiYjk1ODcyN2UyZDUxNDA4YWJhZjEzNjYwMzUzNzkxMDE0MGFiZjY1YjMwYWI2MTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijg5NWM2MzQ3MTI1NjllMzZlNDQ3N2MzYzBiNmNlYWFjYjc2MzkzYTgwMjQxMjNiMmFkYjcyYzBiZDFiMjI2NDIifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_e43689ce93594b05b3cf5d5827e060e1",
+      "statement": "同步 TTL 可由 READ_STATE_SYNC_TTL_SECONDS 設定，預設 30 天；Redis field 與閒置 hash 都會過期，前端同步 map 限制為 100 筆。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/composables/useReadResults.ts#L10-L25",
+          "version": "repo-lines-v1:sha256:d4df5b5831ca75d4b6e0d420ba8759d123a7ae24ad8bdf18dbb7df54eb10b853:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFhMWQxYTYzMzkwMjI5Yzc5ODM0N2U4M2EwNDA1NDQxYzk0MDAwMzUyODRhZDE2OGMxYmY2Y2RmMWQ3MGEzNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5ZjQ5ZmZiZTRlZjhjMDhhMzkwODVmOTZlYzhiMmI4NDI3YjQ2NGMwZjYzNTdkZTY4MDIzMTA5ZTY3ZTUxYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY3NzUzM2NkNjA2ZjBkYzQyNTVkYzY2ODU5NzQwNmY0YzJhYWMzOGYzNDNkZDNiZDc1MzcyNDg3YjYyOTlkYjQifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/read-sync-config.ts#L11-L38",
+          "version": "repo-lines-v1:sha256:a22e811b8abb003a0593f360321a9f7273ec382e73d587c664fc3e93128c54ae:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgxMGM3OTVmOWZkY2E4Y2M5MmI2ZWNhMzVmNWFmYjEzM2QyNjhmOTU0ODQzMzg2YWQ4YWVlNThiYmFkMzIyNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhmY2ZlZTBhMTkwZTEyYzU4NDI1YzNhMmZlMjNmOWUxMWFmNzAxMWMzOTU4ODk3MWQwYTQ3MzMwODY1NzM5NjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY0OGExYzZlMGRkZTE0YTJmODI1ODdlYTg0ZGQwZGRkNDlmM2QwNjViZmI2ZTcxZWRmNjNlNDI4YTZjN2QwMDEifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/upstash-read-state.ts#L17-L120",
+          "version": "repo-lines-v1:sha256:23b8042c3f4edaa8deb32fd22ba60ce581caf025841a637e8e5eaba6bc40a42d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA0LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwMWJhNDcxOWM4MGI2ZmU5MTFiMDkxYTdjMDUxMjRiNjRlZWVjZTk2NGUwOWMwNThlZjhmOTgwNWRhY2E1NDZiIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJmNjhiZjUyYjM0OGM4MTY0YzA0MzQzZjkxYmI3MWFmZmZmYTIzZWZlZDQxMzY0NTRiMTYzYTAyMzVkZTM0MWVlIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MmEyMjJhYzliNjdkMDE2MWZiOTg0YTkxYzY1MzFhOTgxNjkzNWIzY2MwNWI0YjM5ZWI3ZDE3OWZmNzg3MzM0IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI0Y2Y4Y2NmNWJjYmUxNTNkNDJiOTM5ZTc3ZWE0YWI4ZThlNzc5M2Q5ZTIxZDlkNjY2NzA1YzQwZWY4YWVjNmUyIn0"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-28T12:59:50.272Z"
+    "at": "2026-09-28T16:59:07.681Z"
   }
 }

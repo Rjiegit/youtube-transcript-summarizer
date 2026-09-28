@@ -5,7 +5,7 @@ description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topo
 tags: [operations, configuration, docker, deployment]
 verified:
   - by: openwiki/0.4.3
-    at: 2026-09-28T12:59:50.272Z
+    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -27,36 +27,36 @@ sources:
     resource: repo://apps/showcase/server/utils/config.ts
   - id: openwiki-source-3b0efe03f5b86982327fa144
     resource: repo://apps/showcase/server/utils/read-sync-config.ts
+  - id: openwiki-source-e8a3e4e8f72c5329a78957ec
+    resource: repo://apps/whisper_summary/apps/api/schemas.py
+  - id: openwiki-source-fb3a71308a5a59482c2767f3
+    resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-445a1c8f48d3b2e4f898d6be
+    resource: repo://apps/whisper_summary/core/config.py
+  - id: openwiki-source-cd3c19edb3412c855091bcd0
+    resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
+  - id: openwiki-source-25d6d487d3ae6567d7b0397b
+    resource: repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-44f784ddceb054f0c06a5950
+    resource: repo://apps/whisper_summary/pyproject.toml
+  - id: openwiki-source-5d30f93453a5fc9227aa0b47
+    resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-  - id: openwiki-source-05ccef8d4cf1698187f20464
-    resource: repo://pyproject.toml
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-  - id: openwiki-source-ea52e4ece41ed31f8a8e2718
-    resource: repo://whisper_summary/apps/api/schemas.py
-  - id: openwiki-source-4796880dadec1e10c195387c
-    resource: repo://whisper_summary/apps/workers/processing_worker.py
-  - id: openwiki-source-f60b7b12c706e6741d8191c8
-    resource: repo://whisper_summary/core/config.py
-  - id: openwiki-source-0d97e8e2b8e9528f009e0d8b
-    resource: repo://whisper_summary/infrastructure/llm/model_options.py
-  - id: openwiki-source-72911afd713a01e09bd32b6a
-    resource: repo://whisper_summary/infrastructure/llm/weighted_selection.py
-  - id: openwiki-source-aaaf86d61afa929bb997ee28
-    resource: repo://whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
+generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 ---
 
 # 設定、執行與部署
 
 ## Python 主系統
 
-複製 `.env.example` 為 `.env` 並填入所需值，絕不可提交 secrets。`Config.validate()` 接受 `OPENAI_API_KEY`、`GOOGLE_GEMINI_API_KEY`、`OLLAMA_API_KEY` 任一值，或可在 PATH 找到的 Codex CLI；預設自動候選池只包含 Gemini 與 Codex CLI，因此僅有 OpenAI 或 Ollama key 仍無法從預設池選出模型。使用 Notion 時需同時提供 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。Discord、Notion workspace URL、RSS 與維運 token 依功能選填。
+複製 `apps/whisper_summary/.env.example` 為 `apps/whisper_summary/.env` 並填入所需值，絕不可提交 secrets。`Config.validate()` 接受 `OPENAI_API_KEY`、`GOOGLE_GEMINI_API_KEY`、`OLLAMA_API_KEY` 任一值，或可在 PATH 找到的 Codex CLI；預設自動候選池只包含 Gemini 與 Codex CLI，因此僅有 OpenAI 或 Ollama key 仍無法從預設池選出模型。使用 Notion 時需同時提供 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。Discord、Notion workspace URL、RSS 與維運 token 依功能選填。
 
-`Config` 載入 `.env`、固定 Asia/Taipei timezone，並確保 `data/`、`data/videos/`、`data/_summarized/` 存在。RSS 預設停用；poll interval、minimum interval 和 task API timeout 都至少為一秒。
+`Config` 載入 `apps/whisper_summary/.env`、固定 Asia/Taipei timezone，並確保 `data/`、`data/videos/`、`data/_summarized/` 存在。RSS 預設停用；poll interval、minimum interval 和 task API timeout 都至少為一秒。
 
 `PROCESSING_ENGINE` 預設 `legacy`，也可設 `langgraph`；建立 task 時的 `processing_engine` 可逐筆覆寫。Worker 需要 `PROCESSING_WORKER_TOKEN`（若未設則沿用 `PROCESSING_LOCK_ADMIN_TOKEN`）才能透過中央 API claim、heartbeat 與回寫 task。`TASK_API_BASE_URL` 指向 API，`TASK_LOCK_TIMEOUT_SECONDS` 與 `TASK_LEASE_HEARTBEAT_SECONDS` 控制 lease 生命週期。常駐 worker 預設每 60 秒輪詢一次。Codex CLI 的執行檔與 timeout 可由 `CODEX_BIN`、`CODEX_TIMEOUT_SECONDS` 設定。
 
@@ -76,9 +76,9 @@ generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 
 `make install` 還會寫入 `/usr/local/bin/yt-dlp`，本機可能需要權限，不應把它視為純 dependency sync。API 的開發命令綁定 `0.0.0.0:8080` 並啟用 reload。
 
-Docker Compose 以共用 runtime base、`.env` 與 bind-mounted repository 啟動 api、streamlit、processing-worker、rss-monitor。Dockerfile 以 `api`、`ui`、`worker` targets 分別安裝對應 dependency group。API 暴露 8080、Streamlit 暴露 8501；Streamlit、RSS monitor 與 processing worker 的 `TASK_API_BASE_URL` 都指向 Docker DNS 名稱 `api`。API 與 processing worker 啟動時預設更新 yt-dlp，可用 `YTDLP_AUTO_UPDATE=0` 停用。
+Docker Compose 以共用 runtime base、`apps/whisper_summary/.env` 與 bind-mounted repository 啟動 api、streamlit、processing-worker、rss-monitor。Dockerfile 以 `api`、`ui`、`worker` targets 分別安裝對應 dependency group。API 暴露 8080、Streamlit 暴露 8501；Streamlit、RSS monitor 與 processing worker 的 `TASK_API_BASE_URL` 都指向 Docker DNS 名稱 `api`。API 與 processing worker 啟動時預設更新 yt-dlp，可用 `YTDLP_AUTO_UPDATE=0` 停用。
 
-processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-processing-lock` 會從 environment 或 root `.env` 取 token 並送出 force release；執行前應先用 GET/dry-run 確認目標 backend 與 lock age，避免中斷活躍 worker。
+processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-processing-lock` 會從 environment 或 `apps/whisper_summary/.env` 取 token 並送出 force release；執行前應先用 GET/dry-run 確認目標 backend 與 lock age，避免中斷活躍 worker。
 
 ### 本機 Data 清理
 
@@ -90,7 +90,7 @@ processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-proc
 
 ## Nuxt Showcase
 
-在 `apps/showcase` 執行 `npm install`、`npm run dev`、`npm run test`、`npm run build`。`make showcase` 優先載入 frontend `.env`，不存在才使用 repository root `.env`。
+在 `apps/showcase` 執行 `npm install`、`npm run dev`、`npm run test`、`npm run build`。`make showcase` 載入 `apps/showcase/.env`（若存在）。
 
 Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 同時設定 Nitro SWR 與 `public, s-maxage=<ttl>, stale-while-revalidate=<ttl>`。
 
@@ -98,7 +98,7 @@ Notion token/database id、status property、completed value，以及選用同�
 
 跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 
-`npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它優先讀 frontend `.env`，不存在才讀 root `.env`，且不覆寫既有 process environment；`make showcase` 則會 export 選定檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`；若依賴 root `.env`，請從 repository root 使用 `make showcase`。執行時另可用 `/api/showcase/diagnostics` 檢查解析，或 `/api/showcase/health` 實際驗證 Notion 存取。
+`npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它讀取 `apps/showcase/.env`，且不覆寫既有 process environment；`make showcase` 則會 export 該檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`。執行時另可用 `/api/showcase/diagnostics` 檢查解析，或 `/api/showcase/health` 實際驗證 Notion 存取。
 
 ## Betterleaks 掃描設定
 
@@ -108,8 +108,8 @@ Notion token/database id、status property、completed value，以及選用同�
 
 `filter` 必須同時符合路徑與 secret 值條件才忽略 finding：
 
-- `tests/`、Showcase `tests/` 與 `test-data/`、`.archive/tests/` 或 `.archive/test_` 開頭路徑，只忽略列出的 placeholder 模式：`secret`、`token`、`api-key`、`database-id`、`page-id`，`lock|openai|gemini|ollama` 搭配 `-secret` 或 `-key`，以及 `test|env|runtime|nuxt|mock` 加底線或連字號的限定字元字串。
-- 根目錄與 Showcase 的 `.env.example` 僅忽略精確值 `example-maintainer-token`。
+- `apps/whisper_summary/tests/`、Showcase `tests/` 與 `test-data/`、`.archive/tests/` 或 `.archive/test_` 開頭路徑，只忽略列出的 placeholder 模式：`secret`、`token`、`api-key`、`database-id`、`page-id`，`lock|openai|gemini|ollama` 搭配 `-secret` 或 `-key`，以及 `test|env|runtime|nuxt|mock` 加底線或連字號的限定字元字串。
+- Python app 與 Showcase 的 `.env.example` 僅忽略精確值 `example-maintainer-token`。
 
 因此測試檔案仍屬掃描範圍，不符合上述值模式的 finding 不會由這份 filter 豁免。
 

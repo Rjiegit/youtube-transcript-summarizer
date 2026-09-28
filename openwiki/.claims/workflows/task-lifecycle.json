@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:d5a53c0f032075dd5e820eb17bc936ef1631047951e20048c3f42dd90e725770",
+  "pageVersion": "sha256:7cd62d21e3ede594522c96bef224a3b38945784781d7196f65954cbd656621cd",
   "claims": [
     {
       "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
       "statement": "相同 URL 的 Pending/Processing task 會被視為 active duplicate；Completed task 可依 block_existing 永久阻擋或在 cache TTL 內回傳 cached result。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/tasks/task_creation.py#L22-L72",
-          "version": "repo-lines-v1:sha256:ec8c5851c820334cf2b15424ff2d7335c6483129840286556a6bc46f7973e371:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/whisper_summary/services/tasks/task_creation.py#L22-L72",
+          "version": "repo-lines-v1:sha256:555657dd6cf8985f0e03edb085ce41f4b28602cdbd90f2eb13b5c2ba17b8d1e1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjYzViMjkwZTY2ZWI5NTBjNzAwNjNmMjQ3MWFkYzllY2E4Yzg4OTdjMGRlYzcwMjU0MWRhOWQyMzM5Nzk0OGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyNjZkM2E5ODZhOWYyNmFmZTUxMGM3YjZhNWY5OTE1MDJlMTlkNGU2MGZlNWJiYzNiNjY5ZDYyMmQ4NWI4MjkifQ"
         }
       ]
     },
@@ -17,11 +17,11 @@
       "statement": "Dedicated processing worker依polling interval反覆執行queue drain；API process不啟動daemon thread，單次cycle失敗不終止常駐worker。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/api/dependencies.py#L42-L48",
+          "resource": "repo://apps/whisper_summary/apps/api/dependencies.py#L42-L48",
           "version": "repo-lines-v1:sha256:4c9fbed5b6c2cda23dd7dc8d0ee32aedc9c0daf08dc1a360ec57ab547f3ec443:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNmRmYzBlODUzODJlOTVlMDUzYjNkNTA2YTg4NzI2OGIwM2EwYjk1YTFmZTA2ZmU0OTE4YTAwZWIzZGFiYjhkOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMzBjMWYxODhmMTQyZWQ3YTgyNDY4MGIyMDcxNzJjNTUxOWJjNjE0YTQ4ZmRhN2NmMTY3ZWRiOGRkZjc5OTU2YyIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYzk4ZTg4OTQzNmQyMjY4OTlmMzJiYTI2ZTZlYjU0ZjE0NTQwOWM5ODkzM2ExZmY2NGQxMmY4NDg0NDNlOTI5ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
         },
         {
-          "resource": "repo://whisper_summary/apps/workers/processing_worker.py",
+          "resource": "repo://apps/whisper_summary/apps/workers/processing_worker.py",
           "version": "repo-file-v1:sha256:26a5371f0360458b78ed083847f354cd54a276c091cdcaacb2c9bedc6b0e9830"
         }
       ]
@@ -31,11 +31,11 @@
       "statement": "Retry endpoint 只接受 Failed task，建立關聯的新 Pending retry task並把 source改為 Failed Retry Created；retry等待dedicated worker後續取得。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/api/routers/tasks.py",
+          "resource": "repo://apps/whisper_summary/apps/api/routers/tasks.py",
           "version": "repo-file-v1:sha256:0714a3e92b9fca890d4a5cf3a909a20c79ae184178c9d4fc709a9a28b26077ff"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L380-L410",
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py#L380-L410",
           "version": "repo-lines-v1:sha256:dc6497cfbb4b1b324d014f56826c723498a4ec909c49493fd8c4a3d157d1c32b:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI3MDQzYzAwZTJmOTY1MWRkMzJhMDUxYWY2N2JhOGM3YTA2YzUzZjA4OWYzY2I2MmRjZGY3NmU1MDEzMDRhZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZmUyZDU3ZDg2M2U1YzhlN2M0MTIyNDg1YjIyMTliN2IzOTZlNGE2NGFlZWE4YzMzMzEwMWQ2Mjg0NjhlOTQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA1YzY1Y2FjMjA1NWIzOWE1YzZjNDE0ODAyNDM4YzdiYTZlZTVmMGI2YzQ0NDU3OTRkZWFkNzUwNmQzYThiZjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhYzQ1M2EwNTNmYTc0ZjliMjBkYTRkNTgzNjEyZGFmMWY1NDgxOWJmMmE4ZGEzOTIwM2E5MGIxNzQxMzgxNDkifQ"
         }
       ]
@@ -45,16 +45,16 @@
       "statement": "常駐 worker 透過中央 API 在 SQLite transaction 內 atomic claim 最舊 Pending task；過期 Processing lease 先標記 Failed，避免失效 owner 重複寫入。",
       "evidence": [
         {
-          "resource": "repo://tests/unit/test_sqlite_client.py",
-          "version": "repo-file-v1:sha256:3923258451bcc2e9296bca69107e1b1f3ef94e0117b0caf50eb48db9a6525fc0"
-        },
-        {
-          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py",
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py",
           "version": "repo-file-v1:sha256:dad773c5c50277ff48a767a2d4698f48a3176bf457f6b2cd183e464f7b85c383"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L119-L180",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py#L119-L180",
           "version": "repo-lines-v1:sha256:bd7a9ecc0e9fcc0b813fea3995e45e7bf2137e31e4b140598ee383d99f544cc2:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMzMzJlZjAxYmJiMTdhMDQzMGI5MzJkZjg5MTkxMzc2YmI2YTM2MTBlYTY2ZjA3NzI3YzUzNmI5MzkxYzM2NjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlYjMyMmZmZDQ0MDA5MTM1YWYwNWJiNDlhY2MwNTM1ZjdkNDViMjM1N2IyOTYzMmE0YzhiZGY2YzU0NDIyNjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQzMzEwOTVkNWZkOTQ5N2Y0M2RkNjkwMWE5M2Y3NDNiYjY1NTUwNmEwNTBlMTVjMjgxNWJmMWM5ZDRmMTMyOTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzZDk5MTdmNzNmMWRkNDZhZWJjNGY3NDNhOWFmYWI4YzQ1MmEzOTI4ZWJlMjQxZjMzYThmODJmZGU3NzI0OWIifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/tests/unit/test_sqlite_client.py",
+          "version": "repo-file-v1:sha256:3923258451bcc2e9296bca69107e1b1f3ef94e0117b0caf50eb48db9a6525fc0"
         }
       ]
     },
@@ -63,15 +63,15 @@
       "statement": "每筆 task claim 核發 worker id 與 lease token；heartbeat、progress、complete、fail 都需驗證 ownership，失去 lease 時 worker 停止回寫。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/api/routers/processing.py#L116-L205",
+          "resource": "repo://apps/whisper_summary/apps/api/routers/processing.py#L116-L205",
           "version": "repo-lines-v1:sha256:b43d3abc36235820a1ded3a344fbf3c4d170565d31dd5e5f3cdcd27b8cfc8bd3:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1MzI2OTVmZjkxMTMzNTM5M2YyZWMyMjNmYWE0OWMwZTFjNTJjNDU2YzQ3MmU0ZWE0MzkzYmRkMTNmZDgxOTEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4NDgyNDJkYmRlYTUzNTBjMzhlZjQzNmQ3YzcxYzM0N2Q2YjNlOGUyOWVmNmIxMDg5MzM0OGIzMjAxZGM1YzgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRiZDE4NmIwMzg4YzA0YmQ0YmUzNjlmODU2NmJhYmI4MmYxZjY5ZGU3MTllYzc2MGU4Mjk1NDhlMmM2Y2U2YWEifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/persistence/sqlite/client.py#L153-L270",
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py#L153-L270",
           "version": "repo-lines-v1:sha256:dac33fc389299d1ce92475f217d6af70e616a04f36a3196b6af37e1fa7cc5afb:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiIwM2ExZDc5NThjMWZhZDZmNzRkYzkxZmI3MTY3MzljODlkY2MyNTk4NTRjZjNjMTRjMDAxODIyNzBiOGU5NDczIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJiNTY5Y2IwOTI4MGVlMDc4MTk0NWU0OGQ0MDQxYmQyZGZhYWU2OTFhZDJlYWJmNWQzY2JhMDg0NmM3MjE2Y2FhIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiI3MTk2N2E2MjNmOTkwNzAyOGRhNDczNmZkYzQ5ODEzYjBkNWFjNWZlYzY2ZWQxODEyYmE2YzMxM2RlOWYwMzhlIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiI2MTZlZGRjZjcyM2U5NzZlNTBkZTMzYTlhMjBjZDI2Nzc0MGQ3Zjk3YzkwMjYyYWY0NWJmMDIzOWI2YTNkN2FhIn0"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L222-L250",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py#L222-L250",
           "version": "repo-lines-v1:sha256:b2dfe1917137e702bdb36f8b1dc413c93d56f8d9c446ad23a087faff483492b7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MTZkNTE3ZjlmYjE4ZDMwNmZjZjUzYTI2N2YwMWJlNWZjYjI2ZTcyNTA5ZTYzYWU2ZTRhZDE1ODdjZGQ4YTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1MjM2ZDM4ODQ0MjE5Y2JlZjg0OGRmMjY2ZTNmYjdiZmRlNTZjMTFiZWYzMDY1ZTgzMzkyOTViNTEzZTFhZjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM3MmYxY2Y3NGE3ZWJkYTc0YjRkMzY5ZGFkODE3ZTY4MTM4Y2NjMGQwMmVjYzg5ZTliYmNhOTlmMDY0ODk2ZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ZWI3YTlkNDA5NTNkODRjNDFkZjQyZmI1YWYyM2VmMTM3M2YwZTFlMGIxODdlY2JmZDQ2MmUyNmRjNTk1ZjUifQ"
         }
       ]
@@ -79,6 +79,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-28T12:59:50.272Z"
+    "at": "2026-09-28T16:59:07.681Z"
   }
 }

@@ -1,13 +1,13 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:408327adabdb7381ced94ee1466c3944df3d8f3778f9d9724ea6cee9e6dae7b3",
+  "pageVersion": "sha256:11300a375af21ad7e11c67a1ff6d641269cd3c426462ac8153b4d9c5bc91e951",
   "claims": [
     {
       "id": "claim_2c361d6854b0489a9c545d131c871425",
       "statement": "單筆 pipeline 依序執行下載與 metadata 擷取、更新 title、轉錄、metadata-aware 摘要、Markdown 與可選 JSON sidecar 保存、Notion 保存、Completed 狀態更新與 Discord 通知。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
           "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
@@ -17,7 +17,7 @@
       "statement": "Pipeline 任一步驟丟出 exception 時 task 會轉為 Failed並保存 error與 duration，worker 可繼續下一筆。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
           "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
@@ -27,8 +27,8 @@
       "statement": "Summarizer 只在 transient provider error 時排除失敗 candidate 並重選一次；非 transient error 不切換，沒有 fallback 時保留原始 exception。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L90-L170",
-          "version": "repo-lines-v1:sha256:c69599dbf51776a2888608e4284fe8f531d27da908f0430c03e3f540c703e6b2:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA2LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJmMzI4YmRiOTYyMGM0ZDlkMmQxYzEyODI2ODQ1NGVhZDQ1YjZkM2JhMGMyYzU1MTdkNzEwNTJmMGYyZWE4OWU4IiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJlNjA5YzNmMDgxYTUwMTAzODgwMTRjNTIwZWYwMjNjOTAzNTcxYTcxZjQ0YTQ0YTBhZjgyNjAzNWMxZDIyYzViIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlMjA1NzI5ZTc3ODI5OTQ2OTIxZTEwNDRjOGJhZmRjNTNhMzYzOTJhZTVjNmI4NzE3NTQ5YzQ1NTQ0MWI2NDk4IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIwM2U1MjhiOTZlNWUyMzMxMjZkOGEwYTMxZjhjOTFmNGQ1NmFkNzMwZjU3MzBhNTNlZWUwNjhiZTYxNTlkNjRjIn0"
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L90-L170",
+          "version": "repo-lines-v1:sha256:a4376988862b885853d499cc9c0ddde34f090fb12ab0d91af8227b8fc47c577f:eyJzZWxlY3RlZExpbmVDb3VudCI6ODEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0MThhYTc4MmViN2RmZWIxNjlkOTg0NDA5MmRkZTUzMjA3NjQ4ZDc3ZjBhYzYwNmVmNzNhMWExOTIzYjM3ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhZTY0YjBhNjg0Nzk0Zjk1Y2YzZTNiMmM3YzU4MWQ3YzA1YmE0ODE4YWNlYmJmY2NiOTUyYzg4MzU2ZjgyNDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ4ZDFhYzczMTI1NTE0ZjM5MzNlMjU5Njc1ZTdjZmViZjM0NmViMjMzYTM5NmIzYzg4NGNlYzAzNzI1ODJkMjAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjliNzIzNzQ5MzA5NzQ0NjNjMGNjYjc3ODkwNzQ2ZTBmYzlmMGE1MjQxZjNlODYyMjNkY2EyNzJmZTYyNWQ2NTQifQ"
         }
       ]
     },
@@ -37,11 +37,11 @@
       "statement": "成功 candidate 以 provider:model 記錄 last_model_label，worker 再與 faster-whisper model size 組合為持久化模型標籤。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/summarizer_service.py#L172-L204",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L172-L204",
           "version": "repo-lines-v1:sha256:975fc32c5287cc11c0a307ba5450d369a2a3147edf4651be6308b49b7bb96371:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIzMzBkZGFlOTEzNjc0ZWE2Yzk2ZThlMmRhMWNmYzA1MjJhNTYzZjhmYmJjMDczZTI3OGFiNDA0NmZiZmIyMDMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQyODliMWJjZTg1MmY4NjhlNmUzN2ZmYWEyNzc0MTZhNmEzNzRjOTQ3MTIwMWE3ODcxNGJhNDQ1YWY5YzczMzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjFkZjNlN2E0ZTcwNTMxZjQxNmFhNDhjNGE5Yzg4Nzc1YzhmMjlmNmE4OTNmNjg3MzQ1OGEzNzVkMWFmY2UzZWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjIyMzE4MGVmNGM4NTQzZGNhZjFmMzBkZTFiZjJmYTE1MTNkYmZhNWIzYmZmOGEyZTNhZjFiYzM3OGM3MWRjNjAifQ"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
           "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
@@ -51,15 +51,15 @@
       "statement": "Downloader 只向 yt-dlp 要求白名單 metadata，並將解析結果正規化為 immutable VideoMetadata；無效 metadata JSON 不會使已有媒體檔的下載失敗。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/domain/media/models.py#L22-L113",
+          "resource": "repo://apps/whisper_summary/domain/media/models.py#L22-L113",
           "version": "repo-lines-v1:sha256:fef6c61a6e7af6664d7a05680a8e46460293714aa15d460344c269ac9c8651e7:eyJzZWxlY3RlZExpbmVDb3VudCI6OTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2OWExMzk3NWMyNTZlYzgzMjBlMjAxNjA4M2M5NmRmNjM3Y2EzZDM1YmViZGUyMzE0YmVlM2E0NzExYjU2Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2YjA0NDkxNDY5NzIyZTgzNjNhOTRlNDA0NDUzOGUwMTNhMmEyMTdlMzZiMWU1NjhiYTYwYWNiN2I0YzhmMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBmOGNmNmU2MjBjMDg2ZDAzMTIyYzIxNThkMTY2ODZkMmIzYzBkZGE3YjY1ZDdkMjc4YjVkNWFlOGE2MDMxMmIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/media/downloader.py#L155-L202",
+          "resource": "repo://apps/whisper_summary/infrastructure/media/downloader.py#L155-L202",
           "version": "repo-lines-v1:sha256:a4575be57b8e6e47b77cf449fa9e28e81867067fc7278e9d5982e417194439fd:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEwYTNhNmQyZGFjZTYzNjFjYTc1OTg4ODliNjFhOWJhN2VkZDhhNDZmMzllMDAxYjBiOWUwMzNhYTc5OWQ3YWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ4Y2U5MjE5YzdlZTAzYTk4NzhhNDhlMjAzNjExYWRjNGQ2NjM4NDc4ODk4ZjViMWQ4MzFhMjA2MzNiYjY5YjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjcxYTc5MDg1ZTJiMWQ0Zjk4NmEzZmYxZmMzNzUyOGRkZWYyYzFkY2FlYTQ5MzljMDY1YmNmZjRlOWJmMmVmODgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/media/downloader.py#L22-L95",
+          "resource": "repo://apps/whisper_summary/infrastructure/media/downloader.py#L22-L95",
           "version": "repo-lines-v1:sha256:e79284e783605db2015b3f9b7b0d3da303563e6ce0520752069debb270fc5322:eyJzZWxlY3RlZExpbmVDb3VudCI6NzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4Mjk3ODhiYTYyNGNhMmQzMmE2YmY1NmZmY2M1YjRhYWJmYjY5N2M5YWM2OTgxZWRlYzRkYjEyZjgzM2ZhNWQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0Y2I1NDZhOTZmNDU0MWQ0MDBkOTA0MGVlZThlNjQ1NGU2ZjgwYmM5ZTYzM2Y0ZDc5YmQzZjUxNjIwODIwNjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJmMTQxNjQzNzI1NWUwMTBlMTgwNzRmZGIzODQ2Njg0ZDQ0NDBkNThhMjEyMjA5YTExNTM2YzZmY2M4MTE0ZWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcwNmNkZDRmNDk5NWYwOTFlMjhlNTZmMTcwZDBlZGZhMjFjYjVmZjhmMGFlNjZhZTFmMzVjNzgxNjZiOWY0NDMifQ"
         }
       ]
@@ -69,11 +69,11 @@
       "statement": "Summarizer 將 metadata 標成不可信的創作者背景、禁止用它覆寫摘要規則，並只截斷送入 prompt 的 description 至 6,000 字元。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/core/prompt.py#L156-L164",
+          "resource": "repo://apps/whisper_summary/core/prompt.py#L156-L164",
           "version": "repo-lines-v1:sha256:309c7b598cd1ac5f2e6b9abd42b1d78635665f84bf4889302410030f17886903:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTE5YTU1Y2NmZmIzY2E5ZDFiMzY4YjJmNTdlN2Y2MTk4NmY0Yzk3NjlmZGVjYmYyNWUwMjlhYWYyZjI0ZjZkMCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTY1MzcxZWIxYzQ1M2RkZTQzZjRjZTU0MWY1MGVmYjU5ZGE0NjIyNTY5YmQ4MDk0MmRjMDhmZWI4Mzc2NWNmNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjIsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGJkYmUxMDVmYTNiNTc3MjQ5MzE5Y2I2NTYwNzU1NTU0ODJmOTgwMjZiNzFmYjhlMWM0YmZjYjkzNTM0ZmY2YiJ9"
         },
         {
-          "resource": "repo://whisper_summary/infrastructure/llm/prompt_context.py#L1-L50",
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/prompt_context.py#L1-L50",
           "version": "repo-lines-v1:sha256:a7f6763a93ffb86a670e648232b2d6c5980d2330f4c4dc1c37984ed02acd34cb:eyJzZWxlY3RlZExpbmVDb3VudCI6NTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzM2UyOWNmNmJhYmRmNDA4YWM4MGNmZjY5ZmVlODc5ZTIxNWM5N2E4YTViNmRiY2Q0ZDgwMjFjNmI0MDgzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMwYzFmMTg4ZjE0MmVkN2E4MjQ2ODBiMjA3MTcyYzU1MTliYzYxNGE0OGZkYTdjZjE2N2VkYjhkZGY3OTk1NmMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
@@ -83,12 +83,12 @@
       "statement": "Metadata sidecar寫入exception只記錄warning，不阻止後續Notion保存與task完成。",
       "evidence": [
         {
-          "resource": "repo://tests/unit/test_processing_worker.py#L214-L271",
-          "version": "repo-lines-v1:sha256:c8ecebca844c487a44a4a127f5918f9d533c813a32d07e1ece1bdc720c241835:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYTRkZTE2Zjc5NTJiYzczMGIzYzY1Y2M2Zjg5YTBkYTk3OWU1M2ZiNDY5MjU5ODM2M2VlMmYxMzNlMTVjMmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlOTNkODkzOTA2ZWVhZjJjYWRjYzY1NTg1OTdiZDkzMzBlMmViNjlkZmI2MGE5YzgxNzUyMTg1MjdlNzI2ODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OGJiMTc5MGYyM2QwMjcyNGM1ZTgwNmUxNDIxMTFhZTQxMDAwOTMwOWFlZGVjOWE5ZDQ5MTM5MWRiODBmOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
+          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
-          "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
+          "resource": "repo://apps/whisper_summary/tests/unit/test_processing_worker.py#L214-L271",
+          "version": "repo-lines-v1:sha256:c8ecebca844c487a44a4a127f5918f9d533c813a32d07e1ece1bdc720c241835:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYTRkZTE2Zjc5NTJiYzczMGIzYzY1Y2M2Zjg5YTBkYTk3OWU1M2ZiNDY5MjU5ODM2M2VlMmYxMzNlMTVjMmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlOTNkODkzOTA2ZWVhZjJjYWRjYzY1NTg1OTdiZDkzMzBlMmViNjlkZmI2MGE5YzgxNzUyMTg1MjdlNzI2ODEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OGJiMTc5MGYyM2QwMjcyNGM1ZTgwNmUxNDIxMTFhZTQxMDAwOTMwOWFlZGVjOWE5ZDQ5MTM5MWRiODBmOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -97,7 +97,7 @@
       "statement": "沒有 VideoMetadata 的 download result 仍使用兩參數 summarize 且不寫 sidecar，維持既有 downloader 與測試替身的相容性。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
           "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
         }
       ]
@@ -107,12 +107,12 @@
       "statement": "Dedicated processing worker以可設定間隔持續執行queue drain，單次cycle例外不終止常駐process。",
       "evidence": [
         {
-          "resource": "repo://tests/unit/test_dedicated_processing_worker.py#L1-L34",
-          "version": "repo-lines-v1:sha256:1e970b452d851f6b48365601f837138f44c2686dce8f31e7a4603d1b88a16ac9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmZGE4Nzk3ZDA1YTc4OGI1YjViZTI2NzAwNzhkNjNjZjVkZDk0MmY0Nzk2NzlkMjY0NmJlMWQ2NmQ2MzJlZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5Y2I5M2FmM2MwYzZiMmUyYWVkMDM2MmNkMzk2Nzk2MmM1OTU4YzE0YmYzMDE0MWJlMTBlNWEwODg0MWJmZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ5NTk3NjBjOWM4MTQyNmVjNGM2ZTY5ZDYyMDFjZmNiODYzNzc0MTk1YmNmM2U5YjM3YTliNTE3Yzc2M2Y1NDIifQ"
+          "resource": "repo://apps/whisper_summary/apps/workers/processing_worker.py",
+          "version": "repo-file-v1:sha256:26a5371f0360458b78ed083847f354cd54a276c091cdcaacb2c9bedc6b0e9830"
         },
         {
-          "resource": "repo://whisper_summary/apps/workers/processing_worker.py",
-          "version": "repo-file-v1:sha256:26a5371f0360458b78ed083847f354cd54a276c091cdcaacb2c9bedc6b0e9830"
+          "resource": "repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py#L1-L34",
+          "version": "repo-lines-v1:sha256:1e970b452d851f6b48365601f837138f44c2686dce8f31e7a4603d1b88a16ac9:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJmZGE4Nzk3ZDA1YTc4OGI1YjViZTI2NzAwNzhkNjNjZjVkZDk0MmY0Nzk2NzlkMjY0NmJlMWQ2NmQ2MzJlZjQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI5Y2I5M2FmM2MwYzZiMmUyYWVkMDM2MmNkMzk2Nzk2MmM1OTU4YzE0YmYzMDE0MWJlMTBlNWEwODg0MWJmZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ5NTk3NjBjOWM4MTQyNmVjNGM2ZTY5ZDYyMDFjZmNiODYzNzc0MTk1YmNmM2U5YjM3YTliNTE3Yzc2M2Y1NDIifQ"
         }
       ]
     },
@@ -121,15 +121,15 @@
       "statement": "ProcessingWorker 依 task override、全域設定、legacy 預設的優先序選擇引擎；legacy 與 LangGraph 共用相同 PipelineOperations 順序。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/engines.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
           "version": "repo-file-v1:sha256:9cc0f4aa5f0f897fca207cc4c68666c57dfaa6ed32d986b0353c30bb59adbd70"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/langgraph_engine.py",
+          "resource": "repo://apps/whisper_summary/services/pipeline/langgraph_engine.py",
           "version": "repo-file-v1:sha256:dfcd67b1b9ee4dd7948fa644d780929a7245827802ec4f107df0f6c2f1af8d27"
         },
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L205-L218",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py#L205-L218",
           "version": "repo-lines-v1:sha256:49886e44631901d3ecd0d574abcdc1ab17918f2cb716ce39d7edf50fb41ffb31:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1NjljYjA5MjgwZWUwNzgxOTQ1ZTQ4ZDQwNDFiZDJkZmFhZTY5MWFkMmVhYmY1ZDNjYmEwODQ2YzcyMTZjYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0NjNkNzcyNDExZDM0NWYzMDNkOTAzMWVlYWZkYWRjMzIyMDFiMjdmMGU3MGFiNDM3ZjdlZDA2ZTY3NjIzZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0OThjZWNhZWQ4ZDg2ZjVjZTg0ZGEyNGVkYjRmODZhNGY3OTAwZmFiOWFjODk5N2ZhM2JhNzJlYWQxNmY1YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM3MmYxY2Y3NGE3ZWJkYTc0YjRkMzY5ZGFkODE3ZTY4MTM4Y2NjMGQwMmVjYzg5ZTliYmNhOTlmMDY0ODk2ZTkifQ"
         }
       ]
@@ -139,7 +139,7 @@
       "statement": "Worker 失去 task lease 時停止該 task 的回寫，避免舊 owner 覆蓋新狀態。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/services/pipeline/processing_runner.py#L225-L250",
+          "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py#L225-L250",
           "version": "repo-lines-v1:sha256:18dc19b64aac2da043c1587a5ed2c74c95b6d922a8f9ca26c0c74c1ff02dda79:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1MjM2ZDM4ODQ0MjE5Y2JlZjg0OGRmMjY2ZTNmYjdiZmRlNTZjMTFiZWYzMDY1ZTgzMzkyOTViNTEzZTFhZjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjczZmYzOTA4MGYzYzUzMmY1NjRmNDk1ZWYyNTdiMTJiNWIzOTlhNGE0ODUxY2EzZTM2NzAwMzIzNGE0MDQ5MGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ZWI3YTlkNDA5NTNkODRjNDFkZjQyZmI1YWYyM2VmMTM3M2YwZTFlMGIxODdlY2JmZDQ2MmUyNmRjNTk1ZjUifQ"
         }
       ]
@@ -147,6 +147,6 @@
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-28T12:59:50.272Z"
+    "at": "2026-09-28T16:59:07.681Z"
   }
 }

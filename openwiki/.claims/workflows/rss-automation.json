@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:ea0bb78bce79631aeba7ff48df3253c6edeae122ee70024acf4cc14509b16f5d",
+  "pageVersion": "sha256:f619615def717ed870cc39ae74894b4fbe688ad9aeb8d4b20b99f0c37d062d63",
   "claims": [
     {
       "id": "claim_a541333b266a4705af9012a0abb94745",
       "statement": "RSS monitor 只負責解析 feed 並透過 FastAPI 建立 SQLite task，下載、轉錄與摘要仍由 dedicated processing worker 處理。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/workers/rss_monitor.py",
+          "resource": "repo://apps/whisper_summary/apps/workers/rss_monitor.py",
           "version": "repo-file-v1:sha256:28dad49b6b98c391978cb16c964a21f5929226d2c23338f7cd2e2c2ce60c439b"
         },
         {
-          "resource": "repo://whisper_summary/services/rss/channel_monitor.py",
+          "resource": "repo://apps/whisper_summary/services/rss/channel_monitor.py",
           "version": "repo-file-v1:sha256:a10b10bd515a83c68eb48ecf95588de22db9b603334a28d7c3b86278be83433d"
         }
       ]
@@ -21,12 +21,12 @@
       "statement": "首次 polling 只建立 watermark，不建立歷史 tasks；後續只處理發布時間嚴格晚於 watermark 的項目，失敗時保留舊 watermark 以便重試。",
       "evidence": [
         {
-          "resource": "repo://tests/unit/test_rss_monitor.py",
-          "version": "repo-file-v1:sha256:4b7fd4d4cdfb41c7ea7d98b7bac5ca764c915b19d037ff677917fe00bfb61ba7"
+          "resource": "repo://apps/whisper_summary/services/rss/channel_monitor.py",
+          "version": "repo-file-v1:sha256:a10b10bd515a83c68eb48ecf95588de22db9b603334a28d7c3b86278be83433d"
         },
         {
-          "resource": "repo://whisper_summary/services/rss/channel_monitor.py",
-          "version": "repo-file-v1:sha256:a10b10bd515a83c68eb48ecf95588de22db9b603334a28d7c3b86278be83433d"
+          "resource": "repo://apps/whisper_summary/tests/unit/test_rss_monitor.py",
+          "version": "repo-file-v1:sha256:4b7fd4d4cdfb41c7ea7d98b7bac5ca764c915b19d037ff677917fe00bfb61ba7"
         }
       ]
     },
@@ -35,11 +35,11 @@
       "statement": "RSS 任務固定送往 SQLite，成功建立回應與 duplicate 回應分別計為新增或重複，其餘狀態視為 polling error。",
       "evidence": [
         {
-          "resource": "repo://whisper_summary/apps/api/routers/tasks.py",
+          "resource": "repo://apps/whisper_summary/apps/api/routers/tasks.py",
           "version": "repo-file-v1:sha256:0714a3e92b9fca890d4a5cf3a909a20c79ae184178c9d4fc709a9a28b26077ff"
         },
         {
-          "resource": "repo://whisper_summary/services/rss/channel_monitor.py",
+          "resource": "repo://apps/whisper_summary/services/rss/channel_monitor.py",
           "version": "repo-file-v1:sha256:a10b10bd515a83c68eb48ecf95588de22db9b603334a28d7c3b86278be83433d"
         }
       ]
@@ -49,18 +49,18 @@
       "statement": "RSS monitor 的實際 polling interval 取設定 interval 與 minimum interval 的較大值，並可用 --once 執行單輪；Docker 內 API base URL 使用 http://api:8080。",
       "evidence": [
         {
-          "resource": "repo://compose.yaml",
-          "version": "repo-file-v1:sha256:aed3d1d6f774e05e2ef18a3844d5c1342488a450743e105570f44bf43dd8e310"
+          "resource": "repo://apps/whisper_summary/apps/workers/rss_monitor.py",
+          "version": "repo-file-v1:sha256:28dad49b6b98c391978cb16c964a21f5929226d2c23338f7cd2e2c2ce60c439b"
         },
         {
-          "resource": "repo://whisper_summary/apps/workers/rss_monitor.py",
-          "version": "repo-file-v1:sha256:28dad49b6b98c391978cb16c964a21f5929226d2c23338f7cd2e2c2ce60c439b"
+          "resource": "repo://compose.yaml",
+          "version": "repo-file-v1:sha256:a3a69cecd8bf3274283cc00bc74f5ed8acb6c5b184b387837c5504f421d816df"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.4.3",
-    "at": "2026-09-28T12:59:50.272Z"
+    "at": "2026-09-28T16:59:07.681Z"
   }
 }
