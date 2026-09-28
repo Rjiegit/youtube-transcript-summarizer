@@ -303,30 +303,42 @@ a {
 
 .read-sync-control {
   display: grid;
-  gap: 4px;
+  align-content: start;
+  gap: 6px;
   min-width: 190px;
 }
 
-.read-sync-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 24px;
-  color: var(--ink);
-  cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 700;
+.read-sync-control__heading {
+  display: grid;
+  gap: 3px;
 }
 
-.read-sync-toggle input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--accent);
+.read-sync-control__label {
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .read-sync-control__status {
   color: var(--muted);
   font-size: 0.78rem;
+}
+
+.read-sync-control__connect {
+  justify-self: start;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel);
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.read-sync-control__connect:hover {
+  border-color: var(--accent);
 }
 
 .read-sync-auth {

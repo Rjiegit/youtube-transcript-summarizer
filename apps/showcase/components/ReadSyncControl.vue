@@ -8,6 +8,7 @@ const {
   isRemoteSyncEnabled,
   remoteSyncStatus,
   setRemoteSyncEnabled,
+  syncRemoteState,
 } = useReadResults();
 
 const accessToken = ref("");
@@ -19,22 +20,25 @@ const statusLabel = computed(() => {
     case "connecting":
       return "同步中…";
     case "authentication_required":
-      return "需要同步碼";
+      return "這台裝置尚未連結";
     case "unavailable":
-      return "尚未完成伺服器設定";
+      return "同步服務尚未設定";
     case "synced":
-      return "已同步";
+      return "已同步到你的裝置";
     case "error":
-      return "同步失敗，保留本機狀態";
+      return "同步暫時失敗，資料保存在本機";
     default:
-      return "僅儲存在這台裝置";
+      return "尚未連結這台裝置";
   }
 });
 
-async function handleToggle(event: Event): Promise<void> {
-  const input = event.target as HTMLInputElement;
+async function connectOrRetry(): Promise<void> {
   authenticationError.value = "";
-  await setRemoteSyncEnabled(input.checked);
+  if (isRemoteSyncEnabled.value) {
+    await syncRemoteState();
+    return;
+  }
+  await setRemoteSyncEnabled(true);
 }
 
 async function submitAccessToken(): Promise<void> {
@@ -56,16 +60,20 @@ async function submitAccessToken(): Promise<void> {
 
 <template>
   <div class="read-sync-control" data-testid="read-sync-control">
-    <label class="read-sync-toggle">
-      <input
-        :checked="isRemoteSyncEnabled"
-        data-testid="read-sync-toggle"
-        type="checkbox"
-        @change="handleToggle"
-      />
-      <span>跨裝置同步</span>
-    </label>
-    <span class="read-sync-control__status" aria-live="polite">{{ statusLabel }}</span>
+    <div class="read-sync-control__heading">
+      <span class="read-sync-control__label">個人同步</span>
+      <span class="read-sync-control__status" role="status" aria-live="polite">{{ statusLabel }}</span>
+    </div>
+
+    <button
+      v-if="remoteSyncStatus === 'local' || remoteSyncStatus === 'error'"
+      class="read-sync-control__connect"
+      data-testid="read-sync-connect-button"
+      type="button"
+      @click="connectOrRetry"
+    >
+      {{ remoteSyncStatus === "error" ? "重新連線" : "連結這台裝置" }}
+    </button>
 
     <form
       v-if="isRemoteSyncEnabled && remoteSyncStatus === 'authentication_required'"
@@ -73,7 +81,9 @@ async function submitAccessToken(): Promise<void> {
       data-testid="read-sync-auth-form"
       @submit.prevent="submitAccessToken"
     >
-      <label class="read-sync-auth__label" for="read-sync-access-token">個人同步碼</label>
+      <label class="read-sync-auth__label" for="read-sync-access-token">
+        輸入個人同步碼以連結這台裝置
+      </label>
       <div class="read-sync-auth__fields">
         <input
           id="read-sync-access-token"
@@ -84,7 +94,7 @@ async function submitAccessToken(): Promise<void> {
           required
         />
         <button class="read-sync-auth__button" type="submit" :disabled="isSubmitting">
-          {{ isSubmitting ? "連線中…" : "連線" }}
+          {{ isSubmitting ? "連結中…" : "連結裝置" }}
         </button>
       </div>
       <p v-if="authenticationError" class="read-sync-auth__error" role="alert">

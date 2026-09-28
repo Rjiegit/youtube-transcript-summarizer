@@ -231,7 +231,7 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="mark-all-read-button"]').attributes("disabled")).toBeDefined();
   });
 
-  it("lets this device opt into remote read-state sync", async () => {
+  it("lets this device connect to remote read-state sync", async () => {
     stubLocalStorage();
     useFetchMock.mockResolvedValue({
       data: ref(response),
@@ -255,7 +255,7 @@ describe("showcase index page", () => {
     });
     await flushPromises();
 
-    await wrapper.get('[data-testid="read-sync-toggle"]').setValue(true);
+    await wrapper.get('[data-testid="read-sync-connect-button"]').trigger("click");
     await flushPromises();
 
     expect(window.localStorage.getItem("nuxt-showcase-read-sync-enabled")).toBe("true");
