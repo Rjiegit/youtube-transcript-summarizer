@@ -42,7 +42,7 @@ runtimeConfig > NOTION_*/SHOWCASE_* > NUXT_*
 Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600
 ```
 
-搭配 Vercel CDN 做簡易 SWR 快取；server process 內也保留最後成功的資料快照，當 Notion 暫時失敗時可優先回退。這個 TTL 不影響已讀狀態；已讀預設由瀏覽器管理，另可選擇啟用下方的 Upstash 跨裝置同步。
+搭配 Vercel CDN 做簡易 SWR 快取；server process 內也保留最後成功的資料快照，當 Notion 暫時失敗時可優先回退。這個列表快取 TTL 不影響已讀狀態；Upstash 已讀同步資料另有獨立的閒置到期時間。
 
 ## 跨裝置已讀同步（選用）
 
@@ -52,7 +52,7 @@ Cache-Control: public, s-maxage=3600, stale-while-revalidate=3600
 
 1. 在 Upstash Console 建立並認領一個 Redis database。臨時建立但未認領的 database 可能在 72 小時後刪除。
 2. 選擇靠近 Vercel Function 的 region；單人使用不需要先開 Global replication。
-3. 維持 `Eviction` 關閉，且不要替 `showcase:read-state:*` 設定 TTL。
+3. 維持 `Eviction` 關閉；已讀資料的 TTL 由應用程式設定，不要在 Upstash Console 再設另一個 TTL。
 4. 從 database 的 REST API 區域取得 URL 與 token。
 
 同步實作透過 Nuxt server 呼叫 Upstash REST API，Redis token 不會送到 browser。資料保存在一個 Redis Hash：
@@ -72,6 +72,7 @@ UPSTASH_REDIS_REST_TOKEN=YOUR_SERVER_SIDE_REDIS_TOKEN
 READ_STATE_SYNC_ACCESS_TOKEN=YOUR_PERSONAL_DEVICE_CODE
 READ_STATE_SYNC_SESSION_SECRET=YOUR_COOKIE_SIGNING_SECRET
 READ_STATE_SYNC_SPACE_ID=personal
+READ_STATE_SYNC_TTL_SECONDS=2592000
 ```
 
 可用以下指令分別產生 access token 與 session secret；兩者請使用不同值：
@@ -86,6 +87,7 @@ openssl rand -hex 32
 - `READ_STATE_SYNC_ACCESS_TOKEN`：新裝置第一次啟用同步時，在 UI 輸入的個人同步碼。
 - `READ_STATE_SYNC_SESSION_SECRET`：簽署 30 天 HttpOnly cookie 的獨立 secret。
 - `READ_STATE_SYNC_SPACE_ID`：已讀資料 namespace。更換 access token 或 session secret 時不要改它，否則會看起來像全新的資料空間。
+- `READ_STATE_SYNC_TTL_SECONDS`：已讀狀態保留期限，單位秒；預設 `2592000`（30 天）。每筆狀態在最後一次更新 30 天後會被清除；伺服器每次讀取或更新時會順便清理過期項目。整個 Hash 連續 30 天沒有同步活動也會過期。每個同步空間最多保留 100 筆狀態，超出時優先移除最舊的項目。
 
 設定後可執行：
 
@@ -119,7 +121,7 @@ POST   /api/read-state/mutations
 - 個人同步碼應使用隨機長字串，不要使用一般帳號密碼。
 - Free tier 沒有 uptime SLA；`localStorage` 是遠端不可用時的 fallback，不應移除。
 - Free database 長時間沒有活動時可能被封存；重新啟用或還原後若 endpoint 改變，要同步更新 Vercel env。
-- Upstash 的 `Eviction` 必須保持關閉，否則到達容量時可能淘汰已讀資料。
+- Upstash 的 `Eviction` 必須保持關閉，避免資料在應用程式設定的 30 天期限前被容量策略淘汰。
 
 ### 未來加入帳號
 

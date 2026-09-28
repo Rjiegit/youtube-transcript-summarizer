@@ -56,6 +56,7 @@ const snapshot = {
       accessToken: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_ACCESS_TOKEN")),
       sessionSecret: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SESSION_SECRET")),
       spaceId: firstNonEmptyEnvValue("READ_STATE_SYNC_SPACE_ID") || "personal",
+      ttlSeconds: firstNonEmptyEnvValue("READ_STATE_SYNC_TTL_SECONDS") || "2592000",
     },
   },
   processEnv: {
@@ -75,6 +76,7 @@ const snapshot = {
     READ_STATE_SYNC_ACCESS_TOKEN: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_ACCESS_TOKEN")),
     READ_STATE_SYNC_SESSION_SECRET: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SESSION_SECRET")),
     READ_STATE_SYNC_SPACE_ID: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SPACE_ID")),
+    READ_STATE_SYNC_TTL_SECONDS: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_TTL_SECONDS")),
   },
 };
 

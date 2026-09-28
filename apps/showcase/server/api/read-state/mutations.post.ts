@@ -10,7 +10,7 @@ import {
 
 const MAX_MUTATIONS_PER_REQUEST = 1000;
 
-function normalizeMutations(value: unknown): ReadStateMutation[] | null {
+function normalizeMutations(value: unknown, ttlSeconds: number): ReadStateMutation[] | null {
   if (!Array.isArray(value) || value.length > MAX_MUTATIONS_PER_REQUEST) {
     return null;
   }
@@ -21,15 +21,19 @@ function normalizeMutations(value: unknown): ReadStateMutation[] | null {
     }
     const mutation = rawMutation as Partial<ReadStateMutation>;
     const contentKey = typeof mutation.contentKey === "string" ? mutation.contentKey.trim() : "";
+    const updatedAt = typeof mutation.updatedAt === "string" ? Date.parse(mutation.updatedAt) : NaN;
     if (!contentKey || contentKey.length > 2048 ||
         (mutation.status !== "read" && mutation.status !== "unread") ||
-        typeof mutation.updatedAt !== "string" || !Number.isFinite(Date.parse(mutation.updatedAt))) {
+        !Number.isFinite(updatedAt)) {
       return null;
+    }
+    if (updatedAt < Date.now() - ttlSeconds * 1000) {
+      continue;
     }
     mutations.push({
       contentKey,
       status: mutation.status,
-      updatedAt: mutation.updatedAt,
+      updatedAt: new Date(updatedAt).toISOString(),
     });
   }
   return mutations;
@@ -40,7 +44,7 @@ export default defineEventHandler(async (event) => {
   const config = getRequestReadSyncConfig(event);
   const principal = requireReadSyncPrincipal(event, config);
   const body = await readBody<{ mutations?: unknown }>(event);
-  const mutations = normalizeMutations(body?.mutations);
+  const mutations = normalizeMutations(body?.mutations, config.ttlSeconds);
   if (!mutations) {
     throw createError({ statusCode: 400, statusMessage: "Invalid read-state mutations." });
   }

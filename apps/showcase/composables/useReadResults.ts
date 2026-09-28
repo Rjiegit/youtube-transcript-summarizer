@@ -19,7 +19,7 @@ const READ_SYNC_ENABLED_STATE_KEY = "showcase-read-sync-enabled";
 const READ_SYNC_PREFERENCE_READY_STATE_KEY = "showcase-read-sync-preference-ready";
 const READ_SYNC_STATUS_STATE_KEY = "showcase-read-sync-status";
 const MAX_READ_ENTRIES = 500;
-const MAX_SYNC_ENTRIES = 1000;
+const MAX_SYNC_ENTRIES = 100;
 
 type ReadEntry = {
   readAt: string;

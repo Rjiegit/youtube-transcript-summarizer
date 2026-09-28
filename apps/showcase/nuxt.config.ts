@@ -52,6 +52,7 @@ export default defineNuxtConfig({
     readStateSyncAccessToken: readSyncConfig.accessToken,
     readStateSyncSessionSecret: readSyncConfig.sessionSecret,
     readStateSyncSpaceId: readSyncConfig.spaceId,
+    readStateSyncTtlSeconds: readSyncConfig.ttlSeconds,
     public: {
       buildDate,
       commitSha,

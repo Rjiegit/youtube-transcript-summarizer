@@ -3,6 +3,7 @@ import type {
   SyncedReadEntry,
   SyncedReadMap,
 } from "../../types/read-sync";
+import { DEFAULT_READ_STATE_SYNC_TTL_SECONDS } from "./read-sync-config";
 
 interface UpstashConfig {
   url: string;
@@ -14,9 +15,24 @@ interface UpstashResponse {
   error?: string;
 }
 
+const MAX_SYNC_ENTRIES = 100;
+
 const APPLY_MUTATIONS_SCRIPT = `
 local key = KEYS[1]
 local mutations = cjson.decode(ARGV[1])
+local ttlSeconds = tonumber(ARGV[2])
+local cutoff = ARGV[3]
+local maxEntries = tonumber(ARGV[4])
+local now = tonumber(redis.call("TIME")[1])
+local existing = redis.call("HGETALL", key)
+for index = 1, #existing, 2 do
+  local ok, entry = pcall(cjson.decode, existing[index + 1])
+  local expiresAt = ok and type(entry) == "table" and tonumber(entry.expiresAt) or nil
+  local updatedAt = ok and type(entry) == "table" and entry.updatedAt or nil
+  if (expiresAt and expiresAt <= now) or (not expiresAt and (type(updatedAt) ~= "string" or updatedAt < cutoff)) then
+    redis.call("HDEL", key, existing[index])
+  end
+end
 for _, mutation in ipairs(mutations) do
   local currentJson = redis.call("HGET", key, mutation.contentKey)
   local shouldWrite = not currentJson
@@ -27,9 +43,57 @@ for _, mutation in ipairs(mutations) do
   if shouldWrite then
     redis.call("HSET", key, mutation.contentKey, cjson.encode({
       status = mutation.status,
-      updatedAt = mutation.updatedAt
+      updatedAt = mutation.updatedAt,
+      expiresAt = now + ttlSeconds
     }))
   end
+end
+local remaining = redis.call("HGETALL", key)
+local ordered = {}
+for index = 1, #remaining, 2 do
+  local ok, entry = pcall(cjson.decode, remaining[index + 1])
+  local updatedAt = ok and type(entry) == "table" and type(entry.updatedAt) == "string" and entry.updatedAt or ""
+  table.insert(ordered, { field = remaining[index], updatedAt = updatedAt })
+end
+table.sort(ordered, function(left, right)
+  return left.updatedAt < right.updatedAt
+end)
+for index = 1, #ordered - maxEntries do
+  redis.call("HDEL", key, ordered[index].field)
+end
+redis.call("EXPIRE", key, ttlSeconds)
+return redis.call("HGETALL", key)
+`;
+
+const GET_SNAPSHOT_SCRIPT = `
+local key = KEYS[1]
+local ttlSeconds = tonumber(ARGV[1])
+local cutoff = ARGV[2]
+local maxEntries = tonumber(ARGV[3])
+local now = tonumber(redis.call("TIME")[1])
+local entries = redis.call("HGETALL", key)
+for index = 1, #entries, 2 do
+  local ok, entry = pcall(cjson.decode, entries[index + 1])
+  local expiresAt = ok and type(entry) == "table" and tonumber(entry.expiresAt) or nil
+  local updatedAt = ok and type(entry) == "table" and entry.updatedAt or nil
+  if (expiresAt and expiresAt <= now) or (not expiresAt and (type(updatedAt) ~= "string" or updatedAt < cutoff)) then
+    redis.call("HDEL", key, entries[index])
+  end
+end
+local ordered = {}
+for index = 1, #entries, 2 do
+  local ok, entry = pcall(cjson.decode, entries[index + 1])
+  local updatedAt = ok and type(entry) == "table" and type(entry.updatedAt) == "string" and entry.updatedAt or ""
+  table.insert(ordered, { field = entries[index], updatedAt = updatedAt })
+end
+table.sort(ordered, function(left, right)
+  return left.updatedAt < right.updatedAt
+end)
+for index = 1, #ordered - maxEntries do
+  redis.call("HDEL", key, ordered[index].field)
+end
+if redis.call("HLEN", key) > 0 then
+  redis.call("EXPIRE", key, ttlSeconds)
 end
 return redis.call("HGETALL", key)
 `;
@@ -102,17 +166,27 @@ async function executeCommand(config: UpstashConfig, command: unknown[]): Promis
 export async function getReadStateSnapshot(
   config: UpstashConfig,
   spaceId: string,
+  ttlSeconds = DEFAULT_READ_STATE_SYNC_TTL_SECONDS,
 ): Promise<SyncedReadMap> {
-  return normalizeHashResult(await executeCommand(config, ["HGETALL", redisKey(spaceId)]));
+  return normalizeHashResult(await executeCommand(config, [
+    "EVAL",
+    GET_SNAPSHOT_SCRIPT,
+    "1",
+    redisKey(spaceId),
+    String(ttlSeconds),
+    new Date(Date.now() - ttlSeconds * 1000).toISOString(),
+    String(MAX_SYNC_ENTRIES),
+  ]));
 }
 
 export async function applyReadStateMutations(
   config: UpstashConfig,
   spaceId: string,
   mutations: ReadStateMutation[],
+  ttlSeconds = DEFAULT_READ_STATE_SYNC_TTL_SECONDS,
 ): Promise<SyncedReadMap> {
   if (mutations.length === 0) {
-    return getReadStateSnapshot(config, spaceId);
+    return getReadStateSnapshot(config, spaceId, ttlSeconds);
   }
   const result = await executeCommand(config, [
     "EVAL",
@@ -120,6 +194,9 @@ export async function applyReadStateMutations(
     "1",
     redisKey(spaceId),
     JSON.stringify(mutations),
+    String(ttlSeconds),
+    new Date(Date.now() - ttlSeconds * 1000).toISOString(),
+    String(MAX_SYNC_ENTRIES),
   ]);
   return normalizeHashResult(result);
 }

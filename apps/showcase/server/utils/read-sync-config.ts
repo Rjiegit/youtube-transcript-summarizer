@@ -6,7 +6,10 @@ export interface ReadSyncConfig {
   accessToken: string;
   sessionSecret: string;
   spaceId: string;
+  ttlSeconds: number;
 }
+
+export const DEFAULT_READ_STATE_SYNC_TTL_SECONDS = 60 * 60 * 24 * 30;
 
 interface ReadSyncConfigSource {
   runtimeConfig?: Record<string, unknown>;
@@ -28,6 +31,13 @@ function parseEnabled(value: unknown): boolean {
   return ["1", "true", "yes", "on"].includes(readString(value).toLowerCase());
 }
 
+function parseTtlSeconds(value: unknown): number {
+  const parsed = typeof value === "number" ? value : Number(readString(value));
+  return Number.isSafeInteger(parsed) && parsed > 0
+    ? parsed
+    : DEFAULT_READ_STATE_SYNC_TTL_SECONDS;
+}
+
 export function resolveReadSyncConfig(source: ReadSyncConfigSource = {}): ReadSyncConfig {
   const runtimeConfig = source.runtimeConfig ?? {};
   const env = source.env ?? process.env;
@@ -44,6 +54,12 @@ export function resolveReadSyncConfig(source: ReadSyncConfigSource = {}): ReadSy
   const spaceId = readString(runtimeConfig.readStateSyncSpaceId) ||
     readEnv(env, "READ_STATE_SYNC_SPACE_ID") ||
     "personal";
+  const runtimeTtl = runtimeConfig.readStateSyncTtlSeconds;
+  const ttlValue = runtimeTtl !== undefined && runtimeTtl !== null &&
+      (typeof runtimeTtl === "number" || readString(runtimeTtl))
+    ? runtimeTtl
+    : readEnv(env, "READ_STATE_SYNC_TTL_SECONDS");
+  const ttlSeconds = parseTtlSeconds(ttlValue);
 
   return {
     enabled,
@@ -53,5 +69,6 @@ export function resolveReadSyncConfig(source: ReadSyncConfigSource = {}): ReadSy
     accessToken,
     sessionSecret,
     spaceId,
+    ttlSeconds,
   };
 }

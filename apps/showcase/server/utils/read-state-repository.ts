@@ -21,10 +21,10 @@ export function createReadStateRepository(config: ReadSyncConfig): ReadStateRepo
 
   return {
     getSnapshot(syncSpaceId) {
-      return getReadStateSnapshot(upstashConfig, syncSpaceId);
+      return getReadStateSnapshot(upstashConfig, syncSpaceId, config.ttlSeconds);
     },
     applyMutations(syncSpaceId, mutations) {
-      return applyReadStateMutations(upstashConfig, syncSpaceId, mutations);
+      return applyReadStateMutations(upstashConfig, syncSpaceId, mutations, config.ttlSeconds);
     },
   };
 }
