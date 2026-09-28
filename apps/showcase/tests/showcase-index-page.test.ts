@@ -668,7 +668,7 @@ describe("showcase index page", () => {
     route.fullPath = "/";
     await flushPromises();
 
-    expect(fetchMock).not.toHaveBeenCalled();
+    expect(fetchMock.mock.calls.some(([url]) => url === "/api/showcase/results")).toBe(false);
     expect(wrapper.get('[data-testid="card-result-1"]').text()).toContain("First result");
   });
 
@@ -686,9 +686,17 @@ describe("showcase index page", () => {
       error: ref(null),
     });
     let resolveRefresh: ((value: ShowcaseApiResponse) => void) | undefined;
-    fetchMock.mockImplementation(() => new Promise<ShowcaseApiResponse>((resolve) => {
-      resolveRefresh = resolve;
-    }));
+    fetchMock.mockImplementation((url: string) => {
+      if (url === "/api/read-sync/session") {
+        return Promise.resolve({ available: true, authenticated: false });
+      }
+      if (url === "/api/showcase/results") {
+        return new Promise<ShowcaseApiResponse>((resolve) => {
+          resolveRefresh = resolve;
+        });
+      }
+      return Promise.resolve({});
+    });
 
     const pageModule = await loadPageModule();
     const TestHost = defineComponent({
@@ -739,7 +747,7 @@ describe("showcase index page", () => {
     });
     await flushPromises();
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls.filter(([url]) => url === "/api/showcase/results")).toHaveLength(1);
     expect(fetchMock).toHaveBeenCalledWith("/api/showcase/results", {
       query: {
         refresh: "1",
