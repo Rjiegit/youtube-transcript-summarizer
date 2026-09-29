@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "pages": {
+    "/openwiki/architecture/module-boundaries-and-dependencies.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:4f81e0bbf3f1fb4afb7d1de6fe9b6ab45b64a527d897201f8715776be30146eb"
+    },
+    "/openwiki/architecture/system-overview.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:e959d91c052ff1f6aeefac4c33293f08132a26a88347c55591f66bbdfc66411e"
+    },
+    "/openwiki/frontend/read-state-sync.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:5a7454a2d2f618d4a454d860f310a43eeeea8394783753b123ec7e354ab311d5"
+    },
+    "/openwiki/frontend/showcase-experience.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:e1127ea218cf12c8c85080f460cae8d6b66d7671de51e488ab6d6975f5399fc8"
+    },
+    "/openwiki/integrations/browser-extension.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:a98e2a0e71a3f47f20ac654064ea672a0df370df84f3fbbdab617b140813a505"
+    },
+    "/openwiki/integrations/llm-providers.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:e165b7db8a1237b5f847a3896b30246a4b1338e8b36322eb82b4b00121a8216e"
+    },
+    "/openwiki/integrations/notion-and-showcase.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:9f35e3ce83489b4ce1ddc954e19ca3a6869cfd216910672b64b379496e71a1aa"
+    },
+    "/openwiki/interfaces/http-api-and-clients.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:2123f81006a317b3b918c2d5a5b47ff9e0d916e08e100a2fa5b3d84ec53f8aab"
+    },
+    "/openwiki/operations/configuration-and-deployment.md": {
+      "pageVersion": "sha256:43647fb2a014b387ec91ae05aa3b4c6c877ae657dbc19376c811b11c9462fab8",
+      "completedBy": "codex",
+      "completedRunId": "1f1fc7a5-385c-4c3f-be9c-f7d86ebf4419",
+      "gitHead": "e7ba614ba9a1dc62bbbd3a94c7cc5a0716260541",
+      "sourceFingerprint": "sha256:a8f5ea55fe411b535b41c5554a0112ca0472a8bffc1291ffc7d58a19436fc0a9"
+    },
+    "/openwiki/operations/development-and-testing.md": {
+      "pageVersion": "sha256:bc16793da383ece25a1e7390955f0c8ffa08d2685e8e8028e55e08fa36b44869",
+      "completedBy": "codex",
+      "completedRunId": "1f1fc7a5-385c-4c3f-be9c-f7d86ebf4419",
+      "gitHead": "e7ba614ba9a1dc62bbbd3a94c7cc5a0716260541",
+      "sourceFingerprint": "sha256:a8f5ea55fe411b535b41c5554a0112ca0472a8bffc1291ffc7d58a19436fc0a9"
+    },
+    "/openwiki/persistence/task-and-result-storage.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:437308daa0fe30ca78b318474ae619001fcfd3d522de596f416881c88c1bedaf"
+    },
+    "/openwiki/quickstart.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:372931f42e0eefed5118cd56a2d2980ae31eccbaa2175683b7bc5101f9b20cc4"
+    },
+    "/openwiki/workflows/media-processing.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:11300a375af21ad7e11c67a1ff6d641269cd3c426462ac8153b4d9c5bc91e951"
+    },
+    "/openwiki/workflows/rss-automation.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:f619615def717ed870cc39ae74894b4fbe688ad9aeb8d4b20b99f0c37d062d63"
+    },
+    "/openwiki/workflows/task-lifecycle.md": {
+      "gitHead": "4aa1cf4e113e95bc28dfccd555b1960978e2bb25",
+      "pageVersion": "sha256:7cd62d21e3ede594522c96bef224a3b38945784781d7196f65954cbd656621cd"
+    }
+  }
+}

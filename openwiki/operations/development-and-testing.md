@@ -3,9 +3,6 @@ type: development-guide
 title: 開發規則與測試策略
 description: 集中說明 Python 與 Nuxt 的程式碼分層、常用命令、測試邊界、CI 與提交前驗證。
 tags: [development, testing, conventions, ci]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -30,6 +27,9 @@ sources:
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
 generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-09-29T12:41:26.213Z
 ---
 
 # 開發規則與測試策略

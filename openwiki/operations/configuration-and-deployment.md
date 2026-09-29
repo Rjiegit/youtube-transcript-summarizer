@@ -4,8 +4,8 @@ title: 設定、執行與部署
 description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topology、診斷與秘密管理。
 tags: [operations, configuration, docker, deployment]
 verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
+  - by: openwiki/0.6.0
+    at: 2026-09-29T12:41:26.213Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -47,7 +47,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+generated: { by: "codex", at: "2026-09-29T12:41:26.213Z" }
 ---
 
 # 設定、執行與部署
@@ -84,7 +84,7 @@ processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-proc
 
 `make cleanup-data-dry-run` 只統計符合條件的檔案數與預估可釋放容量，不列出或刪除檔案；確認後才執行 `make cleanup-data`。實際清理會顯示 `data/videos` 與 `data/summaries` 的清理前容量、清理後容量與總 reclaimed 容量。
 
-影片預設保留 7 天，summary artifacts 預設保留 180 天；可在命令列以 `VIDEO_RETENTION_DAYS` 與 `SUMMARY_RETENTION_DAYS` 覆寫，例如 `make cleanup-data-dry-run VIDEO_RETENTION_DAYS=30 SUMMARY_RETENTION_DAYS=365`。兩個值都必須是非負整數，且兩個 data 子目錄必須存在，否則 target 會在掃描或刪除前停止。
+影片與 summary artifacts 預設都保留 3 天；可在命令列以 `VIDEO_RETENTION_DAYS` 與 `SUMMARY_RETENTION_DAYS` 覆寫，例如 `make cleanup-data-dry-run VIDEO_RETENTION_DAYS=30 SUMMARY_RETENTION_DAYS=365`。兩個值都必須是非負整數，且 `data/videos` 與 `data/summaries` 都必須存在，否則 target 會在掃描或刪除前停止。`readme.md` 也記載了 3 天預設值，並建議先用 dry-run 預覽。
 
 清理範圍只包含 `data/videos` 與 `data/summaries` 中超過期限的 regular files，不會處理 `data/tasks.db` 或其他 `data` 內容。這兩個 Make targets 都是人工觸發的維運操作；目前沒有自動排程，也不會在 worker 完成後自動執行。
 
