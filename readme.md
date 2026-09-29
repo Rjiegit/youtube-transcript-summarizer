@@ -141,6 +141,7 @@ npm --prefix apps/showcase run build
 make extension-check
 ```
 
+`make cleanup-data` 預設清理超過 3 天的影片與摘要檔案；可先執行 `make cleanup-data-dry-run` 預覽。
 完整的啟動、環境變數、資料清理與部署說明請看 [設定、執行與部署](openwiki/operations/configuration-and-deployment.md)。
 
 ## 多 Worker 模式
