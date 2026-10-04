@@ -3,6 +3,7 @@ import { DEFAULT_CACHE_TTL_SECONDS } from "./config";
 
 export const MAX_SHOWCASE_RESULTS = 50;
 export const NOTION_VERSION = "2022-06-28";
+const NOTION_REQUEST_TIMEOUT_MS = 5000;
 const STATUS_PROPERTY_CANDIDATES = ["Status", "status", "狀態", "状态", "State", "state"];
 const TITLE_PROPERTY_CANDIDATES = ["Title", "title", "Name", "name", "標題", "标题"];
 const SUMMARY_PROPERTY_CANDIDATES = ["Summary", "summary", "Prompt", "prompt", "Description", "description", "摘要"];
@@ -420,6 +421,7 @@ export async function fetchDatabaseSchema(
 ): Promise<NotionDatabaseSchema> {
   const response = await fetchImpl(`https://api.notion.com/v1/databases/${databaseId}`, {
     method: "GET",
+    signal: AbortSignal.timeout(NOTION_REQUEST_TIMEOUT_MS),
     headers: buildNotionHeaders(apiKey),
   });
 
@@ -440,6 +442,7 @@ export async function fetchPage(
 ): Promise<NotionPage> {
   const response = await fetchImpl(`https://api.notion.com/v1/pages/${pageId}`, {
     method: "GET",
+    signal: AbortSignal.timeout(NOTION_REQUEST_TIMEOUT_MS),
     headers: buildNotionHeaders(apiKey),
   });
 
@@ -469,6 +472,7 @@ export async function fetchPageBlocks(
 
     const response = await fetchImpl(`https://api.notion.com/v1/blocks/${pageId}/children?${query.toString()}`, {
       method: "GET",
+      signal: AbortSignal.timeout(NOTION_REQUEST_TIMEOUT_MS),
       headers: buildNotionHeaders(apiKey),
     });
 
@@ -587,6 +591,7 @@ export async function fetchLatestCompletedResults(
     : null;
   const response = await fetchImpl("https://api.notion.com/v1/databases/" + options.databaseId + "/query", {
     method: "POST",
+    signal: AbortSignal.timeout(NOTION_REQUEST_TIMEOUT_MS),
     headers: buildNotionHeaders(options.apiKey),
     body: JSON.stringify({
       ...(queryFilter ? { filter: queryFilter } : {}),
@@ -618,10 +623,12 @@ export async function fetchShowcaseDetail(
   options: FetchShowcaseDetailOptions,
 ): Promise<ShowcaseDetailResult> {
   const fetchImpl = options.fetchImpl ?? fetch;
-  const schema = await fetchDatabaseSchema(options.apiKey, options.databaseId, fetchImpl);
+  const [schema, page, blocks] = await Promise.all([
+    fetchDatabaseSchema(options.apiKey, options.databaseId, fetchImpl),
+    fetchPage(options.apiKey, options.pageId, fetchImpl),
+    fetchPageBlocks(options.apiKey, options.pageId, fetchImpl),
+  ]);
   const fieldMapping = resolveFieldMapping(schema);
-  const page = await fetchPage(options.apiKey, options.pageId, fetchImpl);
-  const blocks = await fetchPageBlocks(options.apiKey, options.pageId, fetchImpl);
   const baseResult = mapNotionPageToResult(page, fieldMapping);
   const content = renderNotionBlocks(blocks) || baseResult.summary;
 

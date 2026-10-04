@@ -34,6 +34,14 @@ runtimeConfig > NOTION_*/SHOWCASE_* > NUXT_*
 
 空字串會視為未設定；`SHOWCASE_CACHE_TTL_SECONDS` 若不是有效正數，會回退到 `3600`。
 
+## Notion 請求與逾時
+
+詳細頁的 database schema、page 及 blocks 讀取會平行開始，完成後再整理輸出。
+
+Server 對 Notion 的每次 HTTP 請求設定 5 秒 timeout，包含 database schema、database query、page 及每次 blocks 分頁／子內容讀取。逾時會中止該請求與尚未完成的回應內容讀取；這是單次請求上限，整篇文章的多次讀取總時間仍可能超過 5 秒。
+
+後端不會自動重試 Notion 請求。有成功快取時保留舊資料；沒有快取時 API 回傳 502，後續請求可重新嘗試。網站端 GET 請求沿用 ofetch 的預設有限重試。
+
 ## Cache
 
 `SHOWCASE_CACHE_TTL_SECONDS` 目前會同時控制列表與詳細 API 的 server / CDN cache。Server API route 會回傳：

@@ -162,4 +162,21 @@ describe("showcase detail API cache", () => {
     expect(second).toMatchObject({ title: "Cached title" });
     expect(fetchShowcaseDetailMock).toHaveBeenCalledTimes(2);
   });
+
+  it.each([
+    new TypeError("fetch failed"),
+    new DOMException("The operation timed out", "TimeoutError"),
+  ])("returns 502 on a cold failure (%s) and tries again on the next request", async (error) => {
+    runtimeConfigMock.mockReturnValue({
+      notionApiKey: "api-key", notionDatabaseId: "database-id", showcaseCacheTtlSeconds: 600,
+    });
+    fetchShowcaseDetailMock
+      .mockRejectedValueOnce(error)
+      .mockResolvedValueOnce({ id: "page-1", content: "Recovered" });
+    const handler = (await import("../server/api/showcase/results/[id].get")).default;
+    await expect(handler(createEvent("page-1"))).rejects.toMatchObject({ statusCode: 502 });
+    expect(fetchShowcaseDetailMock).toHaveBeenCalledTimes(1);
+    await expect(handler(createEvent("page-1"))).resolves.toMatchObject({ content: "Recovered" });
+    expect(fetchShowcaseDetailMock).toHaveBeenCalledTimes(2);
+  });
 });
