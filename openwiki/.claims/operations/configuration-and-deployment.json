@@ -1,18 +1,22 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:43647fb2a014b387ec91ae05aa3b4c6c877ae657dbc19376c811b11c9462fab8",
+  "pageVersion": "sha256:b84e90e8492bfbf96ec86c8f33a97b45fa94ef0ec5b3b882898f21f4b52f9fcd",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
-      "statement": "Python Config 從 apps/whisper_summary/.env 載入設定、使用 Asia/Taipei timezone、建立 data 目錄，並要求至少一個摘要 provider key 或可執行的 Codex CLI；Notion key 存在時也必須有 database id。",
+      "statement": "Python Config 以 load_dotenv() 載入可找到的 .env、使用 Asia/Taipei timezone 並建立 data 目錄；validate 要求至少一個摘要 provider key 或可執行的 Codex CLI，Notion key 存在時也必須有 database id；Makefile 的 worker 入口另以 --env-file 指定 apps/whisper_summary/.env。",
       "evidence": [
         {
-          "resource": "repo://apps/whisper_summary/core/config.py#L24-L68",
-          "version": "repo-lines-v1:sha256:99da4fb909437c8dbfd48460940ccb9d24ea0c33a72feec4999b418b4f918ecc:eyJzZWxlY3RlZExpbmVDb3VudCI6NDUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNhYmRhM2I1MWYyY2NmOTA5ZDE0NmQ2YTE4YTMzZjQwYTMyNmExMDQ0MzhlMmExMzkyZDczODNiOGU3ZGIxZjgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUyOWRhNTM1N2QwMjIzZWRjOWRmZTU3MDQzMDU5ZWUwZDZlNWE5MTE4ZTRlMzFjMmE3MjZkMTVlMDFkYTdjZGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU2NzIxZDNjZjc3OGYyYThkM2MwN2Q4NGU4MWZmMmM1NmNkYWFjNGI2YWQ2YjYyMTNlZjYwOGNkOTMyOWE1NWIifQ"
+          "resource": "repo://Makefile#L29-L33",
+          "version": "repo-lines-v1:sha256:d8909ba8bd1478545c058993769f1b151cec8e98c9ed3630898f25ce0b8aed38:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDNhOGJhOTMzNzhkMGVlMTg4NTljOTcwMGQ4YzI4ZjdmNTcwYTljMmMxOGFlYjk5ZDBkYjE4OThjOTFlMjUwYyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNDgwNDliZWFhMDU2NDQyMTc1MGRjMzBkMDk0ODJhZmM5NTVkMjgxZTYzMjUwZjk3ODAyOGJkNWNkZmQwM2I2ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMmM4ZjE2ZDE2YWI2NDBmMWFmZTg1OTU5YTg5YzBmMTU3ZDA5Njg2OGNkMGNlZmEwNzlhZjYwN2EzOWY3NWM5OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGVlZjU0YTJlMzRlMmEwNGUyNGEzZDBlYTRiN2IyYzkwMzhiMTBiYTI0YWEyYWI3MzJhYmM1NDVkNDFiY2ZiYSJ9"
         },
         {
-          "resource": "repo://apps/whisper_summary/core/config.py#L88-L115",
-          "version": "repo-lines-v1:sha256:2182aee61a9e90a147e0637506a8b95934c5591a69c6ba0c39a28845ab1a69fe:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFjYjAxNDM2N2Y1ZmJlNWJmNzM2NTBjZDM5NjMzZDEyNmRkMWI3ODdlYTM1ZDM4YjVkNGIzZjEyZWE3YWUzYzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1NTE4Y2RmMDZmYmUyNDViNjBkNWZmZGYwNWM4ODY2MjhjMjBhNTBmZDM4ZmVlOGZmOWU5MzhjZjYzMmE1YWUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1ZDk1Y2UyMjg1ZjA2ZjI2NGJiMDI0MjNjYzk5MmM0YTY4YmM2YWE2N2Q5NTJhZWEyNTU2ODU2NWQ3MzIwZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNiMzg3NjIyODAyNmE0NjhmYWQ5MWIxMmVlYzI3NjJiYTQyNDliNzM5NWQ5OWYwZjhkNDg2ODQwYjE0MTA5YTIifQ"
+          "resource": "repo://apps/whisper_summary/core/config.py#L32-L64",
+          "version": "repo-lines-v1:sha256:7ae20d3fec3c29ca3dbb003ca892a7a9d7a5fcbc1ed8ecac96875242e24a5531:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhiNmI0YjliMWMzMzAxNDQ0MWZjMGU3OWUzMjQ1MTAyZDIzNDVkNjQ4MWVjMTVkOWYzM2M4NjM2MDVkOTAwOWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMTFiNzZmNWE4YjNkODNhZWE1Y2MyYjIxMWFkNjRjNTViY2U3YmUwN2ZkZGE5YjM3MjkxOGZiZDcwMTBjN2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwM2IzZWRhYjE2NTc0ZDk4N2U1YmRjNTNlYjg1YjNhYTZjZGUxNTAyODRkOTZlZDYzNzRjM2MwMmRhMWY4M2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwNWQ0NzVjYzllNDNkMTJlODZkNGVjNTM4MWE5MTU5ZjAyMTkyMjQ5NDBlMTcxYzFjZTVlYTMyMDFmNzE5ZWEifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/core/config.py#L92-L130",
+          "version": "repo-lines-v1:sha256:a1c3eddb003a297793d593cf2bbfb495aa339fa441961f1b9873ec9075f650d5:eyJzZWxlY3RlZExpbmVDb3VudCI6MzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI0ZGFmYjdjODM3Njc4YjNkNGNmMWZiZjRiNjMyOTg2NmM3ZGIxNGMwY2EwMjY4NDA3M2M0OGU2YWVkZjUwMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MDMyZTk2NGQwOTMyMzUxZTVkMTg1MjY5MjgxYjE3MWEzYTA5YjA4YjI4NmU2NjFlYTQ3MDMyM2M4MmViNGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBkNDZmMmMzMGM3MjRmMThiZTUwMWYxNzZhMjY4MzY0MTgxMmI2MjljMDRlZWQ3MGIwYjg5OGI1NDFhZGZiNzciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -285,10 +289,28 @@
           "version": "repo-file-v1:sha256:026780e7ee8b4ff7537a31b6c23247e3e7b9dad384062ea940c5970678f4f7ce"
         }
       ]
+    },
+    {
+      "id": "claim_e7cbc182b9f24cd5b305bf58891d6fbc",
+      "statement": "SHOWCASE_BASE_URL 是預設未設定的可選環境變數；Discord 將有效 HTTP/HTTPS 根網址與合法摘要 UUID 組成 /results/{id}，無效值只略過新連結，且不依賴 NOTION_URL。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/.env.example#L14-L18",
+          "version": "repo-lines-v1:sha256:ebe53f43b0305a2e1e6d40703ba2af24ed1883097c4e11e3dcca88461eabb826:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTI0YTY5MGE3YjI2MjhkMWQ3ZGI1YTg0ZGIwYjgyNzNhMmI4MDZjYWEyZmRmY2EyYTNmYzFjMGZkMzBmZTRhNyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOWFmYTFiYjUxZTM0NzZmNjIwMWRkMDM0NjQ0YjQ4NWVhMDA5MDgwMDdjOWYyNzQzNzk3Y2U5NmRlNWM2M2U1NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTExZWRiYThkZWFiYzBjOGMyNmEyZTQ2ODVlODAzMzIzZjM2MDE4ZTY4NTViMzE3MTcwZDVlZTRhNGMyODU4NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMmJkYWYyZGJjYmQ4YmJlOThmM2JlMjM3MjI3NmJmYzcxZmVlZjg0NjkyNTc0MGEzYTBmYmEyMTZkMWExYzkwMiJ9"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/core/config.py#L44-L53",
+          "version": "repo-lines-v1:sha256:b8a29bd1b7c159c0d532ff45ef781dcccd05e4049e164a9c558b951044fd382a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ1MTJiNGQwM2Y3ODlmNzg2NTkyOGZlZmVhNzg1NWRiZGU0ZGZmZjIxMzJlMGI1MjVkMDUwOTBlMDZjNTI4N2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUyODVhODEzNTg4OWM0MzZhNzNkNmY5YzkwMjJjODE1YmE4NjYxZDgyMWIzZWU2YzNiM2RiNzEwMjY3MmEzNGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU1ZDQwMWJmYWRkYThmNjhhYzIwMWQ1NjAzYjExMDRiMzMzNDZjMzQzNzM5YzBlYWEyMTQwNDU5NjFkMjE2ZWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjAwYzVhNDcwOGQyYWY1YjVlMjc2YjViYmY1YmE5MjQ4ZmFjMGYwMTY4YzJkYWI2OWUyZTZkNTc3MjUzYmFmY2IifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/notifications/discord.py#L49-L83",
+          "version": "repo-lines-v1:sha256:61d0ad58ae106406b6017315d2e86c069d6fc7093d457e1e67d67ceaed28e55a:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MDJkNzA4YzEwNWRlZTg2MTBkNjk2ODdmMWY4ZGJkOTdiMDExMWM4MGQ0YmJjMDZkYWM0ZjM3ZDc5NDRmMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2YThhNzUxZGQ4NWRmZGI0YTlhZTcwZjdjNDQwMmQ2NDUwNTZjNTRjNjhhNmQ4MDZlMGU1OTk2N2Q2M2M5MzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU5ZjE0YzQxZWY0OTE3NGRhODVmZGU4OTY0NTRiOTM4ODRiNGQzN2E3NjA0YzI0NTYzNDE1NWE1YTdmOWE2NTMifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-09-29T12:41:26.213Z"
+    "at": "2026-10-04T12:21:01.480Z"
   }
 }

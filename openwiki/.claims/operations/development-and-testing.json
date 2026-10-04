@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:bc16793da383ece25a1e7390955f0c8ffa08d2685e8e8028e55e08fa36b44869",
+  "pageVersion": "sha256:822e746a781c48123b5f1433653798b6f941cfebbd89b82c043bac6c0cf1a061",
   "claims": [
     {
       "id": "claim_18efeaf5a06b4c9cabc9632ffac9ea0f",
@@ -98,7 +98,7 @@
         },
         {
           "resource": "repo://apps/whisper_summary/tests/unit/test_processing_engines.py",
-          "version": "repo-file-v1:sha256:d5cbafee9461ebd78a42ec7b18d0a0c68f46db3c3e1fdf6fef13e44868002938"
+          "version": "repo-file-v1:sha256:9e4a1451821852a39216d67d2098766f547f7da1ec411c0b5b95f0a7b9688961"
         }
       ]
     },
@@ -111,10 +111,30 @@
           "version": "repo-lines-v1:sha256:dea341fbc1d4782fb6417d63a77b79a5aade267de0062dbadf268087c1ea5c70:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZGY2MGZlZDRkNDdmZDQzODMzYWZhZDNlNDY4MGQxYjY2NDE4YmUzNTdhNGU0ZWU1MTE4ODUwNGUyZmM0ZDQyNiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYzE3YWVkNTlhMDhkYjk3NDRkZWQ2NWVmZGY0ZmQ3NWI5ZTM4MTA1MTkyYmQ2NzFhZTY1YmMyZGI5ZWJkZTI3NCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNWIxZGFhZmQ0NDIwYjJkMjU1ZDk0MDA0MzQ1ZTc0YTc3MzA0NmNmNGU3YzViYjA5NDVjOTBiYjI2ZjU2ZmJlNyIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
         }
       ]
+    },
+    {
+      "id": "claim_1e32e55940ae4a959c91d31f54fb1b02",
+      "statement": "Discord notifier 單元測試以 stub HTTP 驗證完整訊息、UUID 正規化、無效或缺少網址與 ID 的降級，以及知識庫連結不依賴 NOTION_URL。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/tests/unit/test_discord_notifier.py#L16-L88",
+          "version": "repo-lines-v1:sha256:654b61b587d927bbfd1135a5f5116f68c1be1f2b114b39a6c0ab0d038ba02104:eyJzZWxlY3RlZExpbmVDb3VudCI6NzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdjNzhmMTk3ZDI4MGFiMWJhMTY0ZjM0OWIwODA5NTFlMjI0YjA5NzY5NjIyMjRmNjcwY2NiNWU2M2QwOTM2MmEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImYyNGIyMmU1MWUwMDBlMzU3ZTc0NTc4ZjNlN2QwMmY2MTgzYjFjMTU5MGI5NWZhZDA1OTY0ZjI0N2IyZDcyMzQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkyMzY0ZWM2YThkYmE4ODM1ZWMyZjdjYTQyMWIzODIyNDA2YzI4ZDk1N2Q1ZDQyYzg3NTJjNWIyZTRiODYxNWQifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5d1685800c6249a9a6b87949dd2f49be",
+      "statement": "Legacy 與 LangGraph 的測試都串接實際 Discord notifier 並 stub HTTP post，驗證最終連結使用 storage 回傳的摘要 UUID，且與完成狀態保存的 notion_page_id 一致。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/tests/unit/test_processing_engines.py#L135-L160",
+          "version": "repo-lines-v1:sha256:878112171d55d2863137dc038a0355972396ec09b78df9e57d16b39eb695c706:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFiMjM4MTNmZmM1ZmYwNGJmODk4MzQ3MTkxM2M5OTUyZmE0Y2IxZWY1NGIyNDgzZTg3ZmFiN2JhOGM4NzI4ZWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVlZmU0NzgwYzA3ZDg3ODgyNzEwN2FlM2E3YmExZTgxNzM5MDAzNjBmYjA2MmIxOGFiZTY1NWM1MGFiY2MxZDgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA5NDJmY2JjYmQzZDQzMDAwMGJkMDYxYTJhYTYwZjkwYTliMGU0ZWI1NTk1YzZjMDAwNWIzNzZhMGRlNGVjOTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhMGIwMWZhYzRmMTE5ZjRmNzZhMmViODE1NmNmNzc0MDRmMzdiNmNiNDNjNmU4Njg5NDYwMmM4ZmExYWIwMjMifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-09-29T12:41:26.213Z"
+    "at": "2026-10-04T12:21:01.480Z"
   }
 }

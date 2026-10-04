@@ -4,22 +4,28 @@ title: Notion 資料整合與 Showcase 邊界
 description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀查詢、schema 映射及可見性邊界。
 tags: [notion, integration, persistence, showcase]
 verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
+  - by: openwiki/0.6.0
+    at: 2026-10-04T12:21:01.480Z
 sources:
+  - id: openwiki-source-fd187f7783d8b744deda578e
+    resource: repo://apps/showcase/components/ShowcaseCard.vue
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
     resource: repo://apps/showcase/server/utils/notion.ts
   - id: openwiki-source-db42db5a52daaee659ddab56
     resource: repo://apps/showcase/tests/showcase-notion-contract.test.ts
+  - id: openwiki-source-3224679c3e8a326edddf16ce
+    resource: repo://apps/whisper_summary/infrastructure/notifications/discord.py
   - id: openwiki-source-3dcaeedd9757866ead8ffb84
     resource: repo://apps/whisper_summary/infrastructure/persistence/notion/client.py
   - id: openwiki-source-ff0286cd18c5814ca933998b
     resource: repo://apps/whisper_summary/infrastructure/storage/summary_storage.py
+  - id: openwiki-source-79006d740abb2f90a0561607
+    resource: repo://apps/whisper_summary/services/pipeline/engines.py
   - id: openwiki-source-9bc2eae428d964ac1917b0b7
     resource: repo://apps/whisper_summary/tests/unit/test_notion_contract.py
   - id: openwiki-source-9225efb0c61a21bf97b44e10
     resource: repo://contracts/notion_completed_page.json
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -41,6 +47,14 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 列表 query 依 created time 倒序、最多 50 筆，通常以解析出的狀態欄位篩選 `Completed`。詳細頁讀取 page properties，並從 page 的 children endpoint 分頁抓取 blocks；每一層遇到 `has_children` 的 block，會再以該 block id 遞迴抓取並分頁完成其 children，形成完整 block tree。這個流程是逐層、依 API 回傳順序進行，任一層的 Notion request 失敗都會讓詳細頁查詢失敗，而不會回傳不完整樹。
 
 完整 block tree 再轉成 Markdown。一般子內容接在 parent 後方；bulleted/numbered list item 與 to-do 的子內容縮排四個 spaces，以保存巢狀清單層級；quote 與 callout 則將自己的文字和所有子內容一起套用引用前綴。若 parent block 本身沒有可呈現內容，仍保留其可呈現 children。只有整棵 block tree 最終沒有 Markdown content 時，詳細頁才 fallback 到 Summary property。
+
+## Discord 連到摘要詳細頁
+
+摘要寫入後回傳的 Notion `page_id`，由 pipeline 保存為 `notion_page_id`；Discord 使用這個摘要結果 ID，不使用處理任務的 `task_id` 或 YouTube video ID。Showcase 的結果 `id` 同樣來自 Notion `page.id`，卡片與通知因而可指向同一個 `/results/{id}` 詳細頁。
+
+設定 `SHOWCASE_BASE_URL=https://knowledge.example.com` 後，通知會加入 `知識庫：https://knowledge.example.com/results/{摘要頁面 UUID}`。通知函式將有無連字號的合法 UUID 正規化為標準格式。這個連結不依賴 `NOTION_URL`；網站根網址或 ID 無效時只略過知識庫連結，原有通知仍照常處理。設定與錯誤處理詳見[設定、執行與部署](../operations/configuration-and-deployment.md)。
+
+部署時應對齊摘要寫入與 Showcase 的 Notion 資料庫設定，並確認網站使用的 integration 能讀取摘要頁面。詳細頁直接按 page ID 讀取，首頁清單的狀態篩選或快取尚未顯示新結果，不代表連結 ID 錯誤。通知連結本身不改變頁面權限，也不新增存取控制。
 
 ## 安全與故障邊界
 

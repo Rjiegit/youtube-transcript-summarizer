@@ -5,7 +5,7 @@ description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topo
 tags: [operations, configuration, docker, deployment]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-09-29T12:41:26.213Z
+    at: 2026-10-04T12:21:01.480Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -27,6 +27,8 @@ sources:
     resource: repo://apps/showcase/server/utils/config.ts
   - id: openwiki-source-3b0efe03f5b86982327fa144
     resource: repo://apps/showcase/server/utils/read-sync-config.ts
+  - id: openwiki-source-4406f4d9096d90261e3f6198
+    resource: repo://apps/whisper_summary/.env.example
   - id: openwiki-source-e8a3e4e8f72c5329a78957ec
     resource: repo://apps/whisper_summary/apps/api/schemas.py
   - id: openwiki-source-fb3a71308a5a59482c2767f3
@@ -37,6 +39,8 @@ sources:
     resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
   - id: openwiki-source-25d6d487d3ae6567d7b0397b
     resource: repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-3224679c3e8a326edddf16ce
+    resource: repo://apps/whisper_summary/infrastructure/notifications/discord.py
   - id: openwiki-source-44f784ddceb054f0c06a5950
     resource: repo://apps/whisper_summary/pyproject.toml
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
@@ -47,7 +51,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-09-29T12:41:26.213Z" }
+generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
 ---
 
 # 設定、執行與部署
@@ -56,7 +60,7 @@ generated: { by: "codex", at: "2026-09-29T12:41:26.213Z" }
 
 複製 `apps/whisper_summary/.env.example` 為 `apps/whisper_summary/.env` 並填入所需值，絕不可提交 secrets。`Config.validate()` 接受 `OPENAI_API_KEY`、`GOOGLE_GEMINI_API_KEY`、`OLLAMA_API_KEY` 任一值，或可在 PATH 找到的 Codex CLI；預設自動候選池只包含 Gemini 與 Codex CLI，因此僅有 OpenAI 或 Ollama key 仍無法從預設池選出模型。使用 Notion 時需同時提供 `NOTION_API_KEY` 與 `NOTION_DATABASE_ID`。Discord、Notion workspace URL、RSS 與維運 token 依功能選填。
 
-`Config` 載入 `apps/whisper_summary/.env`、固定 Asia/Taipei timezone，並確保 `data/`、`data/videos/`、`data/_summarized/` 存在。RSS 預設停用；poll interval、minimum interval 和 task API timeout 都至少為一秒。
+`Config` 使用 `load_dotenv()` 載入可找到的 `.env`；Makefile 的 worker 入口另以 `--env-file apps/whisper_summary/.env` 指定設定來源。Config 固定 Asia/Taipei timezone，並確保 `data/`、`data/videos/`、`data/_summarized/` 存在。RSS 預設停用；poll interval、minimum interval 和 task API timeout 都至少為一秒。
 
 `PROCESSING_ENGINE` 預設 `legacy`，也可設 `langgraph`；建立 task 時的 `processing_engine` 可逐筆覆寫。Worker 需要 `PROCESSING_WORKER_TOKEN`（若未設則沿用 `PROCESSING_LOCK_ADMIN_TOKEN`）才能透過中央 API claim、heartbeat 與回寫 task。`TASK_API_BASE_URL` 指向 API，`TASK_LOCK_TIMEOUT_SECONDS` 與 `TASK_LEASE_HEARTBEAT_SECONDS` 控制 lease 生命週期。常駐 worker 預設每 60 秒輪詢一次。Codex CLI 的執行檔與 timeout 可由 `CODEX_BIN`、`CODEX_TIMEOUT_SECONDS` 設定。
 
@@ -64,7 +68,7 @@ generated: { by: "codex", at: "2026-09-29T12:41:26.213Z" }
 
 | 目的 | 指令 |
 | --- | --- |
-| 安裝 frozen Python dependencies | `uv sync --frozen --no-install-project` |
+| 安裝 frozen Python dependencies | `uv sync --project apps/whisper_summary --frozen --no-install-project` |
 | API | `make api` |
 | Streamlit | `make streamlit` |
 | SQLite worker 一次 | `make run` |
@@ -79,6 +83,20 @@ generated: { by: "codex", at: "2026-09-29T12:41:26.213Z" }
 Docker Compose 以共用 runtime base、`apps/whisper_summary/.env` 與 bind-mounted repository 啟動 api、streamlit、processing-worker、rss-monitor。Dockerfile 以 `api`、`ui`、`worker` targets 分別安裝對應 dependency group。API 暴露 8080、Streamlit 暴露 8501；Streamlit、RSS monitor 與 processing worker 的 `TASK_API_BASE_URL` 都指向 Docker DNS 名稱 `api`。API 與 processing worker 啟動時預設更新 yt-dlp，可用 `YTDLP_AUTO_UPDATE=0` 停用。
 
 processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-processing-lock` 會從 environment 或 `apps/whisper_summary/.env` 取 token 並送出 force release；執行前應先用 GET/dry-run 確認目標 backend 與 lock age，避免中斷活躍 worker。
+
+### Discord 知識庫連結設定
+
+`DISCORD_WEBHOOK_URL` 控制是否傳送完成通知。選填 `SHOWCASE_BASE_URL` 可讓訊息附上摘要詳細頁，設定於實際執行 processing pipeline 的環境：
+
+```dotenv
+SHOWCASE_BASE_URL=https://knowledge.example.com
+```
+
+填網站根網址，不包含 `/results`；預設未設定，不會自動連到任何特定部署。通知使用摘要的 `notion_page_id`，清除根網址前後空白與尾端斜線，將合法 UUID 正規化後產生 `/results/{id}`。只接受有 host 的 HTTP/HTTPS URL；內嵌帳密、query、fragment、空白或無效 port 會讓新連結被略過。缺少或無效摘要 ID（包括測試模式的模擬 ID）也只略過知識庫連結。
+
+YouTube 與原有條件式 Notion 連結保持原有行為；知識庫連結不要求 `NOTION_URL`。Discord request 仍有 10 秒預設 timeout；HTTP 錯誤或 request exception 會記錄並回傳 `False`。
+
+設定變更後重新載入執行摘要的 process。Compose 的 services 共用 env_file，需重新建立 container 才載入更新值，例如 `docker compose up -d --force-recreate processing-worker`；單純 restart 不會重新載入 env_file。清空新設定並重新載入環境即可恢復原通知格式。部署網址保留在不受 Git 追蹤的 `.env` 或環境變數，測試與文件僅使用測試網域。
 
 ### 本機 Data 清理
 
