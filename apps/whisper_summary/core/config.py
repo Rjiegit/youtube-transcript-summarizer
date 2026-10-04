@@ -45,6 +45,7 @@ class Config:
         self.notion_database_id = os.getenv("NOTION_DATABASE_ID")
         self.notion_url = os.getenv("NOTION_URL")
         self.discord_webhook_url = os.getenv("DISCORD_WEBHOOK_URL")
+        self.showcase_base_url = os.getenv("SHOWCASE_BASE_URL")
         self.task_api_base_url = os.getenv(
             "TASK_API_BASE_URL",
             "http://localhost:8080",

@@ -1,8 +1,11 @@
 import unittest
+from dataclasses import replace
+from functools import partial
 from types import SimpleNamespace
 from unittest.mock import MagicMock, call
 
 from whisper_summary.domain.tasks.models import Task
+from whisper_summary.infrastructure.notifications.discord import send_task_completion_notification
 from whisper_summary.services.pipeline.engines import (
     LANGGRAPH_ENGINE,
     LEGACY_ENGINE,
@@ -31,6 +34,8 @@ class TestProcessingEngineSelection(unittest.TestCase):
 
 
 class TestProcessingEngineParity(unittest.TestCase):
+    SUMMARY_PAGE_ID = "12345678-1234-1234-1234-1234567890ab"
+
     def _runtime(self):
         events = []
         db = MagicMock()
@@ -53,7 +58,7 @@ class TestProcessingEngineParity(unittest.TestCase):
         file_manager.save_text.side_effect = lambda *_args: events.append("save_file")
         storage = MagicMock()
         storage.save.side_effect = lambda **_kwargs: (
-            events.append("publish") or {"page_id": "page-1"}
+            events.append("publish") or {"page_id": self.SUMMARY_PAGE_ID}
         )
         notifier = MagicMock(side_effect=lambda *_args, **_kwargs: events.append("notify") or True)
 
@@ -64,6 +69,7 @@ class TestProcessingEngineParity(unittest.TestCase):
                 transcription_model_size="tiny",
                 discord_webhook_url=None,
                 notion_url=None,
+                showcase_base_url="https://knowledge.example.com",
             ),
             downloader_factory=lambda *_args: downloader,
             transcriber_factory=lambda *_args: transcriber,
@@ -99,7 +105,12 @@ class TestProcessingEngineParity(unittest.TestCase):
                 self.assertEqual(events, expected_events)
                 self.assertEqual(result.title, "Title")
                 self.assertEqual(result.summary, "summary")
-                self.assertEqual(result.notion_page_id, "page-1")
+                self.assertEqual(result.notion_page_id, self.SUMMARY_PAGE_ID)
+                runtime.notifier.assert_called_once_with(
+                    "Title", "https://youtu.be/example", None,
+                    notion_url=None, notion_task_id=self.SUMMARY_PAGE_ID,
+                    showcase_base_url="https://knowledge.example.com",
+                )
                 self.assertEqual(result.model_label, "faster-whisper-tiny+openai:test")
                 self.assertEqual(
                     runtime.db.update_task_status.call_args_list,
@@ -116,9 +127,33 @@ class TestProcessingEngineParity(unittest.TestCase):
                             title="Title",
                             summary="summary",
                             processing_duration=result.processing_duration,
-                            notion_page_id="page-1",
+                            notion_page_id=self.SUMMARY_PAGE_ID,
                         ),
                     ],
+                )
+
+    def test_both_engines_send_link_to_saved_summary(self):
+        for engine_name in (LEGACY_ENGINE, LANGGRAPH_ENGINE):
+            with self.subTest(engine=engine_name):
+                runtime, _events = self._runtime()
+                runtime.config.discord_webhook_url = "https://discord.example/webhook"
+                post = MagicMock(return_value=SimpleNamespace(status_code=204))
+                runtime = replace(runtime, notifier=partial(send_task_completion_notification, post=post))
+                task = Task(id="1", url="https://youtu.be/example", status="Processing")
+
+                create_processing_engine(engine_name, runtime).execute(task)
+
+                post.assert_called_once_with(
+                    "https://discord.example/webhook",
+                    json={"content": (
+                        "✅ 任務完成：Title\nhttps://youtu.be/example\n"
+                        f"知識庫：https://knowledge.example.com/results/{self.SUMMARY_PAGE_ID}"
+                    )},
+                    timeout=10,
+                )
+                self.assertEqual(
+                    runtime.db.update_task_status.call_args.kwargs["notion_page_id"],
+                    self.SUMMARY_PAGE_ID,
                 )
 
     def test_system_default_does_not_require_persisted_engine_property(self):

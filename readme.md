@@ -2,6 +2,11 @@
 
 這個專案會接收 YouTube URL，使用 `yt-dlp` 下載媒體、以 faster-whisper 轉錄，再透過 LLM 產生繁體中文摘要。任務與結果可儲存在 SQLite、Markdown 與 Notion，並提供 Streamlit、FastAPI、RSS monitor、Browser Extension 與 Nuxt Showcase 等入口。
 
+若要讓 Discord 完成通知附上知識庫摘要連結，在執行摘要流程的
+`apps/whisper_summary/.env` 設定 `SHOWCASE_BASE_URL=https://knowledge.example.com`，
+並重新載入 worker 環境。通知會使用摘要的 Notion page ID 連往 `/results/{id}`；
+未設定時保留原有通知。Compose 的 env_file 變更需重新建立 worker container。
+
 ## 系統流程
 
 ```text

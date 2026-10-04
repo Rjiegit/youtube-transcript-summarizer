@@ -88,6 +88,7 @@ class TestProcessingWorker(unittest.TestCase):
             transcription_model_size="tiny",
             notion_url=None,
             discord_webhook_url=None,
+            showcase_base_url=None,
             data_dir="data",
         )
         mock_notify.return_value = True
@@ -124,6 +125,7 @@ class TestProcessingWorker(unittest.TestCase):
             None,
             notion_url=None,
             notion_task_id="11111111-2222-3333-4444-555555555555",
+            showcase_base_url=None,
         )
         mock_notify.assert_any_call(
             "Sample Title",
@@ -131,6 +133,7 @@ class TestProcessingWorker(unittest.TestCase):
             None,
             notion_url=None,
             notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+            showcase_base_url=None,
         )
 
     @patch("whisper_summary.infrastructure.composition.Config")
@@ -174,6 +177,7 @@ class TestProcessingWorker(unittest.TestCase):
             transcription_model_size="tiny",
             notion_url=None,
             discord_webhook_url=None,
+            showcase_base_url=None,
             data_dir="data",
         )
         mock_notify.return_value = True
@@ -206,6 +210,7 @@ class TestProcessingWorker(unittest.TestCase):
             None,
             notion_url=None,
             notion_task_id="ffffffff-1111-2222-3333-444444444444",
+            showcase_base_url=None,
         )
 
     def test_worker_uses_metadata_and_completes_when_sidecar_write_fails(self):
@@ -248,6 +253,7 @@ class TestProcessingWorker(unittest.TestCase):
                 transcription_model_size="tiny",
                 notion_url=None,
                 discord_webhook_url=None,
+                showcase_base_url=None,
                 data_dir="data",
             ),
         )

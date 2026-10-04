@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from typing import Any, Callable, Optional
+from urllib.parse import urlsplit
+from uuid import UUID
 
 try:  # pragma: no cover - optional dependency
     import requests
@@ -24,6 +26,7 @@ def send_task_completion_notification(
     *,
     notion_url: Optional[str] = None,
     notion_task_id: Optional[str] = None,
+    showcase_base_url: Optional[str] = None,
     post: Optional[PostFunc] = None,
     timeout_seconds: int = DEFAULT_TIMEOUT_SECONDS,
 ) -> bool:
@@ -47,6 +50,28 @@ def send_task_completion_notification(
 
     notion_url_value = (notion_url or "").strip()
     notion_task_id_value = (notion_task_id or "").strip()
+    showcase_base = (showcase_base_url or "").strip().rstrip("/")
+    if showcase_base:
+        try:
+            parsed = urlsplit(showcase_base)
+            if (
+                parsed.scheme not in {"http", "https"}
+                or not parsed.hostname
+                or parsed.username is not None
+                or parsed.password is not None
+                or parsed.query
+                or parsed.fragment
+                or any(character.isspace() for character in showcase_base)
+            ):
+                raise ValueError("Invalid showcase base URL")
+            # Accessing port also validates malformed port values.
+            parsed.port
+            page_id = str(UUID(notion_task_id_value))
+        except ValueError:
+            logger.info("Invalid showcase URL or summary page ID; omitting knowledge link.")
+        else:
+            message_lines.append(f"知識庫：{showcase_base}/results/{page_id}")
+
     if notion_url_value and notion_task_id_value:
         normalized_base = notion_url_value.rstrip("/")
         sanitized_id = notion_task_id_value.replace("-", "")
