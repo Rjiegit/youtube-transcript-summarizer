@@ -211,7 +211,6 @@ class PipelineOperations:
             state["title"] or "untitled",
             state["url"],
             self.runtime.config.discord_webhook_url,
-            notion_url=self.runtime.config.notion_url,
             notion_task_id=state.get("notion_page_id"),
             showcase_base_url=self.runtime.config.showcase_base_url,
         )

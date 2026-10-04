@@ -123,7 +123,6 @@ class TestProcessingWorker(unittest.TestCase):
             "Sample Title",
             "https://youtu.be/alpha",
             None,
-            notion_url=None,
             notion_task_id="11111111-2222-3333-4444-555555555555",
             showcase_base_url=None,
         )
@@ -131,7 +130,6 @@ class TestProcessingWorker(unittest.TestCase):
             "Sample Title",
             "https://youtu.be/bravo",
             None,
-            notion_url=None,
             notion_task_id="aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
             showcase_base_url=None,
         )
@@ -208,7 +206,6 @@ class TestProcessingWorker(unittest.TestCase):
             "Recovered Title",
             "https://youtu.be/delta",
             None,
-            notion_url=None,
             notion_task_id="ffffffff-1111-2222-3333-444444444444",
             showcase_base_url=None,
         )

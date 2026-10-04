@@ -108,7 +108,7 @@ class TestProcessingEngineParity(unittest.TestCase):
                 self.assertEqual(result.notion_page_id, self.SUMMARY_PAGE_ID)
                 runtime.notifier.assert_called_once_with(
                     "Title", "https://youtu.be/example", None,
-                    notion_url=None, notion_task_id=self.SUMMARY_PAGE_ID,
+                    notion_task_id=self.SUMMARY_PAGE_ID,
                     showcase_base_url="https://knowledge.example.com",
                 )
                 self.assertEqual(result.model_label, "faster-whisper-tiny+openai:test")
@@ -132,10 +132,11 @@ class TestProcessingEngineParity(unittest.TestCase):
                     ],
                 )
 
-    def test_both_engines_send_link_to_saved_summary(self):
+    def test_both_engines_send_only_knowledge_link_with_notion_configured(self):
         for engine_name in (LEGACY_ENGINE, LANGGRAPH_ENGINE):
             with self.subTest(engine=engine_name):
                 runtime, _events = self._runtime()
+                runtime.config.notion_url = "https://www.notion.so/workspace"
                 runtime.config.discord_webhook_url = "https://discord.example/webhook"
                 post = MagicMock(return_value=SimpleNamespace(status_code=204))
                 runtime = replace(runtime, notifier=partial(send_task_completion_notification, post=post))
@@ -148,6 +149,31 @@ class TestProcessingEngineParity(unittest.TestCase):
                     json={"content": (
                         "✅ 任務完成：Title\nhttps://youtu.be/example\n"
                         f"知識庫：https://knowledge.example.com/results/{self.SUMMARY_PAGE_ID}"
+                    )},
+                    timeout=10,
+                )
+                self.assertEqual(
+                    runtime.db.update_task_status.call_args.kwargs["notion_page_id"],
+                    self.SUMMARY_PAGE_ID,
+                )
+
+    def test_both_engines_do_not_fall_back_to_notion_without_knowledge_url(self):
+        for engine_name in (LEGACY_ENGINE, LANGGRAPH_ENGINE):
+            with self.subTest(engine=engine_name):
+                runtime, _events = self._runtime()
+                runtime.config.notion_url = "https://www.notion.so/workspace"
+                runtime.config.discord_webhook_url = "https://discord.example/webhook"
+                runtime.config.showcase_base_url = None
+                post = MagicMock(return_value=SimpleNamespace(status_code=204))
+                runtime = replace(runtime, notifier=partial(send_task_completion_notification, post=post))
+                task = Task(id="1", url="https://youtu.be/example", status="Processing")
+
+                create_processing_engine(engine_name, runtime).execute(task)
+
+                post.assert_called_once_with(
+                    "https://discord.example/webhook",
+                    json={"content": (
+                        "✅ 任務完成：Title\nhttps://youtu.be/example"
                     )},
                     timeout=10,
                 )

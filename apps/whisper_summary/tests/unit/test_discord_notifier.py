@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 
 from whisper_summary.infrastructure.notifications.discord import (
     RequestException,
@@ -14,7 +13,7 @@ class _StubResponse:
 
 
 class TestDiscordNotifier(unittest.TestCase):
-    def test_showcase_link_is_independent_of_notion_url(self):
+    def test_showcase_link_normalizes_summary_page_id(self):
         for page_id in ("12345678-1234-1234-1234-1234567890ab", "123456781234123412341234567890ab"):
             with self.subTest(page_id=page_id):
                 captured = {}
@@ -71,7 +70,6 @@ class TestDiscordNotifier(unittest.TestCase):
             "Title",
             "https://youtu.be/id",
             "https://discord.example/webhook",
-            notion_url="https://www.notion.so/workspace",
             notion_task_id="12345678-1234-1234-1234-1234567890ab",
             showcase_base_url="https://knowledge.example.com",
             post=stub_post,
@@ -82,8 +80,7 @@ class TestDiscordNotifier(unittest.TestCase):
             (
                 "✅ 任務完成：Title\n"
                 "https://youtu.be/id\n"
-                "知識庫：https://knowledge.example.com/results/12345678-1234-1234-1234-1234567890ab\n"
-                "Notion：https://www.notion.so/workspace/123456781234123412341234567890ab"
+                "知識庫：https://knowledge.example.com/results/12345678-1234-1234-1234-1234567890ab"
             ),
         )
 
@@ -110,32 +107,6 @@ class TestDiscordNotifier(unittest.TestCase):
             "Title", "https://youtu.be/id", None
         )
         self.assertFalse(result)
-
-    def test_send_notification_missing_notion_inputs_logs_info(self):
-        captured = {}
-
-        def stub_post(webhook_url, *, json, timeout):
-            captured["content"] = json["content"]
-            return _StubResponse(204, "ok")
-
-        with patch("whisper_summary.infrastructure.notifications.discord.logger") as mock_logger:
-            mock_logger.warning = mock_logger.warning  # attribute to avoid AttributeError
-            result = send_task_completion_notification(
-                "Title",
-                "https://youtu.be/id",
-                "https://discord.example/webhook",
-                notion_url="https://www.notion.so/workspace",
-                post=stub_post,
-            )
-
-        self.assertTrue(result)
-        self.assertEqual(
-            captured["content"],
-            "✅ 任務完成：Title\nhttps://youtu.be/id",
-        )
-        mock_logger.info.assert_any_call(
-            "Notion link information incomplete; sending Discord notification without Notion URL."
-        )
 
 
 if __name__ == "__main__":

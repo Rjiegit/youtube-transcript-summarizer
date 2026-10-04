@@ -5,7 +5,8 @@
 若要讓 Discord 完成通知附上知識庫摘要連結，在執行摘要流程的
 `apps/whisper_summary/.env` 設定 `SHOWCASE_BASE_URL=https://knowledge.example.com`，
 並重新載入 worker 環境。通知會使用摘要的 Notion page ID 連往 `/results/{id}`；
-未設定時保留原有通知。Compose 的 env_file 變更需重新建立 worker container。
+完成通知只附加知識庫摘要入口，不再附加 Notion 網址。未設定知識庫網址或網址／摘要頁 ID 無效時，
+通知僅顯示完成標題與影片網址。Compose 的 env_file 變更需重新建立 worker container。
 
 ## 系統流程
 

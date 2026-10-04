@@ -24,7 +24,6 @@ def send_task_completion_notification(
     youtube_url: str,
     webhook_url: Optional[str],
     *,
-    notion_url: Optional[str] = None,
     notion_task_id: Optional[str] = None,
     showcase_base_url: Optional[str] = None,
     post: Optional[PostFunc] = None,
@@ -48,7 +47,6 @@ def send_task_completion_notification(
 
     message_lines = [f"✅ 任務完成：{title}", youtube_url]
 
-    notion_url_value = (notion_url or "").strip()
     notion_task_id_value = (notion_task_id or "").strip()
     showcase_base = (showcase_base_url or "").strip().rstrip("/")
     if showcase_base:
@@ -71,16 +69,6 @@ def send_task_completion_notification(
             logger.info("Invalid showcase URL or summary page ID; omitting knowledge link.")
         else:
             message_lines.append(f"知識庫：{showcase_base}/results/{page_id}")
-
-    if notion_url_value and notion_task_id_value:
-        normalized_base = notion_url_value.rstrip("/")
-        sanitized_id = notion_task_id_value.replace("-", "")
-        notion_link = f"{normalized_base}/{sanitized_id or notion_task_id_value}"
-        message_lines.append(f"Notion：{notion_link}")
-    elif notion_url_value or notion_task_id_value:
-        logger.info(
-            "Notion link information incomplete; sending Discord notification without Notion URL."
-        )
 
     payload = {
         "content": "\n".join(message_lines),
