@@ -49,6 +49,14 @@
 - PRs: include summary, motivation, screenshots (for UI), repro/steps, and linked issues. Target `master`.
 - CI runs flake8 and unittest on push/PR; keep builds green.
 
+### 遠端 Git 寫入必須當次確認
+- AI agent 執行任何 `git push` 前，必須先完成修改、驗證與 review，向使用者說明將推送的 commit、remote、branch 及影響，停下來取得當次明確確認後才能執行。
+- 此規則涵蓋一般 push、`--force`、`--force-with-lease`、推送／刪除遠端 branch 或 tag，以及透過 API、其他工具或腳本進行的等效遠端 Git 寫入。
+- 先前任務的 push 授權不得沿用；「進行開發」、「自行 review」、「全部完成」或授權本機 commit／amend／squash，均不代表允許 push。即使任務一開始要求 push，也必須在具體推送內容可供檢查後，再取得執行前確認。
+- Force push 必須額外說明將被改寫的遠端歷史；使用者確認後優先採用 `--force-with-lease`。
+- 使用者只要求指令或表示將手動執行時，只提供指令，不得代為執行。確認尚未收到時，不得透過 hook、背景工作或其他方式推送。
+- 發布／合併 PR、部署網站等其他遠端發布動作，也須在結果可供檢查後停下來取得當次確認，不得從開發或 review 授權推定。
+
 ## Security & Configuration
 - Use `apps/whisper_summary/.env` (copy `apps/whisper_summary/.env.example`). Common keys:
   - LLM: `OPENAI_API_KEY`, `GOOGLE_GEMINI_API_KEY`
