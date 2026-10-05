@@ -3,6 +3,9 @@ type: operations-guide
 title: 設定、執行與部署
 description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topology、診斷與秘密管理。
 tags: [operations, configuration, docker, deployment]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -18,12 +21,20 @@ sources:
     resource: repo://.github/workflows/openwiki-update.yml
   - id: openwiki-source-dac0a79ee8362683638fa30e
     resource: repo://apps/showcase/nuxt.config.ts
+  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
+    resource: repo://apps/showcase/README.md
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
+  - id: openwiki-source-f987324e0612a557c62a85fb
+    resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-98886cf9c4725ca201459fa1
+    resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-bae0c48de5dc6743f6dddd59
     resource: repo://apps/showcase/server/utils/config.ts
   - id: openwiki-source-3b0efe03f5b86982327fa144
     resource: repo://apps/showcase/server/utils/read-sync-config.ts
+  - id: openwiki-source-51d27e8448c6ca65ff1ee504
+    resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-4406f4d9096d90261e3f6198
     resource: repo://apps/whisper_summary/.env.example
   - id: openwiki-source-e8a3e4e8f72c5329a78957ec
@@ -48,10 +59,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T12:54:12.705Z
+generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
 ---
 
 # 設定、執行與部署
@@ -110,13 +118,13 @@ SHOWCASE_BASE_URL=https://knowledge.example.com
 
 在 `apps/showcase` 執行 `npm install`、`npm run dev`、`npm run test`、`npm run build`。`make showcase` 載入 `apps/showcase/.env`（若存在）。
 
-Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 同時設定 Nitro SWR 與 `public, s-maxage=<ttl>, stale-while-revalidate=<ttl>`。
+Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 保留同一 TTL 的 Nitro SWR，但 route rule 不再設定固定 Cache-Control header；列表與詳情 handler 仍產生成功回應的 public s-maxage／stale-while-revalidate 標頭，避免固定規則覆蓋錯誤的 no-store。
 
 Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅有 build date 與 commit SHA。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
 
 跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 
-`npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它讀取 `apps/showcase/.env`，且不覆寫既有 process environment；`make showcase` 則會 export 該檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`。執行時另可用 `/api/showcase/diagnostics` 檢查解析，或 `/api/showcase/health` 實際驗證 Notion 存取。
+`npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它讀取 `apps/showcase/.env`，且不覆寫既有 process environment；`make showcase` 則會 export 該檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`。公開 diagnostics 與 health API 已移除；check-env 也不能證明已部署 runtimeConfig 正確或 Notion 權限可用。部署後請透過平台設定與 server log 排錯。
 
 Showcase 對每次 Notion HTTP 請求設定固定 5 秒 timeout，包含 schema、query、page 與每次 blocks 分頁／子內容讀取；整篇文章的累計時間仍可能超過 5 秒。後端不自動重試；已有成功快取時保留舊資料，沒有快取時回傳 502，後續請求可重新嘗試。詳細頁的三種初始讀取會平行開始，見[Notion 資料整合](../integrations/notion-and-showcase.md)。
 
@@ -153,3 +161,9 @@ Workflow 使用 Node.js 22，安裝固定版本的 OpenWiki 與可選 Mermaid �
 - [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)
+
+### Showcase 安全錯誤與 log
+
+必要設定缺少時回固定 500 訊息，上游讀取失敗且無快取時回固定 502 訊息，不包含 env snapshot 或 Notion error body。server log 的 configuration unavailable 只記錄缺少設定名稱或布林值；Notion query failed 只記錄 results／detail 與 timeout、network-or-type-error、upstream-error 等預定義分類，包含背景更新失敗，不輸出原始 Error 或 secrets。
+
+Nitro error hook 只對展示列表／詳情的 4xx、5xx 錯誤補上 Cache-Control: no-store，防止 SWR 的代理回應遺失 handler 標頭；成功回應與其他 API 不套用這項規則。

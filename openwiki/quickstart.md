@@ -4,8 +4,8 @@ title: 快速開始與開發導覽
 description: 從環境設定、安裝、啟動與測試開始，並依開發任務導向架構、API、持久層與整合文件。
 tags: [quickstart, setup, navigation]
 verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
+  - by: openwiki/0.6.0
+    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -21,6 +21,8 @@ sources:
     resource: repo://apps/showcase/package.json
   - id: openwiki-source-36cce2c34e32cbad2ec20271
     resource: repo://apps/showcase/pages/settings/sync.vue
+  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
+    resource: repo://apps/showcase/README.md
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
   - id: openwiki-source-3b0efe03f5b86982327fa144
@@ -47,7 +49,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
 ---
 
 # 快速開始與開發導覽
@@ -162,8 +164,8 @@ npm --prefix apps/showcase run build
 
 ## 常見檢查
 
-- Showcase 顯示缺少設定：先執行 `npm run check-env`，再查看 `/api/showcase/diagnostics`。
-- diagnostics 正常但無資料：查看 `/api/showcase/health`，確認 Notion integration 權限、database id 與 status schema。
+- Showcase 無法載入：本機先執行 `npm run check-env`；部署後檢查平台環境設定與 server log。check-env 不驗證已部署 runtimeConfig 或 Notion 權限。
+- 設定存在但仍無資料：檢查 Notion integration 權限、database id 與 status schema。公開 diagnostics／health API 已移除，錯誤細節不再提供給訪客；安全 log 分類見[設定、執行與部署](operations/configuration-and-deployment.md)。
 - task 已 Pending 但未開始：確認 dedicated processing worker 正在執行，或用 `make processing-worker` 啟動；`POST /processing-jobs` 只會確認目前採 dedicated mode，`make run` 則會同步處理一次 queue。再以維運端點檢查 active task leases。
 - Extension 無法送出：確認 Options API Base URL、API connectivity 與頁面是否為支援的 YouTube URL；channel handle 還需要 DOM 提供 channel id。
 - RSS 沒有建立舊影片 tasks：首次 poll 只 seed watermark，這是避免回填整個歷史 feed 的預期行為。

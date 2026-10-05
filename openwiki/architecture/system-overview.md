@@ -4,8 +4,8 @@ title: 系統架構與端到端資料流
 description: 說明任務輸入、專用 worker、持久層與獨立前端應用之間的責任和資料流。
 tags: [architecture, pipeline, api, worker, nuxt]
 verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
+  - by: openwiki/0.6.0
+    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts

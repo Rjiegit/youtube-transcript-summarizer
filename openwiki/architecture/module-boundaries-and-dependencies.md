@@ -4,8 +4,8 @@ title: 模組邊界與外部依賴
 description: 說明 Python modular monolith、獨立應用、composition roots，以及各 runtime 的依賴管理方式。
 tags: [architecture, dependencies, python, boundaries]
 verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
+  - by: openwiki/0.6.0
+    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-269e1e25890c094aaa09d0a0
     resource: repo://.docker/Dockerfile
@@ -51,7 +51,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -79,3 +79,5 @@ Python CI 從 `apps/whisper_summary/` 安裝 lockfile、執行 Flake8 與 unitte
 Python 的 unit／integration 測試與 fixtures 放在 `apps/whisper_summary/tests/`；Nuxt 測試放在 `apps/showcase/tests/`，兩者共用的契約 fixture 保留在頂層 `contracts/`。
 
 相關閱讀：[系統架構](system-overview.md)、[開發與測試](../operations/development-and-testing.md)。
+
+Nuxt production dependencies 包含 Nuxt、markdown-it 與 opencc-js；opencc-js 只使用字元字典支援標題繁簡搜尋。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 放在 devDependencies；Python dev group 包含 flake8 與 httpx。

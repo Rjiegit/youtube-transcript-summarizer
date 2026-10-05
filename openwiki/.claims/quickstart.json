@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:372931f42e0eefed5118cd56a2d2980ae31eccbaa2175683b7bc5101f9b20cc4",
+  "pageVersion": "sha256:24d391c9e88a7d9b837e850c813c530cea4db492b615ef4740065d2fa9f9776d",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -8,7 +8,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/package.json",
-          "version": "repo-file-v1:sha256:2c5da852a27e9d57ef543a6d93e11a9de4f66a288a7d19b0e5cac11455d530df"
+          "version": "repo-file-v1:sha256:290acf499662a284418c6826b0a5e26d458262e53f8b9b0b44ecfb40f45d5fa3"
         },
         {
           "resource": "repo://apps/whisper_summary/pyproject.toml#L1-L21",
@@ -207,10 +207,20 @@
           "version": "repo-file-v1:sha256:026780e7ee8b4ff7537a31b6c23247e3e7b9dad384062ea940c5970678f4f7ce"
         }
       ]
+    },
+    {
+      "id": "claim_4f1282c1c8594ef2a8f4a93e148fabed",
+      "statement": "Showcase 已移除公開 diagnostics 與 health API；本機排錯使用 check-env，但它不驗證部署 runtimeConfig 或 Notion 權限，部署後使用平台設定與安全 server log。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/README.md#L165-L178",
+          "version": "repo-lines-v1:sha256:27bff2658f840728d17e5873b01cc894b16644119846ecc0a6cfa619bc5918ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyMTc1MGNmM2YxOWVjNDk1YTcwYTY2Y2QzYzBjYzExNjQ3Mzc1OGE5ZjRmYjE0MWM5YjM1ZGZmMTc0ZGRjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOTY4N2I3OGJiNmJhN2VjN2M4ZWRiMGFhY2IzMTFjODUxMTljYjhjZTFiNzZiZTZkMDk4YmY5NTQ1ZTc0NWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjM2ZGE2OTgzMzg5NmJhYTMwNjc1NGFlNWQwODk5YjljZDc3NmQ1ZDY0NzZiODgwOTEwNDg0MTE5ZDFhMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
-    "by": "openwiki/0.4.3",
-    "at": "2026-09-28T16:59:07.681Z"
+    "by": "openwiki/0.6.0",
+    "at": "2026-10-05T13:47:15.340Z"
   }
 }

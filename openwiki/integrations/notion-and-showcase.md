@@ -5,12 +5,22 @@ description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀
 tags: [notion, integration, persistence, showcase]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-05T12:54:12.705Z
+    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-fd187f7783d8b744deda578e
     resource: repo://apps/showcase/components/ShowcaseCard.vue
+  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
+    resource: repo://apps/showcase/README.md
+  - id: openwiki-source-f987324e0612a557c62a85fb
+    resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-f1a67212459cd418a8f6d3d6
+    resource: repo://apps/showcase/server/api/showcase/results/%5Bid%5D.get.ts
+  - id: openwiki-source-98886cf9c4725ca201459fa1
+    resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
     resource: repo://apps/showcase/server/utils/notion.ts
+  - id: openwiki-source-51d27e8448c6ca65ff1ee504
+    resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-db42db5a52daaee659ddab56
     resource: repo://apps/showcase/tests/showcase-notion-contract.test.ts
   - id: openwiki-source-3224679c3e8a326edddf16ce
@@ -25,7 +35,7 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_notion_contract.py
   - id: openwiki-source-9225efb0c61a21bf97b44e10
     resource: repo://contracts/notion_completed_page.json
-generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
+generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -65,8 +75,8 @@ Schema、database query、page 與每次 blocks 分頁／子內容請求各自�
 ## 安全與故障邊界
 
 - Notion token 只存在 Python process 或 Nuxt Nitro server；browser 不直接呼叫 Notion。
-- diagnostics 僅回報設定是否存在，不回傳 token value。
-- Showcase 將 Notion error body 壓成單行並截到 300 characters 後才放入錯誤訊息，避免無界輸出。
+- 公開 diagnostics 與 health API 已移除；設定排錯使用本機 check-env 與部署平台 server log。
+- Notion adapter 仍會把錯誤 body 壓成單行並截到 300 characters 作為內部 Error；列表與詳情 route 不把該訊息傳給訪客，也不記錄原始 body。對外使用固定 500／502 訊息；server log 只含故障階段、route 與安全分類，錯誤回應設為 no-store。
 - Showcase cache 可在短暫 Notion failure 時回傳最後成功 snapshot，但初次查詢沒有 snapshot 時仍會失敗。
 - Notion queue 與 SQLite 的 consistency 差異由持久化頁維護，本頁不把 Showcase 的 read schema 誤當作 queue locking 保證。
 

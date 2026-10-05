@@ -4,9 +4,11 @@ title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
 tags: [nuxt, showcase, swr, caching, ux]
 verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
+  - by: openwiki/0.6.0
+    at: 2026-10-05T13:47:15.340Z
 sources:
+  - id: openwiki-source-369da753c512075845679e7e
+    resource: repo://apps/showcase/components/HighlightedTitle.vue
   - id: openwiki-source-bb92958ed21ee9cf0accb45d
     resource: repo://apps/showcase/components/ReadSyncControl.vue
   - id: openwiki-source-6b1be9f1b66868fbfe965160
@@ -17,17 +19,25 @@ sources:
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
   - id: openwiki-source-36cce2c34e32cbad2ec20271
     resource: repo://apps/showcase/pages/settings/sync.vue
-  - id: openwiki-source-a3da7cc10ec9db071df60002
-    resource: repo://apps/showcase/server/api/showcase/diagnostics.get.ts
-  - id: openwiki-source-8622a3965ca73ed99b52ff8c
-    resource: repo://apps/showcase/server/api/showcase/health.get.ts
+  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
+    resource: repo://apps/showcase/README.md
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-f1a67212459cd418a8f6d3d6
+    resource: repo://apps/showcase/server/api/showcase/results/%5Bid%5D.get.ts
+  - id: openwiki-source-98886cf9c4725ca201459fa1
+    resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
+  - id: openwiki-source-51d27e8448c6ca65ff1ee504
+    resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-acc677c60f44374b1f2d50cf
     resource: repo://apps/showcase/server/utils/swr-cache.ts
   - id: openwiki-source-c2ec24a0ccca33febfd50837
     resource: repo://apps/showcase/tests/swr-cache.test.ts
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+  - id: openwiki-source-218f09975f8887eb7efa96c4
+    resource: repo://apps/showcase/tests/title-search.test.ts
+  - id: openwiki-source-0790ba7e8a15c95a134e6b3f
+    resource: repo://apps/showcase/utils/title-search.ts
+generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -36,7 +46,7 @@ Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 
 
 ## 列表與詳細頁
 
-首頁先去重，再以標題做 client-side、不分大小寫的搜尋，並將未讀項目排在已讀項目前。列表可一次標記目前篩選集合為已讀。詳細頁成功取得資料後，會把 Notion page id 與穩定 read key 一併標記，並以 Markdown renderer 顯示 block content；有效 YouTube URL 另產生 privacy-enhanced embed。
+首頁先去重，再以標題做 client-side、繁簡字元等價且不分大小寫的搜尋，並將未讀項目排在已讀項目前。列表可一次標記目前篩選集合為已讀。詳細頁成功取得資料後，會把 Notion page id 與穩定 read key 一併標記，並以 Markdown renderer 顯示 block content；有效 YouTube URL 另產生 privacy-enhanced embed。
 
 首頁和詳細頁都處理 loading、error 與 hydration。詳細頁在沒有 loading、沒有 fetch error 且沒有 item 時產生 404。頁面 title、description 與 social metadata 會跟隨結果內容更新。
 
@@ -61,9 +71,11 @@ Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 
 
 Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗，現有列表保持可見，不以錯誤覆寫畫面。
 
-## 維運端點
+## 搜尋高亮與安全排錯
 
-`/api/showcase/diagnostics` 只揭露設定是否存在與解析後狀態，不回傳 secret；`/api/showcase/health` 實際執行 Notion query，用於區分環境設定問題與 database/schema/permission 問題。
+標題搜尋透過 opencc-js 的 TSCharacters 字元字典正規化繁簡字與大小寫，不將「影片／視頻」或「人工智慧／人工智能」視為同義詞。搜尋為 literal substring，正規表示式符號也視為一般字元。預處理保留原始字元的 UTF-16 offset；HighlightedTitle 以 Vue 文字插值與 mark 呈現命中範圍，維持原標題、不使用 v-html。
+
+公開 diagnostics 與 health API 已移除，首頁錯誤區塊也不再提供診斷連結。列表與詳情使用固定一般錯誤訊息，不把設定 snapshot 或原始 Notion 錯誤傳給訪客；缺少設定為 500，上游失敗且沒有快取為 502。server log 只記錄設定存在與否或預定義錯誤類型，背景更新失敗也會記錄。Nitro error hook 對展示列表／詳情的 4xx、5xx 最終回應補上 Cache-Control: no-store，成功回應維持既有快取。排錯方式見[設定、執行與部署](../operations/configuration-and-deployment.md)。
 
 ## 延伸閱讀
 

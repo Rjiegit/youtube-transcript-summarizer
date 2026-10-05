@@ -3,6 +3,9 @@ type: development-guide
 title: 開發規則與測試策略
 description: 集中說明 Python 與 Nuxt 的程式碼分層、常用命令、測試邊界、CI 與提交前驗證。
 tags: [development, testing, conventions, ci]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -12,14 +15,24 @@ sources:
     resource: repo://AGENTS.md
   - id: openwiki-source-ec214e818e93e527ce43036b
     resource: repo://apps/showcase/AGENTS.md
+  - id: openwiki-source-7a6b7883faa40aa2f71237b7
+    resource: repo://apps/showcase/tests/highlighted-title.test.ts
   - id: openwiki-source-40202183da1fe23aacead855
     resource: repo://apps/showcase/tests/read-sync-auth.test.ts
   - id: openwiki-source-31ffe686977198603ef70e51
     resource: repo://apps/showcase/tests/showcase-detail-api.test.ts
   - id: openwiki-source-50e4ba8bfc996c2e22710061
     resource: repo://apps/showcase/tests/showcase-detail-concurrency.test.ts
+  - id: openwiki-source-a96e93b91fdeba5f6639e608
+    resource: repo://apps/showcase/tests/showcase-error-cache.test.ts
+  - id: openwiki-source-4a19939b54a3dc224af8a980
+    resource: repo://apps/showcase/tests/showcase-index-page.test.ts
   - id: openwiki-source-d59fd416296b9ecacadfcf35
     resource: repo://apps/showcase/tests/showcase-notion-timeout.test.ts
+  - id: openwiki-source-dec663b9989d0cfd47f8817c
+    resource: repo://apps/showcase/tests/showcase-results-api.test.ts
+  - id: openwiki-source-218f09975f8887eb7efa96c4
+    resource: repo://apps/showcase/tests/title-search.test.ts
   - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
     resource: repo://apps/showcase/tests/upstash-read-state.test.ts
   - id: openwiki-source-4bb166095eacfb6386b2f861
@@ -34,10 +47,7 @@ sources:
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T12:54:12.705Z
+generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
 ---
 
 # 開發規則與測試策略
@@ -97,6 +107,8 @@ npm --prefix apps/showcase run test -- tests/showcase-detail-concurrency.test.ts
 
 ## Commit 與文件規則
 
+AI agent 在任何遠端 Git 寫入、發布／合併 PR 或部署前，先完成修改、驗證與 review，提供具體內容，再取得當次明確確認。本機 commit／amend／squash 或先前授權不代表可 push；若使用者只要指令，不代為執行。Force push 另需說明遠端歷史改寫，確認後優先用 --force-with-lease。
+
 Commit subject 使用簡短、現在式的 Conventional Commit 風格，例如 `fix: avoid duplicate task scheduling`。Pull Request 應包含摘要、動機、驗證結果與相關 issue；UI 變更另附畫面。
 
 使用者可見的啟動或操作方式變更時，更新 `readme.md`；架構或流程變更時，透過 OpenWiki lifecycle 更新 generated wiki，不直接編輯 indexes、Claims 或 run metadata。功能需求與設計決策記錄在對應的 issue 或 Pull Request；持續有效的操作與開發規則同步更新正式文件。舊設計必須明確標示為歷史資料。
@@ -108,3 +120,13 @@ Commit subject 使用簡短、現在式的 Conventional Commit 風格，例如 `
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
 - [跨裝置已讀同步](../frontend/read-state-sync.md)
+
+## Showcase 搜尋與錯誤資訊驗證
+
+`title-search.test.ts`、`highlighted-title.test.ts` 與 `showcase-search.test.ts` 驗證繁簡字元等價、大小寫、literal 搜尋、Unicode offset、保留原文、HTML 字元安全呈現與列表搜尋整合。
+
+列表與詳情 API 測試以含敏感測試字串的上游 Error，驗證固定 502 與 log 不外洩；缺少設定時驗證固定 500、no-store 與不呼叫 Notion。首頁測試確認載入失敗仍有一般提示且無診斷連結。`showcase-error-cache.test.ts` 核對 Nitro error hook 只對展示錯誤套用 no-store，不影響成功與其他路由。`showcase-diagnostics.test.ts` 已隨兩支診斷 API 移除。
+
+Focused command：`npm --prefix apps/showcase run test -- tests/title-search.test.ts tests/highlighted-title.test.ts tests/showcase-search.test.ts tests/showcase-results-api.test.ts tests/showcase-detail-api.test.ts tests/showcase-error-cache.test.ts tests/showcase-index-page.test.ts`。
+
+Production build 的 preview 另需確認 diagnostics／health 回傳 404，而不是 catch-all 的 200 HTML，並確認列表與詳情錯誤回應實際帶 no-store。Handler mock 測試不能取代這項框架整合驗證。
