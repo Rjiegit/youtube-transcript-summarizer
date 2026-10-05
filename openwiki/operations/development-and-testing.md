@@ -3,9 +3,6 @@ type: development-guide
 title: 開發規則與測試策略
 description: 集中說明 Python 與 Nuxt 的程式碼分層、常用命令、測試邊界、CI 與提交前驗證。
 tags: [development, testing, conventions, ci]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-04T12:21:01.480Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -17,6 +14,12 @@ sources:
     resource: repo://apps/showcase/AGENTS.md
   - id: openwiki-source-40202183da1fe23aacead855
     resource: repo://apps/showcase/tests/read-sync-auth.test.ts
+  - id: openwiki-source-31ffe686977198603ef70e51
+    resource: repo://apps/showcase/tests/showcase-detail-api.test.ts
+  - id: openwiki-source-50e4ba8bfc996c2e22710061
+    resource: repo://apps/showcase/tests/showcase-detail-concurrency.test.ts
+  - id: openwiki-source-d59fd416296b9ecacadfcf35
+    resource: repo://apps/showcase/tests/showcase-notion-timeout.test.ts
   - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
     resource: repo://apps/showcase/tests/upstash-read-state.test.ts
   - id: openwiki-source-4bb166095eacfb6386b2f861
@@ -31,7 +34,10 @@ sources:
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
+generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-05T12:54:12.705Z
 ---
 
 # 開發規則與測試策略
@@ -71,7 +77,7 @@ CI 有三個 jobs：Python執行 Flake8與 unittest，Showcase執行 npm test/bu
 
 ### Discord 連結的隔離驗證
 
-`test_discord_notifier.py` 使用 stub HTTP sender 驗證完整通知文字，涵蓋網站根網址清理、UUID 有無連字號、缺少或無效網址／ID、Notion 與知識庫連結同時存在，以及未設定 `NOTION_URL` 時仍產生知識庫連結；另保留 webhook 未設定、HTTP failure 與 request exception 的測試。
+`test_discord_notifier.py` 使用 stub HTTP sender 驗證完整通知文字，涵蓋網站根網址清理、UUID 有無連字號、缺少或無效網址／ID、通知只附加知識庫連結，以及不依賴 `NOTION_URL` 的行為；另保留 webhook 未設定、HTTP failure 與 request exception 的測試。
 
 `test_processing_engines.py` 除了驗證兩個引擎的步驟順序、完成狀態與 notifier 參數，還在 Legacy 與 LangGraph 各執行一次實際的通知函式、只 stub HTTP post，確認最終 `/results/{id}` 指向 storage 回傳的摘要 UUID，且與完成狀態保存的 `notion_page_id` 相同。任務 ID 刻意使用不同值，避免把任務 ID 誤當摘要 ID。
 
@@ -80,6 +86,14 @@ PYTHONPATH=apps uv run --project apps/whisper_summary python -m unittest whisper
 ```
 
 這些測試不發送真實 Discord 訊息，也不呼叫真實 Notion 或 LLM；網站範例使用 `knowledge.example.com`。本機 `.env` 或部署環境才保存實際網址，不將個人部署網址寫入測試、文件或 `.env.example`。正式網站的頁面存取與點擊仍需部署後驗收，不能由 stub 測試推定成功。
+
+### Showcase Notion 請求驗證
+
+`showcase-detail-concurrency.test.ts` 在 schema 尚未完成時確認 schema、page 與 blocks 三路都已開始，並驗證空 blocks 的 Summary fallback 及各路連線失敗不自動重試。`showcase-notion-timeout.test.ts` 使用可控制的 AbortSignal，驗證 schema、page、blocks 與 query 的 5 秒 timeout，以及 blocks 每次分頁和子內容請求使用獨立 signal。`showcase-detail-api.test.ts` 驗證冷快取失敗回傳 502，後續請求可再嘗試。
+
+```bash
+npm --prefix apps/showcase run test -- tests/showcase-detail-concurrency.test.ts tests/showcase-notion-timeout.test.ts tests/showcase-detail-api.test.ts
+```
 
 ## Commit 與文件規則
 

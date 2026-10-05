@@ -5,7 +5,7 @@ description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀
 tags: [notion, integration, persistence, showcase]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-04T12:21:01.480Z
+    at: 2026-10-05T12:54:12.705Z
 sources:
   - id: openwiki-source-fd187f7783d8b744deda578e
     resource: repo://apps/showcase/components/ShowcaseCard.vue
@@ -25,7 +25,7 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_notion_contract.py
   - id: openwiki-source-9225efb0c61a21bf97b44e10
     resource: repo://contracts/notion_completed_page.json
-generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
+generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -40,7 +40,7 @@ Python 有兩條 Notion 寫入路徑：`NotionDB` 以 `URL`、`Name`、`Status` 
 
 ## Nuxt 唯讀端
 
-Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文候選名稱與型別尋找 title、summary、URL、created time/date 與 processing duration，title/created time 另可 fallback 到首個相符型別。缺少欄位時回傳安全預設，例如 `Untitled result`、空 summary 或 `null` URL。
+Showcase 列表查詢先讀 database schema；詳細頁則透過 `Promise.all` 同時啟動 schema、page properties 與 blocks 讀取，全部成功後才進行映射與 Markdown 整理。欄位解析會按已知中英文候選名稱與型別尋找 title、summary、URL、created time/date 與 processing duration，title/created time 另可 fallback 到首個相符型別。缺少欄位時回傳安全預設，例如 `Untitled result`、空 summary 或 `null` URL。
 
 狀態欄位可由設定明確指定；未指定時依 `Status`、` 狀態 `、`State` 等候選尋找 `status`/`select`，最後 fallback 到任一相符型別。指定的欄位不存在或型別錯誤會明確失敗。完全找不到狀態欄位時不加 filter；因此公開 database 若依賴 Completed 可見性，應明確配置正確欄位，而不能把無 filter fallback 當成存取控制。
 
@@ -55,6 +55,12 @@ Showcase 每次查詢先讀 database schema。欄位解析會按已知中英文�
 設定 `SHOWCASE_BASE_URL=https://knowledge.example.com` 後，通知會加入 `知識庫：https://knowledge.example.com/results/{摘要頁面 UUID}`。通知函式將有無連字號的合法 UUID 正規化為標準格式。這個連結不依賴 `NOTION_URL`；網站根網址或 ID 無效時只略過知識庫連結，原有通知仍照常處理。設定與錯誤處理詳見[設定、執行與部署](../operations/configuration-and-deployment.md)。
 
 部署時應對齊摘要寫入與 Showcase 的 Notion 資料庫設定，並確認網站使用的 integration 能讀取摘要頁面。詳細頁直接按 page ID 讀取，首頁清單的狀態篩選或快取尚未顯示新結果，不代表連結 ID 錯誤。通知連結本身不改變頁面權限，也不新增存取控制。
+
+## 請求逾時與失敗
+
+Schema、database query、page 與每次 blocks 分頁／子內容請求各自使用 `AbortSignal.timeout(5000)`。5 秒限制涵蓋單次請求與尚未完成的 response body 讀取，不是整篇文章的總時間上限；遞迴與分頁的累計時間可能更長。後端不自動重試，詳細頁任何一路失敗都讓整次查詢失敗；`Promise.all` 失敗本身不會取消其他已開始的請求。
+
+已有成功快取時保留舊 snapshot；沒有快取時 API 回傳 502，之後的請求可再嘗試。網站端 GET 使用 ofetch 的預設有限重試，與後端對 Notion 的無重試行為不同。
 
 ## 安全與故障邊界
 

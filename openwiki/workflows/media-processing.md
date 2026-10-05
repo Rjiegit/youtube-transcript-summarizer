@@ -3,9 +3,6 @@ type: workflow
 title: 媒體轉錄與摘要流程
 description: 追蹤單筆任務的下載、YouTube metadata 擷取、Whisper 轉錄、LLM 選擇、輸出儲存、通知與失敗處理。
 tags: [pipeline, whisper, llm, metadata, storage]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-04T12:21:01.480Z
 sources:
   - id: openwiki-source-fb3a71308a5a59482c2767f3
     resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
@@ -29,7 +26,10 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e694b4a233a28ca429d8a36e
     resource: repo://apps/whisper_summary/tests/unit/test_processing_worker.py
-generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
+generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-05T12:54:12.705Z
 ---
 
 # 媒體轉錄與摘要流程
@@ -56,7 +56,7 @@ generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
 
 兩個引擎在 `publish_summary` 取得摘要 storage 回傳的 `page_id`，保存為 `notion_page_id`；`complete_task` 將同一個 ID 寫回任務後，`send_notification` 才傳入 notifier。Notifier 的既有參數名稱是 `notion_task_id`，但此處實際值是摘要結果頁面 ID，不是任務 ID。
 
-`SHOWCASE_BASE_URL` 設定有效且摘要 ID 可解析為 UUID 時，Discord 訊息會在 YouTube URL 後加入知識庫 `/results/{id}` 連結，再依既有條件附上 Notion 連結。未設定根網址、網址不合法或 ID 缺少／不合法時只略過知識庫連結。未設定 webhook 會略過整個通知；HTTP error 或 request exception 回傳 `False`，pipeline 不把這個回傳值當作摘要失敗。
+`SHOWCASE_BASE_URL` 設定有效且摘要 ID 可解析為 UUID 時，Discord 訊息會在 YouTube URL 後加入知識庫 `/results/{id}` 連結，不再附加 Notion 網址。未設定根網址、網址不合法或 ID 缺少／不合法時只略過知識庫連結。未設定 webhook 會略過整個通知；HTTP error 或 request exception 回傳 `False`，pipeline 不把這個回傳值當作摘要失敗。
 
 Showcase 同樣用 Notion page ID 開啟摘要詳細頁；ID 契約見[Notion 資料整合與 Showcase 邊界](../integrations/notion-and-showcase.md)，設定與重新載入環境的方式見[設定、執行與部署](../operations/configuration-and-deployment.md)。
 

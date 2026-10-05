@@ -3,9 +3,6 @@ type: operations-guide
 title: 設定、執行與部署
 description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topology、診斷與秘密管理。
 tags: [operations, configuration, docker, deployment]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-04T12:21:01.480Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -51,7 +48,10 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-04T12:21:01.480Z" }
+generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-05T12:54:12.705Z
 ---
 
 # 設定、執行與部署
@@ -94,9 +94,9 @@ SHOWCASE_BASE_URL=https://knowledge.example.com
 
 填網站根網址，不包含 `/results`；預設未設定，不會自動連到任何特定部署。通知使用摘要的 `notion_page_id`，清除根網址前後空白與尾端斜線，將合法 UUID 正規化後產生 `/results/{id}`。只接受有 host 的 HTTP/HTTPS URL；內嵌帳密、query、fragment、空白或無效 port 會讓新連結被略過。缺少或無效摘要 ID（包括測試模式的模擬 ID）也只略過知識庫連結。
 
-YouTube 與原有條件式 Notion 連結保持原有行為；知識庫連結不要求 `NOTION_URL`。Discord request 仍有 10 秒預設 timeout；HTTP 錯誤或 request exception 會記錄並回傳 `False`。
+通知保留完成標題與 YouTube 網址，僅選擇性附加知識庫摘要入口，不再附加 Notion 網址；知識庫連結不要求 `NOTION_URL`。Discord request 仍有 10 秒預設 timeout；HTTP 錯誤或 request exception 會記錄並回傳 `False`。
 
-設定變更後重新載入執行摘要的 process。Compose 的 services 共用 env_file，需重新建立 container 才載入更新值，例如 `docker compose up -d --force-recreate processing-worker`；單純 restart 不會重新載入 env_file。清空新設定並重新載入環境即可恢復原通知格式。部署網址保留在不受 Git 追蹤的 `.env` 或環境變數，測試與文件僅使用測試網域。
+設定變更後重新載入執行摘要的 process。Compose 的 services 共用 env_file，需重新建立 container 才載入更新值，例如 `docker compose up -d --force-recreate processing-worker`；單純 restart 不會重新載入 env_file。清空新設定並重新載入環境即可讓通知只顯示完成標題與影片網址。部署網址保留在不受 Git 追蹤的 `.env` 或環境變數，測試與文件僅使用測試網域。
 
 ### 本機 Data 清理
 
@@ -117,6 +117,8 @@ Notion token/database id、status property、completed value，以及選用同�
 跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 
 `npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它讀取 `apps/showcase/.env`，且不覆寫既有 process environment；`make showcase` 則會 export 該檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`。執行時另可用 `/api/showcase/diagnostics` 檢查解析，或 `/api/showcase/health` 實際驗證 Notion 存取。
+
+Showcase 對每次 Notion HTTP 請求設定固定 5 秒 timeout，包含 schema、query、page 與每次 blocks 分頁／子內容讀取；整篇文章的累計時間仍可能超過 5 秒。後端不自動重試；已有成功快取時保留舊資料，沒有快取時回傳 502，後續請求可重新嘗試。詳細頁的三種初始讀取會平行開始，見[Notion 資料整合](../integrations/notion-and-showcase.md)。
 
 ## Betterleaks 掃描設定
 
