@@ -256,13 +256,6 @@ onBeforeUnmount(() => {
       <p class="state-panel__body">
         {{ errorMessage }}
       </p>
-      <p class="state-panel__body">
-        可直接檢查
-        <a href="/api/showcase/diagnostics" target="_blank" rel="noreferrer">/api/showcase/diagnostics</a>
-        確認 server 端實際讀到哪些 env，或打開
-        <a href="/api/showcase/health" target="_blank" rel="noreferrer">/api/showcase/health</a>
-        直接驗證 Notion 查詢。
-      </p>
     </section>
 
     <section v-else-if="!pending && items.length === 0" class="state-panel">

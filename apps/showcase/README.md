@@ -162,21 +162,17 @@ YYYY.MM.DD · shortSha
 
 若沒有 commit SHA，頁尾會顯示 `local`，代表目前不是可精準對應部署 commit 的版本。
 
-## Diagnostics
+## 排錯方式
 
-若首頁顯示 `Missing Notion showcase configuration.`，可直接開：
+公開的 `/api/showcase/diagnostics` 與 `/api/showcase/health` 已移除，首頁不再提供診斷連結。
+列表與詳情 API 只回傳一般錯誤訊息，避免暴露內部設定或 Notion 原始錯誤。
 
-```txt
-/api/showcase/diagnostics
-```
+本機可執行 `npm run check-env` 檢查環境變數是否存在；這不代表部署後的 runtimeConfig 正確，也不會驗證 Notion 權限。
+部署後請從部署平台的 server log 排查：
 
-這個端點只會回傳「哪些設定有讀到」，不會洩漏實際 secret 值，適合用來檢查本機或 Vercel 的 env 是否真的進到 Nuxt server。
+- `[showcase] configuration unavailable`：必要設定缺少；log 只包含缺少的設定名稱或存在與否。
+- `[showcase] Notion query failed`：Notion 讀取失敗；log 包含列表／詳情路由與預定義錯誤類型，不含原始回應或 secrets。快取背景更新失敗也會記錄。
 
-若 `diagnostics` 顯示正常，但首頁仍無法載入，可再開：
-
-```txt
-/api/showcase/health
-```
-
-這個端點會直接測試 Notion query，回傳成功筆數或精簡後的錯誤訊息，適合排查 integration 權限、database id、欄位名稱或 API 回應問題。
-若 schema 內找不到 `Status`，系統會先嘗試自動偵測像是 `狀態` / `State` 等 `status` 或 `select` 欄位；仍不符時可用 `NOTION_STATUS_PROPERTY` 與 `NOTION_COMPLETED_STATUS` 明確指定。
+請透過平台設定與 Notion integration 權限檢查問題，不要公開完整設定或原始 Notion 回應。
+若 schema 內找不到 `Status`，系統會先嘗試自動偵測像是 `狀態` / `State` 等 `status` 或 `select` 欄位；
+仍不符時可用 `NOTION_STATUS_PROPERTY` 與 `NOTION_COMPLETED_STATUS` 明確指定。

@@ -10,17 +10,6 @@ export interface ShowcaseConfig {
   cacheTtlSeconds: number;
 }
 
-export interface ShowcaseConfigDiagnostic {
-  runtimeConfig: {
-    notionApiKey: boolean;
-    notionDatabaseId: boolean;
-    statusPropertyName: boolean;
-    completedStatusValue: boolean;
-    showcaseCacheTtlSeconds: number | null;
-  };
-  processEnv: Record<string, boolean>;
-}
-
 interface ShowcaseConfigSource {
   runtimeConfig?: Record<string, unknown>;
   env?: Record<string, string | undefined>;
@@ -70,26 +59,6 @@ function parseCacheTtlSeconds(value: string | number | null | undefined): number
   return DEFAULT_CACHE_TTL_SECONDS;
 }
 
-export function getShowcaseRuntimeSnapshot(
-  runtimeConfig: Record<string, unknown> = {},
-  env: Record<string, string | undefined> = process.env,
-): ShowcaseConfigDiagnostic {
-  return {
-    runtimeConfig: {
-      notionApiKey: readRuntimeString(runtimeConfig.notionApiKey).length > 0,
-      notionDatabaseId: readRuntimeString(runtimeConfig.notionDatabaseId).length > 0,
-      statusPropertyName: readRuntimeString(runtimeConfig.statusPropertyName).length > 0,
-      completedStatusValue: readRuntimeString(runtimeConfig.completedStatusValue).length > 0,
-      showcaseCacheTtlSeconds: readRuntimeNumber(runtimeConfig.showcaseCacheTtlSeconds),
-    },
-    processEnv: Object.fromEntries(
-      Object.values(SHOWCASE_ENV_KEYS)
-        .flat()
-        .map((key) => [key, typeof env[key] === "string" && env[key]!.trim().length > 0]),
-    ),
-  };
-}
-
 export function resolveShowcaseConfig(source: ShowcaseConfigSource = {}): ShowcaseConfig {
   const runtimeConfig = source.runtimeConfig ?? {};
   const env = source.env ?? process.env;
@@ -121,14 +90,10 @@ export function getShowcaseRouteRules(cacheTtlSeconds: number, isProduction: boo
   }
 
   const ttl = parseCacheTtlSeconds(cacheTtlSeconds);
-  const headers = {
-    "cache-control": getShowcaseCacheControlValue(ttl),
-  };
 
   return {
     [SHOWCASE_RESULTS_ROUTE]: {
       swr: ttl,
-      headers,
     },
   };
 }

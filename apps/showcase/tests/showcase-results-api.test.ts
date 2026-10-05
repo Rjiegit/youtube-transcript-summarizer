@@ -112,4 +112,44 @@ describe("showcase results API cache", () => {
     expect(fallback).toMatchObject({ items: [{ id: "cached-result" }] });
     expect(fetchLatestCompletedResultsMock).toHaveBeenCalledTimes(2);
   });
+  it("does not expose upstream secrets in errors or logs", async () => {
+    runtimeConfigMock.mockReturnValue({
+      notionApiKey: "private-key", notionDatabaseId: "private-database", showcaseCacheTtlSeconds: 600,
+    });
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      fetchLatestCompletedResultsMock.mockRejectedValue(new Error("private-key private-database raw-notion-body"));
+      const handler = (await import("../server/api/showcase/results.get")).default;
+      await expect(handler(createEvent())).rejects.toMatchObject({
+        statusCode: 502, statusMessage: "Failed to load showcase results.",
+      });
+      expect(setHeaderMock).toHaveBeenLastCalledWith(expect.anything(), "Cache-Control", "no-store");
+      expect(log).toHaveBeenCalled();
+      const output = JSON.stringify(log.mock.calls);
+      for (const secret of ["private-key", "private-database", "raw-notion-body"]) {
+        expect(output).not.toContain(secret);
+      }
+    } finally {
+      log.mockRestore();
+    }
+  });
+  it("keeps missing configuration private and uncacheable", async () => {
+    for (const key of ["NOTION_API_KEY", "NUXT_NOTION_API_KEY", "NOTION_DATABASE_ID", "NUXT_NOTION_DATABASE_ID"]) {
+      delete process.env[key];
+    }
+    runtimeConfigMock.mockReturnValue({});
+    const log = vi.spyOn(console, "error").mockImplementation(() => {});
+    try {
+      const handler = (await import("../server/api/showcase/results.get")).default;
+      await expect(handler(createEvent())).rejects.toMatchObject({
+        statusCode: 500, statusMessage: "Showcase service is unavailable.",
+      });
+      expect(setHeaderMock).toHaveBeenLastCalledWith(expect.anything(), "Cache-Control", "no-store");
+      expect(fetchLatestCompletedResultsMock).not.toHaveBeenCalled();
+      expect(log).toHaveBeenCalled();
+    } finally {
+      log.mockRestore();
+    }
+  });
+
 });

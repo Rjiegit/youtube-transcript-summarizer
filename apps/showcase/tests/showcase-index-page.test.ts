@@ -231,6 +231,29 @@ describe("showcase index page", () => {
     expect(wrapper.get('[data-testid="mark-all-read-button"]').attributes("disabled")).toBeDefined();
   });
 
+  it("shows a load error without public diagnostic links", async () => {
+    stubLocalStorage();
+    useFetchMock.mockResolvedValue({
+      data: ref(null),
+      pending: ref(false),
+      error: ref({ statusMessage: "Showcase service is unavailable." }),
+    });
+    const pageModule = await loadPageModule();
+    const TestHost = defineComponent({
+      components: { IndexPage: pageModule.default },
+      template: "<Suspense><IndexPage /></Suspense>",
+    });
+    const wrapper = mount(TestHost, {
+      global: { stubs: { ClientOnly: defineComponent({ template: "<slot />" }), ShowcaseCard: true } },
+    });
+    await flushPromises();
+    expect(wrapper.text()).toContain("目前無法載入展示資料");
+    expect(wrapper.text()).toContain("Showcase service is unavailable.");
+    expect(wrapper.find('a[href="/api/showcase/diagnostics"]').exists()).toBe(false);
+    expect(wrapper.find('a[href="/api/showcase/health"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+
   it("keeps personal sync settings off the public index page", async () => {
     stubLocalStorage();
     useFetchMock.mockResolvedValue({

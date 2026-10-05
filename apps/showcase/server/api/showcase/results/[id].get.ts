@@ -1,5 +1,6 @@
 import { createError, defineEventHandler, setHeader } from "h3";
 
+import { logShowcaseQueryFailure } from "../../../utils/showcase-errors";
 import { fetchShowcaseDetail } from "../../../utils/notion";
 import { createSWRCache } from "../../../utils/swr-cache";
 import type { ShowcaseDetailResult } from "../../../types/showcase";
@@ -35,13 +36,20 @@ export default defineEventHandler(async (event) => {
   const cacheControlValue = getShowcaseCacheControlValue(cacheTtlSeconds);
 
   if (!notionApiKey || !notionDatabaseId) {
+    console.error("[showcase] configuration unavailable", {
+      route: "detail",
+      notionApiKey: Boolean(notionApiKey),
+      notionDatabaseId: Boolean(notionDatabaseId),
+    });
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({
       statusCode: 500,
-      statusMessage: "Missing Notion showcase configuration.",
+      statusMessage: "Showcase service is unavailable.",
     });
   }
 
   if (!pageId) {
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({
       statusCode: 400,
       statusMessage: "Missing showcase result id.",
@@ -57,17 +65,21 @@ export default defineEventHandler(async (event) => {
         apiKey: notionApiKey,
         databaseId: notionDatabaseId,
         pageId,
+      }).catch((error: unknown) => {
+        logShowcaseQueryFailure("detail", error);
+        throw error;
       }),
     );
-  } catch (error) {
+  } catch {
     const fallback = cache.peek();
     if (fallback) {
       return fallback;
     }
 
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({
       statusCode: 502,
-      statusMessage: error instanceof Error ? error.message : "Failed to load showcase detail.",
+      statusMessage: "Failed to load showcase detail.",
     });
   }
 });

@@ -39,4 +39,4 @@
 PR 內容應包含簡短摘要、相關 issue 或任務連結（若有）、測試證據，以及 UI 變更的畫面截圖。
 
 ## Security & Configuration Tips
-不要提交任何 secret。Notion 存取設定請透過環境變數提供，例如 `NOTION_API_KEY`、`NOTION_DATABASE_ID`，以及選填的 `NOTION_STATUS_PROPERTY`。可使用 `/api/showcase/diagnostics` 與 `/api/showcase/health` 驗證執行時設定是否正確，同時避免暴露實際 secret 值。
+不要提交任何 secret。Notion 存取設定請透過環境變數提供，例如 `NOTION_API_KEY`、`NOTION_DATABASE_ID`，以及選填的 `NOTION_STATUS_PROPERTY`。公開診斷 API 已移除。本機使用 `npm run check-env` 檢查環境變數；部署後透過平台 server log 排錯。對外錯誤使用固定一般訊息，log 不得包含 secrets、完整設定或 Notion 原始回應。

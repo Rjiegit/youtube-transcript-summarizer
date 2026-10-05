@@ -1,12 +1,12 @@
 import { createError, defineEventHandler, getQuery, setHeader } from "h3";
 
+import { logShowcaseQueryFailure } from "../../utils/showcase-errors";
 import { fetchLatestCompletedResults } from "../../utils/notion";
 import { createSWRCache } from "../../utils/swr-cache";
 import type { ShowcaseApiResponse } from "../../../types/showcase";
 import {
   DEFAULT_CACHE_TTL_SECONDS,
   getShowcaseCacheControlValue,
-  getShowcaseRuntimeSnapshot,
   resolveShowcaseConfig,
 } from "../../utils/config";
 let showcaseCache = createSWRCache<ShowcaseApiResponse>({
@@ -47,7 +47,6 @@ export default defineEventHandler(async (event) => {
     statusPropertyName,
     completedStatusValue,
   } = resolveShowcaseConfig({ runtimeConfig });
-  const diagnostic = getShowcaseRuntimeSnapshot(runtimeConfig);
   const cacheControlValue = getShowcaseCacheControlValue(cacheTtlSeconds);
   const cache = getShowcaseCache(cacheTtlSeconds);
 
@@ -59,9 +58,11 @@ export default defineEventHandler(async (event) => {
   ].filter(Boolean);
 
   if (missingEnvVars.length > 0) {
+    console.error("[showcase] configuration unavailable", { route: "results", missingEnvVars });
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({
       statusCode: 500,
-      statusMessage: `Missing Notion showcase configuration: ${missingEnvVars.join(", ")} | ${JSON.stringify(diagnostic)}`,
+      statusMessage: "Showcase service is unavailable.",
     });
   }
 
@@ -73,18 +74,22 @@ export default defineEventHandler(async (event) => {
         cacheTtlSeconds,
         statusPropertyName,
         completedStatusValue,
+      }).catch((error: unknown) => {
+        logShowcaseQueryFailure("results", error);
+        throw error;
       });
 
     return shouldForceRefresh ? await cache.refresh(fetchResults) : await cache.get(fetchResults);
-  } catch (error) {
+  } catch {
     const fallback = cache.peek();
     if (fallback) {
       return fallback;
     }
 
+    setHeader(event, "Cache-Control", "no-store");
     throw createError({
       statusCode: 502,
-      statusMessage: error instanceof Error ? error.message : "Failed to load showcase results.",
+      statusMessage: "Failed to load showcase results.",
     });
   }
 });

@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
-  getShowcaseRuntimeSnapshot,
   resolveShowcaseConfig,
 } from "../server/utils/config";
 
@@ -92,27 +91,6 @@ describe("showcase env resolution", () => {
     expect(resolved.cacheTtlSeconds).toBe(3600);
   });
 
-  it("builds a diagnostic snapshot from the same config sources", () => {
-    process.env.NOTION_API_KEY = "api-key";
-    process.env.NUXT_NOTION_DATABASE_ID = "nuxt-database-id";
-
-    const snapshot = getShowcaseRuntimeSnapshot({
-      notionApiKey: "",
-      notionDatabaseId: "runtime-database-id",
-      showcaseCacheTtlSeconds: 600,
-    }, process.env);
-
-    expect(snapshot.runtimeConfig).toEqual({
-      notionApiKey: false,
-      notionDatabaseId: true,
-      statusPropertyName: false,
-      completedStatusValue: false,
-      showcaseCacheTtlSeconds: 600,
-    });
-    expect(snapshot.processEnv.NOTION_API_KEY).toBe(true);
-    expect(snapshot.processEnv.NUXT_NOTION_DATABASE_ID).toBe(true);
-  });
-
   it("uses SHOWCASE_CACHE_TTL_SECONDS for API route rules without caching the home page", async () => {
     process.env.SHOWCASE_CACHE_TTL_SECONDS = "900";
     process.env.NODE_ENV = "production";
@@ -126,9 +104,7 @@ describe("showcase env resolution", () => {
     expect(config.runtimeConfig.showcaseCacheTtlSeconds).toBe(900);
     expect(config.routeRules["/"]).toBeUndefined();
     expect(config.routeRules["/api/showcase/results"].swr).toBe(900);
-    expect(config.routeRules["/api/showcase/results"].headers["cache-control"]).toBe(
-      "public, s-maxage=900, stale-while-revalidate=900",
-    );
+    expect(config.routeRules["/api/showcase/results"].headers).toBeUndefined();
     expect(config.css).toEqual(["~/assets/css/main.css"]);
   });
 
