@@ -162,6 +162,37 @@ describe("showcase title search", () => {
     expect(title.get("mark").text()).toBe("İ");
   });
 
+  it.each([
+    ["視頻摘要與視頻教學", "视频", ["視頻", "視頻"]],
+    ["视频摘要", "視頻", ["视频"]],
+    ["視频摘要", "视频", ["視频"]],
+    ["頭髮與發展", "发", ["髮", "發"]],
+  ])("uses the same matches for filtering and highlighting %s", async (title, query, matches) => {
+    useFetchMock().data.value.items[0].title = title;
+    const wrapper = await mountIndexPage();
+    const input = wrapper.get('[data-testid="title-search-input"]');
+    await input.setValue(query);
+    // The stub renders both the client list and fallback, so verify both.
+    const titles = wrapper.findAll(".showcase-card__title");
+    expect(titles).toHaveLength(2);
+    for (const rendered of titles) {
+      expect(rendered.text()).toBe(title);
+      expect(rendered.findAll("mark").map((mark) => mark.text())).toEqual(matches);
+    }
+    await input.setValue("");
+    expect(wrapper.findAll(".showcase-card__title")).toHaveLength(4);
+    expect(wrapper.find("mark").exists()).toBe(false);
+  });
+
+  it("refreshes prepared title matches when list data changes", async () => {
+    const wrapper = await mountIndexPage();
+    await wrapper.get('[data-testid="title-search-input"]').setValue("视频");
+    expect(wrapper.text()).toContain("找不到符合的標題");
+    useFetchMock().data.value.items[0].title = "視頻新標題";
+    await wrapper.vm.$nextTick();
+    expect(wrapper.get(".showcase-card__title").get("mark").text()).toBe("視頻");
+  });
+
   it("shows an empty state when no title matches", async () => {
     const wrapper = await mountIndexPage();
 

@@ -14,7 +14,8 @@
   },
   "dependencies": {
     "markdown-it": "^14.2.0",
-    "nuxt": "^3.21.11"
+    "nuxt": "^3.21.11",
+    "opencc-js": "1.4.2"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.2.0",

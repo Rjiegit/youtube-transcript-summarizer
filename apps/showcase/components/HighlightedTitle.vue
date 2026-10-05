@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-import { splitTitleSearch } from "../utils/title-search";
+import { splitTitleSearch, type TitleSearchRange } from "../utils/title-search";
 
-const props = defineProps<{ title: string; query: string }>();
-const parts = computed(() => splitTitleSearch(props.title, props.query));
+const props = defineProps<{ title: string; ranges: readonly TitleSearchRange[] }>();
+const parts = computed(() => splitTitleSearch(props.title, props.ranges));
 </script>
 
 <template>

@@ -6,7 +6,7 @@ import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useAppLoading } from "../composables/useAppLoading";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
-import { normalizeTitleSearch } from "../utils/title-search";
+import { findTitleMatches, normalizeTitleSearch, prepareTitleSearch } from "../utils/title-search";
 import { formatTaipeiDateTime } from "../utils/datetime";
 import {
   dedupeShowcaseResults,
@@ -55,12 +55,20 @@ const { finish: finishLoading, start: startLoading } = useAppLoading();
 const titleSearchQuery = ref("");
 const listRenderRevision = ref(0);
 const normalizedTitleSearchQuery = computed(() => normalizeTitleSearch(titleSearchQuery.value));
+const searchableItems = computed(() => dedupedItems.value.map((item) => ({
+  item,
+  search: prepareTitleSearch(item.title),
+})));
+const titleMatchesById = computed(() => new Map(searchableItems.value.map(({ item, search }) => [
+  item.id,
+  findTitleMatches(search, normalizedTitleSearchQuery.value),
+])));
 const filteredItems = computed(() => {
   if (!normalizedTitleSearchQuery.value) {
     return dedupedItems.value;
   }
 
-  return dedupedItems.value.filter((item) => item.title.toLowerCase().includes(normalizedTitleSearchQuery.value));
+  return dedupedItems.value.filter((item) => (titleMatchesById.value.get(item.id)?.length ?? 0) > 0);
 });
 const displayItems = computed(() =>
   sortUnreadResultsFirst(filteredItems.value, (item) => isResultRead(item, readMap.value)));
@@ -293,7 +301,7 @@ onBeforeUnmount(() => {
           v-for="item in displayItems"
           :key="item.id"
           :item="item"
-          :search-query="titleSearchQuery"
+          :title-matches="titleMatchesById.get(item.id) ?? []"
           :is-read="isResultRead(item, readMap)"
           @mark-read="markManyAsRead(getResultReadKeys(item))"
         />
@@ -312,7 +320,7 @@ onBeforeUnmount(() => {
                 <span v-if="item.processing_duration != null">{{ item.processing_duration.toFixed(1) }}s</span>
               </div>
               <div class="showcase-card__title-row">
-                <h2 class="showcase-card__title"><HighlightedTitle :title="item.title" :query="titleSearchQuery" /></h2>
+                <h2 class="showcase-card__title"><HighlightedTitle :title="item.title" :ranges="titleMatchesById.get(item.id) ?? []" /></h2>
               </div>
               <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
             </a>
