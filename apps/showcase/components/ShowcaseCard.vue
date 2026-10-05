@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+import HighlightedTitle from "./HighlightedTitle.vue";
+
 import type { ShowcaseResult } from "../types/showcase";
 import { formatTaipeiDate } from "../utils/datetime";
 
 const props = withDefaults(defineProps<{
   item: ShowcaseResult;
   isRead?: boolean;
+  searchQuery?: string;
 }>(), {
   isRead: false,
+  searchQuery: "",
 });
 
 const emit = defineEmits<{
@@ -51,7 +55,7 @@ const durationLabel = computed(() => {
           <span v-if="durationLabel">{{ durationLabel }}</span>
         </div>
         <div class="showcase-card__title-row">
-          <h2 class="showcase-card__title">{{ item.title }}</h2>
+          <h2 class="showcase-card__title"><HighlightedTitle :title="item.title" :query="searchQuery" /></h2>
           <span
             class="showcase-card__read-badge"
             :class="{ 'showcase-card__read-badge--visible': isRead }"

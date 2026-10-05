@@ -714,6 +714,11 @@ a {
   font-size: 0.7rem;
 }
 
+.showcase-title-highlight {
+  background-color: #ffeb3b;
+  color: inherit;
+}
+
 .showcase-card__title {
   margin: 16px 0 12px;
   font-size: 1.28rem;

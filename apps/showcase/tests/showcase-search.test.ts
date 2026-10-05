@@ -139,6 +139,29 @@ describe("showcase title search", () => {
     expect(wrapper.text()).toContain("OpenAI Whisper Pipeline");
   });
 
+  it("highlights matching text and removes highlights when cleared", async () => {
+    const wrapper = await mountIndexPage();
+    const input = wrapper.get('[data-testid="title-search-input"]');
+    await input.setValue("  whisper  ");
+    const titles = wrapper.findAll(".showcase-card__title");
+    expect(titles.length).toBeGreaterThan(0);
+    for (const title of titles) {
+      expect(title.get("mark").text()).toBe("Whisper");
+      expect(title.text()).toBe("OpenAI Whisper Pipeline");
+    }
+    await input.setValue("");
+    expect(wrapper.find("mark").exists()).toBe(false);
+  });
+
+  it("highlights Unicode matches included by the title filter", async () => {
+    useFetchMock().data.value.items[0].title = "İstanbul";
+    const wrapper = await mountIndexPage();
+    await wrapper.get('[data-testid="title-search-input"]').setValue("i");
+    const title = wrapper.get(".showcase-card__title");
+    expect(title.text()).toBe("İstanbul");
+    expect(title.get("mark").text()).toBe("İ");
+  });
+
   it("shows an empty state when no title matches", async () => {
     const wrapper = await mountIndexPage();
 

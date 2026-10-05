@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, onActivated, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
+import HighlightedTitle from "../components/HighlightedTitle.vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useAppLoading } from "../composables/useAppLoading";
 import { useReadResults } from "../composables/useReadResults";
 import type { ShowcaseApiResponse } from "../types/showcase";
+import { normalizeTitleSearch } from "../utils/title-search";
 import { formatTaipeiDateTime } from "../utils/datetime";
 import {
   dedupeShowcaseResults,
@@ -52,7 +54,7 @@ const { isReady, markManyAsRead, readMap, refreshReadState } = useReadResults();
 const { finish: finishLoading, start: startLoading } = useAppLoading();
 const titleSearchQuery = ref("");
 const listRenderRevision = ref(0);
-const normalizedTitleSearchQuery = computed(() => titleSearchQuery.value.trim().toLowerCase());
+const normalizedTitleSearchQuery = computed(() => normalizeTitleSearch(titleSearchQuery.value));
 const filteredItems = computed(() => {
   if (!normalizedTitleSearchQuery.value) {
     return dedupedItems.value;
@@ -291,6 +293,7 @@ onBeforeUnmount(() => {
           v-for="item in displayItems"
           :key="item.id"
           :item="item"
+          :search-query="titleSearchQuery"
           :is-read="isResultRead(item, readMap)"
           @mark-read="markManyAsRead(getResultReadKeys(item))"
         />
@@ -309,7 +312,7 @@ onBeforeUnmount(() => {
                 <span v-if="item.processing_duration != null">{{ item.processing_duration.toFixed(1) }}s</span>
               </div>
               <div class="showcase-card__title-row">
-                <h2 class="showcase-card__title">{{ item.title }}</h2>
+                <h2 class="showcase-card__title"><HighlightedTitle :title="item.title" :query="titleSearchQuery" /></h2>
               </div>
               <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
             </a>
