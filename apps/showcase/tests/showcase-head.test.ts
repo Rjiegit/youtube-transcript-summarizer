@@ -1,7 +1,7 @@
-import { defineComponent, h, Suspense } from "vue";
+import { defineComponent, h, reactive, ref, Suspense } from "vue";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
-import { ref } from "vue";
+import { mountAsyncPage } from "../test-data/mount-async-page";
 
 const useFetchMock = vi.fn();
 const useRouteMock = vi.fn();
@@ -63,6 +63,7 @@ describe("showcase head metadata", () => {
     });
     useRuntimeConfigMock.mockReturnValue({
       public: {
+        siteUrl: "https://video-knowledge.hellojie.me",
         buildDate: "2026.06.26",
         commitSha: "abc123456789",
       },
@@ -242,7 +243,7 @@ describe("showcase head metadata", () => {
     });
 
     const pageModule = await import("../pages/results/[id].vue?t=" + Date.now());
-    mount(pageModule.default, {
+    await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: true,
@@ -250,19 +251,19 @@ describe("showcase head metadata", () => {
       },
     });
 
-    const lastCall = useHeadMock.mock.calls.at(-1)?.[0];
+    const lastCall = useHeadMock.mock.calls.at(-1)?.[0]();
     expect(lastCall?.title?.value ?? lastCall?.title).toBe("Second result");
     expect(lastCall?.meta).toEqual(expect.arrayContaining([
       expect.objectContaining({ name: "description", content: "Summary" }),
       expect.objectContaining({ property: "og:title", content: "Second result" }),
       expect.objectContaining({ property: "og:description", content: "Summary" }),
-      expect.objectContaining({ name: "twitter:card", content: "summary" }),
+      expect.objectContaining({ name: "twitter:card", content: "summary_large_image" }),
       expect.objectContaining({ name: "twitter:title", content: "Second result" }),
       expect.objectContaining({ name: "twitter:description", content: "Summary" }),
     ]));
-    expect(lastCall?.meta).not.toEqual(expect.arrayContaining([
-      expect.objectContaining({ property: "og:image" }),
-      expect.objectContaining({ name: "twitter:image" }),
+    expect(lastCall?.meta).toEqual(expect.arrayContaining([
+      expect.objectContaining({ property: "og:image", content: "https://video-knowledge.hellojie.me/share-preview.png" }),
+      expect.objectContaining({ name: "twitter:image", content: "https://video-knowledge.hellojie.me/share-preview.png" }),
     ]));
   });
 
@@ -285,7 +286,7 @@ describe("showcase head metadata", () => {
     });
 
     const pageModule = await import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
-    mount(pageModule.default, {
+    await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: true,
@@ -293,7 +294,7 @@ describe("showcase head metadata", () => {
       },
     });
 
-    const lastCall = useHeadMock.mock.calls.at(-1)?.[0];
+    const lastCall = useHeadMock.mock.calls.at(-1)?.[0]();
     expect(lastCall?.meta).toEqual(expect.arrayContaining([
       expect.objectContaining({
         name: "description",
@@ -325,7 +326,7 @@ describe("showcase head metadata", () => {
     });
 
     const pageModule = await import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
-    mount(pageModule.default, {
+    await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: true,
@@ -333,11 +334,53 @@ describe("showcase head metadata", () => {
       },
     });
 
-    const lastCall = useHeadMock.mock.calls.at(-1)?.[0];
+    const lastCall = useHeadMock.mock.calls.at(-1)?.[0]();
     expect(lastCall?.meta).toEqual(expect.arrayContaining([
       expect.objectContaining({ name: "description", content: DEFAULT_DESCRIPTION }),
       expect.objectContaining({ property: "og:description", content: DEFAULT_DESCRIPTION }),
       expect.objectContaining({ name: "twitter:description", content: DEFAULT_DESCRIPTION }),
     ]));
+  });
+
+  it("waits for initial data before registering article metadata", async () => {
+    useRouteMock.mockReturnValue({ params: { id: "delayed-result" } });
+    let resolveFetch!: (value: unknown) => void;
+    useFetchMock.mockReturnValue(new Promise((resolve) => { resolveFetch = resolve; }));
+    const pageModule = await import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
+    const wrapper = await mountAsyncPage(pageModule.default, { global: { stubs: { NuxtLink: true } } });
+    expect(useHeadMock).not.toHaveBeenCalled();
+    resolveFetch({
+      data: ref({ id: "delayed-result", title: "Delayed title", summary: "Delayed summary", content: "" }),
+      pending: ref(false), error: ref(null),
+    });
+    await flushPromises();
+    const head = useHeadMock.mock.calls.at(-1)?.[0]();
+    expect(head.title).toBe("Delayed title");
+    expect(head.meta).toContainEqual({ property: "og:description", content: "Delayed summary" });
+    wrapper.unmount();
+  });
+
+  it("updates metadata and clean URLs when the current article changes", async () => {
+    const route = reactive({ params: { id: "first" }, fullPath: "/results/first?og_test=1#fragment" });
+    useRouteMock.mockReturnValue(route);
+    const data = ref({ id: "first", title: "First", summary: "First summary", content: "" });
+    useFetchMock.mockReturnValue({ data, pending: ref(false), error: ref(null) });
+    const pageModule = await import("../pages/results/[id].vue?t=" + Date.now() + Math.random());
+    const wrapper = await mountAsyncPage(pageModule.default, { global: { stubs: { NuxtLink: true } } });
+    const getHead = useHeadMock.mock.calls.at(-1)?.[0];
+    expect(getHead().title).toBe("First");
+    route.params.id = "second";
+    data.value = { id: "second", title: "Second", summary: "Second summary", content: "" };
+    await wrapper.vm.$nextTick();
+    expect(getHead().title).toBe("Second");
+    expect(getHead().meta).toContainEqual({ property: "og:description", content: "Second summary" });
+    expect(getHead().meta).toContainEqual({
+      property: "og:url", content: "https://video-knowledge.hellojie.me/results/second",
+    });
+    expect(getHead().link).toContainEqual({
+      rel: "canonical", href: "https://video-knowledge.hellojie.me/results/second",
+    });
+    expect(useFetchMock.mock.calls[0][0]()).toBe("/api/showcase/results/second");
+    wrapper.unmount();
   });
 });

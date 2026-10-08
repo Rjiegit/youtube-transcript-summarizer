@@ -9,7 +9,19 @@ npm install
 npm run dev
 npm run test
 npm run build
+npm run test:ssr
 ```
+
+## 分享預覽
+
+文章頁 `/results/{id}` 會在 SSR 等待資料後輸出文章標題、摘要、Open Graph / Twitter metadata 與 canonical URL，不需要 crawler 執行 JavaScript。所有文章共用 `public/share-preview.png`（1200 × 630 PNG）；圖片與 metadata URL 使用同一個公開網站 origin。
+
+- `NUXT_PUBLIC_SITE_URL`：選填，預設 `https://video-knowledge.hellojie.me`。Preview deployment 若要讓分享預覽指向該版本，請設定成可公開存取的 preview HTTPS origin。
+- 設定只使用 HTTPS origin，忽略 path、query 與 fragment；空白、無效 URL、HTTP URL 或包含帳密的 URL 會回退正式網站。
+- 未設定 preview origin 時，canonical 與圖片仍指向正式網站；本機 SSR 測試會另外 GET 本機圖片，確認 build 內的實際資產。
+- 上游讀取失敗且無成功快取時，SSR 回傳一般 5xx 錯誤並設定 `Cache-Control: no-store`。
+
+`npm run test:ssr` 需先完成 `npm run build`，會啟動本機 production server，以延遲 Notion fixture 檢查原始 HTML、各 crawler UA、圖片 GET 與 502/no-store。測試使用假憑證，攔截外部請求，不需要 Notion 帳號；CI 在 build 後自動執行。
 
 ## 標題搜尋
 

@@ -7,14 +7,26 @@ import { useReadResults } from "../../composables/useReadResults";
 import type { ShowcaseDetailResult } from "../../types/showcase";
 import { formatTaipeiDateTime } from "../../utils/datetime";
 import { getResultReadKey } from "../../utils/showcase";
+import { resolveSiteUrl } from "../../utils/site-url";
 
 const route = useRoute();
-const resultId = String(route.params.id || "");
+const resultId = computed(() => String(route.params.id || ""));
+const siteUrl = resolveSiteUrl(useRuntimeConfig().public.siteUrl);
+const pageUrl = computed(() => `${siteUrl}/results/${encodeURIComponent(resultId.value)}`);
+const shareImageUrl = `${siteUrl}/share-preview.png`;
 
-const { data, error, pending } = useFetch<ShowcaseDetailResult>(`/api/showcase/results/${resultId}`, {
-  server: true,
-  default: () => null,
-});
+const { data, error, pending } = await useFetch<ShowcaseDetailResult>(
+  () => `/api/showcase/results/${encodeURIComponent(resultId.value)}`,
+  { server: true, default: () => null },
+);
+
+// SSR errors must not become successful, cacheable article responses.
+if (import.meta.server && error.value) {
+  throw createError({
+    statusCode: error.value.statusCode || 502,
+    statusMessage: "Failed to load showcase detail.",
+  });
+}
 
 const item = computed<ShowcaseDetailResult | null>(() => data.value ?? null);
 const { markManyAsRead } = useReadResults();
@@ -111,18 +123,26 @@ function stripMarkdownSyntax(value: string): string {
 
 const pageDescription = computed(() => compactMetaDescription(item.value?.summary || item.value?.content));
 
-useHead({
-  title: pageTitle,
+useHead(() => ({
+  title: pageTitle.value,
+  link: [{ rel: "canonical", href: pageUrl.value }],
   meta: [
     { name: "description", content: pageDescription.value },
     { property: "og:title", content: pageTitle.value },
     { property: "og:description", content: pageDescription.value },
     { property: "og:type", content: "article" },
-    { name: "twitter:card", content: "summary" },
+    { property: "og:url", content: pageUrl.value },
+    { property: "og:image", content: shareImageUrl },
+    { property: "og:image:type", content: "image/png" },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: "深藍色背景上的青綠色播放圖示" },
+    { name: "twitter:card", content: "summary_large_image" },
+    { name: "twitter:image", content: shareImageUrl },
     { name: "twitter:title", content: pageTitle.value },
     { name: "twitter:description", content: pageDescription.value },
   ],
-});
+}));
 
 const createdAtLabel = computed(() => {
   return formatTaipeiDateTime(item.value?.created_at);

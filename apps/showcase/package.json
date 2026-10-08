@@ -10,7 +10,8 @@
     "build": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt build && node ./scripts/ensure-nuxt-internal-paths.mjs",
     "preview": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt preview",
     "test": "vitest run",
-    "check-env": "node ./scripts/check-env.mjs"
+    "check-env": "node ./scripts/check-env.mjs",
+    "test:ssr": "node --test scripts/test-showcase-ssr.mjs"
   },
   "dependencies": {
     "markdown-it": "^14.2.0",

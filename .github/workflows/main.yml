@@ -64,6 +64,9 @@ jobs:
     - name: Build
       run: npm --prefix apps/showcase run build
 
+    - name: Verify production SSR metadata
+      run: npm --prefix apps/showcase run test:ssr
+
   browser-extension:
     runs-on: ubuntu-latest
 

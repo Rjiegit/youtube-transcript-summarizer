@@ -1,7 +1,7 @@
-import { mount } from "@vue/test-utils";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ref } from "vue";
 
+import { mountAsyncPage } from "../test-data/mount-async-page";
 import type { ShowcaseDetailResult } from "../types/showcase";
 
 const useFetchMock = vi.fn();
@@ -25,6 +25,7 @@ vi.mock("../composables/useReadResults", () => ({
 vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useRoute", useRouteMock);
 vi.stubGlobal("useHead", vi.fn());
+vi.stubGlobal("useRuntimeConfig", () => ({ public: { siteUrl: "https://video-knowledge.hellojie.me" } }));
 vi.stubGlobal("createError", (input: { statusCode: number; statusMessage: string }) => {
   const error = new Error(input.statusMessage);
   return Object.assign(error, input);
@@ -97,7 +98,7 @@ describe("Showcase detail page", () => {
     });
 
     const pageModule = await loadPageModule();
-    const wrapper = mount(pageModule.default, {
+    const wrapper = await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: {
@@ -139,7 +140,7 @@ describe("Showcase detail page", () => {
     });
 
     const pageModule = await loadPageModule();
-    const wrapper = mount(pageModule.default, {
+    const wrapper = await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: {
@@ -174,7 +175,7 @@ describe("Showcase detail page", () => {
     });
 
     const pageModule = await loadPageModule();
-    const wrapper = mount(pageModule.default, {
+    const wrapper = await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: {
@@ -201,7 +202,7 @@ describe("Showcase detail page", () => {
     });
 
     const pageModule = await loadPageModule();
-    const wrapper = mount(pageModule.default, {
+    const wrapper = await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: true,
@@ -230,7 +231,7 @@ describe("Showcase detail page", () => {
     });
 
     const pageModule = await loadPageModule();
-    mount(pageModule.default, {
+    await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: true,
@@ -256,7 +257,7 @@ describe("Showcase detail page", () => {
     });
 
     const pageModule = await loadPageModule();
-    const wrapper = mount(pageModule.default, {
+    const wrapper = await mountAsyncPage(pageModule.default, {
       global: {
         stubs: {
           NuxtLink: true,
@@ -286,7 +287,7 @@ describe("Showcase detail page", () => {
     const pageModule = await loadPageModule();
 
     try {
-      mount(pageModule.default, {
+      await mountAsyncPage(pageModule.default, {
         global: {
           stubs: {
             NuxtLink: true,

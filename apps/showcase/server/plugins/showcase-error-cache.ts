@@ -9,7 +9,7 @@ export default defineNitroPlugin((nitroApp) => {
     }
     const path = getRequestURL(event).pathname;
     if (
-      (path === "/api/showcase/results" || path.startsWith("/api/showcase/results/"))
+      (path === "/api/showcase/results" || path.startsWith("/api/showcase/results/") || path.startsWith("/results/"))
       && getResponseStatus(event) >= 400
     ) {
       setHeader(event, "Cache-Control", "no-store");

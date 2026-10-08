@@ -2,6 +2,7 @@ import {
   getShowcaseRouteRules,
   resolveShowcaseConfig,
 } from "./server/utils/config";
+import { resolveSiteUrl } from "./utils/site-url";
 import { resolveReadSyncConfig } from "./server/utils/read-sync-config";
 
 const showcaseConfig = resolveShowcaseConfig({ env: process.env });
@@ -54,6 +55,7 @@ export default defineNuxtConfig({
     readStateSyncSpaceId: readSyncConfig.spaceId,
     readStateSyncTtlSeconds: readSyncConfig.ttlSeconds,
     public: {
+      siteUrl: resolveSiteUrl(process.env.NUXT_PUBLIC_SITE_URL),
       buildDate,
       commitSha,
     },

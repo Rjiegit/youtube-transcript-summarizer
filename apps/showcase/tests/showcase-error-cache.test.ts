@@ -13,6 +13,10 @@ describe("showcase final error cache policy", () => {
     ["/api/showcase/results", 500, true],
     ["/api/showcase/results/page-id", 502, true],
     ["/api/showcase/results", 200, false],
+    ["/results/page-id", 502, true],
+    ["/results/page-id", 404, true],
+    ["/results/page-id", 200, false],
+    ["/results-other", 500, false],
     ["/api/read-state", 500, false],
     ["/api/showcase/results-other", 500, false],
   ])("applies no-store to %s with status %s: %s", async (pathname, status, expected) => {
