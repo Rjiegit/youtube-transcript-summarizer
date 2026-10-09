@@ -5,7 +5,7 @@
   "asOf": "2026-10-09T09:44:10Z",
   "timezone": "Asia/Taipei",
   "weekConvention": "sunday-saturday",
-  "dateBasis": "notion-created-time",
+  "dateBasis": "record-created-time",
   "dedupPolicy": "within-week-source",
   "uniqueSourceCount": 421,
   "categories": [

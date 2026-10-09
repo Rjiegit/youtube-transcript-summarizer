@@ -13,7 +13,7 @@ async function fixture(overrides = {}) {
   directory = await mkdtemp(join(tmpdir(), "weekly-insights-test-"));
   const series = {
     schemaVersion: 1, analysisVersion: "topic-v1", timezone: "Asia/Taipei", weekConvention: "sunday-saturday",
-    dateBasis: "notion-created-time", dedupPolicy: "within-week-source", collectionStart: "2026-09-01",
+    dateBasis: "record-created-time", dedupPolicy: "within-week-source", collectionStart: "2026-09-01",
     asOf: "2026-10-09T09:44:10Z", uniqueSourceCount: 1, reportStarts: ["2026-09-06"],
     categories: [{ id: "agent-engineering", label: "Agent 工程" }],
   };

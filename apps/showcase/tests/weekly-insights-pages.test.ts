@@ -17,7 +17,7 @@ const week = (start: string, overrides = {}): WeeklyInsight => ({
 });
 const series: InsightListResponse["series"] = {
   collectionStart: "2026-09-01", asOf: "2026-10-09T09:44:10Z", timezone: "Asia/Taipei",
-  weekConvention: "sunday-saturday", dateBasis: "notion-created-time", dedupPolicy: "within-week-source",
+  weekConvention: "sunday-saturday", dedupPolicy: "within-week-source",
   analysisVersion: "topic-v1-sunday", uniqueSourceCount: 30, categories, overview: "## 整體摘要\n\n收錄題材有變化。",
 };
 const items = [

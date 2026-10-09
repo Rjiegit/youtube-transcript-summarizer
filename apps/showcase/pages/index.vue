@@ -261,7 +261,7 @@ onBeforeUnmount(() => {
 
     <section v-else-if="!pending && items.length === 0" class="state-panel">
       <p class="state-panel__title">還沒有可展示的結果</p>
-      <p class="state-panel__body">Notion database 目前沒有 `Completed` 項目。</p>
+      <p class="state-panel__body">目前沒有可展示的資料，請稍後再回來查看。</p>
     </section>
 
     <section v-else-if="hasTitleSearchQuery && displayItems.length === 0" class="state-panel">

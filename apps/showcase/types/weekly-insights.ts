@@ -33,7 +33,6 @@ export interface InsightSeries {
   asOf: string;
   timezone: string;
   weekConvention: string;
-  dateBasis: string;
   dedupPolicy: string;
   analysisVersion: string;
   uniqueSourceCount: number | null;

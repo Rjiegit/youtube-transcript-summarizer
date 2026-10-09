@@ -103,7 +103,7 @@ useHead({
         <div v-if="visibleWeeks.length" class="insight-week-grid"><WeeklyInsightCard v-for="week in visibleWeeks" :key="week.start" :week="week" :categories="series?.categories ?? []" /></div>
         <p v-else class="state-panel">沒有符合日期的週報，請調整篩選。</p>
       </section>
-      <details class="insight-method"><summary>資料說明與更新方式</summary><p>每週從週日到週六，日期使用台灣時間的 Notion 建立時間。資料從 9/1 起，首週缺少 8/30、8/31；最後一週以查詢時間為準。</p><p>同週同一來源只計一次，跨週再次收錄仍計入該週。占比反映個人收錄題材，不能直接代表市場或產業趨勢。每週回顧經整理後更新，僅展示部分代表來源。</p></details>
+      <details class="insight-method"><summary>資料說明與更新方式</summary><p>每週從週日到週六，日期依資料收錄時間並按台灣時間分週。資料從 9/1 起，首週缺少 8/30、8/31；最後一週以查詢時間為準。</p><p>同週同一來源只計一次，跨週再次收錄仍計入該週。占比反映個人收錄題材，不能直接代表市場或產業趨勢。每週回顧經整理後更新，僅展示部分代表來源。</p></details>
     </template>
   </main>
 </template>

@@ -34,7 +34,7 @@ export async function loadInsightContent(directory = join(getAppRoot(), "content
   const raw = JSON.parse(await readFile(join(directory, "series.json"), "utf8"));
   requireValue(raw.schemaVersion === 1, "unsupported schema");
   requireValue(raw.timezone === "Asia/Taipei" && raw.weekConvention === "sunday-saturday", "invalid calendar");
-  requireValue(raw.dateBasis === "notion-created-time" && raw.dedupPolicy === "within-week-source", "invalid analysis policy");
+  requireValue(raw.dateBasis === "record-created-time" && raw.dedupPolicy === "within-week-source", "invalid analysis policy");
   date(raw.collectionStart);
   timestamp(raw.asOf);
   text(raw.analysisVersion, "analysis version");
@@ -108,7 +108,7 @@ export async function loadInsightContent(directory = join(getAppRoot(), "content
     "inconsistent series unique count");
   return {
     series: { collectionStart: raw.collectionStart, asOf: raw.asOf, timezone: raw.timezone,
-      weekConvention: raw.weekConvention, dateBasis: raw.dateBasis, dedupPolicy: raw.dedupPolicy,
+      weekConvention: raw.weekConvention, dedupPolicy: raw.dedupPolicy,
       analysisVersion: raw.analysisVersion, uniqueSourceCount: allPublished ? raw.uniqueSourceCount : null,
       categories, overview: allPublished ? overview : "" },
     weeks,
