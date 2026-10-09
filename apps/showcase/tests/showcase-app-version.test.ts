@@ -3,6 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { reactive, ref } from "vue";
 
 const useRuntimeConfigMock = vi.fn();
+type Navigation = { path: string; query?: Record<string, string>; hash?: string };
+let navigationGuard: (to: Navigation, from: Navigation) => void;
+vi.stubGlobal("useRouter", () => ({ beforeEach: (callback: typeof navigationGuard) => {
+  navigationGuard = callback;
+  return vi.fn();
+} }));
 const loadingHooks = new Map<string, () => void>();
 const route = reactive({ path: "/", fullPath: "/" });
 
@@ -81,7 +87,7 @@ describe("showcase app version footer", () => {
     const wrapper = await mountApp();
 
     expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(false);
-    loadingHooks.get("page:loading:start")?.();
+    navigationGuard({ path: route.path === "/" ? "/insights" : route.path }, { path: "/previous" });
     await wrapper.vm.$nextTick();
 
     const overlay = wrapper.get('[data-testid="app-loading-overlay"]');
@@ -96,7 +102,7 @@ describe("showcase app version footer", () => {
     expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("true");
     expect(wrapper.get('[data-testid="app-content"]').attributes("inert")).toBeDefined();
 
-    vi.advanceTimersByTime(100);
+    vi.advanceTimersByTime(20);
     loadingHooks.get("page:loading:end")?.();
     await wrapper.vm.$nextTick();
 
@@ -105,7 +111,7 @@ describe("showcase app version footer", () => {
     expect(wrapper.get('[data-testid="app-content"]').attributes("aria-busy")).toBe("true");
     expect(wrapper.get('[data-testid="app-content"]').attributes("inert")).toBeDefined();
 
-    vi.advanceTimersByTime(399);
+    vi.advanceTimersByTime(79);
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(true);
 
@@ -122,17 +128,32 @@ describe("showcase app version footer", () => {
     useRuntimeConfigMock.mockReturnValue({ public: {} });
     const wrapper = await mountApp();
 
-    loadingHooks.get("page:loading:start")?.();
-    vi.advanceTimersByTime(100);
+    navigationGuard({ path: route.path === "/" ? "/insights" : route.path }, { path: "/previous" });
+    vi.advanceTimersByTime(10);
     loadingHooks.get("page:loading:end")?.();
-    vi.advanceTimersByTime(200);
-    loadingHooks.get("page:loading:start")?.();
+    await wrapper.vm.$nextTick();
+    vi.advanceTimersByTime(20);
+    navigationGuard({ path: route.path === "/" ? "/insights" : route.path }, { path: "/previous" });
     await wrapper.vm.$nextTick();
 
-    vi.advanceTimersByTime(200);
+    vi.advanceTimersByTime(70);
     await wrapper.vm.$nextTick();
     expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(true);
     expect(wrapper.get('[data-testid="app-content"]').classes()).toContain("app-frame__content--loading");
+  });
+
+  it("does not cover same-page category, week or hash navigation", async () => {
+    useRuntimeConfigMock.mockReturnValue({ public: {} });
+    const wrapper = await mountApp();
+    navigationGuard({ path: "/insights", query: { category: "career" } },
+      { path: "/insights", query: { category: "agent-engineering" } });
+    navigationGuard({ path: "/insights", query: { fromWeek: "2026-09-13" } }, { path: "/insights" });
+    navigationGuard({ path: "/insights", hash: "#reviews" }, { path: "/insights" });
+    loadingHooks.get("page:loading:end")?.();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-testid="app-loading-overlay"]').exists()).toBe(false);
+    expect(wrapper.get('[data-testid="app-content"]').attributes("inert")).toBeUndefined();
+    wrapper.unmount();
   });
 
   it("uses the article skeleton on detail routes", async () => {
@@ -142,7 +163,7 @@ describe("showcase app version footer", () => {
     useRuntimeConfigMock.mockReturnValue({ public: {} });
     const wrapper = await mountApp();
 
-    loadingHooks.get("page:loading:start")?.();
+    navigationGuard({ path: route.path === "/" ? "/insights" : route.path }, { path: "/previous" });
     await wrapper.vm.$nextTick();
 
     const overlay = wrapper.get('[data-testid="app-loading-overlay"]');

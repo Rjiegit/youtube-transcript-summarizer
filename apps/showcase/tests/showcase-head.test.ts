@@ -39,6 +39,7 @@ vi.stubGlobal("useFetch", useFetchMock);
 vi.stubGlobal("useRoute", useRouteMock);
 vi.stubGlobal("useHead", useHeadMock);
 vi.stubGlobal("useRuntimeConfig", useRuntimeConfigMock);
+vi.stubGlobal("useRouter", () => ({ beforeEach: vi.fn(() => vi.fn()) }));
 vi.stubGlobal("useNuxtApp", () => ({
   hook: vi.fn(() => vi.fn()),
 }));

@@ -11,7 +11,7 @@ const commitSha = computed(() => normalizeVersionPart(publicConfig.commitSha));
 const shortCommitSha = computed(() => commitSha.value.slice(0, 7) || "local");
 const appVersionLabel = computed(() => `${buildDate.value} · ${shortCommitSha.value}`);
 const { finish: finishLoading, isLoading, start: startLoading } = useAppLoading();
-const minimumLoadingVisibilityMs = 500;
+const minimumLoadingVisibilityMs = 100;
 const isLoadingVisible = ref(false);
 const route = useRoute();
 const loadingSkeletonVariant = computed<"list" | "detail">(() =>
@@ -19,8 +19,9 @@ const loadingSkeletonVariant = computed<"list" | "detail">(() =>
 let loadingVisibleSince = 0;
 let hideLoadingTimer: ReturnType<typeof setTimeout> | null = null;
 const nuxtApp = useNuxtApp();
-const stopLoadingStartHook = nuxtApp.hook("page:loading:start", () => {
-  startLoading("route-navigation");
+const router = useRouter();
+const stopLoadingNavigationGuard = router.beforeEach((to, from) => {
+  if (to.path !== from.path) startLoading("route-navigation");
 });
 const stopLoadingEndHook = nuxtApp.hook("page:loading:end", () => {
   finishLoading("route-navigation");
@@ -73,7 +74,7 @@ watch(isLoading, (isBusy) => {
 
 onBeforeUnmount(() => {
   clearHideLoadingTimer();
-  stopLoadingStartHook();
+  stopLoadingNavigationGuard();
   stopLoadingEndHook();
   finishLoading("route-navigation");
 });
