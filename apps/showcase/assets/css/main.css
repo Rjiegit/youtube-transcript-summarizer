@@ -1625,6 +1625,15 @@ a {
 }
 
 .insight-topic { margin-top: 28px; }
+.insight-topic-tracks { margin-top: 32px; }
+.insight-topic-track { padding: 20px 0; border-top: 1px solid var(--line); }
+.insight-topic-track h4 { font-size: 20px; margin: 0 0 8px; }
+.insight-topic-track p, .insight-topic-track li { line-height: 1.8; }
+.insight-topic-track ol { padding-left: 24px; }
+.insight-topic-track li { margin: 12px 0; }
+.insight-topic-track li a { display: block; }
+.insight-topic-tags { display: flex; flex-wrap: wrap; gap: 10px; }
+.insight-topic-tags a { padding: 6px 12px; border: 1px solid var(--line); border-radius: 20px; }
 .insight-topic h3 { font-size: 22px; }
 .insight-topic dl { margin: 24px 0; }
 .insight-topic dt { color: var(--accent-strong); font-weight: 600; margin-top: 22px; }

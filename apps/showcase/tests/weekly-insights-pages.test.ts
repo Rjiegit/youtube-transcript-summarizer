@@ -23,6 +23,10 @@ const series: InsightListResponse["series"] = {
     { categoryId: "agent-engineering", change: "從工具試用到驗證成果", signal: "可靠交付持續出現", watch: "追蹤失敗處理" },
     { categoryId: "career", change: "從升遷到可轉移能力", signal: "單週集中", watch: "觀察長期能力" },
   ] },
+  topicTracks: [{ id: "delivery", label: "可靠交付", categoryIds: ["agent-engineering"],
+    change: "從工作流程轉向驗證", watch: "確認是否延續", observations: [
+      { week: "2026-09-06", summary: "討論工作流程" }, { week: "2026-09-13", summary: "討論驗證" },
+    ] }],
 };
 const items = [
   week("2026-08-30", { coverageStart: "2026-09-01", endExclusive: "2026-09-06" }),
@@ -49,6 +53,9 @@ describe("weekly insight pages", () => {
     expect(wrapper.findAll(".insight-week-card")).toHaveLength(4);
     expect(wrapper.findAll(".insight-chart__column")).toHaveLength(2);
     expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("從工具試用到驗證成果");
+    expect(wrapper.get('[data-testid="topic-tracks"]').text()).toContain("從工作流程轉向驗證");
+    expect(wrapper.get('[data-testid="topic-tracks"]').find('a[href="/insights/2026-09-06"]').exists()).toBe(true);
+    expect(wrapper.get('[data-testid="category-topic-tags"]').text()).toContain("可靠交付");
     expect(wrapper.get('[data-testid="topic-evidence"]').attributes("open")).toBeUndefined();
     expect(wrapper.text()).toContain("首週部分資料");
     expect(wrapper.text()).toContain("本週進行中");
@@ -60,9 +67,11 @@ describe("weekly insight pages", () => {
     expect(wrapper.get('button[data-category="career"]').attributes("aria-pressed")).toBe("true");
     expect(wrapper.get('[data-testid="topic-evidence"]').find('select[aria-label="起始週"]').exists()).toBe(true);
     expect(route.query.category).toBe("career");
+    expect(wrapper.find('[data-testid="category-topic-tags"]').exists()).toBe(false);
     expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("從升遷到可轉移能力");
     await wrapper.get('select[aria-label="起始週"]').setValue("2026-09-13");
     expect(wrapper.findAll(".insight-week-card")).toHaveLength(2);
+    expect(wrapper.get('[data-testid="topic-tracks"]').text()).toContain("討論工作流程");
     expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("2026-09-06–2026-09-19");
     expect(wrapper.get(".insight-chart").attributes("aria-label")).toContain("職涯");
     wrapper.unmount();

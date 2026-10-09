@@ -49,6 +49,12 @@ const visibleWeeks = computed(() => hasUnmappedLegacyDates.value
   ? filterInsightWeeks(weeks.value, queryValue("from"), queryValue("to"))
   : filterInsightWeeksByRange(weeks.value, fromWeek.value, toWeek.value));
 const selectedTopic = computed(() => series.value?.topicInsights?.items.find((item) => item.categoryId === selectedCategory.value?.id));
+const categoryTopics = computed(() => (series.value?.topicTracks ?? [])
+  .filter((topic) => topic.categoryIds.includes(selectedCategory.value?.id ?? "")));
+const observationRange = (start: string) => {
+  const week = weeks.value.find((item) => item.start === start);
+  return week ? formatWeekRange(week) : start;
+};
 const topicPeriod = computed(() => {
   const insight = series.value?.topicInsights;
   const last = weeks.value.find((week) => week.start === insight?.toWeek);
@@ -102,6 +108,22 @@ useHead({
         <MarkdownContent v-if="series?.overview" :source="series.overview" />
         <p v-else>目前展示已整理的單週回顧，整體分析尚未完成。</p>
         <p v-if="filtered" class="insight-caption">整體觀察描述完整系列；下方統計與週報依所選週次範圍篩選。</p>
+        <div v-if="series?.topicTracks?.length" class="insight-topic-tracks" data-testid="topic-tracks">
+          <h3>話題如何演變</h3>
+          <p class="insight-caption">分類保持穩定，話題標籤隨內容累積更新。以下依已整理的完整週觀察，不隨週次篩選改寫；未列出的週不代表話題消失。</p>
+          <article v-for="topic in series.topicTracks" :key="topic.id" class="insight-topic-track">
+            <h4 :id="`topic-${topic.id}`">{{ topic.label }}</h4>
+            <p class="insight-caption">{{ topic.categoryIds.map(id => series?.categories.find(category => category.id === id)?.label).join(' · ') }}</p>
+            <p>{{ topic.change }}</p>
+            <ol>
+              <li v-for="observation in topic.observations" :key="observation.week">
+                <NuxtLink :to="`/insights/${observation.week}`">{{ observationRange(observation.week) }}</NuxtLink>
+                <span>{{ observation.summary }}</span>
+              </li>
+            </ol>
+            <p><strong>接下來觀察：</strong>{{ topic.watch }}</p>
+          </article>
+        </div>
       </section>
       <section class="insight-panel">
         <div class="insight-section-heading"><p class="hero__eyebrow">Topic Trends</p><h2>主題變化與洞見</h2><p>看看內容如何轉向、哪些訊號值得留意，以及接下來可以觀察什麼。</p></div>
@@ -115,6 +137,9 @@ useHead({
         <article v-if="selectedTopic" class="insight-topic" data-testid="topic-insight">
           <h3>{{ selectedCategory?.label }}</h3>
           <p class="insight-caption">分析期間：{{ topicPeriod }}</p>
+          <div v-if="categoryTopics.length" class="insight-topic-tags" data-testid="category-topic-tags" aria-label="相關話題">
+            <a v-for="topic in categoryTopics" :key="topic.id" :href="`#topic-${topic.id}`">{{ topic.label }}</a>
+          </div>
           <dl>
             <dt>內容轉變</dt><dd>{{ selectedTopic.change }}</dd>
             <dt>值得注意的訊號</dt><dd>{{ selectedTopic.signal }}</dd>

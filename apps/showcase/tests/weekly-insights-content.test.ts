@@ -36,10 +36,36 @@ async function fixture(overrides = {}) {
 }
 
 describe("weekly insight publication content", () => {
+  it("publishes topic tracks with reviewed week evidence and strips private fields", async () => {
+    const series = await fixture();
+    const topicTracks = [{ id: "delivery", label: "可靠交付", categoryIds: ["agent-engineering"],
+      change: "仍需觀察", watch: "追蹤驗證", privateBody: "must not escape",
+      observations: [{ week: "2026-09-06", summary: "討論工作流程", privateBody: "must not escape" }] }];
+    await writeFile(join(directory, "series.json"), JSON.stringify({ ...series, topicTracks }));
+    const result = await loadInsightContent(directory);
+    expect(result.series.topicTracks[0].observations[0].week).toBe("2026-09-06");
+    expect(JSON.stringify(result)).not.toContain("must not escape");
+    await fixture({ published: false });
+    await writeFile(join(directory, "series.json"), JSON.stringify({ ...series, topicTracks }));
+    expect((await loadInsightContent(directory)).series.topicTracks).toEqual([]);
+  });
+
+  it("rejects topic tracks with unknown categories, unsupported weeks or duplicate IDs", async () => {
+    const series = await fixture();
+    const track = { id: "delivery", label: "可靠交付", categoryIds: ["agent-engineering"],
+      change: "仍需觀察", watch: "追蹤驗證", observations: [{ week: "2026-09-06", summary: "工作流程" }] };
+    for (const topicTracks of [[{ ...track, categoryIds: ["unknown"] }],
+      [{ ...track, observations: [{ week: "2026-10-04", summary: "未核對" }] }], [track, track]]) {
+      await writeFile(join(directory, "series.json"), JSON.stringify({ ...series, topicTracks }));
+      await expect(loadInsightContent(directory)).rejects.toThrow(/topic track/);
+    }
+  });
+
   it("loads reviewed content without forwarding unknown private fields", async () => {
     await fixture({ privateBody: "must not escape" });
     const result = await loadInsightContent(directory);
     expect(result.weeks).toHaveLength(1);
+    expect(result.series.topicTracks).toEqual([]);
     expect(result.weeks[0].content).toContain("測試正文");
     expect(JSON.stringify(result)).not.toContain("must not escape");
   });

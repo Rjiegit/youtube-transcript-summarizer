@@ -126,11 +126,36 @@ export async function loadInsightContent(directory = join(getAppRoot(), "content
   }
   requireValue(!allPublished || weeks.reduce((sum, week) => sum + week.metrics.newSourceCount, 0) === raw.uniqueSourceCount,
     "inconsistent series unique count");
+  const trackIds = new Set();
+  let topicTracks = [];
+  if (allPublished && raw.topicTracks !== undefined) {
+    requireValue(Array.isArray(raw.topicTracks), "invalid topic tracks");
+    topicTracks = raw.topicTracks.map((track) => {
+      requireValue(typeof track.id === "string" && /^[a-z]+(?:-[a-z]+)*$/.test(track.id) &&
+        !trackIds.has(track.id), "invalid/duplicate topic track ID");
+      trackIds.add(track.id);
+      requireValue(Array.isArray(track.categoryIds) && track.categoryIds.length > 0 &&
+        new Set(track.categoryIds).size === track.categoryIds.length && track.categoryIds.every((id) => ids.has(id)),
+      "unknown/duplicate topic track category");
+      requireValue(Array.isArray(track.observations) && track.observations.length > 0, "missing topic track evidence");
+      const observedWeeks = new Set();
+      const observations = track.observations.map(({ week, summary }) => {
+        const evidence = weeks.find((item) => item.start === week);
+        requireValue(evidence && evidence.periodState === "closed" && evidence.dataCompleteness === "complete" &&
+          evidence.coverageStart === evidence.start && !observedWeeks.has(week), "invalid topic track evidence week");
+        observedWeeks.add(week);
+        return { week, summary: safeMarkdown(text(summary, "topic track observation")) };
+      }).sort((a, b) => a.week.localeCompare(b.week));
+      return { id: track.id, label: safeMarkdown(text(track.label, "topic track label")),
+        categoryIds: [...track.categoryIds], change: safeMarkdown(text(track.change, "topic track change")),
+        watch: safeMarkdown(text(track.watch, "topic track watch")), observations };
+    });
+  }
   return {
     series: { collectionStart: raw.collectionStart, asOf: raw.asOf, timezone: raw.timezone,
       weekConvention: raw.weekConvention, dedupPolicy: raw.dedupPolicy,
       analysisVersion: raw.analysisVersion, uniqueSourceCount: allPublished ? raw.uniqueSourceCount : null,
-      categories, overview: allPublished ? overview : "", topicInsights },
+      categories, overview: allPublished ? overview : "", topicInsights, topicTracks },
     weeks,
   };
 }

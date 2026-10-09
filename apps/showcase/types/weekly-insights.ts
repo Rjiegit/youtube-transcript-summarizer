@@ -3,6 +3,15 @@ export interface InsightCategory {
   label: string;
 }
 
+export interface InsightTopicTrack {
+  id: string;
+  label: string;
+  categoryIds: string[];
+  change: string;
+  watch: string;
+  observations: Array<{ week: string; summary: string }>;
+}
+
 export interface WeeklyInsightSummary {
   start: string;
   endExclusive: string;
@@ -29,6 +38,7 @@ export interface WeeklyInsight extends WeeklyInsightSummary {
 }
 
 export interface InsightSeries {
+  topicTracks?: InsightTopicTrack[];
   topicInsights?: {
     fromWeek: string;
     toWeek: string;
