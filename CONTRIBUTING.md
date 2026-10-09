@@ -98,6 +98,8 @@ npm --prefix apps/showcase run build
 
 AI agent 的遠端 Git 寫入與發布流程依 [AGENTS.md](AGENTS.md) 的「遠端 Git 寫入必須當次確認」規則：先完成修改、驗證與 review，提供具體推送內容，再停下來取得使用者當次確認。先前授權或本機 commit／amend／squash 授權不得視為 push 許可；只要求指令時不得代為執行。
 
+推送確認前須依 `AGENTS.md` 的「推送前異動說明」提供完整異動說明與推送後預期，包含推送範圍、行為差異、使用影響及驗證結果；確認後若推送範圍或內容變更，須更新說明並重新取得確認。
+
 - Commit subject 使用簡短、現在式描述，例如 `feat: add task retry guard`。
 - 一個 commit 聚焦一個主要意圖。
 - Pull Request 應包含摘要、動機、驗證結果、相關 issue；UI 變更另附畫面。
