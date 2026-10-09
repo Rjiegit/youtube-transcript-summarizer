@@ -4,7 +4,7 @@
 
 ## 使用方式
 
-- `/insights`：整體觀察、分類占比、日期篩選與六週回顧。
+- `/insights`：整體觀察、主題洞見、週次篩選與六週回顧。
 - `/insights/{週日日期}`：單週分析、分類數量、代表影片與上下週導航。
 - 首頁「每週回顧與分類趨勢」連至總覽。
 - 本機啟動：`npm --prefix apps/showcase run dev`，預設 port 3000。
@@ -36,7 +36,7 @@
 - 同一來源只有一個主分類，八類定義與 ID 固定；次要議題不重複計數。
 - 占比為分類來源數除以當週來源數，變化用百分點；空週顯示「—」。
 - 可比較完整週須同時符合 `periodState=closed`、`dataCompleteness=complete`、`coverageStart=start`。
-- 整體 overview 必須按分類分析跨週的內容焦點與占比變化，區分持續走勢、單週尖峰、短期波動，並指出值得追蹤的訊號與樣本限制。這些結論只描述收錄內容，不外推成市場或產業趨勢；細則見專案週報 skill。
+- 整體 overview 提煉跨分類主線；series.topicInsights 必須按分類分析跨週的內容焦點，區分持續走勢、單週尖峰、短期波動，並指出值得追蹤的訊號與樣本限制。這些結論只描述收錄內容，不外推成市場或產業趨勢；細則見專案週報 skill。
 - 原始 Date、Tags 皆未填寫，不能把 Notion 建立時間寫成影片發布時間或閱讀時間。
 - 內容品質不足的摘要不作為推論證據；文章中的產品、醫療、法規與行情敘述未另行查核。
 
@@ -44,7 +44,7 @@
 
 公開介面只說明「資料收錄時間」，不顯示後端供應者名稱或特定資料庫欄位。`series.json` 的時間基準採中性 `record-created-time`；公開 API 的 series projection 不包含 `dateBasis`，後端 adapter 與憑證設定留在 server 端。
 
-總覽上方呈現全期來源、原始紀錄與可比較完整週數。分類選單切換長條圖；所有分類的占比表與圖表共用純函式計算。預設圖表只顯示四個完整週，勾選後才加入首週與進行中週，部分週以斜線與文字標示。
+總覽以整體觀察與「主題變化與洞見」為主。分類選單切換人工整理的內容轉變、值得注意的訊號與後續觀察重點，明確標示分析期間。週次選單篩選統計與週報，不即時重算洞見。來源數、原始紀錄、完整週數、分類長條圖、占比表與最近兩週占比變化放入預設收合的「統計依據」；表與圖表共用純函式計算。預設圖表只顯示四個完整週，勾選後才加入首週與進行中週，部分週以斜線與文字標示。
 
 範圍使用「起始週」與「結束週」選單，選項直接顯示週日到週六的日期。起始週會納入該週及之後週報；結束週會納入該週及之前週報。`fromWeek`、`toWeek`、`category`、`partial` 保存於 URL query，歷史 `from`／`to` 日期 query 仍可換算成重疊週次。篩選不裁切週報內的日資料；數量標示為「週次來源合計」，包含跨週重現；整體觀察仍描述完整系列，畫面另有說明。
 
@@ -88,7 +88,7 @@ flowchart LR
 
 更新步驟：
 
-1. 使用下方週報 skill，先根據進度列出待補週，再讀取 Notion 摘要並核對正文、分類、Taipei 日期與來源鍵。更新 overview 時逐類分析跨週內容走向，說明變化是否持續、值得留意的訊號與判讀限制；不可只整理百分比，也不可從個人收錄推論外部市場趨勢。私人資料放 `data/reports/`；進度 CLI 不直接匯出 Notion 或呼叫 LLM，讀取與撰寫由 skill 引導 agent 完成。
+1. 使用下方週報 skill，先根據進度列出待補週，再讀取 Notion 摘要並核對正文、分類、Taipei 日期與來源鍵。更新 overview 的整體主線與 series.topicInsights 的八類洞見時，分析跨週內容走向，說明變化是否持續、值得留意的訊號與判讀限制；不可只整理百分比，也不可從個人收錄推論外部市場趨勢。私人資料放 `data/reports/`；進度 CLI 不直接匯出 Notion 或呼叫 LLM，讀取與撰寫由 skill 引導 agent 完成。
 2. 在 `content/weekly-insights/{週日日期}/` 編輯 `report.json` 和 `report.md`，更新既有週使用同一目錄並增加 revision。
 3. 將該週加到 `series.json` 的 `reportStarts`。新報告先設 `published: false`，確認要展示的內容後才設 true 並填入 publishedAt。
 4. 更新系列與各份週報的共同 `asOf`，核對 periodState、coverageStart、分類計數、新來源與跨週重現，必要時更正其他受影響週與 overview。
@@ -173,7 +173,9 @@ skill 完成後回報處理、跳過、失敗與待補週，更新本機展示�
 
 ## 實際資料契約
 
-`series.json`：schemaVersion、analysisVersion、collectionStart、asOf、timezone、weekConvention、dateBasis、dedupPolicy、uniqueSourceCount、categories、reportStarts。
+`series.json`：schemaVersion、analysisVersion、collectionStart、asOf、timezone、weekConvention、dateBasis、dedupPolicy、uniqueSourceCount、categories、reportStarts、topicInsights。
+
+`topicInsights`：`fromWeek`、`toWeek` 為實際分析的完整週週日；`items` 每個分類一筆 `categoryId`、`change`、`signal`、`watch`。正文是純文字，分別表示內容轉變、值得注意的訊號、後續觀察重點。驗證期間對應已發布且可比較的完整週、分類完整且無重複、正文非空；白名單投影不轉交未知欄位。未全部發布時與 overview 一起隱藏，避免帶出尚未發布的分析。舊系列缺少此欄位時顯示尚未整理，不以數字自動生成洞見。
 
 `report.json`：schemaVersion、analysisVersion、published、publishedAt、revision、start、endExclusive、coverageStart、asOf、periodState、dataCompleteness、title、summary、metrics、categories、sources、qualityNote。
 

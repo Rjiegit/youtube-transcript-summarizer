@@ -152,6 +152,11 @@ test("weekly insights are bundled, calendar-aligned and rendered before hydratio
   assert.equal(index.status, 200);
   const indexDom = new JSDOM(await index.text());
   assert.match(indexDom.window.document.body.textContent, /週日 — 週六/);
+  if (series.topicInsights) {
+    assert.ok(indexDom.window.document.querySelector('[data-testid="topic-insight"]')?.textContent
+      .includes(series.topicInsights.items[0].change));
+  }
+  assert.equal(indexDom.window.document.querySelector('[data-testid="topic-evidence"]')?.hasAttribute("open"), false);
   assert.equal(indexDom.window.document.querySelectorAll(".insight-week-card").length, weeks.length);
   assert.equal(indexDom.window.document.querySelectorAll(".insight-chart__column").length,
     weeks.filter((week) => week.periodState === "closed" && week.coverageStart === week.start &&

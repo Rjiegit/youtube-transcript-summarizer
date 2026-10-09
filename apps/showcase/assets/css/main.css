@@ -1623,3 +1623,11 @@ a {
     grid-column: 1 / -1;
   }
 }
+
+.insight-topic { margin-top: 28px; }
+.insight-topic h3 { font-size: 22px; }
+.insight-topic dl { margin: 24px 0; }
+.insight-topic dt { color: var(--accent-strong); font-weight: 600; margin-top: 22px; }
+.insight-topic dd { margin: 8px 0 0; line-height: 1.9; color: var(--muted-strong); }
+.insight-evidence { margin-top: 28px; border-top: 1px solid var(--line); padding-top: 20px; }
+.insight-evidence summary { cursor: pointer; font-weight: 600; }

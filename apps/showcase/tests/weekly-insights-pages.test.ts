@@ -19,6 +19,10 @@ const series: InsightListResponse["series"] = {
   collectionStart: "2026-09-01", asOf: "2026-10-09T09:44:10Z", timezone: "Asia/Taipei",
   weekConvention: "sunday-saturday", dedupPolicy: "within-week-source",
   analysisVersion: "topic-v1-sunday", uniqueSourceCount: 30, categories, overview: "## 整體摘要\n\n收錄題材有變化。",
+  topicInsights: { fromWeek: "2026-09-06", toWeek: "2026-09-13", items: [
+    { categoryId: "agent-engineering", change: "從工具試用到驗證成果", signal: "可靠交付持續出現", watch: "追蹤失敗處理" },
+    { categoryId: "career", change: "從升遷到可轉移能力", signal: "單週集中", watch: "觀察長期能力" },
+  ] },
 };
 const items = [
   week("2026-08-30", { coverageStart: "2026-09-01", endExclusive: "2026-09-06" }),
@@ -44,6 +48,8 @@ describe("weekly insight pages", () => {
     const wrapper = await mountAsyncPage(page.default, { global: { stubs } });
     expect(wrapper.findAll(".insight-week-card")).toHaveLength(4);
     expect(wrapper.findAll(".insight-chart__column")).toHaveLength(2);
+    expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("從工具試用到驗證成果");
+    expect(wrapper.get('[data-testid="topic-evidence"]').attributes("open")).toBeUndefined();
     expect(wrapper.text()).toContain("首週部分資料");
     expect(wrapper.text()).toContain("本週進行中");
     await wrapper.get('[data-testid="include-partial"]').setValue(true);
@@ -51,6 +57,10 @@ describe("weekly insight pages", () => {
     expect(wrapper.findAll(".insight-chart__column")).toHaveLength(4);
     await wrapper.get('[data-testid="insight-category"]').setValue("career");
     expect(route.query.category).toBe("career");
+    expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("從升遷到可轉移能力");
+    await wrapper.get('select[aria-label="起始週"]').setValue("2026-09-13");
+    expect(wrapper.findAll(".insight-week-card")).toHaveLength(2);
+    expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("2026-09-06–2026-09-19");
     expect(wrapper.get(".insight-chart").attributes("aria-label")).toContain("職涯");
     wrapper.unmount();
   });

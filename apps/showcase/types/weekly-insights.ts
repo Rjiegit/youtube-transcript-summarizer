@@ -29,6 +29,11 @@ export interface WeeklyInsight extends WeeklyInsightSummary {
 }
 
 export interface InsightSeries {
+  topicInsights?: {
+    fromWeek: string;
+    toWeek: string;
+    items: Array<{ categoryId: string; change: string; signal: string; watch: string }>;
+  } | null;
   collectionStart: string;
   asOf: string;
   timezone: string;

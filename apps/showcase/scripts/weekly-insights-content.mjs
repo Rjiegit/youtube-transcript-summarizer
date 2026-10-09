@@ -104,13 +104,33 @@ export async function loadInsightContent(directory = join(getAppRoot(), "content
   }
   weeks.sort((a, b) => a.start.localeCompare(b.start));
   const allPublished = weeks.length === raw.reportStarts.length && weeks.length > 0;
+  let topicInsights = null;
+  if (allPublished && raw.topicInsights) {
+    const { fromWeek, toWeek, items } = raw.topicInsights;
+    date(fromWeek);
+    date(toWeek);
+    const analysisWeeks = weeks.filter((week) => week.start >= fromWeek && week.start <= toWeek);
+    requireValue(fromWeek <= toWeek && analysisWeeks[0]?.start === fromWeek &&
+      analysisWeeks.at(-1)?.start === toWeek &&
+      analysisWeeks.length === (date(toWeek) - date(fromWeek)) / (7 * 86400000) + 1 && analysisWeeks.every((week) =>
+        week.periodState === "closed" && week.dataCompleteness === "complete" && week.coverageStart === week.start),
+    "invalid topic insight period");
+    requireValue(Array.isArray(items) && items.length === categories.length, "missing topic insights");
+    const topicIds = new Set();
+    topicInsights = { fromWeek, toWeek, items: items.map(({ categoryId, change, signal, watch }) => {
+      requireValue(ids.has(categoryId) && !topicIds.has(categoryId), "unknown/duplicate topic insight category");
+      topicIds.add(categoryId);
+      return { categoryId, change: safeMarkdown(text(change, "topic change")),
+        signal: safeMarkdown(text(signal, "topic signal")), watch: safeMarkdown(text(watch, "topic watch")) };
+    }) };
+  }
   requireValue(!allPublished || weeks.reduce((sum, week) => sum + week.metrics.newSourceCount, 0) === raw.uniqueSourceCount,
     "inconsistent series unique count");
   return {
     series: { collectionStart: raw.collectionStart, asOf: raw.asOf, timezone: raw.timezone,
       weekConvention: raw.weekConvention, dedupPolicy: raw.dedupPolicy,
       analysisVersion: raw.analysisVersion, uniqueSourceCount: allPublished ? raw.uniqueSourceCount : null,
-      categories, overview: allPublished ? overview : "" },
+      categories, overview: allPublished ? overview : "", topicInsights },
     weeks,
   };
 }

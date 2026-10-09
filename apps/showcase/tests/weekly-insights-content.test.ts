@@ -16,6 +16,9 @@ async function fixture(overrides = {}) {
     dateBasis: "record-created-time", dedupPolicy: "within-week-source", collectionStart: "2026-09-01",
     asOf: "2026-10-09T09:44:10Z", uniqueSourceCount: 1, reportStarts: ["2026-09-06"],
     categories: [{ id: "agent-engineering", label: "Agent 工程" }],
+    topicInsights: { fromWeek: "2026-09-06", toWeek: "2026-09-06", items: [
+      { categoryId: "agent-engineering", change: "內容轉變", signal: "待觀察訊號", watch: "後續追蹤", privateBody: "must not escape" },
+    ] },
   };
   const report = {
     schemaVersion: 1, analysisVersion: "topic-v1", published: true, publishedAt: "2026-10-09T09:44:10Z",
@@ -47,6 +50,7 @@ describe("weekly insight publication content", () => {
     expect(result.weeks).toEqual([]);
     expect(result.series.uniqueSourceCount).toBeNull();
     expect(result.series.overview).toBe("");
+    expect(result.series.topicInsights).toBeNull();
   });
 
   it("rejects inconsistent counts, unsafe links and a non-Sunday period", async () => {
@@ -62,5 +66,16 @@ describe("weekly insight publication content", () => {
     const series = await fixture();
     await writeFile(join(directory, "series.json"), JSON.stringify({ ...series, reportStarts: ["../private"] }));
     await expect(loadInsightContent(directory)).rejects.toThrow(/date/i);
+  });
+
+  it("rejects topic insights outside complete published weeks or with unknown categories", async () => {
+    const series = await fixture();
+    series.topicInsights.toWeek = "2026-09-13";
+    await writeFile(join(directory, "series.json"), JSON.stringify(series));
+    await expect(loadInsightContent(directory)).rejects.toThrow(/topic insight period/);
+    const valid = await fixture();
+    valid.topicInsights.items[0].categoryId = "private-category";
+    await writeFile(join(directory, "series.json"), JSON.stringify(valid));
+    await expect(loadInsightContent(directory)).rejects.toThrow(/topic insight category/);
   });
 });
