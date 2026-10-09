@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-09T09:44:10Z",
+  "revision": 1,
+  "start": "2026-08-30",
+  "endExclusive": "2026-09-06",
+  "coverageStart": "2026-09-01",
+  "asOf": "2026-10-09T09:44:10Z",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "工程化與金融風險",
+  "summary": "第一週已重視 Agent 系統設計，也關心金融制裁與資產安全。",
+  "metrics": {
+    "rawCount": 43,
+    "sourceCount": 42,
+    "newSourceCount": 42,
+    "recurringSourceCount": 0
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 14
+    },
+    {
+      "id": "models-tools",
+      "count": 7
+    },
+    {
+      "id": "career",
+      "count": 3
+    },
+    {
+      "id": "finance-retirement",
+      "count": 2
+    },
+    {
+      "id": "crypto-policy",
+      "count": 10
+    },
+    {
+      "id": "technology-business",
+      "count": 3
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 2
+    },
+    {
+      "id": "society-leisure",
+      "count": 1
+    }
+  ],
+  "sources": [
+    {
+      "title": "你以為 Claude 降智，其實是你少設了這個",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=E8Bx9OlpmdM"
+    },
+    {
+      "title": "川普全面封殺俄羅斯，普丁要炒加密貨幣背後水超深？#比特幣  #BTC #加密貨幣  #川普  #中國 #美國  #普丁",
+      "categoryId": "crypto-policy",
+      "sourceUrl": "https://www.youtube.com/watch?v=LLu0_AOZzuk"
+    },
+    {
+      "title": "GPT-6 Astra 突然发布！AGI 真的来了？全面碾压 Fable 5.1 模型，AI 格局彻底变了！| 零度解说",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=Z_XC21Yovfs"
+    },
+    {
+      "title": "NVIDIA的護城河變了！不只在賣 GPU，還變成 AI 時代的「銀行」替客戶借錢？｜Kelly Tsai",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=OWFpCOkj0e8"
+    }
+  ],
+  "qualityNote": "統計反映個人收錄題材，日期採 Notion 建立時間；僅列部分代表來源，摘要內的外部事實未另行查核。"
+}

@@ -215,6 +215,7 @@ onBeforeUnmount(() => {
         <p class="hero__body">
           收藏從影片整理出的重點筆記
         </p>
+        <a href="/insights" class="hero__review-link">每週回顧與分類趨勢 →</a>
       </div>
     </section>
 

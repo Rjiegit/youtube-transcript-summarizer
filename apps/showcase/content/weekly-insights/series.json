@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "collectionStart": "2026-09-01",
+  "asOf": "2026-10-09T09:44:10Z",
+  "timezone": "Asia/Taipei",
+  "weekConvention": "sunday-saturday",
+  "dateBasis": "notion-created-time",
+  "dedupPolicy": "within-week-source",
+  "uniqueSourceCount": 421,
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "label": "AI Agent 與開發工程"
+    },
+    {
+      "id": "models-tools",
+      "label": "AI 模型與應用工具"
+    },
+    {
+      "id": "career",
+      "label": "職涯與組織管理"
+    },
+    {
+      "id": "finance-retirement",
+      "label": "投資理財與退休"
+    },
+    {
+      "id": "crypto-policy",
+      "label": "加密資產、收藏與金融政策"
+    },
+    {
+      "id": "technology-business",
+      "label": "科技硬體與企業經營"
+    },
+    {
+      "id": "wellbeing-learning",
+      "label": "心理健康與學習生活"
+    },
+    {
+      "id": "society-leisure",
+      "label": "社會時事與休閒"
+    }
+  ],
+  "reportStarts": [
+    "2026-08-30",
+    "2026-09-06",
+    "2026-09-13",
+    "2026-09-20",
+    "2026-09-27",
+    "2026-10-04"
+  ]
+}

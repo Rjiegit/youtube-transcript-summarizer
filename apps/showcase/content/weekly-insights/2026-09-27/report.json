@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-09T09:44:10Z",
+  "revision": 1,
+  "start": "2026-09-27",
+  "endExclusive": "2026-10-04",
+  "coverageStart": "2026-09-27",
+  "asOf": "2026-10-09T09:44:10Z",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "從工具試用走向可靠交付",
+  "summary": "工程比重增加，知識、任務管理、驗證與成本控制成為主線。",
+  "metrics": {
+    "rawCount": 116,
+    "sourceCount": 109,
+    "newSourceCount": 98,
+    "recurringSourceCount": 11
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 40
+    },
+    {
+      "id": "models-tools",
+      "count": 8
+    },
+    {
+      "id": "career",
+      "count": 15
+    },
+    {
+      "id": "finance-retirement",
+      "count": 16
+    },
+    {
+      "id": "crypto-policy",
+      "count": 8
+    },
+    {
+      "id": "technology-business",
+      "count": 12
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 7
+    },
+    {
+      "id": "society-leisure",
+      "count": 3
+    }
+  ],
+  "sources": [
+    {
+      "title": "DeepSeek Harness 桌面版正式发布！本地对接越狱模型，100%无审查，简直爽歪歪！| 零度解说",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=d2UVNJSX7oA"
+    },
+    {
+      "title": "散戶為什麼永遠賠錢？《致富未來》《Enrich Your Future》揭開市場真相 🧠📉",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=w3x1KjMTAPo"
+    },
+    {
+      "title": "你知不知道你的位置、年資在市場上的實際區間？",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=pAxg22-rdaM"
+    },
+    {
+      "title": "夏威夷大崩潰2⋯不是英航也出包？第一次來到物價最高的茂宜島參加科技峰會！｜Kelly Tsai",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=FVfdQUOtXzc"
+    }
+  ],
+  "qualityNote": "統計反映個人收錄題材，日期採 Notion 建立時間；僅列部分代表來源，摘要內的外部事實未另行查核。"
+}

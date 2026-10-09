@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-09T09:44:10Z",
+  "revision": 1,
+  "start": "2026-09-20",
+  "endExclusive": "2026-09-27",
+  "coverageStart": "2026-09-20",
+  "asOf": "2026-10-09T09:44:10Z",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "模型、知識與學習同步擴展",
+  "summary": "Jev、本地模型、OpenWiki 與學習生活題材擴展，內容組成更加多元。",
+  "metrics": {
+    "rawCount": 108,
+    "sourceCount": 103,
+    "newSourceCount": 94,
+    "recurringSourceCount": 9
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 27
+    },
+    {
+      "id": "models-tools",
+      "count": 22
+    },
+    {
+      "id": "career",
+      "count": 13
+    },
+    {
+      "id": "finance-retirement",
+      "count": 15
+    },
+    {
+      "id": "crypto-policy",
+      "count": 7
+    },
+    {
+      "id": "technology-business",
+      "count": 6
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 10
+    },
+    {
+      "id": "society-leisure",
+      "count": 3
+    }
+  ],
+  "sources": [
+    {
+      "title": "怎麼樣做出沒有 AI 味的設計？ /impeccable 深度解析！",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=QuQ2FOznK18"
+    },
+    {
+      "title": "Opus 5.5 正式发布！Claude 这次到底有多离谱？实测做动画、游戏、写代码，AI 已经强到这种程度了？ | 零度解说",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=sxny85UZr1A"
+    },
+    {
+      "title": "財富自由最終目的！從中樂透測驗看出你有沒有致富思維！",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=nDGzLPI2I9k"
+    },
+    {
+      "title": "想拿推薦先做這些，別急著開口",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=rlj71n12FlU"
+    }
+  ],
+  "qualityNote": "統計反映個人收錄題材，日期採 Notion 建立時間；僅列部分代表來源，摘要內的外部事實未另行查核。"
+}

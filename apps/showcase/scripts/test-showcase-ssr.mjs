@@ -133,3 +133,45 @@ test("production SSR emits complete article metadata before hydration", { timeou
     assert.ok(!html.includes("Private upstream failure"));
   });
 });
+
+test("weekly insights are bundled, calendar-aligned and rendered before hydration", { timeout: 30000 }, async (t) => {
+  const server = await startServer();
+  t.after(server.stop);
+  const response = await fetch(`${server.baseUrl}/api/showcase/insights`);
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get("cache-control"), /s-maxage=300/);
+  assert.ok(response.headers.get("etag"));
+  const { series, weeks } = await response.json();
+  assert.equal(series.weekConvention, "sunday-saturday");
+  for (const week of weeks) {
+    assert.equal(new Date(`${week.start}T00:00:00Z`).getUTCDay(), 0);
+    assert.ok(!("content" in week));
+    assert.ok(!("sources" in week));
+  }
+  const index = await fetch(`${server.baseUrl}/insights`);
+  assert.equal(index.status, 200);
+  const indexDom = new JSDOM(await index.text());
+  assert.match(indexDom.window.document.body.textContent, /週日 — 週六/);
+  assert.equal(indexDom.window.document.querySelectorAll(".insight-week-card").length, weeks.length);
+  assert.equal(indexDom.window.document.querySelectorAll(".insight-chart__column").length,
+    weeks.filter((week) => week.periodState === "closed" && week.coverageStart === week.start &&
+      week.dataCompleteness === "complete").length);
+  indexDom.window.close();
+  if (weeks.length) {
+    const week = weeks[0];
+    const detail = await fetch(`${server.baseUrl}/insights/${week.start}`);
+    assert.equal(detail.status, 200);
+    const dom = new JSDOM(await detail.text());
+    assert.match(dom.window.document.title, new RegExp(week.title));
+    assert.equal(headValue(dom.window.document, "description"), week.summary);
+    assert.equal(headValue(dom.window.document, "og:url"), `${siteUrl}/insights/${week.start}`);
+    assert.ok(dom.window.document.querySelector(".markdown-content h2"));
+    assert.ok(!dom.window.document.body.textContent.includes("snapshot.private"));
+    dom.window.close();
+  }
+  const missing = await fetch(`${server.baseUrl}/api/showcase/insights/1900-01-01`);
+  assert.equal(missing.status, 404);
+  assert.equal(missing.headers.get("cache-control"), "no-store");
+  const missingPage = await fetch(`${server.baseUrl}/insights/1900-01-01`);
+  assert.equal(missingPage.status, 404);
+});

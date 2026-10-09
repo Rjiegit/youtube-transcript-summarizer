@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-09T09:44:10Z",
+  "revision": 1,
+  "start": "2026-09-06",
+  "endExclusive": "2026-09-13",
+  "coverageStart": "2026-09-06",
+  "asOf": "2026-10-09T09:44:10Z",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "模型試用與金融觀察並行",
+  "summary": "模型應用、Agent 實作與金融議題並行，尚未集中在單一分類。",
+  "metrics": {
+    "rawCount": 48,
+    "sourceCount": 47,
+    "newSourceCount": 47,
+    "recurringSourceCount": 0
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 11
+    },
+    {
+      "id": "models-tools",
+      "count": 10
+    },
+    {
+      "id": "career",
+      "count": 3
+    },
+    {
+      "id": "finance-retirement",
+      "count": 4
+    },
+    {
+      "id": "crypto-policy",
+      "count": 10
+    },
+    {
+      "id": "technology-business",
+      "count": 5
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 3
+    },
+    {
+      "id": "society-leisure",
+      "count": 1
+    }
+  ],
+  "sources": [
+    {
+      "title": "面向普通人的AI时代入局指南",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=wt2kiCU6sA0"
+    },
+    {
+      "title": "GPT Image 2.5 正式发布！免费可用、无需越狱，生成更快更精准，实测对比 Z-Image 谁更强？| 零度解说",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=DmXPtoXU6tw"
+    },
+    {
+      "title": "去美元化殘酷現實，俄羅斯2025年還在「以物易物」？#比特幣  #BTC #加密貨幣  #川普  #中國 #美國  #普丁  #美元霸權 #貨幣  #加密貨幣法案  #股市 #科技股 #銀行  #國家",
+      "categoryId": "crypto-policy",
+      "sourceUrl": "https://www.youtube.com/watch?v=9t2wQDADhyI"
+    },
+    {
+      "title": "賈伯斯設計iPhone的秘密。為什麼蘋果手機堅持不要鍵盤？#Apple #蘋果  #duo  #iphone18pro  #stevejobs",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=7H8vMiK5o3c"
+    }
+  ],
+  "qualityNote": "統計反映個人收錄題材，日期採 Notion 建立時間；僅列部分代表來源，摘要內的外部事實未另行查核。"
+}

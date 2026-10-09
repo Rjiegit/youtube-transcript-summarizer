@@ -11,7 +11,11 @@
     "preview": "node ./scripts/ensure-nuxt-internal-paths.mjs && nuxt preview",
     "test": "vitest run",
     "check-env": "node ./scripts/check-env.mjs",
-    "test:ssr": "node --test scripts/test-showcase-ssr.mjs"
+    "test:ssr": "node --test scripts/test-showcase-ssr.mjs",
+    "insights:check": "node ./scripts/check-weekly-insights.mjs",
+    "predev": "node ./scripts/build-weekly-insights.mjs",
+    "prebuild": "node ./scripts/build-weekly-insights.mjs",
+    "pretest": "node ./scripts/build-weekly-insights.mjs"
   },
   "dependencies": {
     "markdown-it": "^14.2.0",

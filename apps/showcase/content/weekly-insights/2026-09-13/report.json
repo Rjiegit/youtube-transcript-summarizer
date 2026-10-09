@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-09T09:44:10Z",
+  "revision": 1,
+  "start": "2026-09-13",
+  "endExclusive": "2026-09-20",
+  "coverageStart": "2026-09-13",
+  "asOf": "2026-10-09T09:44:10Z",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "職涯與組織規則的集中回顧",
+  "summary": "升遷、PIP、跳槽與能見度集中出現，職涯成為本週最大分類。",
+  "metrics": {
+    "rawCount": 88,
+    "sourceCount": 86,
+    "newSourceCount": 81,
+    "recurringSourceCount": 5
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 19
+    },
+    {
+      "id": "models-tools",
+      "count": 15
+    },
+    {
+      "id": "career",
+      "count": 22
+    },
+    {
+      "id": "finance-retirement",
+      "count": 8
+    },
+    {
+      "id": "crypto-policy",
+      "count": 13
+    },
+    {
+      "id": "technology-business",
+      "count": 6
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 2
+    },
+    {
+      "id": "society-leisure",
+      "count": 1
+    }
+  ],
+  "sources": [
+    {
+      "title": "Forward Deployed Engineer是什麼？為什麼職缺數一年暴增8倍？｜Kelly Tsai",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=vFm3ztmlJgY"
+    },
+    {
+      "title": "Bento：把簡報變回你真正擁有的檔案｜Github雷達",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=UW_IbWDFB0Y"
+    },
+    {
+      "title": "Qwen3.8-27B 正式开源！越狱无审查！最低 8GB 显存就能跑，媲美顶级闭源模型？本地部署实测 | 零度解说",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=QSObR7YcmIo"
+    },
+    {
+      "title": "你的錢正被銀行綁架？Coinbase CEO揭露華爾街謊言",
+      "categoryId": "crypto-policy",
+      "sourceUrl": "https://www.youtube.com/watch?v=f5j41v4MdDY"
+    }
+  ],
+  "qualityNote": "統計反映個人收錄題材，日期採 Notion 建立時間；僅列部分代表來源，摘要內的外部事實未另行查核。"
+}

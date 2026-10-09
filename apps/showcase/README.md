@@ -12,6 +12,25 @@ npm run build
 npm run test:ssr
 ```
 
+## 每週內容回顧
+
+首頁「每週回顧與分類趨勢」連到 `/insights`，單週詳情為 `/insights/{週日日期}`。一週從週日到週六，時區固定 Asia/Taipei；資料自 2026-09-01 起，首週與進行中週不納入預設完整週比較。
+
+內容保存在 `content/weekly-insights/`：`series.json` 管理分類與週報清單、`overview.md` 保存整體觀察，每個週日目錄包含 `report.json` 與可編輯的 `report.md`。更新文件後重新啟動開發伺服器或重新建置，網站即載入新內容；不用即時呼叫 Notion 或 LLM。
+
+```bash
+npm run insights:check
+npm run dev
+```
+
+`predev`、`pretest`、`prebuild` 會驗證並打包文件。`published: false` 的週報不進網站；私人快照與來源全集保存於被 Git 忽略的 `data/reports/weekly-insights/`。使用者可以確認內容後手動 commit/push，透過既有部署流程更新。
+
+在 repository 根目錄也可執行 `make showcase-insights-check` 驗證文件。
+
+定期手動整理可呼叫 `$showcase-weekly-insights`，或「補跑尚未完成的週報／補到指定週六」。[週報 skill](../../.agents/skills/showcase-weekly-insights/SKILL.md)會從私人進度檔逐週找出缺口，預設補到最近已結束週；已核對週跳過，進行中週下次重跑。`make showcase-insights-plan` 只列出此次待辦，不查 Notion、不修改內容；進度與快照保存在 `data/reports/weekly-insights/`，不隨 Git 推送。
+
+完整規則、資料契約與手動更新步驟見 [每週回顧開發文件](../../docs/features/showcase-weekly-insights.md)。
+
 ## 分享預覽
 
 文章頁 `/results/{id}` 會在 SSR 等待資料後輸出文章標題、摘要、Open Graph / Twitter metadata 與 canonical URL，不需要 crawler 執行 JavaScript。所有文章共用 `public/share-preview.png`（1200 × 630 PNG）；圖片與 metadata URL 使用同一個公開網站 origin。

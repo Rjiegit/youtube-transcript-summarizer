@@ -242,6 +242,7 @@ modules.xml
 # Node / Nuxt
 apps/showcase/node_modules/
 apps/showcase/.nuxt/
+apps/showcase/.generated/
 apps/showcase/.output/
 apps/showcase/.vercel/
 apps/showcase/coverage/

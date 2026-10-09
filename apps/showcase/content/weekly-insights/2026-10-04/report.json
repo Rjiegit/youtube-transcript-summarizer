@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-09T09:44:10Z",
+  "revision": 1,
+  "start": "2026-10-04",
+  "endExclusive": "2026-10-11",
+  "coverageStart": "2026-10-04",
+  "asOf": "2026-10-09T09:44:10Z",
+  "periodState": "open",
+  "dataCompleteness": "complete",
+  "title": "工程判斷與人生選擇",
+  "summary": "本週仍在進行，新增內容關心審查、路由、職涯角色與退休生活。",
+  "metrics": {
+    "rawCount": 68,
+    "sourceCount": 66,
+    "newSourceCount": 59,
+    "recurringSourceCount": 7
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 18
+    },
+    {
+      "id": "models-tools",
+      "count": 8
+    },
+    {
+      "id": "career",
+      "count": 13
+    },
+    {
+      "id": "finance-retirement",
+      "count": 11
+    },
+    {
+      "id": "crypto-policy",
+      "count": 3
+    },
+    {
+      "id": "technology-business",
+      "count": 3
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 4
+    },
+    {
+      "id": "society-leisure",
+      "count": 6
+    }
+  ],
+  "sources": [
+    {
+      "title": "EP414 - 史丹佛 AI Agent 課 CS329A 整理：Agent 怎麼自己變強？一次看懂 ReAct、RLEF、Constitutional AI",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=R4KL-xeNYZE"
+    },
+    {
+      "title": "【五年級生】退休＝終點？一份長達25年的無薪新工作｜資深外商HR：搞定這5份文件，別在自己家裡變客人",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=5yOHBcQowf0"
+    },
+    {
+      "title": "我們賺8位數＋虧損6位數的經驗｜慢活夫妻｜慢活夫妻",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=UXkyymRJIJs"
+    },
+    {
+      "title": "Jev 最大竞争对手来了！OpenAI Decisions API 实测，文字、图片与三种决策类型",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=pJwpUcL3K7s"
+    }
+  ],
+  "qualityNote": "統計反映個人收錄題材，日期採 Notion 建立時間；僅列部分代表來源，摘要內的外部事實未另行查核。"
+}

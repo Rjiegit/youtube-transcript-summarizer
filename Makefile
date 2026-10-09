@@ -1,4 +1,4 @@
-.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once list-models lint yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
+.PHONY: install install-hooks betterleaks-staged run processing-worker rss-monitor rss-monitor-once list-models lint yt-dlp yt-dlp-update auto test test-unit test-integration streamlit api showcase-install showcase-check showcase showcase-test showcase-insights-check showcase-insights-plan showcase-insights-progress-test extension-check docker-build docker-up docker-down cleanup-data-dry-run cleanup-data clear-processing-lock
 
 YTDLP_AUTO_UPDATE ?= 1
 VIDEO_RETENTION_DAYS ?= 3
@@ -52,6 +52,15 @@ showcase-install:
 
 showcase-check:
 	npm --prefix apps/showcase run check-env
+
+showcase-insights-check:
+	npm --prefix apps/showcase run insights:check
+
+showcase-insights-plan:
+	python3 .agents/skills/showcase-weekly-insights/scripts/progress.py plan
+
+showcase-insights-progress-test:
+	python3 -m unittest discover -s .agents/skills/showcase-weekly-insights/tests -v
 
 showcase:
 	@env_file="apps/showcase/.env"; \
