@@ -105,15 +105,16 @@ useHead({
       </section>
       <section class="insight-panel">
         <div class="insight-section-heading"><p class="hero__eyebrow">Topic Trends</p><h2>主題變化與洞見</h2><p>看看內容如何轉向、哪些訊號值得留意，以及接下來可以觀察什麼。</p></div>
-        <div class="insight-filters">
-          <label>觀察分類<select v-model="categoryId" data-testid="insight-category"><option v-for="category in series?.categories" :key="category.id" :value="category.id">{{ category.label }}</option></select></label>
-          <label>起始週<select v-model="fromWeek" aria-label="起始週"><option value="">最早週</option><option v-for="week in weeks" :key="week.start" :value="week.start">{{ formatWeekRange(week) }} · {{ insightWeekStatus(week) }}</option></select></label>
-          <label>結束週<select v-model="toWeek" aria-label="結束週"><option value="">最新週</option><option v-for="week in weeks" :key="week.start" :value="week.start">{{ formatWeekRange(week) }} · {{ insightWeekStatus(week) }}</option></select></label>
-          <button v-if="filtered" type="button" class="showcase-toolbar__button" @click="router.replace({ query: { category: categoryId } })">清除週次</button>
+        <div class="insight-category-picker" role="group" aria-label="觀察分類">
+          <button v-for="category in series?.categories" :key="category.id" type="button"
+            class="insight-category-button" :data-category="category.id"
+            :aria-pressed="selectedCategory?.id === category.id" @click="categoryId = category.id">
+            {{ category.label }}
+          </button>
         </div>
         <article v-if="selectedTopic" class="insight-topic" data-testid="topic-insight">
           <h3>{{ selectedCategory?.label }}</h3>
-          <p class="insight-caption">分析期間：{{ topicPeriod }} · 週次選單篩選下方統計與週報；此洞見保留上述分析期間。</p>
+          <p class="insight-caption">分析期間：{{ topicPeriod }}</p>
           <dl>
             <dt>內容轉變</dt><dd>{{ selectedTopic.change }}</dd>
             <dt>值得注意的訊號</dt><dd>{{ selectedTopic.signal }}</dd>
@@ -124,6 +125,12 @@ useHead({
         <details class="insight-evidence" data-testid="topic-evidence">
           <summary>統計依據：來源數與每週占比</summary>
           <p class="insight-caption">占比以當週來源數為分母，用來輔助理解收錄組成與樣本量；數量不代表外部議題的重要性。</p>
+          <p class="insight-caption">週次範圍只影響此處統計與下方每週回顧。上方洞見依標示的分析期間整理，不隨週次篩選改寫。</p>
+          <div class="insight-filters">
+            <label>起始週<select v-model="fromWeek" aria-label="起始週"><option value="">最早週</option><option v-for="week in weeks" :key="week.start" :value="week.start">{{ formatWeekRange(week) }} · {{ insightWeekStatus(week) }}</option></select></label>
+            <label>結束週<select v-model="toWeek" aria-label="結束週"><option value="">最新週</option><option v-for="week in weeks" :key="week.start" :value="week.start">{{ formatWeekRange(week) }} · {{ insightWeekStatus(week) }}</option></select></label>
+            <button v-if="filtered" type="button" class="showcase-toolbar__button" @click="router.replace({ query: { category: categoryId } })">清除週次</button>
+          </div>
           <section class="insight-stats" aria-label="收錄統計">
             <div><span>{{ filtered || series?.uniqueSourceCount === null ? '週次來源合計' : '全期不同來源' }}</span><strong>{{ filtered || series?.uniqueSourceCount === null ? totalSources : series?.uniqueSourceCount }}</strong><small>{{ filtered || series?.uniqueSourceCount === null ? '所選整週合計，包含跨週重現' : '同一影片在全期只計一次' }}</small></div>
             <div><span>摘要紀錄</span><strong>{{ totalRaw }}</strong><small>含同一來源的重複收錄</small></div>

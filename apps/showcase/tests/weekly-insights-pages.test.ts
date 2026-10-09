@@ -55,7 +55,10 @@ describe("weekly insight pages", () => {
     await wrapper.get('[data-testid="include-partial"]').setValue(true);
     expect(replace).toHaveBeenCalledWith({ query: { partial: "1" } });
     expect(wrapper.findAll(".insight-chart__column")).toHaveLength(4);
-    await wrapper.get('[data-testid="insight-category"]').setValue("career");
+    expect(wrapper.findAll(".insight-category-button")).toHaveLength(categories.length);
+    await wrapper.get('button[data-category="career"]').trigger("click");
+    expect(wrapper.get('button[data-category="career"]').attributes("aria-pressed")).toBe("true");
+    expect(wrapper.get('[data-testid="topic-evidence"]').find('select[aria-label="起始週"]').exists()).toBe(true);
     expect(route.query.category).toBe("career");
     expect(wrapper.get('[data-testid="topic-insight"]').text()).toContain("從升遷到可轉移能力");
     await wrapper.get('select[aria-label="起始週"]').setValue("2026-09-13");
