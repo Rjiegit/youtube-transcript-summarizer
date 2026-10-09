@@ -44,3 +44,8 @@ export function filterInsightWeeks<T extends WeeklyInsightSummary>(weeks: T[], f
   if (from && to && from > to) return [];
   return weeks.filter((week) => (!from || week.endExclusive > from) && (!to || week.start <= to));
 }
+
+export function filterInsightWeeksByRange<T extends WeeklyInsightSummary>(weeks: T[], fromWeek = "", toWeek = ""): T[] {
+  if (fromWeek && toWeek && fromWeek > toWeek) return [];
+  return weeks.filter((week) => (!fromWeek || week.start >= fromWeek) && (!toWeek || week.start <= toWeek));
+}
