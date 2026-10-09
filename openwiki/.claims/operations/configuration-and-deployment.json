@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:26d418d2b0230192f4129cf7e9a15926efee3ae651d561eeed8482d0d84007ab",
+  "pageVersion": "sha256:2e806fb21b0facc3bb819215cbfcbf7a0bf024b5936daa782b39541707acbcee",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -56,15 +56,15 @@
     },
     {
       "id": "claim_de8bd57f507d4afbbadde186010f9ef4",
-      "statement": "Production Showcase list route 保留 TTL 控制的 Nitro SWR，但 route rule 不再設定固定 Cache-Control header；handler 仍產生成功回應的 public s-maxage/stale-while-revalidate，Nitro error hook 對展示 API 錯誤補上 no-store。",
+      "statement": "Production Showcase list route 保留 TTL 控制的 Nitro SWR，但 route rule 不再設定固定 Cache-Control header；handler 仍產生成功回應的 public s-maxage/stale-while-revalidate，Nitro error hook 對結果及 weekly insights 展示頁/API 錯誤補上 no-store。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L40-L65",
           "version": "repo-lines-v1:sha256:b075d8e19d81d44d0cfd4ad0d89152b051917d9aee29638181dcbc0e6dcbf73d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY5MTU5ZjVjMjA5ZGEzODIyYzRjOTA5NjEzY2JkZmNjYTY4YWM5MzViMDE5MjVhZDI2YTBjZWU2MzJiYjJlYTUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRjNGE0OTIwY2ZiNzdkOTRiMGZlYmEzYTY3ZGNmZGRkM2Y3YmYyYzdlYTk1MGUxYTViMzAzMTQ3MDE1M2VlMTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVlMTJiNjExODk0M2UzMGMwMDY4MzNlNzgxNjMwYTUzYjMyZjQxN2VmNWY5Nzk1YzNmMTJmMzMwODAyNGM1ZDkifQ"
         },
         {
-          "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts#L1-L18",
-          "version": "repo-lines-v1:sha256:18f396c697e7b0226c724128dee58d4e1c016e954cbf41eb3b9d709ca48dff6c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmZmZhZGNlOTgzYTdhN2NmMDdhNjZlYWQ5ODA0Y2ExYTQzNWU1Mzc2Mjk4ZmE4YjRjNmE0NTgwZjMxMDg0Y2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts",
+          "version": "repo-file-v1:sha256:c4d4fc94470b635985d23afcb5dee3514fb1657a9f9d5ff23a4e83a799645d2e"
         },
         {
           "resource": "repo://apps/showcase/server/utils/config.ts#L82-L99",
@@ -74,11 +74,11 @@
     },
     {
       "id": "claim_815f782668924b1294f66d81295725d0",
-      "statement": "Nuxt private runtime config 保存 Notion 與選用已讀同步的憑證設定，public runtime config 只包含 build date 與 commit SHA。",
+      "statement": "Nuxt private runtime config 保存 Notion 與選用已讀同步的憑證設定，public runtime config 包含公開 site URL、build date 與 commit SHA。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/nuxt.config.ts#L38-L52",
-          "version": "repo-lines-v1:sha256:be3cf5d21d9a3309ebb197729a12c4bc7c276e697d7fd6185e498979a0c1d278:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjljNjU3MTI1NDdhNGU1NmFmZmVmOTE0MDUxYjRhNzg3NjkyMGRiNjQ4N2I1OWE1YWQ2ZTg4MjRhY2ViOTRmYjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRlMzYyNWM1NDczZmMyZWVjZWQwNDYxODNiOTUxY2JmMzI1ZGU0NDRjYTY5NTEyNmJkOWJiYzc3OWE3ODZlNGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjIwOWU2ZjJiNjg0YzI2YTViYjMyMGNkOWQ4YjI5NDEzZTIyZWJiOTMwOWI3MTZiNTZjZjkwYjMzMjhmNDA0NjYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIifQ"
+          "resource": "repo://apps/showcase/nuxt.config.ts#L38-L60",
+          "version": "repo-lines-v1:sha256:da1d6fffb3ea1a02e9f09b602bab6d9ca41cdfac80f06794b93c4aff762d5087:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjMGIwYTQyM2E4Y2M3YzI0Yjg5OTYxMjZjZmZhYjAyOGI3ODdlNTRkODI3ZTFiZjY4YzQyN2JiNjJiZWIxZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZjQ4NTQ4NzQ3ODIzOTk0NjIyOGRhNWMyOGM2ZTRiNGYzMDYxMWU0YWY1NDFiNzYxMGFjMTE1YTg2OTNiNzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmYjZlYTU4ZDFiNmU4YzIzMTk0YTU1MGU0NDNmN2FiMjM3ODhlZDlhMWU4YTAyZTcwNTViZDIyN2JjZTcyYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzMjA2MTc0OWIzYzhlMmM1ZTA3MmU3MWMzZjYyY2Q2ZWNhMmJjNjRhNjg2NTc1OWRmODhhNTY5MDE0YzRkNzAifQ"
         }
       ]
     },
@@ -177,12 +177,12 @@
       "statement": "check-env 在獨立程序中讀取 apps/showcase/.env 並保留既有環境值；make showcase 會 export 同一檔案的值再啟動開發站。",
       "evidence": [
         {
-          "resource": "repo://Makefile#L45-L58",
-          "version": "repo-lines-v1:sha256:1a2310409dcbda785b57f0cf150673339a50c422ecaede6e976349c4c1a044e8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI1Y2UzODRhN2RhNjFmYjc3YTU5MWUzOTdmZDIyODE3ODg0NmE3NGI3ZTFmODNmNmU0YWY3Mzk2NWI1OGUyNTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJiNmNiYTY2MGFiNzkzNjZlMDQ2N2FkM2UxNGU1Y2Q3ZWY5NGQ2YjIzNDM2YzQ1NmVlNjQzZGQzNzRkNmE4YzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjBhNGZlZmQ4OGI5NTUxZjQwNmFhNjlhNjY2ZmFlOGJmNDk5MWFjNzQxYTU2ODdjNDBlODhkOWE5MzkyNDZlZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJlMzU0MWZkNzUxNTlkODg5M2U3YzdmNDY4OWUxYzIzNjI3YzQxYWZiMTM1NDk4NGU3ZDVlYTc3MmJmMDIzMzUifQ"
+          "resource": "repo://Makefile",
+          "version": "repo-file-v1:sha256:e9e85b6b9cfd4a9e1a0cc00f06d37cfc5b02a4ea7012a50fa621003f6df19e3d"
         },
         {
           "resource": "repo://apps/showcase/scripts/check-env.mjs#L1-L32",
-          "version": "repo-lines-v1:sha256:ea360f47ead98b13410342e810068ec63d66f6978ea1b88e0217119f271aa7e8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmYjQ4NTA3YTRiOWNkNmFlMTBkNGRjZWM1NGJhYjI5NWUyM2UwNWUwOGZmNjk5ZWIxOWNjYWM3NDRkMTBlMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1ZjhhZmRkMGQwNjExNDc0NjBmOWQ2YzFlZjFkMjM3NDE3ODNhYzI0OGM0NmRjZGQ5YzcxODdjYzQ3Njc5ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjk4YTNkZDA2ZTI2ZjY3ZTIyMGU1YzY3MjA2YzNjOGY4OGM0YmY4MjllMDJmMDhjOGNkMjZmNzNhY2ZlZWMifQ"
+          "version": "repo-lines-v1:sha256:5ae5d36f514279e50e88175b59f830f8b0c18f16f5bdc33733c4f8e23c8c569f:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVmYjQ4NTA3YTRiOWNkNmFlMTBkNGRjZWM1NGJhYjI5NWUyM2UwNWUwOGZmNjk5ZWIxOWNjYWM3NDRkMTBlMDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhhYTkyYTcwOWE4Y2Y0NWMzMDM2NjE2MzNiYTRlMDM3OGExNTBjOGE1ZDE0Yjg1NTY1MGIwYjY0MzllZDRhODUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImFhZDVkZjExMjc2NmI1NjVlOTI4MDY0NTU4M2Q2YmQzNzU3MjQ0ZDZhMjBiZTE2N2FiNzkwYWI2NmU2NjNjNDUifQ"
         }
       ]
     },
@@ -343,6 +343,6 @@
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-05T13:47:15.340Z"
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

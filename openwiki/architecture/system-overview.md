@@ -3,10 +3,13 @@ type: architecture
 title: 系統架構與端到端資料流
 description: 說明任務輸入、專用 worker、持久層與獨立前端應用之間的責任和資料流。
 tags: [architecture, pipeline, api, worker, nuxt]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
+  - id: openwiki-source-17de8480042164f5a9040c86
+    resource: repo://apps/showcase/scripts/weekly-insights-content.mjs
+  - id: openwiki-source-8de160800c7fe6a0417a5cac
+    resource: repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts
+  - id: openwiki-source-313f86b8d67fcded8d860c7b
+    resource: repo://apps/showcase/server/api/showcase/insights/index.get.ts
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
@@ -25,6 +28,8 @@ sources:
     resource: repo://apps/whisper_summary/apps/workers/cli.py
   - id: openwiki-source-fb3a71308a5a59482c2767f3
     resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-79006d740abb2f90a0561607
+    resource: repo://apps/whisper_summary/services/pipeline/engines.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-daab87d344d0f6ce8a388ee8
@@ -33,7 +38,10 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 系統架構與端到端資料流
@@ -52,14 +60,14 @@ generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
 | `apps/browser-extension` | Manifest V3 FastAPI client |
 | `apps/showcase` | 直接讀取 Notion 完成成果的 Nuxt/Nitro app |
 
-Compose 編排 `api`、`streamlit`、`processing-worker` 與 `rss-monitor`。Streamlit、RSS monitor 與 processing worker 都以 `http://api:8080` 連線；task 的 SQLite ownership 集中於 API。Showcase 不在此 Compose topology。
+Compose 編排 `api`、`streamlit`、`processing-worker` 與 `rss-monitor`。Streamlit、RSS monitor 與 processing worker 都以 `http://api:8080` 連線；task 的 SQLite ownership 集中於 API。Showcase 不在此 Compose topology。Showcase 另提供每週洞察頁面，內容由 repository 中整理過的週報文件建置為靜態 registry，再由 Nitro server routes 提供總覽與單週資料；它不即時查詢 Notion。
 
 ## 端到端流程
 
 1. Streamlit、Extension、HTTP client 或 RSS monitor 向 FastAPI 送出 YouTube URL。
 2. API 正規化、去重並把 task 持久化；API process 不啟動重型 pipeline。
 3. Dedicated worker 持續透過受 token 保護的 HTTP queue API claim task；單次 polling cycle 失敗會記錄後繼續下一輪。
-4. API 以 SQLite lease 控制 task ownership，worker 持續 heartbeat，並以設定或 task override 選擇 legacy／LangGraph engine。處理包含 yt-dlp、faster-whisper、LLM、Markdown/JSON、Notion 與 Discord；單筆失敗標記 Failed，失去 lease 時停止更新該 task。
+4. API 以 SQLite lease 控制 task ownership，worker 持續 heartbeat，並優先採用 task override，其次使用設定的預設值，最後回退 legacy engine，亦可選擇 LangGraph engine。處理包含 yt-dlp、faster-whisper、LLM、Markdown/JSON、Notion 與 Discord；單筆失敗標記 Failed，失去 lease 時停止更新該 task。
 5. Nuxt Showcase 從 Notion 讀取 Completed 結果，不呼叫 Python Task API，也不把 Notion credential送到瀏覽器。
 
 ```mermaid

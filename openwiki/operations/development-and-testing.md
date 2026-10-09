@@ -3,9 +3,6 @@ type: development-guide
 title: 開發規則與測試策略
 description: 集中說明 Python 與 Nuxt 的程式碼分層、常用命令、測試邊界、CI 與提交前驗證。
 tags: [development, testing, conventions, ci]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -35,6 +32,8 @@ sources:
     resource: repo://apps/showcase/tests/title-search.test.ts
   - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
     resource: repo://apps/showcase/tests/upstash-read-state.test.ts
+  - id: openwiki-source-8e5744b4ac1b806d84300041
+    resource: repo://apps/showcase/tests/weekly-insights-pages.test.ts
   - id: openwiki-source-4bb166095eacfb6386b2f861
     resource: repo://apps/whisper_summary/tests/integration/test_worker_task_leases.py
   - id: openwiki-source-16efc24ea6d42750c31dbc82
@@ -47,7 +46,10 @@ sources:
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 開發規則與測試策略
@@ -83,7 +85,7 @@ Nuxt 使用 Vitest、Vue Test Utils 與 jsdom；測試放在 `apps/showcase/test
 
 目前針對多 worker lease 的 API／SQLite 整合測試、HTTP queue adapter、legacy／LangGraph 引擎選擇，以及 Showcase 的同步驗證、設定與 Upstash 合併都有 focused tests。修改這些跨程序契約時，應先執行對應測試，再視變更範圍跑完整 CI 指令。
 
-CI 有三個 jobs：Python執行 Flake8與 unittest，Showcase執行 npm test/build，Browser Extension執行 manifest/assets/JavaScript validator。Betterleaks 主要由本機 pre-commit hook執行。
+CI 有三個 jobs：Python 執行 Flake8 與 unittest；Showcase 執行 npm test、build 與 production SSR metadata 驗證；Browser Extension 執行 manifest/assets/JavaScript validator。Betterleaks 主要由本機 pre-commit hook執行。
 
 ### Discord 連結的隔離驗證
 
@@ -125,8 +127,8 @@ Commit subject 使用簡短、現在式的 Conventional Commit 風格，例如 `
 
 `title-search.test.ts`、`highlighted-title.test.ts` 與 `showcase-search.test.ts` 驗證繁簡字元等價、大小寫、literal 搜尋、Unicode offset、保留原文、HTML 字元安全呈現與列表搜尋整合。
 
-列表與詳情 API 測試以含敏感測試字串的上游 Error，驗證固定 502 與 log 不外洩；缺少設定時驗證固定 500、no-store 與不呼叫 Notion。首頁測試確認載入失敗仍有一般提示且無診斷連結。`showcase-error-cache.test.ts` 核對 Nitro error hook 只對展示錯誤套用 no-store，不影響成功與其他路由。`showcase-diagnostics.test.ts` 已隨兩支診斷 API 移除。
+列表與詳情 API 測試以含敏感測試字串的上游 Error，驗證固定 502 與 log 不外洩；缺少設定時驗證固定 500、no-store 與不呼叫 Notion。首頁測試確認載入失敗仍有一般提示且無診斷連結。`showcase-error-cache.test.ts` 核對 Nitro error hook 對 results 與 weekly insights 頁面/API 錯誤套用 no-store，不影響成功與其他路由。Weekly insights 的內容、API、頁面與 SSR metadata 另有 focused tests。`showcase-diagnostics.test.ts` 已隨兩支診斷 API 移除。
 
 Focused command：`npm --prefix apps/showcase run test -- tests/title-search.test.ts tests/highlighted-title.test.ts tests/showcase-search.test.ts tests/showcase-results-api.test.ts tests/showcase-detail-api.test.ts tests/showcase-error-cache.test.ts tests/showcase-index-page.test.ts`。
 
-Production build 的 preview 另需確認 diagnostics／health 回傳 404，而不是 catch-all 的 200 HTML，並確認列表與詳情錯誤回應實際帶 no-store。Handler mock 測試不能取代這項框架整合驗證。
+Production build 的 preview 另需確認 diagnostics／health 回傳 404，而不是 catch-all 的 200 HTML，並確認列表、詳情與 weekly insights 錯誤回應實際帶 no-store。Handler mock 測試不能取代這項框架整合驗證。

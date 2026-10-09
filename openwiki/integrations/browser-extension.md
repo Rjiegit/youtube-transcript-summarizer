@@ -3,9 +3,6 @@ type: integration
 title: Browser Extension 任務與 RSS 入口
 description: 說明 Manifest V3 extension 如何辨識 YouTube context、建立摘要任務或 RSS 訂閱，以及設定、權限與失敗回饋。
 tags: [browser-extension, chrome, youtube, api, rss]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-ee3ea3bd39689f7e4f5dc7c6
     resource: repo://.github/workflows/main.yml
@@ -20,6 +17,9 @@ sources:
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
 generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # Browser Extension 任務與 RSS 入口

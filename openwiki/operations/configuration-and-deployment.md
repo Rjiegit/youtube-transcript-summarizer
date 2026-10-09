@@ -3,9 +3,6 @@ type: operations-guide
 title: 設定、執行與部署
 description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topology、診斷與秘密管理。
 tags: [operations, configuration, docker, deployment]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -59,7 +56,10 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 設定、執行與部署
@@ -120,7 +120,7 @@ SHOWCASE_BASE_URL=https://knowledge.example.com
 
 Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 保留同一 TTL 的 Nitro SWR，但 route rule 不再設定固定 Cache-Control header；列表與詳情 handler 仍產生成功回應的 public s-maxage／stale-while-revalidate 標頭，避免固定規則覆蓋錯誤的 no-store。
 
-Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅有 build date 與 commit SHA。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
+Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅包含公開的 site URL、build date 與 commit SHA。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
 
 跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 
@@ -166,4 +166,4 @@ Workflow 使用 Node.js 22，安裝固定版本的 OpenWiki 與可選 Mermaid �
 
 必要設定缺少時回固定 500 訊息，上游讀取失敗且無快取時回固定 502 訊息，不包含 env snapshot 或 Notion error body。server log 的 configuration unavailable 只記錄缺少設定名稱或布林值；Notion query failed 只記錄 results／detail 與 timeout、network-or-type-error、upstream-error 等預定義分類，包含背景更新失敗，不輸出原始 Error 或 secrets。
 
-Nitro error hook 只對展示列表／詳情的 4xx、5xx 錯誤補上 Cache-Control: no-store，防止 SWR 的代理回應遺失 handler 標頭；成功回應與其他 API 不套用這項規則。
+Nitro error hook 對展示列表、詳情與每週洞察頁面/API 的 4xx、5xx 錯誤補上 Cache-Control: no-store，防止 SWR 代理回應遺失 handler 標頭；成功回應與其他 API 不套用這項規則。每週洞察成功內容由 repository 週報文件建置，不需要額外 runtime secret。

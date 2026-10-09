@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:00ef66f6129aa4d206634ef727080b112110dc96a2094ef196978ce56d65adee",
+  "pageVersion": "sha256:a693745d3cca9b5341eb4036df693ee35b1f697f459252a8d1fe73914baa44fc",
   "claims": [
     {
       "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
@@ -150,11 +150,11 @@
     },
     {
       "id": "claim_f760f50d77b84050ac430b44c17432fb",
-      "statement": "Showcase 公開診斷端點已移除；Notion adapter 的內部錯誤不直接傳给訪客或 log，列表與詳情以固定錯誤、安全分類 log 與 no-store 回應失敗。",
+      "statement": "Showcase 公開診斷端點已移除；Notion adapter 的內部錯誤不直接傳給訪客或 log，結果列表與詳情以固定錯誤、安全分類 log 與 no-store 回應失敗。Showcase error hook 亦涵蓋每週洞察頁與 API 的錯誤回應。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/README.md#L165-L178",
-          "version": "repo-lines-v1:sha256:27bff2658f840728d17e5873b01cc894b16644119846ecc0a6cfa619bc5918ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyMTc1MGNmM2YxOWVjNDk1YTcwYTY2Y2QzYzBjYzExNjQ3Mzc1OGE5ZjRmYjE0MWM5YjM1ZGZmMTc0ZGRjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOTY4N2I3OGJiNmJhN2VjN2M4ZWRiMGFhY2IzMTFjODUxMTljYjhjZTFiNzZiZTZkMDk4YmY5NTQ1ZTc0NWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjM2ZGE2OTgzMzg5NmJhYTMwNjc1NGFlNWQwODk5YjljZDc3NmQ1ZDY0NzZiODgwOTEwNDg0MTE5ZDFhMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:9e42fb20c955d580265b819a3158df605d4c1b9da648164798947a1fc1b2c456:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNTRhNTM4NmE4OTA0ODVjYzBhOTUzZmE4Mjg1ZjllMmIxNWYxZWZlZTc0MTcwNGI4ZGRiNzIyZmQwZjc1NTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDNjNDA1OGI2Mzk5ZWVmZjUzN2YyMjdlZGQyMjMxMDhlZmQxOTIxMDIzOWUzOTNiMDA3Y2I3NjIyMDg2YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MWMxZDFhYTE4NWNkZjgyZDVhNjk1ZmFlNmZjZjZkMDVlNWU3NTlmMDAwNWNmZWRkM2NmNmNiN2U3MDM0NWMifQ"
         },
         {
           "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L60-L95",
@@ -165,8 +165,8 @@
           "version": "repo-lines-v1:sha256:5ba5c4c50bff1e1224d6632c634dfa6f6bd46f29f82042cbe4b905d49029d542:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjczYjc1ZmUxNWM1NjcwNTliMGIxZWMxYjQzZTNlMmY4MDdmMTNiNjZlZTg1YjU2MjVmNTg5MTcwZTgwNmE1ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEzNDVhZjkzMGRlNjdjYmNmMjZmNzFmZGM1OWMyN2YyMTEwYmIwNGM5MDMyODVmMmU1ZjAwNzBlYjRmOTRkZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts#L1-L18",
-          "version": "repo-lines-v1:sha256:18f396c697e7b0226c724128dee58d4e1c016e954cbf41eb3b9d709ca48dff6c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdmZmZhZGNlOTgzYTdhN2NmMDdhNjZlYWQ5ODA0Y2ExYTQzNWU1Mzc2Mjk4ZmE4YjRjNmE0NTgwZjMxMDg0Y2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts",
+          "version": "repo-file-v1:sha256:c4d4fc94470b635985d23afcb5dee3514fb1657a9f9d5ff23a4e83a799645d2e"
         },
         {
           "resource": "repo://apps/showcase/server/utils/showcase-errors.ts#L1-L10",
@@ -177,6 +177,6 @@
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-05T13:47:15.340Z"
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

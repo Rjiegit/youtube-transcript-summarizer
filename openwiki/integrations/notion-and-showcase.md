@@ -3,9 +3,6 @@ type: integration
 title: Notion 資料整合與 Showcase 邊界
 description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀查詢、schema 映射及可見性邊界。
 tags: [notion, integration, persistence, showcase]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-fd187f7783d8b744deda578e
     resource: repo://apps/showcase/components/ShowcaseCard.vue
@@ -35,7 +32,10 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_notion_contract.py
   - id: openwiki-source-9225efb0c61a21bf97b44e10
     resource: repo://contracts/notion_completed_page.json
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -58,6 +58,10 @@ Showcase 列表查詢先讀 database schema；詳細頁則透過 `Promise.all` �
 
 完整 block tree 再轉成 Markdown。一般子內容接在 parent 後方；bulleted/numbered list item 與 to-do 的子內容縮排四個 spaces，以保存巢狀清單層級；quote 與 callout 則將自己的文字和所有子內容一起套用引用前綴。若 parent block 本身沒有可呈現內容，仍保留其可呈現 children。只有整棵 block tree 最終沒有 Markdown content 時，詳細頁才 fallback 到 Summary property。
 
+## 每週洞察展示資料
+
+每週洞察使用 repository 中人工整理並發布的 `content/weekly-insights/` 文件。建置時驗證文件並產生 registry；Nitro API 從 registry 提供總覽與單週內容，並以 ETag 與共享快取回應。這條展示路徑不即時讀取 Notion，也不改變原始 Notion 頁面可見性。
+
 ## Discord 連到摘要詳細頁
 
 摘要寫入後回傳的 Notion `page_id`，由 pipeline 保存為 `notion_page_id`；Discord 使用這個摘要結果 ID，不使用處理任務的 `task_id` 或 YouTube video ID。Showcase 的結果 `id` 同樣來自 Notion `page.id`，卡片與通知因而可指向同一個 `/results/{id}` 詳細頁。
@@ -76,7 +80,7 @@ Schema、database query、page 與每次 blocks 分頁／子內容請求各自�
 
 - Notion token 只存在 Python process 或 Nuxt Nitro server；browser 不直接呼叫 Notion。
 - 公開 diagnostics 與 health API 已移除；設定排錯使用本機 check-env 與部署平台 server log。
-- Notion adapter 仍會把錯誤 body 壓成單行並截到 300 characters 作為內部 Error；列表與詳情 route 不把該訊息傳給訪客，也不記錄原始 body。對外使用固定 500／502 訊息；server log 只含故障階段、route 與安全分類，錯誤回應設為 no-store。
+- Notion adapter 仍會把錯誤 body 壓成單行並截到 300 characters 作為內部 Error；結果列表與詳情 route 不把該訊息傳給訪客，也不記錄原始 body。對外使用固定 500／502 訊息；server log 只含故障階段、route 與安全分類，錯誤回應設為 no-store。Showcase error hook 也會為每週洞察頁與 API 的錯誤回應加上 no-store。
 - Showcase cache 可在短暫 Notion failure 時回傳最後成功 snapshot，但初次查詢沒有 snapshot 時仍會失敗。
 - Notion queue 與 SQLite 的 consistency 差異由持久化頁維護，本頁不把 Showcase 的 read schema 誤當作 queue locking 保證。
 

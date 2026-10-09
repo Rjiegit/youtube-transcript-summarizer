@@ -3,9 +3,6 @@ type: workflow
 title: YouTube RSS 自動化
 description: 說明 YouTube channel 訂閱、watermark polling、API 入列與 monitor 執行模式。
 tags: [rss, youtube, automation, sqlite]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-2f9fce5f97d840294b957a0b
     resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
@@ -18,6 +15,9 @@ sources:
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
 generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # YouTube RSS 自動化

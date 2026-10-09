@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:fa38a7923adf6912411700f601e3b05b8dc81c9711b41907e51756a669995b47",
+  "pageVersion": "sha256:628c47d8b772fedf4f3294359a5f3898afbdc5bdf9485bbc9711d4267829e407",
   "claims": [
     {
       "id": "claim_e58d32757ef34b6a8caff1e6252ae528",
@@ -103,10 +103,38 @@
           "version": "repo-lines-v1:sha256:ded476974bc70ce49adadc46ca53209e2ab7417231b8f32f701336e38221c31d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1NjljYjA5MjgwZWUwNzgxOTQ1ZTQ4ZDQwNDFiZDJkZmFhZTY5MWFkMmVhYmY1ZDNjYmEwODQ2YzcyMTZjYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA5NTY5MWVkNmE3OWY0NWNjNzNiODJiNDY0OWFlNzAzZGRhMjMyZGYyZjBhZjE4NGMzZGQwZDJhOGU1NGVhMzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE0OThjZWNhZWQ4ZDg2ZjVjZTg0ZGEyNGVkYjRmODZhNGY3OTAwZmFiOWFjODk5N2ZhM2JhNzJlYWQxNmY1YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlMWM1ZjhhNjgyZTNiZGM1M2NjMWU4ZGZkNDAzNTBhYmM4NzBkMGUzYzM4OTk0YmMwNTJjZTE2OGFmYmU5MjkifQ"
         }
       ]
+    },
+    {
+      "id": "claim_34a74221c157416a988597ae802f78fb",
+      "statement": "Showcase 每週洞察內容由週報文件建置為 registry，Nitro API 提供總覽與單週資料，頁面不即時查詢 Notion。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs",
+          "version": "repo-file-v1:sha256:7dfec8f666ac75c0e934b48b840b1d17b98aec6bda2b2b7a58b5ef919b121e65"
+        },
+        {
+          "resource": "repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts",
+          "version": "repo-file-v1:sha256:7a933f395f81352b343b553aa88bd757ca33074ff9798f78484212c8ce38c1fa"
+        },
+        {
+          "resource": "repo://apps/showcase/server/api/showcase/insights/index.get.ts",
+          "version": "repo-file-v1:sha256:c79095b4c48d1e8a629088d5f4a18acc9ec19a9bb15f139153451ae5650cfb37"
+        }
+      ]
+    },
+    {
+      "id": "claim_c586d34888bc4669bbc99ed1ecfe9fa2",
+      "statement": "Processing engine 選擇依 task override、設定預設值、legacy fallback 的順序解析，並支援 legacy 與 LangGraph。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:4dbb6c20becedf0b3a951b568e7ff79df38217219aca5c2d3db31d18be9d759d"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-05T13:47:15.340Z"
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

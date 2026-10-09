@@ -29,7 +29,7 @@ sources:
 generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-05T12:54:12.705Z
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 媒體轉錄與摘要流程

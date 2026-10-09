@@ -3,9 +3,6 @@ type: frontend-guide
 title: Showcase 跨裝置已讀同步
 description: 說明 Nuxt Showcase 選用的 Upstash 已讀同步、session 驗證、時間戳合併與本機降級行為。
 tags: [showcase, read-state, sync, upstash, authentication]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-6b1be9f1b66868fbfe965160
     resource: repo://apps/showcase/composables/useReadResults.ts
@@ -24,6 +21,9 @@ sources:
   - id: openwiki-source-ac66111399dbff368f8fbd32
     resource: repo://apps/showcase/server/utils/upstash-read-state.ts
 generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # Showcase 跨裝置已讀同步

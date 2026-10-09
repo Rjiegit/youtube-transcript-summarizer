@@ -3,9 +3,6 @@ type: frontend-guide
 title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
 tags: [nuxt, showcase, swr, caching, ux]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-369da753c512075845679e7e
     resource: repo://apps/showcase/components/HighlightedTitle.vue
@@ -23,8 +20,6 @@ sources:
     resource: repo://apps/showcase/README.md
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
-  - id: openwiki-source-f1a67212459cd418a8f6d3d6
-    resource: repo://apps/showcase/server/api/showcase/results/%5Bid%5D.get.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-51d27e8448c6ca65ff1ee504
@@ -37,7 +32,10 @@ sources:
     resource: repo://apps/showcase/tests/title-search.test.ts
   - id: openwiki-source-0790ba7e8a15c95a134e6b3f
     resource: repo://apps/showcase/utils/title-search.ts
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -49,6 +47,10 @@ Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 
 首頁先去重，再以標題做 client-side、繁簡字元等價且不分大小寫的搜尋，並將未讀項目排在已讀項目前。列表可一次標記目前篩選集合為已讀。詳細頁成功取得資料後，會把 Notion page id 與穩定 read key 一併標記，並以 Markdown renderer 顯示 block content；有效 YouTube URL 另產生 privacy-enhanced embed。
 
 首頁和詳細頁都處理 loading、error 與 hydration。詳細頁在沒有 loading、沒有 fetch error 且沒有 item 時產生 404。頁面 title、description 與 social metadata 會跟隨結果內容更新。
+
+## 每週回顧
+
+`/insights` 以已發布週報呈現整體觀察、分類洞見與統計篩選；`/insights/{週日日期}` 顯示單週正文、完整程度、分類統計及代表來源。篩選週次、分類與是否納入部分週會更新 URL query；單週頁提供前後週導覽。內容由 repository 週報文件建置，頁面經 server API 讀取，不會在瀏覽時呼叫 LLM 或即時查詢 Notion。
 
 ## 已讀狀態與選用同步
 
@@ -75,7 +77,7 @@ Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗�
 
 標題搜尋透過 opencc-js 的 TSCharacters 字元字典正規化繁簡字與大小寫，不將「影片／視頻」或「人工智慧／人工智能」視為同義詞。搜尋為 literal substring，正規表示式符號也視為一般字元。預處理保留原始字元的 UTF-16 offset；HighlightedTitle 以 Vue 文字插值與 mark 呈現命中範圍，維持原標題、不使用 v-html。
 
-公開 diagnostics 與 health API 已移除，首頁錯誤區塊也不再提供診斷連結。列表與詳情使用固定一般錯誤訊息，不把設定 snapshot 或原始 Notion 錯誤傳給訪客；缺少設定為 500，上游失敗且沒有快取為 502。server log 只記錄設定存在與否或預定義錯誤類型，背景更新失敗也會記錄。Nitro error hook 對展示列表／詳情的 4xx、5xx 最終回應補上 Cache-Control: no-store，成功回應維持既有快取。排錯方式見[設定、執行與部署](../operations/configuration-and-deployment.md)。
+公開 diagnostics 與 health API 已移除，首頁錯誤區塊也不再提供診斷連結。列表與詳情使用固定一般錯誤訊息，不把設定 snapshot 或原始 Notion 錯誤傳給訪客；缺少設定為 500，上游失敗且沒有快取為 502。server log 只記錄設定存在與否或預定義錯誤類型，背景更新失敗也會記錄。Nitro error hook 對展示列表、詳情與每週回顧頁/API 的 4xx、5xx 最終回應補上 Cache-Control: no-store，成功回應維持各 route 的既有快取。排錯方式見[設定、執行與部署](../operations/configuration-and-deployment.md)。
 
 ## 延伸閱讀
 

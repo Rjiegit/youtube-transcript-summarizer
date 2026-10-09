@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:7cd62d21e3ede594522c96bef224a3b38945784781d7196f65954cbd656621cd",
+  "pageVersion": "sha256:64a506a1fad777a2ec49f9b79ec1611c33a037ba63abb899964c9fa26a761250",
   "claims": [
     {
       "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
@@ -75,10 +75,28 @@
           "version": "repo-lines-v1:sha256:b2dfe1917137e702bdb36f8b1dc413c93d56f8d9c446ad23a087faff483492b7:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0MTZkNTE3ZjlmYjE4ZDMwNmZjZjUzYTI2N2YwMWJlNWZjYjI2ZTcyNTA5ZTYzYWU2ZTRhZDE1ODdjZGQ4YTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE1MjM2ZDM4ODQ0MjE5Y2JlZjg0OGRmMjY2ZTNmYjdiZmRlNTZjMTFiZWYzMDY1ZTgzMzkyOTViNTEzZTFhZjEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM3MmYxY2Y3NGE3ZWJkYTc0YjRkMzY5ZGFkODE3ZTY4MTM4Y2NjMGQwMmVjYzg5ZTliYmNhOTlmMDY0ODk2ZTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk1ZWI3YTlkNDA5NTNkODRjNDFkZjQyZmI1YWYyM2VmMTM3M2YwZTFlMGIxODdlY2JmZDQ2MmUyNmRjNTk1ZjUifQ"
         }
       ]
+    },
+    {
+      "id": "claim_c17251b753494755bf35e62926f4b447",
+      "statement": "Processing engine 在 task processing stage 依 task override、PROCESSING_ENGINE 設定、legacy fallback 順序選擇 legacy 或 LangGraph，且不改變 queue 狀態轉移或 lease 規則。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/workers/processing_worker.py",
+          "version": "repo-file-v1:sha256:26a5371f0360458b78ed083847f354cd54a276c091cdcaacb2c9bedc6b0e9830"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/core/config.py#L99-L104",
+          "version": "repo-lines-v1:sha256:9d57fa85ff1c515e89a0b042ff62f7c02c8ce353d7f73ada216c0b0651b15291:eyJzZWxlY3RlZExpbmVDb3VudCI6NiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMTE0NWY2YzBjMDlkNmE2NTA4Y2RjZTM0OGYzYzg2Y2M1NDlkZWVjODBiOWZmMGI1ZTE1NTYxM2MxZjBmYTI5ZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTUwMzJlOTY0ZDA5MzIzNTFlNWQxODUyNjkyODFiMTcxYTNhMDliMDhiMjg2ZTY2MWVhNDcwMzIzYzgyZWI0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiY2UzNThmOGJiNjYwYzQyOTVjNzkyMmE3ZGNjYzFkMWEzYTNjNjhjZTU3NGNhODA5OTNhMjdlMzY2NmJiNzI3MCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzYwZjNhYTA2NTM5ZGVmNTdjZTVkOTc2ZWU5NzdhZDc4OGI4MDM1OGFjMTQyOThmZjlhNWJiOTY5NWI0NTJiMiJ9"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:4dbb6c20becedf0b3a951b568e7ff79df38217219aca5c2d3db31d18be9d759d"
+        }
+      ]
     }
   ],
   "verification": {
-    "by": "openwiki/0.4.3",
-    "at": "2026-09-28T16:59:07.681Z"
+    "by": "openwiki/0.6.0",
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

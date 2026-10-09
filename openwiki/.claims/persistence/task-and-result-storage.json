@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:437308daa0fe30ca78b318474ae619001fcfd3d522de596f416881c88c1bedaf",
+  "pageVersion": "sha256:4cb30dedf58a8ddbe5695e10a051789344763a6b761b1a24789c6ea05fa7e499",
   "claims": [
     {
       "id": "claim_84c6bc8f911e4e36bf355b3df4511d96",
@@ -115,10 +115,28 @@
           "version": "repo-lines-v1:sha256:92f86be4e19b746acc3953b875286aeff4f702d08e8e40de2205709d8f1e3584:eyJzZWxlY3RlZExpbmVDb3VudCI6NjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJkYTgyOTY0NGRjNGM4ZmEyZTEzYmFmZmI1MTQwMjU2M2E1ZjdkZWQ1NmUzNjQwZTE5MmQ1OGJjYWQ0OGQwNDkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRhNzFkMDg5MjdhYWNjOWVlZDM3ZmMxMjk4MGIwYzA2MWE1MjI5YjQ1YzEzMmI4YTdkNmQ0Nzk2NGY3NGU4YzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMmI0MTVmNjVjMDBiOWE2NzYzZWI2YTYzY2QyZDc4OTE3ODJhNzcwNGVlNmZkYmRkMDZlNWIwYjI0MmIxYTciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY2ZTczYzFhNzU0Y2ZlMmFkYTg0ZmZlM2ZmYzBmMTJhYjc3MWVhNDcyZTgyOWIyMWM4NmQ2ZGQwMmMxYTRmNzMifQ"
         }
       ]
+    },
+    {
+      "id": "claim_7db744ef893d48eda371b73f0f52a071",
+      "statement": "Showcase 每週洞察以 repository 週報 JSON/Markdown 作為獨立發布資料，建置時驗證並打包為 Nuxt registry，並非 task queue 或 Notion summary page 的副本。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/content/weekly-insights/series.json",
+          "version": "repo-file-v1:sha256:ba40655ec835352635efb80daf8f6bbfad7232645da24090b8501e1f49ed7890"
+        },
+        {
+          "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs",
+          "version": "repo-file-v1:sha256:7dfec8f666ac75c0e934b48b840b1d17b98aec6bda2b2b7a58b5ef919b121e65"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/weekly-insights.ts",
+          "version": "repo-file-v1:sha256:46d4d5ed2014a6f0df97f6be7bd674d5b2f892a361718e570ba93e5f920ae822"
+        }
+      ]
     }
   ],
   "verification": {
-    "by": "openwiki/0.4.3",
-    "at": "2026-09-28T16:59:07.681Z"
+    "by": "openwiki/0.6.0",
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:6be2a8e61e1949f4f0fb224422cd641ef395085749ccfb721c2f2e4a633f6927",
+  "pageVersion": "sha256:943df1b29c7a616f0d982d1fa7fad29a7368f30638c292d682b6d4e874629f18",
   "claims": [
     {
       "id": "claim_18efeaf5a06b4c9cabc9632ffac9ea0f",
@@ -32,19 +32,19 @@
     },
     {
       "id": "claim_fd02d9cde3df4d52b3d04fd349e5abdd",
-      "statement": "CI分別驗證Python flake8/unittest、Showcase test/build與Browser Extension assets/JavaScript，而 Betterleaks 由本機 staged pre-commit 流程執行。",
+      "statement": "CI分別驗證Python flake8/unittest、Showcase test/build/production SSR metadata，以及Browser Extension assets/JavaScript；Betterleaks 由本機 staged pre-commit 流程執行。",
       "evidence": [
         {
           "resource": "repo://.githooks/pre-commit#L19-L25",
           "version": "repo-lines-v1:sha256:cf99a8334672c91205de84d3e70a9cf2d299cb8aa33b9002b026d468860a2741:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmM1NWVjNzU2ZDQ4YzdhMmJkY2FhMTFlOWE1YzI2NDkwZGEwMDE1NDI1ZmUxZjVmNzhiNmM1N2NlYzEwMmE4YSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNThhZWRhZmM4OGZiOGE0NzJlZWM4MjYyMzI1MzNjY2Q0Mzk4OWE4MDE2YjgyOWM1MmM2YmVkNTUxMDdmYjI1MiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzFjZTFhYTExNjk1ZDliNTE1NzBkYTE1ZjIzOWQ3MGQyZjVjYWQ1OGE3ODUwZDJhOGRhOWNlZDU4NjFkNDgzMiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
         },
         {
-          "resource": "repo://.github/workflows/main.yml#L9-L77",
-          "version": "repo-lines-v1:sha256:5aa3de878bfc78d6e3a0d10b92cda5c5a8b1074093cb796c34da1fed440fabb3:eyJzZWxlY3RlZExpbmVDb3VudCI6NzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU5ZDgwMTU0ZWQ0MmZjNWM3NzliMTMzMTU3OGI1OGI4OWM4MDFlYWNlNzRmMjRjZDQ4ZWI0YTIzNTc5NDBhOTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwOWM4ZjUyOGNkOTRkYWNkZDk5MGQ4MWE2OWNhMTEwNmUxZGVkMjAwZmRiYjQwY2E0ZjE0Yzc0NzQzMjI3M2QiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA0OWQ3MjZhMGNjZTFjNzg1ZjJjMGZhMzc4OTYzM2Q1MTVkZTk2ZmFkOTcxYTJiNjEwM2YzYTZhYmEzY2QyZDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://.github/workflows/main.yml#L1-L79",
+          "version": "repo-lines-v1:sha256:2d72d36c3ffc0a18e559fb3abfa65116997602249c20553468d57f8c074f5d14:eyJzZWxlY3RlZExpbmVDb3VudCI6NzksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2ZTFiMzJmYTA5MDc5YWUyZjAwMDFmZmYwZWNhMjdiNDk4NTk1N2Q0ZWI0ODU3OTI5YjNjZjA1OGZhYWU1NDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkwMTgzZTgzMjBjMjE4MjZkYzFiMGY4YzhjNjZjNGZjNzlkY2NiODRiZjg2Y2U5NmJiZTA1NTllNzMxMGJkODIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM2NDRkYjRmNDI2ZTQzYmQ4ODA0NGY5MWJhMDIyMzFmNGM5ZWU1YjI4NmRmOWI4ZTMyZTMzMDY5N2U5MDNjMjQifQ"
         },
         {
           "resource": "repo://Makefile#L15-L25",
-          "version": "repo-lines-v1:sha256:59d7becbbde2f18070e619ceeced6e39b1a64b7f94f6094cddc5b270383087e6:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhMjEzOWNjNzAyMjA3NmY3NzZhYTNlZWY4MmIxODBmYTQyZTk3MjhhMTk1NGM0ZjE3NGZhMDU1OTI5NDhhODYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4Yjc3NjBiNDY3Yjg5MTZlMzM1M2Y2YWMwN2VlZGIzMTc5NGNjZTBkZWVhMDk3ODA2OWQ1NjAxMzc3ZDc0YTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjE3MmEzOWNhMTljYjdmZjA4OGIwMmU0MmQwMDM0ZDEwMzk3NjQ1ZThmMzExYzBiNDJlOTU4NWEwM2RhYmI4NjYifQ"
+          "version": "repo-lines-v1:sha256:05c59d25dfe95dde62166ae6d516d4e3471245f2ebe7edcf982c104609ffcafa:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM2YzU4MDE5Yzk3MGUzYjE3MzJhZTY2YzkwMDg1NjQzODI0Njk1M2YxMmNiYTI5ZDYxOWIwMDU3MmZmZjI0NTciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg2ZjY1YTgyMDE0YWNmNjRmYTdkMThiYzFkNzhhOTY4MzBjNjNhMGZmYjFjZDYzNzE4OWViMjk0NmRmM2YwNjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjJjOGYxNmQxNmFiNjQwZjFhZmU4NTk1OWE4OWMwZjE1N2QwOTY4NjhjZDBjZWZhMDc5YWY2MDdhMzlmNzVjOTkifQ"
         }
       ]
     },
@@ -152,15 +152,15 @@
     },
     {
       "id": "claim_a5671499000c410ebc88b8690b062d53",
-      "statement": "Showcase focused tests 覆蓋繁簡搜尋、安全高亮、API 固定錯誤與敏感 log 防洩漏、首頁無診斷連結，以及展示錯誤專用的 no-store hook；診斷端點測試已移除。",
+      "statement": "Showcase focused tests 覆蓋繁簡搜尋、安全高亮、API 固定錯誤與敏感 log 防洩漏、首頁無診斷連結，以及 results 與 weekly insights 錯誤專用的 no-store hook；診斷端點測試已移除。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/tests/highlighted-title.test.ts#L1-L57",
           "version": "repo-lines-v1:sha256:52bc0bcce6300f4d4cd988f16201f1edc009c31bc4d84d0706179d49bb0ff31b:eyJzZWxlY3RlZExpbmVDb3VudCI6NTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4MDY1YmQ1MzMwNjMwZGU4M2Y3ODZiNDJmOWM4M2Q5Zjk1ZWI3MGUxOTU0OTcxZTUwODU5ZDEwZjczZmQzNWUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
-          "resource": "repo://apps/showcase/tests/showcase-error-cache.test.ts#L1-L33",
-          "version": "repo-lines-v1:sha256:13b7fdd3c8191b2a7e0e31dcf4d62df71a5e8626545d8bdfc1012b397f8ccb51:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImVlOGJlNjQ0NjA2NWQ1NzJhYjA3YzAwNjEwNGIzNjNkODUxYjEzNjJkMzFmNTgzNWE4Njc2MWRhMGQzM2Q5ZGQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/tests/showcase-error-cache.test.ts",
+          "version": "repo-file-v1:sha256:4076c8ca56cdd31e143f46b0d4c47106fdbff8323dcbbbdaacabe36aea00b505"
         },
         {
           "resource": "repo://apps/showcase/tests/showcase-index-page.test.ts#L234-L255",
@@ -173,6 +173,10 @@
         {
           "resource": "repo://apps/showcase/tests/title-search.test.ts#L1-L46",
           "version": "repo-lines-v1:sha256:e83d0e2722797cc7b1b9219389565b163e7d83dafd412555f92ad6b45e831f35:eyJzZWxlY3RlZExpbmVDb3VudCI6NDYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFiOTUwNmIyMWY0ODNkYzk1ZGYyZjJiMzVmNzBjMGE0NDNiMDUzYTdiOTY0OWY3NzQ2N2U2ODhhMzMyMDA0MDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/tests/weekly-insights-pages.test.ts",
+          "version": "repo-file-v1:sha256:87c22b41d672b356b14ecb4e2d8f46100580407db91bed10f33f7ab572d7a002"
         }
       ]
     },
@@ -186,13 +190,13 @@
         },
         {
           "resource": "repo://CONTRIBUTING.md#L97-L104",
-          "version": "repo-lines-v1:sha256:e2dfdd457deeb0ae45d217619b9161cc774aa0f9531aea4af9f3b81d169e9752:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMGYwNDg5MjhhZjk0NWQ1YjI2M2YyOWU4MjQ3NjA0Yzk4NDczN2JkMTk4YjFkNmExYjY5MmFiNjBhOTA3MjkwYSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTg1MmI4NGI4ZjMwZDJmOWExNjQwZWUyOThiZTA3MWZiY2IxM2RlZDE3OTg4ZGZjYTVlYmIzMTFkZWZmMDhkZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjBkOGI4M2U1ZTExMmFmYjRkZDkxZDJhZDRmZDhjYzViZjJkZjBlYmZhNmNlMGM3MTNkOWFkNWExNjk1OTg0ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZDMxMGNiYzFlYjNjZGVmYWQxYjY5YzlkNmFjNmIzZjkxZWUzZTI3ZDZlNjM3YzgzNmZlODU1ODU0OTI4NTY5MCJ9"
+          "version": "repo-lines-v1:sha256:c5051f3f909268f66e67d1c4c5b6722f75e7817ec209c5e567115f2dc52f5ff1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmMDQ4OTI4YWY5NDVkNWIyNjNmMjllODI0NzYwNGM5ODQ3MzdiZDE5OGIxZDZhMWI2OTJhYjYwYTkwNzI5MGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NTJiODRiOGYzMGQyZjlhMTY0MGVlMjk4YmUwNzFmYmNiMTNkZWQxNzk4OGRmY2E1ZWJiMzExZGVmZjA4ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwZDhiODNlNWUxMTJhZmI0ZGQ5MWQyYWQ0ZmQ4Y2M1YmYyZGYwZWJmYTZjZTBjNzEzZDlhZDVhMTY5NTk4NGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMTBjYmMxZWIzY2RlZmFkMWI2OWM5ZDZhYzZiM2Y5MWVlM2UyN2Q2ZTYzN2M4MzZmZTg1NTg1NDkyODU2OTAifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-05T13:47:15.340Z"
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

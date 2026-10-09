@@ -3,9 +3,6 @@ type: integration
 title: LLM Providers、選擇與 Failover
 description: 說明 Gemini、OpenAI、Ollama、Codex CLI 的候選資格、加權選擇、provider 呼叫與一次性 transient failover。
 tags: [llm, gemini, openai, ollama, codex, failover]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-cd3c19edb3412c855091bcd0
     resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
@@ -22,6 +19,9 @@ sources:
   - id: openwiki-source-e17149958db116451aa12495
     resource: repo://apps/whisper_summary/tests/unit/test_weighted_selection.py
 generated: { by: "codex", at: "2026-09-27T11:42:53.431Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # LLM Providers、選擇與 Failover

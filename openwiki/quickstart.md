@@ -3,9 +3,6 @@ type: quickstart
 title: 快速開始與開發導覽
 description: 從環境設定、安裝、啟動與測試開始，並依開發任務導向架構、API、持久層與整合文件。
 tags: [quickstart, setup, navigation]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -23,6 +20,8 @@ sources:
     resource: repo://apps/showcase/pages/settings/sync.vue
   - id: openwiki-source-6b47ec2bb946dbfe3f605cea
     resource: repo://apps/showcase/README.md
+  - id: openwiki-source-62d27fea7294b39bcb77aae5
+    resource: repo://apps/showcase/scripts/build-weekly-insights.mjs
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
   - id: openwiki-source-3b0efe03f5b86982327fa144
@@ -49,7 +48,10 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 快速開始與開發導覽
@@ -105,7 +107,7 @@ npm run check-env
 npm run dev
 ```
 
-開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
+開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
 
 ## Browser Extension
 
@@ -158,6 +160,7 @@ npm --prefix apps/showcase run build
 | 維護 RSS channel automation | [YouTube RSS 自動化](workflows/rss-automation.md) |
 | 修改 Notion schema 或 Python/Nuxt 整合 | [Notion 資料整合](integrations/notion-and-showcase.md) |
 | 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](frontend/showcase-experience.md) |
+| 維護 Showcase 每週回顧內容 | `apps/showcase/content/weekly-insights/` 與 `npm run insights:check`；流程見 [設定與部署](operations/configuration-and-deployment.md) |
 | 設定跨裝置已讀同步、session 或 Upstash | [Showcase 跨裝置已讀同步](frontend/read-state-sync.md) |
 | 設定 Docker、env、cache 或部署 | [設定、執行與部署](operations/configuration-and-deployment.md) |
 | 新增或定位測試 | [開發規則與測試策略](operations/development-and-testing.md) |

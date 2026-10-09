@@ -3,10 +3,13 @@ type: persistence-guide
 title: 任務、鎖與結果持久化
 description: 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
+  - id: openwiki-source-edc748d2ffa8cac498e9a351
+    resource: repo://apps/showcase/content/weekly-insights/series.json
+  - id: openwiki-source-17de8480042164f5a9040c86
+    resource: repo://apps/showcase/scripts/weekly-insights-content.mjs
+  - id: openwiki-source-263e3bdd5cbd1e9c173088e9
+    resource: repo://apps/showcase/server/utils/weekly-insights.ts
   - id: openwiki-source-8a8f27feb31a478f83017412
     resource: repo://apps/whisper_summary/apps/api/routers/processing.py
   - id: openwiki-source-8f9eb8eb57207a07e563e910
@@ -25,7 +28,10 @@ sources:
     resource: repo://apps/whisper_summary/services/outputs/path_builder.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 任務、鎖與結果持久化
@@ -66,6 +72,8 @@ Recent history 不是 task status：Streamlit 打開結果時 upsert view time�
 `NotionDB` 把 database page 當作 task record，以 URL、Name、Status 等 properties 建立與更新。它可供 CLI/API 選為 queue backend，但 task acquisition 與 global lock 沒有 SQLite 的原子性；並行 worker 可能取得同一 task，因此文件與部署都必須維持單 worker 假設。
 
 `SummaryStorage` 是另一個用途：pipeline 不論 task backend 為何，都會建立承載摘要的 Notion page，包含 Title、URL、Model、預設 false 的 Public 與 paragraph children。成功回傳的 page id 寫回 task，供 Streamlit、Discord link 與後續查詢使用。Notion write 失敗是 pipeline failure，不會被本機 Markdown 成功掩蓋。
+
+Showcase 每週洞察是獨立的內容發布資料：週報 JSON/Markdown 位於 `apps/showcase/content/weekly-insights/`，建置時驗證並打包至 Nuxt registry。它不是 task queue、summary artifact 或 Notion page 的另一種持久化副本。
 
 ## 本機 artifacts
 

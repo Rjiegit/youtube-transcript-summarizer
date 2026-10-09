@@ -3,9 +3,6 @@ type: workflow
 title: 任務生命週期與併發控制
 description: 說明任務建立、去重、背景排程、SQLite leases、狀態轉移、失敗重試與管理者 lock 操作。
 tags: [tasks, queue, locking, concurrency, retry]
-verified:
-  - by: openwiki/0.4.3
-    at: 2026-09-28T16:59:07.681Z
 sources:
   - id: openwiki-source-1733e19cd888bc4a90558aa4
     resource: repo://apps/whisper_summary/apps/api/dependencies.py
@@ -15,15 +12,22 @@ sources:
     resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
   - id: openwiki-source-fb3a71308a5a59482c2767f3
     resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-445a1c8f48d3b2e4f898d6be
+    resource: repo://apps/whisper_summary/core/config.py
   - id: openwiki-source-6273858b85e260ea458ff24b
     resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py
+  - id: openwiki-source-79006d740abb2f90a0561607
+    resource: repo://apps/whisper_summary/services/pipeline/engines.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-ca28727ce4b3dd82b2bdb95e
     resource: repo://apps/whisper_summary/services/tasks/task_creation.py
   - id: openwiki-source-af864f870947ae550426a1f1
     resource: repo://apps/whisper_summary/tests/unit/test_sqlite_client.py
-generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # 任務生命週期與併發控制
@@ -45,7 +49,7 @@ generated: { by: "codex", at: "2026-09-28T12:59:50.272Z" }
 
 常駐 `processing-worker` 依 polling interval 反覆呼叫 queue drain，API process 不建立 daemon thread。Worker 透過 `HttpTaskQueue` 呼叫中央 API；API 持有 SQLite queue，所有 worker 的 claim 都在同一 database 內協調。
 
-SQLite 在 `BEGIN IMMEDIATE` 內先把過期或不完整 lease 的 Processing task 標記 Failed，需人工重試；再原子取得最舊 Pending task，核發 worker id、lease token 與 locked time。Worker 處理期間持續 heartbeat，progress、complete、fail 都要匹配 token。失去 lease 時，原 worker 不再更新該 task。全域 processing lock 的資料與管理 API 仍存在，但常駐 worker 不使用它作為 queue ownership。實作細節見[任務與結果儲存](../persistence/task-and-result-storage.md)。
+SQLite 在 `BEGIN IMMEDIATE` 內先把過期或不完整 lease 的 Processing task 標記 Failed，需人工重試；再原子取得最舊 Pending task，核發 worker id、lease token 與 locked time。Worker 處理期間持續 heartbeat，progress、complete、fail 都要匹配 token。開始 pipeline 時依 task override、`PROCESSING_ENGINE` 設定、`legacy` fallback 的順序選擇 legacy 或 LangGraph；此選擇不改變 queue 狀態轉移或 lease 規則。失去 lease 時，原 worker 不再更新該 task。全域 processing lock 的資料與管理 API 仍存在，但常駐 worker 不使用它作為 queue ownership。實作細節見[任務與結果儲存](../persistence/task-and-result-storage.md)。
 
 ## 狀態轉移
 

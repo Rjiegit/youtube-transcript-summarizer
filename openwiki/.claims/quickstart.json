@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:24d391c9e88a7d9b837e850c813c530cea4db492b615ef4740065d2fa9f9776d",
+  "pageVersion": "sha256:5d934b2e80e3554be103b659625a830e6fd36f48fa39364915acfcf2d7cbfc64",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -8,7 +8,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/package.json",
-          "version": "repo-file-v1:sha256:290acf499662a284418c6826b0a5e26d458262e53f8b9b0b44ecfb40f45d5fa3"
+          "version": "repo-file-v1:sha256:c73a97ed9a32117f290df3c137352532f5fa526854aa4a69dc897cc74e267d92"
         },
         {
           "resource": "repo://apps/whisper_summary/pyproject.toml#L1-L21",
@@ -38,11 +38,11 @@
     },
     {
       "id": "claim_169c796272d442ec9383732ca166744e",
-      "statement": "Nuxt Showcase提供 dev、build、preview、test及 check-env scripts，development server固定使用 port 3000。",
+      "statement": "Nuxt Showcase提供 dev、build、preview、test、check-env、test:ssr與 insights:check scripts；dev server固定使用 port 3000，dev/build/test前置階段會建置週報 registry。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/package.json#L5-L13",
-          "version": "repo-lines-v1:sha256:c5245520a1b50616b0e00ae78345573465eca9ae3917ceabe299c0c53c12df48:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiN2ViNmMzMjM3NGQ1ZjAyNjAxOTllNTkwMmFlOGY1MjBmYTk3NTZlOGI3ODY2MTBjYjVhYTcxMTIzM2Q0OWFmYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYmNjOTcxNzkwNDg3NWYwMzc1OTNlNGU3ZWZmOWMwYmE2YTIzZWNhNDUyNTQzMzRkNTk2OWZkNGQxM2QxMjAzNCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOTQxZjZhMmYyYjBmM2RjMDVkNDVmZDA5YTQyNTNiMDhhNWI1OTYxOTkzZWM5ZGY5Y2MzMjkxYzVjYmU4NmJmZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMDJmZjIxNjNiMzQyNzM1MGMwNzEyNGRjODg5NWFhMzM4MWQ1ZmQ2Y2EzMGRlMTg5YTdiYzU3ZjhmZDMxOGFlYyJ9"
+          "resource": "repo://apps/showcase/package.json#L5-L20",
+          "version": "repo-lines-v1:sha256:1dd96c12175b89acca69c3a07e635263a766bbaac95494f63c3672368dea0b70:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYjZjMzIzNzRkNWYwMjYwMTk5ZTU5MDJhZThmNTIwZmE5NzU2ZThiNzg2NjEwY2I1YWE3MTEyMzNkNDlhZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhM2I0NjlkOWUwOTc1NzIyNDY2NjczNGM5ZWY3YjI1NGQ4ODUzNGY1ZDViYjcwOTg5NjA4MDVjNTUzZGMzMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0MWY2YTJmMmIwZjNkYzA1ZDQ1ZmQwOWE0MjUzYjA4YTViNTk2MTk5M2VjOWRmOWNjMzI5MWM1Y2JlODZiZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MjM3ZGIyYWI0NTQ1YzIxMzNkMDM4YjcxMzcyNDA3ZTVhYTA3OGEyNGVkNDEzOTc0YzUwNjExNWI0MzYzNzYifQ"
         }
       ]
     },
@@ -217,10 +217,28 @@
           "version": "repo-lines-v1:sha256:27bff2658f840728d17e5873b01cc894b16644119846ecc0a6cfa619bc5918ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyMTc1MGNmM2YxOWVjNDk1YTcwYTY2Y2QzYzBjYzExNjQ3Mzc1OGE5ZjRmYjE0MWM5YjM1ZGZmMTc0ZGRjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOTY4N2I3OGJiNmJhN2VjN2M4ZWRiMGFhY2IzMTFjODUxMTljYjhjZTFiNzZiZTZkMDk4YmY5NTQ1ZTc0NWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjM2ZGE2OTgzMzg5NmJhYTMwNjc1NGFlNWQwODk5YjljZDc3NmQ1ZDY0NzZiODgwOTEwNDg0MTE5ZDFhMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
+    },
+    {
+      "id": "claim_c5998f67a0c24dc1aa26b5a4b0968aa1",
+      "statement": "Showcase 每週回顧內容存放於 repository 的 weekly-insights files，insights:check 可驗證內容，dev/test/build 前置流程會重建 registry。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/README.md#L15-L28",
+          "version": "repo-lines-v1:sha256:effd46e6784cfe11342df39220a4505bfac4ede2978062bbbc06fd1161fa9fed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkM2JlNDY1ZWUyYjY2ODU3ZDhkMzhiNWQxYTRjYjUyZGZiYjhhZTlmMjhlODNjNzJkNjIwYjAxZGJlNmI4OWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkOGMzMmE1M2U1Mjg2NGQ2ZDZmMjdlMTYxMjc2YTNiZjdhMDYyNjUyNjljM2QzODJjMWI2ZmFhMmMzNDI2ZWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUzZmE3NTZiMmE1YjQzM2IxOWRjNmFhYjc0OWI5ZTdjNmJlZWVkMjAxNjk4NmRhMjAwODdjZjU0M2E5NDg5NzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3YzVhMDQzMmRkNmYxOGI4Njc0MjIzOWI5M2Y3ZWExZTkyN2RkMjIyMDgzMDk2MGJiMDIwZDYwZDYzMTg4MzIifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/package.json#L5-L20",
+          "version": "repo-lines-v1:sha256:1dd96c12175b89acca69c3a07e635263a766bbaac95494f63c3672368dea0b70:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYjZjMzIzNzRkNWYwMjYwMTk5ZTU5MDJhZThmNTIwZmE5NzU2ZThiNzg2NjEwY2I1YWE3MTEyMzNkNDlhZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhM2I0NjlkOWUwOTc1NzIyNDY2NjczNGM5ZWY3YjI1NGQ4ODUzNGY1ZDViYjcwOTg5NjA4MDVjNTUzZGMzMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0MWY2YTJmMmIwZjNkYzA1ZDQ1ZmQwOWE0MjUzYjA4YTViNTk2MTk5M2VjOWRmOWNjMzI5MWM1Y2JlODZiZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MjM3ZGIyYWI0NTQ1YzIxMzNkMDM4YjcxMzcyNDA3ZTVhYTA3OGEyNGVkNDEzOTc0YzUwNjExNWI0MzYzNzYifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/scripts/build-weekly-insights.mjs",
+          "version": "repo-file-v1:sha256:7ec799e9d581147e5a6216ebe7bd49767de26197ae2fdbaed53b4bb1375eb387"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-05T13:47:15.340Z"
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

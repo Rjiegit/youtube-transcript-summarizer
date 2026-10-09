@@ -5,7 +5,7 @@ description: 說明 Python modular monolith、獨立應用、composition roots�
 tags: [architecture, dependencies, python, boundaries]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
+    at: 2026-10-09T15:26:03.952Z
 sources:
   - id: openwiki-source-269e1e25890c094aaa09d0a0
     resource: repo://.docker/Dockerfile
@@ -51,7 +51,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -68,16 +68,16 @@ FastAPI 以 feature routers 組裝 HTTP surface；Streamlit、同步 CLI、proce
 
 ## Runtime dependencies
 
-`apps/whisper_summary/pyproject.toml` 將 Python 依賴分成 `api`、`ui`、`worker` 與 `dev` groups；本機預設安裝全部 groups，Docker targets 則只安裝各自需要的 group。Nuxt 使用自己的 `package.json` 與 lockfile。`yt-dlp` 是 downloader 透過 subprocess 呼叫的外部 executable，由 Makefile／Docker 流程安裝，與 Python dependency resolution 分開。
+`apps/whisper_summary/pyproject.toml` 將 Python 依賴分成 `api`、`ui`、`worker` 與 `dev` groups；本機預設安裝全部 groups，Docker targets 則只安裝各自需要的 group。Nuxt Showcase 是獨立 npm application，使用 `apps/showcase/package.json` 與 `package-lock.json` 管理依賴；package scripts 包含 dev/build/preview、Vitest、SSR 驗證與每週洞察內容檢查，dev/build/test 前置流程會先建置週報內容。`yt-dlp` 是 downloader 透過 subprocess 呼叫的外部 executable，由 Makefile／Docker 流程安裝，與 Python dependency resolution 分開。
 
 轉錄 adapter 的預設路徑使用 `faster_whisper.WhisperModel`，同時保留 `whisper.load_model` 的 legacy method。API schema 直接使用 Pydantic，而 Pydantic 目前由 FastAPI dependency 帶入；若未來要獨立使用 schemas，應考慮升格為 direct API dependency。Worker group 另包含 LangGraph，供選用的圖式 orchestration 使用。
 
 ## 驗證邊界
 
-Python CI 從 `apps/whisper_summary/` 安裝 lockfile、執行 Flake8 與 unittest；Showcase job 執行 npm test/build；Browser Extension job 驗證 manifest、assets 與 JavaScript。Betterleaks 則由 repository-local pre-commit hook 掃描 staged index，目前不在 GitHub Actions 中執行。
+GitHub Actions 分別執行 Python 的 lockfile 安裝、Flake8 與 unittest，Showcase 的 npm install、test、build 與 production SSR metadata 驗證，以及 Browser Extension manifest/assets 驗證。Betterleaks 則由 repository-local pre-commit hook 掃描 staged index，目前仍不在 GitHub Actions 中執行。
 
 Python 的 unit／integration 測試與 fixtures 放在 `apps/whisper_summary/tests/`；Nuxt 測試放在 `apps/showcase/tests/`，兩者共用的契約 fixture 保留在頂層 `contracts/`。
 
 相關閱讀：[系統架構](system-overview.md)、[開發與測試](../operations/development-and-testing.md)。
 
-Nuxt production dependencies 包含 Nuxt、markdown-it 與 opencc-js；opencc-js 只使用字元字典支援標題繁簡搜尋。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 放在 devDependencies；Python dev group 包含 flake8 與 httpx。
+Nuxt production dependencies 包含 Nuxt、markdown-it 與 opencc-js；opencc-js 提供字元轉換支援標題繁簡搜尋。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 放在 devDependencies；Python dev group 包含 flake8 與 httpx。

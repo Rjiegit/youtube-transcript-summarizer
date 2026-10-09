@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:a98e2a0e71a3f47f20ac654064ea672a0df370df84f3fbbdab617b140813a505",
+  "pageVersion": "sha256:379f1da16e3558284e76869d7905b33240a9d6a77ceb359be87d11cd923c945c",
   "claims": [
     {
       "id": "claim_a80857af49314adf98410dc2de2d7431",
@@ -107,8 +107,8 @@
       "statement": "Browser Extension validator檢查Manifest V3、manifest與HTML引用檔案及JavaScript語法，GitHub Actions以獨立job執行它。",
       "evidence": [
         {
-          "resource": "repo://.github/workflows/main.yml#L65-L77",
-          "version": "repo-lines-v1:sha256:9911dea70c17698bd9ceac2903444f98dc1c7d7c81b1baa078ffea56da694853:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmYzg5MGJlMDQ0ZjJmNDgzNjBmMzk2YjE3Y2NlNDk1ZGJiMmZhY2UzMjBmMzQxM2ZjYzdjYmI5NGMzMjhmYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI1NjcwN2RhNzhlNjE4YTIwODExNjYzMzU5ZTYxMmIxOTY5MmI5MWQyOTM5ZjlkZWE3YmE3NDY3ZGJmMjE2MzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoyLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjVjMmE2OTY0MjE4ZDQ3NjA0NGMzZTZjMThjMGJlY2EwYjJmODY4M2YzN2U3MmJiNmEzZTdkMGFhOGFlM2E5YmIifQ"
+          "resource": "repo://.github/workflows/main.yml#L65-L78",
+          "version": "repo-lines-v1:sha256:a241194d4964aa50febbb3f7d7197a75df50a30b7ea11657c9794a1e5cedc1dc:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNmYzg5MGJlMDQ0ZjJmNDgzNjBmMzk2YjE3Y2NlNDk1ZGJiMmZhY2UzMjBmMzQxM2ZjYzdjYmI5NGMzMjhmYmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjIxOTFjODdkNmE3YWRhYmFkYWRhOTA5NGU5NGFmNWVlMjcyZTQ1ODdhMDAxMzA2YTc3NTA2MzM5NjBlZTc5ZmEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI1NjcwN2RhNzhlNjE4YTIwODExNjYzMzU5ZTYxMmIxOTY5MmI5MWQyOTM5ZjlkZWE3YmE3NDY3ZGJmMjE2MzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjViZGI5MTQ2OGZiMWJkNTY4YjRjNzBlODE4MWYxYzlmN2VmYjg2MGNiZDFkZjdiMjBlZWJiM2UzZjAwYjU5ZWQifQ"
         },
         {
           "resource": "repo://apps/browser-extension/scripts/validate-browser-extension.mjs#L1-L56",
@@ -118,7 +118,7 @@
     }
   ],
   "verification": {
-    "by": "openwiki/0.4.3",
-    "at": "2026-09-28T16:59:07.681Z"
+    "by": "openwiki/0.6.0",
+    "at": "2026-10-09T15:26:03.952Z"
   }
 }

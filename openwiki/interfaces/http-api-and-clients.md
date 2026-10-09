@@ -3,14 +3,13 @@ type: interface-guide
 title: HTTP API 與客戶端整合
 description: 說明 FastAPI feature routers、task queue 回應、RSS 與 processing lock API，以及各 client 邊界。
 tags: [api, fastapi, clients, rss, processing-lock]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-05T13:47:15.340Z
 sources:
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
   - id: openwiki-source-6b47ec2bb946dbfe3f605cea
     resource: repo://apps/showcase/README.md
+  - id: openwiki-source-8de160800c7fe6a0417a5cac
+    resource: repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-f1a67212459cd418a8f6d3d6
@@ -37,7 +36,10 @@ sources:
     resource: repo://apps/whisper_summary/services/rss/subscription_service.py
   - id: openwiki-source-4ef6c51002fe401d434edeb5
     resource: repo://apps/whisper_summary/services/tasks/processing_scheduler.py
-generated: { by: "codex", at: "2026-10-05T13:47:15.340Z" }
+generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-09T15:26:03.952Z
 ---
 
 # HTTP API 與客戶端整合
@@ -68,8 +70,12 @@ Browser Extension只使用 task與RSS endpoints，不提供 lock管理。Streaml
 
 相關閱讀：[任務生命週期](../workflows/task-lifecycle.md)、[Browser Extension](../integrations/browser-extension.md)。
 
+## Showcase 每週洞察 API
+
+`GET /api/showcase/insights` 回傳系列與週次摘要；`GET /api/showcase/insights/{start}` 回傳單週內容與前後週 slug。兩者對成功回應設定 300 秒 shared cache 與 ETag。不存在的週報回 404 並設 `no-store`。資料從建置時產生的 registry 讀取，不即時呼叫 Notion。
+
 ## Showcase API 錯誤契約
 
 Showcase 的 GET 列表與詳情正常回應及快取備援保持原有格式。必要 Notion 設定缺少時回 500，statusMessage 為 `Showcase service is unavailable.`；上游失敗且沒有 snapshot 時回 502，列表為 `Failed to load showcase results.`，詳情為 `Failed to load showcase detail.`。詳情 handler 缺少 id 時仍回 400。
 
-這些對外訊息不包含原始 Notion 錯誤或 env snapshot。展示 API 的錯誤回應使用 `Cache-Control: no-store`；Nitro error hook 補上 SWR 代理回應可能遺失的標頭。公開的 `/api/showcase/diagnostics` 與 `/api/showcase/health` 已移除，不再是可用 API；排錯使用部署平台 server log 與本機設定檢查。
+這些對外訊息不包含原始 Notion 錯誤或 env snapshot。展示 API 的錯誤回應使用 `Cache-Control: no-store`；Nitro error hook 也涵蓋 results 與 weekly insights 頁面/API，補上 SWR 代理回應可能遺失的標頭。公開的 `/api/showcase/diagnostics` 與 `/api/showcase/health` 已移除，不再是可用 API；排錯使用部署平台 server log 與本機設定檢查。
