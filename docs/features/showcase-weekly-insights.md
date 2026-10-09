@@ -36,6 +36,7 @@
 - 同一來源只有一個主分類，八類定義與 ID 固定；次要議題不重複計數。
 - 占比為分類來源數除以當週來源數，變化用百分點；空週顯示「—」。
 - 可比較完整週須同時符合 `periodState=closed`、`dataCompleteness=complete`、`coverageStart=start`。
+- 整體 overview 必須按分類分析跨週的內容焦點與占比變化，區分持續走勢、單週尖峰、短期波動，並指出值得追蹤的訊號與樣本限制。這些結論只描述收錄內容，不外推成市場或產業趨勢；細則見專案週報 skill。
 - 原始 Date、Tags 皆未填寫，不能把 Notion 建立時間寫成影片發布時間或閱讀時間。
 - 內容品質不足的摘要不作為推論證據；文章中的產品、醫療、法規與行情敘述未另行查核。
 
@@ -87,7 +88,7 @@ flowchart LR
 
 更新步驟：
 
-1. 使用下方週報 skill，先根據進度列出待補週，再讀取 Notion 摘要並核對正文、分類、Taipei 日期與來源鍵。私人資料放 `data/reports/`；進度 CLI 不直接匯出 Notion 或呼叫 LLM，讀取與撰寫由 skill 引導 agent 完成。
+1. 使用下方週報 skill，先根據進度列出待補週，再讀取 Notion 摘要並核對正文、分類、Taipei 日期與來源鍵。更新 overview 時逐類分析跨週內容走向，說明變化是否持續、值得留意的訊號與判讀限制；不可只整理百分比，也不可從個人收錄推論外部市場趨勢。私人資料放 `data/reports/`；進度 CLI 不直接匯出 Notion 或呼叫 LLM，讀取與撰寫由 skill 引導 agent 完成。
 2. 在 `content/weekly-insights/{週日日期}/` 編輯 `report.json` 和 `report.md`，更新既有週使用同一目錄並增加 revision。
 3. 將該週加到 `series.json` 的 `reportStarts`。新報告先設 `published: false`，確認要展示的內容後才設 true 並填入 publishedAt。
 4. 更新系列與各份週報的共同 `asOf`，核對 periodState、coverageStart、分類計數、新來源與跨週重現，必要時更正其他受影響週與 overview。
