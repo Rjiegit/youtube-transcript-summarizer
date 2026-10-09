@@ -38,11 +38,16 @@ const fromWeek = computed({ get: () => queryValue("fromWeek") || weekForDate(que
   set: (value) => setWeekQuery("fromWeek", value) });
 const toWeek = computed({ get: () => queryValue("toWeek") || weekForDate(queryValue("to"), "last"),
   set: (value) => setWeekQuery("toWeek", value) });
+const hasUnmappedLegacyDates = computed(() =>
+  (queryValue("from") && !weekForDate(queryValue("from"), "first")) ||
+  (queryValue("to") && !weekForDate(queryValue("to"), "last")));
 const categoryId = computed({ get: () => queryValue("category") || series.value?.categories[0]?.id || "",
   set: (value) => setQuery("category", value) });
 const includePartial = computed({ get: () => queryValue("partial") === "1", set: (value) => setQuery("partial", value ? "1" : "") });
 const selectedCategory = computed(() => series.value?.categories.find((category) => category.id === categoryId.value) ?? series.value?.categories[0]);
-const visibleWeeks = computed(() => filterInsightWeeksByRange(weeks.value, fromWeek.value, toWeek.value));
+const visibleWeeks = computed(() => hasUnmappedLegacyDates.value
+  ? filterInsightWeeks(weeks.value, queryValue("from"), queryValue("to"))
+  : filterInsightWeeksByRange(weeks.value, fromWeek.value, toWeek.value));
 const newestFirstWeeks = computed(() => [...visibleWeeks.value].reverse());
 const completeWeeks = computed(() => comparableWeeks(visibleWeeks.value));
 const chartWeeks = computed(() => includePartial.value ? visibleWeeks.value : completeWeeks.value);
@@ -56,7 +61,7 @@ const changes = computed(() => {
     return { ...category, change: current === null || prior === null ? null : current - prior };
   }).filter((category) => category.change !== null).sort((a, b) => Math.abs(b.change!) - Math.abs(a.change!)).slice(0, 3);
 });
-const filtered = computed(() => Boolean(fromWeek.value || toWeek.value));
+const filtered = computed(() => Boolean(fromWeek.value || toWeek.value || queryValue("from") || queryValue("to")));
 const totalSources = computed(() => visibleWeeks.value.reduce((sum, week) => sum + week.metrics.sourceCount, 0));
 const totalRaw = computed(() => visibleWeeks.value.reduce((sum, week) => sum + week.metrics.rawCount, 0));
 const siteUrl = resolveSiteUrl(useRuntimeConfig().public.siteUrl);
