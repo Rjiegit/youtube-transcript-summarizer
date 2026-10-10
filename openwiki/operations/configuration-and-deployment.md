@@ -56,10 +56,10 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-10T15:06:52.784Z
 ---
 
 # 設定、執行與部署
@@ -127,6 +127,8 @@ Notion token/database id、status property、completed value，以及選用同�
 `npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它讀取 `apps/showcase/.env`，且不覆寫既有 process environment；`make showcase` 則會 export 該檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`。公開 diagnostics 與 health API 已移除；check-env 也不能證明已部署 runtimeConfig 正確或 Notion 權限可用。部署後請透過平台設定與 server log 排錯。
 
 Showcase 對每次 Notion HTTP 請求設定固定 5 秒 timeout，包含 schema、query、page 與每次 blocks 分頁／子內容讀取；整篇文章的累計時間仍可能超過 5 秒。後端不自動重試；已有成功快取時保留舊資料，沒有快取時回傳 502，後續請求可重新嘗試。詳細頁的三種初始讀取會平行開始，見[Notion 資料整合](../integrations/notion-and-showcase.md)。
+
+週報內容的整理、私人 checkpoint 與 registry 建置見[每週回顧整理與內容發布流程](../workflows/weekly-insights.md)；Streamlit 的直接 repository 存取與操作歷史見[Streamlit 任務操作與狀態導覽](../frontend/streamlit-console.md)。
 
 ## Betterleaks 掃描設定
 

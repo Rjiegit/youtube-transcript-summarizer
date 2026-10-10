@@ -42,10 +42,10 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
+generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T06:45:07.968Z
+    at: 2026-10-10T15:06:52.784Z
 ---
 
 # 系統架構與端到端資料流
@@ -89,3 +89,19 @@ flowchart LR
 ```
 
 Domain contracts、services 與 adapters 的方向見[模組邊界與外部依賴](module-boundaries-and-dependencies.md)；queue 與 lock 行為見[任務生命週期](../workflows/task-lifecycle.md)。
+
+
+## 文件責任與閱讀順序
+
+此頁維護應用責任與跨系統資料流；日常修改依下列主題深入，避免在架構概覽重複維護細節。
+
+| 問題 | 主要文件 |
+| --- | --- |
+| HTTP payload、認證與 client 相容性 | [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md) |
+| 任務狀態、claim、heartbeat 與失敗重試 | [任務生命週期與併發控制](../workflows/task-lifecycle.md) |
+| SQLite、Notion 與檔案的儲存機制 | [任務、鎖與結果持久化](../persistence/task-and-result-storage.md) |
+| Streamlit 列表、詳細頁與操作歷史 | [Streamlit 任務操作與狀態導覽](../frontend/streamlit-console.md) |
+| 週報整理、checkpoint 與內容建置 | [每週回顧整理與內容發布流程](../workflows/weekly-insights.md) |
+| Showcase 瀏覽、搜尋與快取 | [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md) |
+
+Notion 的共用 schema 與 Python／Nuxt 契約集中於[Notion 資料整合](../integrations/notion-and-showcase.md)；環境設定與排錯集中於[設定、執行與部署](../operations/configuration-and-deployment.md)。

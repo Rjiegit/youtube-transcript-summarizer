@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "pageVersion": "sha256:55740c6b54965626c7a51ea755500c1b2ca91e358c8614a2fdb4937dda9707c3",
+  "claims": [
+    {
+      "id": "claim_15eba4fd2a6741dc9b266710bdb72944",
+      "statement": "Streamlit 入口以 selected_task_id 切換主畫面與詳細頁，並以 selected_db_choice 保存 database 選擇。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/streamlit_app.py#L55-L69",
+          "version": "repo-lines-v1:sha256:645667c7b304a2bdc1d83c5faa408a076b3b5c9920f7248248c60887ac8f7268:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0ODZmZjVjZjkzNjNiNDQyOTMzNjgwM2IyYzk2MGU3M2RhOGM0N2ZhMGM2ZjY3NjU4ZDE0YjMyM2NkMjJkMzQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU1OWFlZjkxZWRjZGVhMjg1N2FjMDBkMzNhYmFlYTkxZjc1OTBiZTdjODJiN2I5YjBlMmRlMjhmZjk1ZDkyZjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImIzN2QwZDUxNjJlMzQ3NGNmNTQ2M2ZjYmE2N2FmYjVlMjZhMTMwMTVkY2VhZjcwMTM0NGZiZjI0NTg2ODA5MmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_b3825dca33dd413e9ddba80e0d96f921",
+      "statement": "Streamlit 新增任務透過 HTTP POST /tasks，但任務列表直接以 composition 建立 database 並讀取 tasks。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_api.py#L17-L26",
+          "version": "repo-lines-v1:sha256:6202c10ee8944024b1b91f79883828828e5c7010d4709e9770b1fbba67e97d58:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg1MGMwZmYwYTIyMzczZDI5MzExNjFkODJiYmNhMDc0YTdiZTJlN2RjY2E5YzBmMmEzYjhlYjFmNDg5NTFiY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdiYTc5ZTBlNDBhMzYzZGUzOGYxNzVmZTE0Mjc0YTU0MTNiNDk1ZWUwNGNlMmI0ODk2ZjFkNDQxOWEyNzAwMGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ3MDE0OWUwNjlhZDY3ZWNjZjQ3MzY0NmZmMWM3NTAwNTBkMzI5ZDExMDAxOGRjNTc2Njg3OGVhZmExZDYwN2QiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ0Mzg0YmVkZjE4YTM1NTFhZmE0OTlkZjViMTk4NWM1Y2M3YWU0NGMyNGI0NTcyNWFhMWUwZjI4YjQwNzdlZWUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_views.py#L245-L253",
+          "version": "repo-lines-v1:sha256:5ef9baf7b0e11973ba4119458e8baeb8b86dffe544f29ededce5e5285717d1b9:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiODhhOGQ3ODBhODllMjVjMmRiMmU4MDk1YzU3NTk4MDcxNjNmYzMzNmI5ZjFlMWFmNzc3ZjIwNGVkNDVlMDM5MiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWQ2ZTI0YWQ1NGVlYzMwYTg0MmRkYzlhZjkxMDJhOWYzYzY3ZThiZGNlYzFmZjVlN2Q0YmI1ZTI1YzgxZTZjZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZWViMWUzY2RhZjg2NzE4ODNjN2M1NDg3NDJkZjliOWM4MGViNDQwZjgyYzQ0ZTIwMjJmNjg0YjBmZWFmMjkzNiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjA1Y2IyNDJkM2Q3ODgyYTc3MGExMDMzMjJlNGIzZTAwNDc1MWEzOThkYjVhYmExMDdkMDBlNmYwODlhMDk2MyJ9"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_views.py#L41-L70",
+          "version": "repo-lines-v1:sha256:86fe1d7f488606048886de0d02be79f8255ff2e8216fc5458a5e39cc2ffe70a7:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlMzAyNTliMTQ3ZWVlNzIwYjhkNGM3NzQ0ZTU5ZmIxMWFmMGQxN2NjYjhjMGFhMjQxNGQxMzc4MjEwMzRhYzciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE5NzUzYTUzYWQ4ZmUzZmQwY2FkNzc5MjUyZGQwMjViZjdlMjU3YzAxM2Q5YTFiNTBiOGNjYTMwODRlY2I1YmQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImE5OGIwNjNkOWI0N2U2NTM3OTYyNTU3MmNjZTE5NzY2OWQ1NzY3ZTEyYzE4YmUwNzU2NTJiOGNkOTgxY2U4ZDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQwOTllMzM2MzVhNzZiZDYwN2FkODZhY2I1YjIxNGZmZmViZTg5MDgzMGExMDEwN2RlODIwNmVjOWYzMTM5M2YifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_5263acac430b467eb5a1c361f1a57a3c",
+      "statement": "Streamlit 任務列表在狀態篩選後分頁，每頁可選 20、50 或 100 筆，View 與 Notion 操作均記錄瀏覽。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_views.py#L253-L370",
+          "version": "repo-lines-v1:sha256:58245354489211652780a01c487a413d0d4038d3599a8099948c76e8599afa2b:eyJzZWxlY3RlZExpbmVDb3VudCI6MTE4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJhZDZlMjRhZDU0ZWVjMzBhODQyZGRjOWFmOTEwMmE5ZjNjNjdlOGJkY2VjMWZmNWU3ZDRiYjVlMjVjODFlNmNlIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI3YmNkNzM1MTJhMzUxNzY5M2YxNGQwMzEyNDZlY2U1N2I2NTNlYjU4YTA3OGEyYTFmOTdlNWMwNTY4NjhiMGIyIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MywicHJlY2VkaW5nQ29udGV4dEhhc2giOiIzYjA3ZDJiODRlNDE3Y2I4MGM4YmY4MDkwYzVlNTE3ODdiNDcxNDdkMmQ5OTlkNmYzMDM1NWZkMmI3N2EyODViIiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiIzNGYyNzgxNWQ3MjY4ODU0ODFmY2M0MWNkNDAzYzVjNDBmZjU0NmFjOWZmZTAzNGY4ZjdlZGI3OWNlZjRmZGZlIn0"
+        }
+      ]
+    },
+    {
+      "id": "claim_73651fd9f0534758bc3b46f33c8fff4c",
+      "statement": "Streamlit 瀏覽歷史持久化於 SQLite，讀取時按 TTL 清理並更新 session state。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_history.py#L13-L54",
+          "version": "repo-lines-v1:sha256:8dba89f5779363c5db0751dc5f002d6bb6ffdeaa042c3d5e274da3557fdcff3f:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwZmYzZmVlOGVjODliMTcxY2Y2MTc3Mzc4NDg5OGVmNTRiZjc1ZGM1ZWEwMmZlYTc4YzZmZmJjZjJkNjJhZDQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg4YjQ4NGQxN2EwODQ1ZWE3ODI3YjZkNGM3ODkyMWZkMGUxNGFhMmM5N2UxMWZkZTYxNDlmMGRiMTEzYTczMmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI3ZGU3ZTg1OTMwYThjZGZkMmFlZDE3YWIwZGYwMmM0YmFiZjkzOTE4ZDliM2M2MjQ5NzZhMWQwZDIxMWI4NzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNmY2VlZTU5ZjM5NGVjZDRjMzU5Mjk0YTEzYjQ1MzY2ODg5NTFlZTNlNjdhNDg4YmJmN2Y2MDAwMzZkNDU2NmMifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_f35946304742479c912794fa40927e31",
+      "statement": "Streamlit RSS 管理僅支援 SQLite，手動 poll 直接建立 monitor 並執行 poll_once。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_rss.py#L47-L55",
+          "version": "repo-lines-v1:sha256:526e71158454704c0329be3d4035b762076c75f1aee4bdacc64b59de83c8f152:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZmNhZmZlMTE5NjNhZDE5ZGM5MWIyMTQ0ZGVjYTJmNzJiYTg0NWJlMjNmM2Y1NTU0ZThhZTYxMGIwZDRhMjU0MCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNjRjODE2MDE2ZGM0MjUzNmU5MTM3MzY0NDFjNGNmN2Y2NzQ1MWNjMzRjMzEzOGYwNWRjNzA1ZDBlMjhkZGJhZiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGNjNGE3ZDFjYzc5NmFiYTNlNDY3MjMzMjdmNTE3ZTlmODExOTgyZDI1MGYwNzAyOTg2ZTRiNTc2NGFkOTU4OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZjkzMTBlNjUwNDM3MTQ1ZjU5ZGRlZTY4YThlNjhkNzUwZWFmZmRiYWZmYjEwODExYWQ4MmNiODFmMTc1ZTJlMiJ9"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/ui/ui_views.py#L75-L108",
+          "version": "repo-lines-v1:sha256:57a0bf207b1e960a9b6f97d61c8ffb807a24abdb09a00412171df92e711b08d2:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZlNTkwNDk4MTUwMTcwOWZmZDgzOTI2M2Q1NDJmZmRiYTIwMTYyNWNiNGEyZjA4YmZiOGFhY2Q1YjFmZWIwYjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ZmQyYjcwYzM1NDgwYmZjZDI5YTAxY2U2YmJlZDM5ODUxYTZiZDMzNzQwMmZiZTMzZGQzNDYyZmEzNmQ1ZDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI4ZTM3OTNkNDA1MDEyYmQ1Y2M1ZGU0MjQyNTVjMWZiMmQ2YzIyNzEwNTA3Njk0NjM2ZTJiMjk3ZTljYmZiYWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYwYTc3MThjZGJjMDJhOTFkZTcwYmM1NWE5YmRjYzMwMDhlNzNmZmNiMDk1Mjk1NGM3ZWFmYzE3MjVlYzZjMmMifQ"
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "by": "openwiki/0.6.0",
+    "at": "2026-10-10T15:06:52.784Z"
+  }
+}

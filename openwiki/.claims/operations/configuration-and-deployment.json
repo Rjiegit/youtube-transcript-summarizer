@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:2e806fb21b0facc3bb819215cbfcbf7a0bf024b5936daa782b39541707acbcee",
+  "pageVersion": "sha256:a242a8ede997a6afe8f622131367fb830c4b1d2f8b0eb23dee805644be4cfcb4",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -108,7 +108,7 @@
       "evidence": [
         {
           "resource": "repo://.github/workflows/openwiki-update.yml#L31-L60",
-          "version": "repo-lines-v1:sha256:51d2feea2d3cd1bd81b4b23b86f87ec98efd6d0f1a26c218fe82fc1dc5e7dfc7:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZThmOWZhNDBlN2JkMDQ5OWQxYzBkODNmZDc1OGFhODViMzA4NDJkYmQ2MWYwZWE2YjdhZTEwZWZlYzc2ZDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0Nzc5NmQzMTczMmZiY2U4OTk4YTJmN2U3YjFiYjk3NTVjMjNlNTg1MDMyMGI5MDkzN2Q4MmMzZmQwZTYyYTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhMmQ5NWViODViNjA0YjdiZmIxNzRiMzdlNThkYzg1ODVlZjcyNjUzNTAzMGExZTE4YTZkZDUwNTQ1OGM5YjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:b3163c87a7eeba94b278eb4b5892171b0c3edd865121d022a8109053a0ee9f46:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcwZThmOWZhNDBlN2JkMDQ5OWQxYzBkODNmZDc1OGFhODViMzA4NDJkYmQ2MWYwZWE2YjdhZTEwZWZlYzc2ZDAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1YThhYzg3NzZkZTgxOTlhNDU1MzRlMDMyZDdmMzg1MzYzNzJkZDBmMDA5ODg2NGU1ZmEzYjQ3M2MyMTRjN2EiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFhMmQ5NWViODViNjA0YjdiZmIxNzRiMzdlNThkYzg1ODVlZjcyNjUzNTAzMGExZTE4YTZkZDUwNTQ1OGM5YjIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
           "resource": "repo://.github/workflows/openwiki-update.yml#L6-L8",
@@ -343,6 +343,6 @@
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-10T15:06:52.784Z"
   }
 }

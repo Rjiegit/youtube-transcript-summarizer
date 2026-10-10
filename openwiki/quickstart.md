@@ -48,10 +48,10 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-10T15:06:52.784Z
 ---
 
 # 快速開始與開發導覽
@@ -159,8 +159,9 @@ npm --prefix apps/showcase run build
 | 修改 Chrome/Edge Extension | [Browser Extension 任務與 RSS 入口](integrations/browser-extension.md) |
 | 維護 RSS channel automation | [YouTube RSS 自動化](workflows/rss-automation.md) |
 | 修改 Notion schema 或 Python/Nuxt 整合 | [Notion 資料整合](integrations/notion-and-showcase.md) |
+| 修改 Streamlit 任務列表、詳細頁、瀏覽歷史或 RSS 操作 | [Streamlit 任務操作與狀態導覽](frontend/streamlit-console.md) |
 | 修改 Showcase UX、read state 或 SWR | [Nuxt Showcase 使用體驗與資料快取](frontend/showcase-experience.md) |
-| 維護 Showcase 每週回顧內容 | `apps/showcase/content/weekly-insights/` 與 `npm run insights:check`；流程見 [設定與部署](operations/configuration-and-deployment.md) |
+| 整理 Showcase 每週回顧、續跑缺週或修改內容建置 | [每週回顧整理與內容發布流程](workflows/weekly-insights.md) |
 | 設定跨裝置已讀同步、session 或 Upstash | [Showcase 跨裝置已讀同步](frontend/read-state-sync.md) |
 | 設定 Docker、env、cache 或部署 | [設定、執行與部署](operations/configuration-and-deployment.md) |
 | 新增或定位測試 | [開發規則與測試策略](operations/development-and-testing.md) |

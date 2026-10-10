@@ -36,15 +36,17 @@ sources:
     resource: repo://apps/showcase/tests/weekly-insights-pages.test.ts
   - id: openwiki-source-0790ba7e8a15c95a134e6b3f
     resource: repo://apps/showcase/utils/title-search.ts
-generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
+generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T06:45:07.968Z
+    at: 2026-10-10T15:06:52.784Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
 
 Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 取得列表，詳細頁同樣在 server 階段取得單筆內容；Notion credentials 與呼叫均留在 Nitro server routes，瀏覽器只接觸 `/api/showcase/*`。
+
+此頁負責瀏覽行為、畫面狀態與快取；Notion schema 和跨應用資料契約見[Notion 資料整合](../integrations/notion-and-showcase.md)，週報作者的整理、進度與建置流程見[每週回顧整理與內容發布流程](../workflows/weekly-insights.md)。
 
 ## 列表與詳細頁
 
