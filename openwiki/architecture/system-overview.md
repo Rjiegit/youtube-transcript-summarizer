@@ -4,6 +4,10 @@ title: 系統架構與端到端資料流
 description: 說明任務輸入、專用 worker、持久層與獨立前端應用之間的責任和資料流。
 tags: [architecture, pipeline, api, worker, nuxt]
 sources:
+  - id: openwiki-source-edc748d2ffa8cac498e9a351
+    resource: repo://apps/showcase/content/weekly-insights/series.json
+  - id: openwiki-source-3d0ab990c23027fbcac5d169
+    resource: repo://apps/showcase/pages/insights/index.vue
   - id: openwiki-source-17de8480042164f5a9040c86
     resource: repo://apps/showcase/scripts/weekly-insights-content.mjs
   - id: openwiki-source-8de160800c7fe6a0417a5cac
@@ -38,10 +42,10 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-10T06:45:07.968Z
 ---
 
 # 系統架構與端到端資料流
@@ -61,6 +65,8 @@ verified:
 | `apps/showcase` | 直接讀取 Notion 完成成果的 Nuxt/Nitro app |
 
 Compose 編排 `api`、`streamlit`、`processing-worker` 與 `rss-monitor`。Streamlit、RSS monitor 與 processing worker 都以 `http://api:8080` 連線；task 的 SQLite ownership 集中於 API。Showcase 不在此 Compose topology。Showcase 另提供每週洞察頁面，內容由 repository 中整理過的週報文件建置為靜態 registry，再由 Nitro server routes 提供總覽與單週資料；它不即時查詢 Notion。
+
+每週洞察系列可附上經核對的 `topicTracks`，記錄話題變化及其完整週觀察。loader 僅在週報都已發布時輸出這些軌跡，並驗證分類與觀察週、整理欄位後交由頁面呈現；話題觀察連回對應單週回顧，分類洞見也可連到相關話題。此內容是整理好的質性記錄，不由頁面即時分析來源。
 
 ## 端到端流程
 

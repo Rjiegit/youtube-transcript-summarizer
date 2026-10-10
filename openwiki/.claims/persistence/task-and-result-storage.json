@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:4cb30dedf58a8ddbe5695e10a051789344763a6b761b1a24789c6ea05fa7e499",
+  "pageVersion": "sha256:69be0f0f9042aecf9974c2cf73c71c7a3adfbf1f927494c50bb754eabc9141db",
   "claims": [
     {
       "id": "claim_84c6bc8f911e4e36bf355b3df4511d96",
@@ -122,21 +122,35 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/content/weekly-insights/series.json",
-          "version": "repo-file-v1:sha256:ba40655ec835352635efb80daf8f6bbfad7232645da24090b8501e1f49ed7890"
+          "version": "repo-file-v1:sha256:f36b829a46deedacf6f9bac65c6574e5bc9ba06232cac1b2b5b37bea9734eb44"
         },
         {
           "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs",
-          "version": "repo-file-v1:sha256:7dfec8f666ac75c0e934b48b840b1d17b98aec6bda2b2b7a58b5ef919b121e65"
+          "version": "repo-file-v1:sha256:f73960d2c11b2ed2293f032f7eddb996916ca79857a6952eb728e7d7d30f70c1"
         },
         {
           "resource": "repo://apps/showcase/server/utils/weekly-insights.ts",
           "version": "repo-file-v1:sha256:46d4d5ed2014a6f0df97f6be7bd674d5b2f892a361718e570ba93e5f920ae822"
         }
       ]
+    },
+    {
+      "id": "claim_0355e9358f9444308e7422b33ef42704",
+      "statement": "Showcase weekly insights 的系列 JSON 可選擇包含 topicTracks 話題資料；建置 loader 驗證其分類與已發布完整週證據，只在全部週報發布時白名單輸出並排序觀察週。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/content/weekly-insights/series.json#L107-L183",
+          "version": "repo-lines-v1:sha256:db7e02445d3896da671b5480537cd67a1a74101bc3a83d6bc2bc288342ae31f0:eyJzZWxlY3RlZExpbmVDb3VudCI6NzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmZjZWQxZDg5OTMzOWQwODhkYjNiYWQzNDY3YmJmYTQ3M2YzYWI3MWY1YmQ2NWJhODkxNTNjM2IxZjU3Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4NjA2ODdiYzdlZGNhYzc5YTVjM2U2MzMwYzQ3ZDhkMWEwZGNmZDI3MGE4YTRhOGM5YmU2NjgzODU5ZjY4YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs#L129-L158",
+          "version": "repo-lines-v1:sha256:8d73cfd94911969411bed259233907e9375fda7f9fcbc4ed2046edaf70110bc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyODhhMTk4MDg0MGJiNjJlY2JhYjg0ZmZlOGQyMDE5MTVhZmVjY2Q4MTdmZTFjNmJmMGU2ZTc0OTMwY2NiNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyMzA0YWFlYmNkODg1ZWZmYzJhMDAwYmM4ZGE2Yzg4MzYwYmVmYmQ1OWQ5OWViNDkzNTk5YTVkMjY3NzNjZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiYjM4MWQ3MDJmMjZkMDFkYTcxYWY3OTQyMTU5YTY0ZmI1MzIzM2RjMTg3OTdiNmFmMzUyNGUwNGFlNWRkMzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxMTYwOGJmMWM0YzVhMmRlYzIwZmJhZjMwOWJlZTFlZTAxYmFkMzFlYWI1ODMxYmZkOTU4NzI5OGZjMjU2OGEifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-10T06:45:07.968Z"
   }
 }

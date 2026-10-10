@@ -32,6 +32,8 @@ sources:
     resource: repo://apps/showcase/tests/title-search.test.ts
   - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
     resource: repo://apps/showcase/tests/upstash-read-state.test.ts
+  - id: openwiki-source-01b8f26fa45fd08f4aac69af
+    resource: repo://apps/showcase/tests/weekly-insights-content.test.ts
   - id: openwiki-source-8e5744b4ac1b806d84300041
     resource: repo://apps/showcase/tests/weekly-insights-pages.test.ts
   - id: openwiki-source-4bb166095eacfb6386b2f861
@@ -46,10 +48,10 @@ sources:
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-10T06:45:07.968Z
 ---
 
 # 開發規則與測試策略
@@ -82,6 +84,8 @@ Python 依賴使用 `uv sync --project apps/whisper_summary --frozen --no-instal
 Python 使用 `unittest` discovery；快速隔離測試放在 `apps/whisper_summary/tests/unit/`，跨 router、storage 或 UI seam 的測試放在 `apps/whisper_summary/tests/integration/`，Python 測試資料放在 `apps/whisper_summary/tests/fixtures/`；跨應用 contract fixture 放在 `contracts/`。LLM、Notion、Discord、yt-dlp 等網路或重型邊界使用 mock、fake 或 fixture。
 
 Nuxt 使用 Vitest、Vue Test Utils 與 jsdom；測試放在 `apps/showcase/tests/`，命名為 `*.test.ts`。優先測試資料轉換、日期格式化、API handler、SWR cache 與 read state。
+
+Weekly insights 的 content tests 驗證話題軌跡只接受已發布且完整週的證據、分類與 ID 必須有效、未知欄位不會輸出，以及未發布系列會隱藏軌跡；頁面 tests 驗證話題摘要連結、分類標籤和週次篩選行為。Production SSR 測試則驗證建置後頁面的 metadata 與公開資產。
 
 目前針對多 worker lease 的 API／SQLite 整合測試、HTTP queue adapter、legacy／LangGraph 引擎選擇，以及 Showcase 的同步驗證、設定與 Upstash 合併都有 focused tests。修改這些跨程序契約時，應先執行對應測試，再視變更範圍跑完整 CI 指令。
 

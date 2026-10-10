@@ -12,6 +12,8 @@ sources:
     resource: repo://apps/showcase/composables/useReadResults.ts
   - id: openwiki-source-8f9c3fc6564a596df49d04e9
     resource: repo://apps/showcase/pages/index.vue
+  - id: openwiki-source-3d0ab990c23027fbcac5d169
+    resource: repo://apps/showcase/pages/insights/index.vue
   - id: openwiki-source-714810166c8a4a2d54858dbf
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
   - id: openwiki-source-36cce2c34e32cbad2ec20271
@@ -30,12 +32,14 @@ sources:
     resource: repo://apps/showcase/tests/swr-cache.test.ts
   - id: openwiki-source-218f09975f8887eb7efa96c4
     resource: repo://apps/showcase/tests/title-search.test.ts
+  - id: openwiki-source-8e5744b4ac1b806d84300041
+    resource: repo://apps/showcase/tests/weekly-insights-pages.test.ts
   - id: openwiki-source-0790ba7e8a15c95a134e6b3f
     resource: repo://apps/showcase/utils/title-search.ts
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-10T06:45:07.968Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -51,6 +55,8 @@ Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 
 ## 每週回顧
 
 `/insights` 以已發布週報呈現整體觀察、分類洞見與統計篩選；`/insights/{週日日期}` 顯示單週正文、完整程度、分類統計及代表來源。篩選週次、分類與是否納入部分週會更新 URL query；單週頁提供前後週導覽。內容由 repository 週報文件建置，頁面經 server API 讀取，不會在瀏覽時呼叫 LLM 或即時查詢 Notion。
+
+Overview 也可顯示固定的話題演變紀錄：每個話題列出已核對完整週的摘要、連到相應單週回顧，並標示後續觀察方向；分類洞見則連到相關話題。這些紀錄不隨週次篩選改寫，未列出的週不表示話題消失。
 
 ## 已讀狀態與選用同步
 

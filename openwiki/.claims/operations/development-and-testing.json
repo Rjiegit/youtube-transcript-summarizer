@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:943df1b29c7a616f0d982d1fa7fad29a7368f30638c292d682b6d4e874629f18",
+  "pageVersion": "sha256:8a6c4a3340ae2f8cff572973584dc5024411c26dbab05ae9093c481b35e060dd",
   "claims": [
     {
       "id": "claim_18efeaf5a06b4c9cabc9632ffac9ea0f",
@@ -176,7 +176,7 @@
         },
         {
           "resource": "repo://apps/showcase/tests/weekly-insights-pages.test.ts",
-          "version": "repo-file-v1:sha256:87c22b41d672b356b14ecb4e2d8f46100580407db91bed10f33f7ab572d7a002"
+          "version": "repo-file-v1:sha256:e41eaf09bcd7392c240acee30fa319142f1637988c68dc1b72398a99cd006eab"
         }
       ]
     },
@@ -193,10 +193,24 @@
           "version": "repo-lines-v1:sha256:c5051f3f909268f66e67d1c4c5b6722f75e7817ec209c5e567115f2dc52f5ff1:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBmMDQ4OTI4YWY5NDVkNWIyNjNmMjllODI0NzYwNGM5ODQ3MzdiZDE5OGIxZDZhMWI2OTJhYjYwYTkwNzI5MGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NTJiODRiOGYzMGQyZjlhMTY0MGVlMjk4YmUwNzFmYmNiMTNkZWQxNzk4OGRmY2E1ZWJiMzExZGVmZjA4ZGUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwZDhiODNlNWUxMTJhZmI0ZGQ5MWQyYWQ0ZmQ4Y2M1YmYyZGYwZWJmYTZjZTBjNzEzZDlhZDVhMTY5NTk4NGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQzMTBjYmMxZWIzY2RlZmFkMWI2OWM5ZDZhYzZiM2Y5MWVlM2UyN2Q2ZTYzN2M4MzZmZTg1NTg1NDkyODU2OTAifQ"
         }
       ]
+    },
+    {
+      "id": "claim_8bd5fa18c2bf417a9ddd892f5a108b32",
+      "statement": "Weekly insights 的 content tests 驗證 topicTracks 的分類、ID、觀察週與發布狀態，並確認未知欄位不會輸出；頁面 tests 驗證話題週次連結、分類標籤及篩選行為。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/tests/weekly-insights-content.test.ts#L38-L70",
+          "version": "repo-lines-v1:sha256:d0ef6ecaed8262ff8468bb97baa127c1afd451b1da4d94c3966b9b4802a434ef:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxZGYyMDRiZDM0MGM0YTA5M2I2MTUzZWZmYWFmZjJmZmNiYTExZGZlOWZmNWNlODRmZDlmM2I3N2FhOTk1YzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM1ZmU2MDQyNGI3NmQxMjBhN2Y5MjE0OGRhZGQxNWY1ZjM3MDI2ODA1Y2E2MjViMmY4ODA5ZWQ1ZWMzYjJmZGEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg4NmQ4ZjBlMGJmNzMyNDI4N2Q3NWEzNDk5ODNhMjI5YWIyNDIzNjNiMWRhNzdhNDAxMGIzMzNiZmU5ZGM3ZjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM1MDhkMmVlYTAyMTVhYWViMzg0MGJlY2UwOGQ1YmQ3MDRiOTBmYmZlMjIyN2I1M2M4ZDI3Njk3Y2MwODZhMDMifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/tests/weekly-insights-pages.test.ts#L48-L75",
+          "version": "repo-lines-v1:sha256:9965a2ed02032bc1cba8d1c17c7c5ca1a64bf062d91f429de464f222dcfa31a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2MWEyNjVhYjQzZDM5MGRlM2Q2YWQ4NWVjZTkwMWYyMzFkMDcyMDAxZjkyZTU3M2RhZTQyMzEzMTliYWVkZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5MmVmNTk0NDUzZjdmZWJlZTE2ZmE2ZGU1YWE5ZmMzYWUxODJiMDk0NWQ4MmNiYWZlOTIwYjgzNWVkYTcwNDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwZDZiODAyZDc3NWUzZWJlYzIxODJjYjk1YTgxZjI5NjQyMjdkZjcyOGUyMDc3OTcyNmJlZmEzNjcxZmRhZjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjZDk0MWZkZWQ5NDQxNGNiNDQzNDA5ZjEwMzc4YjkxOThiY2I0ZTM4ZDZmYWZjNDEyOWU2YWZhNzFhNzI4YTMifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-10T06:45:07.968Z"
   }
 }

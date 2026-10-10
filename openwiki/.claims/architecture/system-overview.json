@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:628c47d8b772fedf4f3294359a5f3898afbdc5bdf9485bbc9711d4267829e407",
+  "pageVersion": "sha256:1642faf7e12d8fe1433fd10998db4df95b21cb5079c37a902785d16ad34f5eb5",
   "claims": [
     {
       "id": "claim_e58d32757ef34b6a8caff1e6252ae528",
@@ -110,7 +110,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs",
-          "version": "repo-file-v1:sha256:7dfec8f666ac75c0e934b48b840b1d17b98aec6bda2b2b7a58b5ef919b121e65"
+          "version": "repo-file-v1:sha256:f73960d2c11b2ed2293f032f7eddb996916ca79857a6952eb728e7d7d30f70c1"
         },
         {
           "resource": "repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts",
@@ -131,10 +131,28 @@
           "version": "repo-file-v1:sha256:4dbb6c20becedf0b3a951b568e7ff79df38217219aca5c2d3db31d18be9d759d"
         }
       ]
+    },
+    {
+      "id": "claim_c4fcf086836c4a2fbdf0f7d75d264a9e",
+      "statement": "Showcase 的 topicTracks 是經整理的質性話題紀錄；loader 只在全部週報發布時輸出，並驗證分類與觀察週，再由 overview 頁面呈現週次連結及分類相關話題。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/content/weekly-insights/series.json#L107-L117",
+          "version": "repo-lines-v1:sha256:7de9d9e3392026285e0c6f441048aa9e0ddf8d064abf862c7b2fe5a2405a9ab0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmZjZWQxZDg5OTMzOWQwODhkYjNiYWQzNDY3YmJmYTQ3M2YzYWI3MWY1YmQ2NWJhODkxNTNjM2IxZjU3Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyZGM2ODUxZDZkYWU2ZmI3OGM2NDYzNjdmMzcxMjFjNWYwZThhZmRkODYzMjg5OGEwZDcyMmQ3NGU1YzBmZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4NjA2ODdiYzdlZGNhYzc5YTVjM2U2MzMwYzQ3ZDhkMWEwZGNmZDI3MGE4YTRhOGM5YmU2NjgzODU5ZjY4YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ1NDVjYTdlZDk2ZDgyZGM4YTkwZTk1NmMyMmNlYzQ0NmE2OGRlNGJmNzNmN2M1YWEzMTdmMWJlYTU0ODM0NDIifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/pages/insights/index.vue#L111-L142",
+          "version": "repo-lines-v1:sha256:b330c8a1c9ea11e8d1549578322a90d911bfcb61f26095e322b6477b6528de15:eyJzZWxlY3RlZExpbmVDb3VudCI6MzIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU0Zjk1NzhhNTc5ZmIyZjVlYzMwODk3NmIwMGViNzAxOWZmNWI0Mjk3ZTJlY2E5YjZmN2M2N2UxOGY0ZjRlOGMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBlMDA2Mzk5NzZmYTc2MzFhNWRiZDI3ZTNlNGNjMjI3YmI0YzM3MWM3NTVlNjVlNzlkNDlkZDMwMGVkOGY0M2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjE2ZjgwZjZiZDZiNGY3YzRjODE3NzI0MGQ3YmYwNjNmNzBjOGJhYjZjOTVjNDIwNzQ1YWQ5OTg5N2VjMTUzODMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjI1OTRjYzJiMmZhMmUwM2U3OTJhZTU1M2FlOGQ5NTVlMDNmNmMxMzQxNzdmYTk2YzNmOTczYzZkZjZhOTAzOGQifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs#L129-L158",
+          "version": "repo-lines-v1:sha256:8d73cfd94911969411bed259233907e9375fda7f9fcbc4ed2046edaf70110bc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyODhhMTk4MDg0MGJiNjJlY2JhYjg0ZmZlOGQyMDE5MTVhZmVjY2Q4MTdmZTFjNmJmMGU2ZTc0OTMwY2NiNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyMzA0YWFlYmNkODg1ZWZmYzJhMDAwYmM4ZGE2Yzg4MzYwYmVmYmQ1OWQ5OWViNDkzNTk5YTVkMjY3NzNjZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiYjM4MWQ3MDJmMjZkMDFkYTcxYWY3OTQyMTU5YTY0ZmI1MzIzM2RjMTg3OTdiNmFmMzUyNGUwNGFlNWRkMzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxMTYwOGJmMWM0YzVhMmRlYzIwZmJhZjMwOWJlZTFlZTAxYmFkMzFlYWI1ODMxYmZkOTU4NzI5OGZjMjU2OGEifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-10T06:45:07.968Z"
   }
 }

@@ -28,10 +28,10 @@ sources:
     resource: repo://apps/whisper_summary/services/outputs/path_builder.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-10T06:45:07.968Z
 ---
 
 # 任務、鎖與結果持久化
@@ -74,6 +74,8 @@ Recent history 不是 task status：Streamlit 打開結果時 upsert view time�
 `SummaryStorage` 是另一個用途：pipeline 不論 task backend 為何，都會建立承載摘要的 Notion page，包含 Title、URL、Model、預設 false 的 Public 與 paragraph children。成功回傳的 page id 寫回 task，供 Streamlit、Discord link 與後續查詢使用。Notion write 失敗是 pipeline failure，不會被本機 Markdown 成功掩蓋。
 
 Showcase 每週洞察是獨立的內容發布資料：週報 JSON/Markdown 位於 `apps/showcase/content/weekly-insights/`，建置時驗證並打包至 Nuxt registry。它不是 task queue、summary artifact 或 Notion page 的另一種持久化副本。
+
+系列 JSON 可選擇包含 `topicTracks`，每筆保存穩定 slug、標籤、既有分類 ID、變化與後續觀察文字，以及 `{ week, summary }` 週次證據。建置 loader 只在全部週報已發布時輸出話題軌跡，並要求分類有效、觀察週已結束且資料完整；輸出採白名單欄位並依週排序。這些是整理後的質性內容，不會改動每週統計或 task 持久化。
 
 ## 本機 artifacts
 
