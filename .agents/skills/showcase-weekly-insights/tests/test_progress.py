@@ -55,6 +55,30 @@ class ProgressTests(unittest.TestCase):
         result = progress.plan(self.root, self.series, entries, "2026-10-12", from_date="2026-10-04")
         self.assertEqual(result["weeks"][0]["reason"], "previously-open")
 
+    def test_date_basis_rename_preserves_completed_weeks_without_writing_state(self):
+        entry = self.week("2026-09-06")
+        original = dict(entry)
+        self.series["dateBasis"] = "record-created-time"
+        args = {"from_date": "2026-09-06", "through": "2026-09-12"}
+        result = progress.plan(self.root, self.series, {"2026-09-06": entry}, "2026-10-10", **args)
+        self.assertEqual(result["weeks"], [])
+        self.assertEqual(result["skipped"], ["2026-09-06"])
+        self.assertEqual(entry, original)
+        self.assertEqual(progress.pending_reason(self.root, self.series, "2026-09-06", entry, True), "requested-refresh")
+        (self.content / "2026-09-06/report.md").write_text("更正內容")
+        self.assertEqual(progress.pending_reason(self.root, self.series, "2026-09-06", entry, False), "artifact-changed")
+
+    def test_date_basis_alias_does_not_hide_real_policy_changes_or_open_week(self):
+        entry = self.week("2026-10-04", closed=False)
+        self.series["dateBasis"] = "record-created-time"
+        self.assertEqual(progress.pending_reason(self.root, self.series, "2026-10-04", entry, False), "previously-open")
+        for key, value in [("analysisVersion", "v2"), ("categories", [{"id": "new-topic", "label": "新分類"}]),
+                           ("dateBasis", "record-edited-time"), ("timezone", "UTC"),
+                           ("dedupPolicy", "global-source"), ("weekConvention", "monday-sunday")]:
+            with self.subTest(key=key):
+                changed = {**self.series, key: value}
+                self.assertEqual(progress.pending_reason(self.root, changed, "2026-10-04", entry, False), "policy-changed")
+
     def test_explicit_midweek_cutoff_requires_open_opt_in(self):
         with self.assertRaises(ValueError):
             progress.plan(self.root, self.series, {}, "2026-10-09", through="2026-10-07")

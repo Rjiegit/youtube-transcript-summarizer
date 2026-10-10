@@ -20,6 +20,7 @@ python3 .agents/skills/showcase-weekly-insights/scripts/progress.py plan
 - 使用者指定截止日期時加 `--through YYYY-MM-DD`。日期選取包含該日的整週，已結束週保留完整七天，不切成日報。包含本週須加 `--include-open`；本週資料只讀至選定日期／查詢當下。
 - 使用者要重新分析既有週或追查 Notion 後續修改時，加 `--from YYYY-MM-DD --through YYYY-MM-DD --refresh`。不要把歷史首次收錄時間改成最後編輯時間。
 - 進度逐週記錄於 `data/reports/weekly-insights/progress.json`，包含完成狀態、版本指紋、報告指紋與私人快照。中途缺週、已記錄但尚未結束的週、報告變動或來源快照遺失都會列入待辦。不要只看最新日期跳過較早缺口。
+- 日期依據由 `notion-created-time` 改名為 `record-created-time` 時，planner 相容原有指紋，仍核對其他規則、週報與私人快照，不需改寫進度檔。此相容只涵蓋名稱變更，實質分類／分析版本等變動仍要求重算；進行中週與 `--refresh` 仍重跑。
 - 若進度不存在，先檢查已有週報與其私人快照；確認來源、分類、完整性後用 `bootstrap --snapshot <私人快照路徑>` 登記既有結果。無可核對的快照則從起點補跑，不能把檔案存在當作成功。
 
 ## 讀取與整理

@@ -38,6 +38,16 @@ def policy(series):
     return hashlib.sha256(value.encode()).hexdigest()
 
 
+def matches_policy(series, recorded_hash):
+    if recorded_hash == policy(series):
+        return True
+    # Only the creation-time policy name changed; all other fields must still match.
+    if series["dateBasis"] == "record-created-time":
+        legacy = {**series, "dateBasis": "notion-created-time"}
+        return recorded_hash == policy(legacy)
+    return False
+
+
 def artifact_hash(root, start):
     directory = root / CONTENT / start
     digest = hashlib.sha256()
@@ -87,7 +97,7 @@ def pending_reason(root, series, start, entry, refresh):
         return "requested-refresh"
     if entry is None:
         return "not-recorded"
-    if entry["policyHash"] != policy(series):
+    if not matches_policy(series, entry["policyHash"]):
         return "policy-changed"
     if entry["status"] != "closed":
         return "previously-open"

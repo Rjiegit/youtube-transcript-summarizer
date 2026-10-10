@@ -146,6 +146,8 @@ npm --prefix apps/showcase run dev
 |`policyHash`|系列起點、分類、analysisVersion、分週及去重規則指紋|
 |`snapshot`、`snapshotHash`|私人快照位置與指紋，供來源索引與結果核對|
 
+日期依據由舊名稱 `notion-created-time` 改為 `record-created-time`，語意同為收錄建立時間。planner 僅在其餘規則完全一致時接受舊名稱的指紋，接著仍核對週報、私人快照與完成狀態；唯讀 plan 不改寫進度。新 checkpoint 使用目前名稱。其他日期依據、分類、版本或分週規則改變仍列為 `policy-changed`，進行中週及指定 refresh 不因此跳過。
+
 planner 從 collectionStart 所在週日逐週檢查，不使用最大日期作為唯一 cursor。未登記週、較早的缺口、之前的 open 週、分析規則改變、報告改動、快照遺失／改動、移出 manifest 的週都會重新列入待辦。查詢失敗、分頁未完成或文件未通過驗證不保存成功進度；中斷後保留其他成功週，再次 plan 即可補缺口。不存在的進度不能直接推定既有文件成功，先驗證報告及來源快照後 bootstrap。
 
 目前已使用既有私人快照 bootstrap 六週。五份 closed 週涵蓋 9/1–10/3；首週雖非完整比較週，但已完成其可觀察範圍。10/4 週是 open，選擇包含本週或待它結束後執行時必須重查。
