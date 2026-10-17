@@ -84,7 +84,7 @@ npm --prefix apps/showcase run test
 npm --prefix apps/showcase run build
 ```
 
-提交前執行與變更風險相符的最小完整驗證；完整測試策略見 `openwiki/testing/test-strategy.md`。
+提交前執行與變更風險相符的最小完整驗證；完整測試策略見 [開發規則與測試策略](openwiki/operations/development-and-testing.md)。
 
 ## Secrets 與本機資料
 
@@ -111,3 +111,5 @@ AI agent 的遠端 Git 寫入與發布流程依 [AGENTS.md](AGENTS.md) 的「遠
 - 架構或流程改變時，透過 OpenWiki 更新流程重新產生 `openwiki/`；不要直接修改其 generated indexes、Claims 或 metadata。
 - 功能需求與設計決策記錄在對應的 issue 或 Pull Request；持續有效的操作與開發規則同步更新正式文件。
 - 過期設計只能保留為明確標示的歷史文件，不應繼續描述成目前待辦。
+
+文件分工與功能對照見 [操作文件導覽](docs/README.md)：README 提供入口，docs 維護操作與人工規則，OpenWiki 說明實作與證據。新增操作文件時同步維護導覽；更新 OpenWiki 時引用手冊，避免重複完整步驟。

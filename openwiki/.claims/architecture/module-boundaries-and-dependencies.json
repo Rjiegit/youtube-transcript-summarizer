@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:6ad38bad79d9222bfa8186e104ba35196ac87843055d1e3f478d14fd39f8f58e",
+  "pageVersion": "sha256:cc47ce1d0b36379f3c7b67d4e3dfab0309e624f70269d5d030f4d7114055bcb0",
   "claims": [
     {
       "id": "claim_8ce30e71df304864940a28036789b29e",
@@ -190,15 +190,15 @@
     },
     {
       "id": "claim_c02d61494ea04d6c899b2760b679628c",
-      "statement": "legacy 與 LangGraph processing engine 共用 PipelineOperations，LangGraph 僅定義操作節點的執行順序。",
+      "statement": "legacy 與 LangGraph processing engine 共用 PipelineOperations；LangGraph 定義節點順序，execute 也以 media_use_lock 保護整段操作。",
       "evidence": [
         {
-          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py#L84-L105",
-          "version": "repo-lines-v1:sha256:207e8b3e619cf148e00dc0463dc7fb098245698642efbf5b971855bc35397311:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI0ZWI3Y2RjZTgzZjdiNjUzN2U3ODc3M2EyOTgxNzIyM2Y4ZDllOTliNDQ1ZTY3ODYwNmUzNTAxNGYwN2Q2NGEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg3MTc0OWNjZGM3ZGUwODE3ZTU1N2I3OGMzOTk2YTBjM2IzZGI4NTJiNmEzNTgxYTVjYmY3NTg2ZjI0YWIzNDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYzYjU2NWY3ZTFiNzJjNTlmYTYwNGJiZmI1ZTNlNTEzNTNlNDBlMjE5NzQwMjAwMzhiOTRlYzc0NzgwYmNlMmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImVhMzE0NTMzMGNmNzlkMmIwMzlmOGI4NjhiNDU0MTVmNGVkZDEwZWU3OWNlNjE1YTQzN2YzM2VhOGM4YmUyZjcifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/langgraph_engine.py",
-          "version": "repo-file-v1:sha256:dfcd67b1b9ee4dd7948fa644d780929a7245827802ec4f107df0f6c2f1af8d27"
+          "version": "repo-file-v1:sha256:d9d7e12e214b1b3f759318ac27c169864e278f96c09bc43066abceb6180fa42d"
         }
       ]
     },
@@ -219,6 +219,6 @@
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

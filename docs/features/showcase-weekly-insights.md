@@ -12,7 +12,7 @@ overview 顯示話題如何延續或轉向，每筆觀察可連到單週回顧�
 
 新增標籤不改主分類版本、不強制重算歷史，也不修改逐週完成紀錄。更正來源內容時刷新受影響週；主分類真正拆分或合併時才改分析版本，記錄生效時間、舊新對照及重算範圍。需要跨版本比较的期間須統一重算，否則明示不可直接比較。標籤改名保留 ID；合併時核對既有觀察，不靜默丟棄歷史。
 
-狀態：第一版已實作於本機，尚未推送或部署到遠端。更新日期：2026-10-09。
+本頁維護人工分析口徑、內容契約與更新步驟；內部建置、API 與測試證據見 [OpenWiki 週報流程](../../openwiki/workflows/weekly-insights.md)。
 
 ## 使用方式
 
@@ -21,7 +21,7 @@ overview 顯示話題如何延續或轉向，每筆觀察可連到單週回顧�
 - 首頁「每週回顧與分類趨勢」連至總覽。
 - 本機啟動：`npm --prefix apps/showcase run dev`，預設 port 3000。
 
-[私人完整分析與來源索引](../../data/reports/weekly-insights/2026-09-01/calendar-weeks/overview.md)保存在被 Git 忽略的 `data/reports/`。網站版本使用整理過的主題分析、統計與部分原始影片連結，不載入原始 Notion 正文或私人快照。
+私人完整分析與來源索引保存在被 Git 忽略的 `data/reports/`。網站版本使用整理過的主題分析、統計與部分原始影片連結，不載入原始 Notion 正文或私人快照。
 
 ## 週期與分析口徑
 
@@ -52,23 +52,9 @@ overview 顯示話題如何延續或轉向，每筆觀察可連到單週回顧�
 - 原始 Date、Tags 皆未填寫，不能把 Notion 建立時間寫成影片發布時間或閱讀時間。
 - 內容品質不足的摘要不作為推論證據；文章中的產品、醫療、法規與行情敘述未另行查核。
 
-## 頁面行為
+## 頁面與建置行為
 
-公開介面只說明「資料收錄時間」，不顯示後端供應者名稱或特定資料庫欄位。`series.json` 的時間基準採中性 `record-created-time`；公開 API 的 series projection 不包含 `dateBasis`，後端 adapter 與憑證設定留在 server 端。
-
-總覽以整體觀察與「主題變化與洞見」為主。八個分類以可換行的選取按鈕直接展開，標示目前選取項目並切換人工整理的內容轉變、值得注意的訊號與後續觀察重點，明確標示分析期間。週次選單位於收合的統計依據內，只篩選統計與週報；旁邊明示不即時重算洞見，避免和主題切換混淆。來源數、原始紀錄、完整週數、分類長條圖、占比表與最近兩週占比變化放入預設收合的「統計依據」；表與圖表共用純函式計算。預設圖表只顯示四個完整週，勾選後才加入首週與進行中週，部分週以斜線與文字標示。
-
-範圍使用「起始週」與「結束週」選單，選項直接顯示週日到週六的日期。起始週會納入該週及之後週報；結束週會納入該週及之前週報。`fromWeek`、`toWeek`、`category`、`partial` 保存於 URL query，歷史 `from`／`to` 日期 query 仍可換算成重疊週次。篩選不裁切週報內的日資料；數量標示為「週次來源合計」，包含跨週重現；整體觀察仍描述完整系列，畫面另有說明。
-
-同頁分類、週次與 hash 更新不觸發全頁載入骨架；只有路徑切換才啟動路由載入提示。骨架最短顯示時間為 100 毫秒，實際資料未完成時仍維持載入狀態。
-
-週報卡片依週次由新到舊排列，趨勢圖仍由舊到新排列，方便分別查看最新內容與時間變化。
-
-占比變化使用篩選後最近兩個可比較完整週，明確列出實際日期。沒有符合週報或沒有完整週時顯示空狀態，提供清除週次範圍操作。
-
-單週頁顯示週曆日期、完整程度、資料截至時間、revision、正文、分類長條與代表來源。第一版僅附原始 YouTube 連結，週報瀏覽不修改文章已讀狀態。不存在的週報回 404。
-
-列表與詳情都有 SSR 標題、描述與 canonical；詳情包含 Markdown 正文，沿用現有 site-url helper 與分享圖片。沒有瀏覽時生成分析的 LLM 呼叫，也不即時查詢 Notion。
+篩選、SSR、快取與公開投影的實作說明見 [Showcase 使用體驗](../../openwiki/frontend/showcase-experience.md)及 [週報建置流程](../../openwiki/workflows/weekly-insights.md)。本頁保留人工分析規則、資料契約與更新步驟。
 
 ## 文件位置與手動更新
 
@@ -209,21 +195,6 @@ skill 完成後回報處理、跳過、失敗與待補週，更新本機展示�
 
 現有 Notion adapter 並未以 Public 控制文章讀取；本次 471 筆 Public 均為 false。新功能以獨立的展示文件／manifest 管理內容，沒有改動原始 Notion 頁面的可見性，也不將私人摘要全文轉成網站資料。
 
-## 模組與驗證
+## 實作與驗證導覽
 
-|位置|責任|
-|---|---|
-|`utils/weekly-insights.ts`|週日分週、完整週選取、占比、區間篩選與顯示格式|
-|`types/weekly-insights.ts`|列表與詳情契約|
-|`scripts/weekly-insights-content.mjs`|驗證文件、白名單欄位與生成 registry|
-|`server/utils/weekly-insights.ts`|讀取已打包 snapshot，列表省略正文與來源|
-|`server/api/showcase/insights/`|列表、詳情與 404；公共 cache TTL 300 秒及內容 ETag|
-|`pages/insights/`|SSR 總覽與單週詳情|
-|`components/InsightCategoryTrend.vue`|分類占比長條圖|
-|`components/WeeklyInsightCard.vue`|週報卡片|
-|`server/plugins/showcase-error-cache.ts`|週報錯誤回應的快取保護；API 查無週報時由 endpoint 明確回傳 404 與 no-store|
-|`.agents/skills/showcase-weekly-insights/`|手動整理流程、逐週進度規劃、成功 checkpoint 與可續跑測試|
-
-自動檢查覆蓋週日界線、跨年、週內與系列統計契約、部分週排除、draft、路徑與 URL、日期篩選、分類切換、空狀態、頁面正文、API cache、SSR metadata 及 404。原有文章列表與分享 SSR 檢查一併執行。
-
-進度工具另有 8 項 unittest，涵蓋週日分週／跨年、預設截止、歷史平日選整週、缺口、open 重跑、刷新、報告／規則／快照變動與原子保存。後續可加入直接匯出 Notion 的 CLI、草稿產生工具、單週比較細節、登入後私人報表。
+Registry 建置、模組責任、公開投影與測試入口見 [OpenWiki 週報流程](../../openwiki/workflows/weekly-insights.md)；頁面與快取機制見 [Showcase 使用體驗](../../openwiki/frontend/showcase-experience.md)。

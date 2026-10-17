@@ -27,7 +27,7 @@ sources:
 generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # 任務生命週期與併發控制

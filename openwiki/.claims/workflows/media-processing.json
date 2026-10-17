@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c20db1af3312338713dd8f7eb503779d8690e9e5b6015cd9ba897cbeb204f454",
+  "pageVersion": "sha256:de69f026a9c7293022d8e30b729538a9a1c25f610925643f0862d861607a70e8",
   "claims": [
     {
       "id": "claim_2c361d6854b0489a9c545d131c871425",
@@ -14,8 +14,12 @@
     },
     {
       "id": "claim_bed34abe309f4052ba057c0b07d880f9",
-      "statement": "Pipeline 任一步驟丟出 exception 時 task 會轉為 Failed並保存 error與 duration，worker 可繼續下一筆。",
+      "statement": "Pipeline 一般步驟例外會使 task Failed 並保存 error 與 duration；metadata sidecar、成功媒體清理及完成通知的例外由共用操作吸收並記錄 warning，worker 可繼續下一筆。",
       "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
+        },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
           "version": "repo-file-v1:sha256:9c462103e18ef86c13d7c15cbaf5181f970ac5ccf1ae68c5e0f5c4a52f328dc8"
@@ -83,12 +87,12 @@
       "statement": "Metadata sidecar寫入exception只記錄warning，不阻止後續Notion保存與task完成。",
       "evidence": [
         {
-          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py#L161-L180",
-          "version": "repo-lines-v1:sha256:70067f3426c848223a903723ac1fb9e5c5d50678834d2c1d94e765eeeb11d778:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRmZTdmNTdhMmI5OWY3YjNlOWE3YmUxNmUyZTk1OTA2YzRhODQzNDczMTg5NWFkNzRjZWI4NDI5ZDY1MDRlMmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJlOTQ4Y2I5ZTQ5OWY1ZWU2ZDMzZDMwMjExZTM3NmJkODI3NTEwMzNjZDNkMzFlY2Q2ZTliNTIwM2I0NGFhZTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAxYWQ1NGMyZTM2NjcyNjRjM2UwMjA1YThlZGJhODUwNGJhZGM0YzJlMWYxN2Y2ZWIxZjVkNjUwODk4YTc3ODYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNmMzRkMWE2NDNmOGJhZWM3OGY0NzY2MTczZTk1YjAzZjgxY2JjYTExMzE2NjM4YTYxZDgyOWZlYTZkNDgwY2QifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         },
         {
           "resource": "repo://apps/whisper_summary/tests/unit/test_processing_worker.py#L216-L273",
-          "version": "repo-lines-v1:sha256:177093e811ca07019532c5f5b44d23cc8c6132903ad47628adcd776fe79bbfe0:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNhZmFiZTQwMTI4YzlhOGZiZmQ4NmRmOGVkMzZmMjU5MDhjYjc2MmZjN2EyYjcwYjBhMzUxZTQwMDU3ZGI5N2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZmNTA3OGRiOWQ1MGFjNzlhODVmZGViNThkOWRmNWU1MjIxMGY0ZjJmOGI2NTJmYzg2NTJmMGQ3NWFlNzViMzciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImRjYzNhZWE2NjYyMjBjNThhYzA2NjFjMTY3MmVjNWU4NzU1NDk1YzQyNmY5Y2FjYjc1NzdiMTI4ODI4ZGY3OTkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNkNDEzNDBjYzIzOWExNTljZTliNjAyMmU5ZjYzMjI4MzJlMmVhZDc2Y2FlOWU0NzU0ZDIxMGViOGZiNmQ1ZTgifQ"
+          "version": "repo-lines-v1:sha256:af6cc176fb9c8a2b0cb16a780f227d26b70d39e3bd589b12bbab472e69678efa:eyJzZWxlY3RlZExpbmVDb3VudCI6NTgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmYTRkZTE2Zjc5NTJiYzczMGIzYzY1Y2M2Zjg5YTBkYTk3OWU1M2ZiNDY5MjU5ODM2M2VlMmYxMzNlMTVjMmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY0ODZmZjVjZjkzNjNiNDQyOTMzNjgwM2IyYzk2MGU3M2RhOGM0N2ZhMGM2ZjY3NjU4ZDE0YjMyM2NkMjJkMzQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4OGJiMTc5MGYyM2QwMjcyNGM1ZTgwNmUxNDIxMTFhZTQxMDAwOTMwOWFlZGVjOWE5ZDQ5MTM5MWRiODBmOTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImRlOTNkODkzOTA2ZWVhZjJjYWRjYzY1NTg1OTdiZDkzMzBlMmViNjlkZmI2MGE5YzgxNzUyMTg1MjdlNzI2ODEifQ"
         }
       ]
     },
@@ -122,11 +126,11 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
-          "version": "repo-file-v1:sha256:4dbb6c20becedf0b3a951b568e7ff79df38217219aca5c2d3db31d18be9d759d"
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/langgraph_engine.py",
-          "version": "repo-file-v1:sha256:dfcd67b1b9ee4dd7948fa644d780929a7245827802ec4f107df0f6c2f1af8d27"
+          "version": "repo-file-v1:sha256:d9d7e12e214b1b3f759318ac27c169864e278f96c09bc43066abceb6180fa42d"
         },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py#L205-L218",
@@ -149,22 +153,46 @@
       "statement": "Legacy 與 LangGraph 在摘要保存及任務 Completed 回寫之後呼叫共用通知步驟，將 storage 回傳的 notion_page_id 與 SHOWCASE_BASE_URL 傳給 Discord；notifier 的 False 回傳值不會被該步驟當作摘要失敗。",
       "evidence": [
         {
-          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py#L182-L217",
-          "version": "repo-lines-v1:sha256:48e909b9db0dd8285f15257d8a51ef935d43873e43e197d7af883f067c44b167:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUxMDM0ODFjNTdkMGYwZGMwZjc2Y2QyY2M4YjM2MDRjNGU4Mjk2ZGE0MTIyYWRkMTllODE3NDVkYzdlMzMxYTYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5MDlhNTNhNjE4ZDAyOGUxZDMwMDBjMGE3YWJjZWVjYmU1ZmIzN2Y0ZTUxMWVmZTQ2NjQzZmFkNmU2Njg3MmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjAyZDVmNWFhNmQ5OWQwZjM3M2Q0MzRiOGZkOWJhYWZkYjFkMTVhNGFlNTFjODI4MTNhNWY2ZWFiOGYzYjk3YjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImNkMjIwNjg2ZmQ2ZjVlNmM5OTJhYzY2NjNiMDI0ZWU4Nzk0NDM5MzIzMjI5ZmM4OGJiMjMyNzY3YjI5ZjA3ODUifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         },
         {
-          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py#L235-L250",
-          "version": "repo-lines-v1:sha256:3bacf363592d6336561f59a7cb0e2c378f24602d6d538dbfb9d0448cb96fbb9c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIzODFlNjJjY2I1N2JjZmJiZDcxZDRkOTA1NmJjOTkwOTU5M2E1NGE1MDc0NDM3NzM2NjI0Mzc4YTZlOWJiMzMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjZiZTc3YWZhMzg3ZTNhNGFkOTY2MTlkNTI0NmQxMzFiY2Q4MjdjZTU2MzgxZjRjODdlNjI0ZWRhZGEwNjc1NWMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjU0ZWRkODYwYzNiZmNmNjM1MmI3NmUzOTg2MDlkN2M3NzAwZmE5N2U3MGM0YWNhMTFiNjk2OGQyZjZlOWFjYjcifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/langgraph_engine.py",
+          "version": "repo-file-v1:sha256:d9d7e12e214b1b3f759318ac27c169864e278f96c09bc43066abceb6180fa42d"
+        }
+      ]
+    },
+    {
+      "id": "claim_fec735f93f0340c788e6efb20bc7c41f",
+      "statement": "兩個 engine 以媒體使用鎖保護操作；成功任務在摘要發布與 Completed 寫入後清理單一媒體檔，清理拒絕越界、符號連結與非一般檔案，失敗只記錄警告。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/media/lifecycle.py",
+          "version": "repo-file-v1:sha256:1910dfdc361af7127c15ba872de0e5d15e7a1aaf7ed9c014dd9f1a10cbfa0ecb"
         },
         {
-          "resource": "repo://apps/whisper_summary/services/pipeline/langgraph_engine.py#L18-L36",
-          "version": "repo-lines-v1:sha256:741cfb57cb5d7c25e0222e078e2cfd610ac6441f8179c90444bfeb4e176dc539:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4ZTIyNTE2NmFhYTFlYWQ5YTQzZjc0YjNjNmEwNTYwNTBmYmViNTZjNDk2ZGY3NTA0YzdlYjE5MGMxOTdmM2UiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQzMjdjODcxZTgwNmExZjMxMmQ5MDkzZTkwMjg2M2YwMGIxMjI2YzJmYTMwZmJiYmRhOWQzYjFlYzYxMTg2NDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM5YmFjYWNkOTJkMTk4M2RjMDc5OTBjNTIxZjJjNzY2YjQzYzQ3NDI0ZTI1NWQ4MzA0MjhjMmUxZGFmMmQwNDQifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/services/pipeline/langgraph_engine.py",
+          "version": "repo-file-v1:sha256:d9d7e12e214b1b3f759318ac27c169864e278f96c09bc43066abceb6180fa42d"
+        }
+      ]
+    },
+    {
+      "id": "claim_f3352209b0c14da192b4611e6e678548",
+      "statement": "媒體使用鎖以 YouTube video ID 協調 URL 別名，同影片互斥、不同影片可並行；無法解析 ID 時取得資料目錄排他鎖，鎖檔位於 videos 之外且程序退出會釋放鎖。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/media/lifecycle.py",
+          "version": "repo-file-v1:sha256:1910dfdc361af7127c15ba872de0e5d15e7a1aaf7ed9c014dd9f1a10cbfa0ecb"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-17T08:57:58.717Z"
   }
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:01b0c47e2ba742aa2e29e9ddbb6a17b11fc247978be4d6073e9753edd7727a2e",
+  "pageVersion": "sha256:443d2723ddaa11702949b66f20c9ca3cbd1a3c44e265df60aeee5bce9db3aafd",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -213,8 +213,8 @@
       "statement": "Showcase 已移除公開 diagnostics 與 health API；本機排錯使用 check-env，但它不驗證部署 runtimeConfig 或 Notion 權限，部署後使用平台設定與安全 server log。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/README.md#L165-L178",
-          "version": "repo-lines-v1:sha256:27bff2658f840728d17e5873b01cc894b16644119846ecc0a6cfa619bc5918ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyMTc1MGNmM2YxOWVjNDk1YTcwYTY2Y2QzYzBjYzExNjQ3Mzc1OGE5ZjRmYjE0MWM5YjM1ZGZmMTc0ZGRjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOTY4N2I3OGJiNmJhN2VjN2M4ZWRiMGFhY2IzMTFjODUxMTljYjhjZTFiNzZiZTZkMDk4YmY5NTQ1ZTc0NWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjM2ZGE2OTgzMzg5NmJhYTMwNjc1NGFlNWQwODk5YjljZDc3NmQ1ZDY0NzZiODgwOTEwNDg0MTE5ZDFhMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://docs/operations/showcase.md",
+          "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
     },
@@ -223,22 +223,22 @@
       "statement": "Showcase 每週回顧內容存放於 repository 的 weekly-insights files，insights:check 可驗證內容，dev/test/build 前置流程會重建 registry。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/README.md#L15-L28",
-          "version": "repo-lines-v1:sha256:effd46e6784cfe11342df39220a4505bfac4ede2978062bbbc06fd1161fa9fed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjZkM2JlNDY1ZWUyYjY2ODU3ZDhkMzhiNWQxYTRjYjUyZGZiYjhhZTlmMjhlODNjNzJkNjIwYjAxZGJlNmI4OWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkOGMzMmE1M2U1Mjg2NGQ2ZDZmMjdlMTYxMjc2YTNiZjdhMDYyNjUyNjljM2QzODJjMWI2ZmFhMmMzNDI2ZWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjUzZmE3NTZiMmE1YjQzM2IxOWRjNmFhYjc0OWI5ZTdjNmJlZWVkMjAxNjk4NmRhMjAwODdjZjU0M2E5NDg5NzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijk3YzVhMDQzMmRkNmYxOGI4Njc0MjIzOWI5M2Y3ZWExZTkyN2RkMjIyMDgzMDk2MGJiMDIwZDYwZDYzMTg4MzIifQ"
-        },
-        {
           "resource": "repo://apps/showcase/package.json#L5-L20",
           "version": "repo-lines-v1:sha256:1dd96c12175b89acca69c3a07e635263a766bbaac95494f63c3672368dea0b70:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjdlYjZjMzIzNzRkNWYwMjYwMTk5ZTU5MDJhZThmNTIwZmE5NzU2ZThiNzg2NjEwY2I1YWE3MTEyMzNkNDlhZmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImJhM2I0NjlkOWUwOTc1NzIyNDY2NjczNGM5ZWY3YjI1NGQ4ODUzNGY1ZDViYjcwOTg5NjA4MDVjNTUzZGMzMDciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijk0MWY2YTJmMmIwZjNkYzA1ZDQ1ZmQwOWE0MjUzYjA4YTViNTk2MTk5M2VjOWRmOWNjMzI5MWM1Y2JlODZiZmQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MjM3ZGIyYWI0NTQ1YzIxMzNkMDM4YjcxMzcyNDA3ZTVhYTA3OGEyNGVkNDEzOTc0YzUwNjExNWI0MzYzNzYifQ"
         },
         {
           "resource": "repo://apps/showcase/scripts/build-weekly-insights.mjs",
           "version": "repo-file-v1:sha256:7ec799e9d581147e5a6216ebe7bd49767de26197ae2fdbaed53b4bb1375eb387"
+        },
+        {
+          "resource": "repo://docs/features/showcase-weekly-insights.md",
+          "version": "repo-file-v1:sha256:9814f869456ef7514cb1ab356c9c3000164a2af6dd9306b7005e682465453748"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-10T15:06:52.784Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:64a506a1fad777a2ec49f9b79ec1611c33a037ba63abb899964c9fa26a761250",
+  "pageVersion": "sha256:f34544a45627f80092e4a3fed9b64c45b853a2ff7928207b99b385213bbb4e1c",
   "claims": [
     {
       "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
@@ -8,7 +8,7 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/services/tasks/task_creation.py#L22-L72",
-          "version": "repo-lines-v1:sha256:555657dd6cf8985f0e03edb085ce41f4b28602cdbd90f2eb13b5c2ba17b8d1e1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjYzViMjkwZTY2ZWI5NTBjNzAwNjNmMjQ3MWFkYzllY2E4Yzg4OTdjMGRlYzcwMjU0MWRhOWQyMzM5Nzk0OGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyNjZkM2E5ODZhOWYyNmFmZTUxMGM3YjZhNWY5OTE1MDJlMTlkNGU2MGZlNWJiYzNiNjY5ZDYyMmQ4NWI4MjkifQ"
+          "version": "repo-lines-v1:sha256:29c407fa1bff3a6fda3649be67d2901d4c963bc724cfbf521e5a2764ede99e11:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjYzViMjkwZTY2ZWI5NTBjNzAwNjNmMjQ3MWFkYzllY2E4Yzg4OTdjMGRlYzcwMjU0MWRhOWQyMzM5Nzk0OGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyNjZkM2E5ODZhOWYyNmFmZTUxMGM3YjZhNWY5OTE1MDJlMTlkNGU2MGZlNWJiYzNiNjY5ZDYyMmQ4NWI4MjkifQ"
         }
       ]
     },
@@ -46,7 +46,7 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py",
-          "version": "repo-file-v1:sha256:dad773c5c50277ff48a767a2d4698f48a3176bf457f6b2cd183e464f7b85c383"
+          "version": "repo-file-v1:sha256:5239d082112fe53dc53c9b0ee5f0d786cdff1e5a201b5fe5c247ec07cb1da305"
         },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py#L119-L180",
@@ -90,13 +90,13 @@
         },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
-          "version": "repo-file-v1:sha256:4dbb6c20becedf0b3a951b568e7ff79df38217219aca5c2d3db31d18be9d759d"
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

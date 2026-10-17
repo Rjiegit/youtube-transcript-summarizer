@@ -31,7 +31,7 @@ sources:
 generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T06:45:07.968Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # 任務、鎖與結果持久化

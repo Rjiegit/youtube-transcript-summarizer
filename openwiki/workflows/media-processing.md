@@ -16,6 +16,8 @@ sources:
     resource: repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py
   - id: openwiki-source-e3deef680a5ed6126a3e663d
     resource: repo://apps/whisper_summary/infrastructure/media/downloader.py
+  - id: openwiki-source-3a4d462be42c08cbbcc6362a
+    resource: repo://apps/whisper_summary/infrastructure/media/lifecycle.py
   - id: openwiki-source-79006d740abb2f90a0561607
     resource: repo://apps/whisper_summary/services/pipeline/engines.py
   - id: openwiki-source-9d74f9961da3fcb79187c2ef
@@ -26,10 +28,10 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e694b4a233a28ca429d8a36e
     resource: repo://apps/whisper_summary/tests/unit/test_processing_worker.py
-generated: { by: "codex", at: "2026-10-05T12:54:12.705Z" }
+generated: { by: "codex", at: "2026-10-17T08:57:58.717Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-17T08:57:58.717Z
 ---
 
 # 媒體轉錄與摘要流程
@@ -46,11 +48,12 @@ verified:
 4. `Summarizer` 將 title、逐字稿與可選的 metadata 套入學習筆記 prompt，再呼叫選定的 LLM。
 5. worker 組合 `faster-whisper-<size>+<provider:model>` 模型標籤，以穩定 output path 保存 Markdown；有 metadata 時，另在實際 Markdown 路徑旁保存同 stem 的 `.metadata.json`。
 6. `SummaryStorage` 建立 Notion page；若回傳 page id，寫回 task。
-7. task 更新為 `Completed`，包含摘要、duration 與 Notion page id，最後送 Discord completion notification。
+7. task 更新為 `Completed`，包含摘要、duration 與 Notion page id。
+8. 在啟用清理且取得摘要 page id 時清理單一媒體檔，再送 Discord completion notification。
 
 舊的 downloader adapter 或 test double 若未回傳 `VideoMetadata`，worker 仍以原本的兩參數介面呼叫 summarizer，且不寫 sidecar，保留向後相容行為。
 
-一般步驟丟出 exception 時，task 會轉為 `Failed` 並保存 error message 與 elapsed duration，而 worker loop 仍可繼續下一筆。若 lease 已失效，worker 停止處理該 task，也不能再寫入 Failed。metadata sidecar 是特例：Markdown 成功後若 JSON 寫入失敗，只記錄 warning，仍繼續 Notion 保存與完成 task。通知在 task 已標為 Completed 後執行；通知本身若拋例外，現行外層 catch 仍會再嘗試把 task 改為 Failed，因此 notifier 實作應自行吸收可恢復的 delivery failure。
+一般步驟丟出 exception 時，task 會轉為 `Failed` 並保存 error message 與 elapsed duration，而 worker loop 仍可繼續下一筆。若 lease 已失效，worker 停止處理該 task，也不能再寫入 Failed。metadata sidecar 是特例：Markdown 成功後若 JSON 寫入失敗，只記錄 warning，仍繼續 Notion 保存與完成 task。通知在 task 已標為 Completed 後執行；共用通知操作吸收 notifier exception 並記錄 warning，False 回傳也不會將成功任務改成 Failed。
 
 ## 完成通知與知識庫導向
 
@@ -92,3 +95,9 @@ Focused tests 分別驗證 yt-dlp metadata 解析降級、prompt trust boundary�
 - [Notion 資料整合](../integrations/notion-and-showcase.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 - [開發規則與測試策略](../operations/development-and-testing.md)
+
+## 媒體清理與操作文件
+
+兩個 engine 在整段操作外取得媒體使用鎖，完成摘要發布與 Completed 寫入後才進行單檔清理，再發送通知。清理拒絕越界、符號連結及非一般檔案；清理失敗只記錄警告。保留開關、手動清理與共用資料限制見 [媒體清理手冊](../../docs/operations/media-cleanup.md)；engine 切換見 [Processing 手冊](../../docs/operations/processing.md)，通知設定見 [通知手冊](../../docs/operations/notifications.md)。
+
+媒體鎖以 YouTube video ID 協調 URL 別名；同影片互斥、不同影片可並行，無法解析 ID 時取得資料目錄排他鎖。鎖檔位於 videos 之外，程序退出會釋放鎖。

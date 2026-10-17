@@ -18,8 +18,6 @@ sources:
     resource: repo://apps/showcase/package.json
   - id: openwiki-source-36cce2c34e32cbad2ec20271
     resource: repo://apps/showcase/pages/settings/sync.vue
-  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
-    resource: repo://apps/showcase/README.md
   - id: openwiki-source-62d27fea7294b39bcb77aae5
     resource: repo://apps/showcase/scripts/build-weekly-insights.mjs
   - id: openwiki-source-d2d7610281b3f0057b9f9314
@@ -44,14 +42,18 @@ sources:
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
+  - id: openwiki-source-469a55bc4f498a65419781db
+    resource: repo://docs/features/showcase-weekly-insights.md
+  - id: openwiki-source-a018598f940064e36f33cafc
+    resource: repo://docs/operations/showcase.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T15:06:52.784Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # 快速開始與開發導覽
@@ -107,7 +109,7 @@ npm run check-env
 npm run dev
 ```
 
-開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 是唯讀介面，不會啟動 Python processing pipeline。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
+開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 的文章瀏覽唯讀；另有受保護的 `/submit` 收件匣入口，透過雲端 Queue 與本機 bridge 入庫，不直接啟動 Python processing pipeline。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
 
 ## Browser Extension
 
@@ -146,6 +148,20 @@ npm --prefix apps/showcase run build
 ```
 
 ## 依任務找文件
+
+操作步驟、安裝與人工內容規則由 [docs 導覽](../docs/README.md)維護；本 Wiki 說明實作、資料流與證據。README 提供快速開始及入口，避免三處重複維護完整手冊。
+
+| 操作需求 | 人工維護手冊 |
+| --- | --- |
+| Engine 切換與多 Worker | [Processing](../docs/operations/processing.md) |
+| 媒體保留與清理 | [媒體清理](../docs/operations/media-cleanup.md) |
+| Discord 摘要入口 | [通知](../docs/operations/notifications.md) |
+| Showcase 設定與部署核對 | [Showcase](../docs/operations/showcase.md) |
+| 已讀同步安裝與輪替 | [已讀同步](../docs/operations/showcase-read-sync.md) |
+| 雲端影片收件匣 | [收件匣](../docs/video-inbox.md) |
+| 週報分析與手動更新 | [每週回顧](../docs/features/showcase-weekly-insights.md) |
+
+下表依修改範圍連到實作說明：
 
 | 你要做的事 | 文件 |
 | --- | --- |

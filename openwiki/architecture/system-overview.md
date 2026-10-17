@@ -45,7 +45,7 @@ sources:
 generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T15:06:52.784Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # 系統架構與端到端資料流

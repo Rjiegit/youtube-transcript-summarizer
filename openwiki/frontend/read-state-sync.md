@@ -20,13 +20,15 @@ sources:
     resource: repo://apps/showcase/server/utils/read-sync-server.ts
   - id: openwiki-source-ac66111399dbff368f8fbd32
     resource: repo://apps/showcase/server/utils/upstash-read-state.ts
-generated: { by: "codex", at: "2026-09-28T16:59:07.681Z" }
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # Showcase 跨裝置已讀同步
+
+安裝、環境變數、憑證輪替與裝置重新連結見 [操作手冊](../../docs/operations/showcase-read-sync.md)。本頁說明 session、資料模型與合併機制。
 
 Showcase 預設把已讀狀態存在瀏覽器 `localStorage`。裝置連結入口位於 `/settings/sync`；使用者輸入個人同步碼後，已有有效 session 的裝置在載入頁面時會自動恢復遠端同步。本機狀態仍供即時 UI 與遠端故障時使用；本機已讀資料及同步資料分別保存在 localStorage，但不再保存同步開關偏好。
 

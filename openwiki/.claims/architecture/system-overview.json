@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:fffa9c704fd2fa09cb1a2b5188a03fcd3d125610390ea848c7bb6f386f6b8787",
+  "pageVersion": "sha256:0d662e9258e3fb65676d23f7b1d521aa7785b6141ab632ad37f0652ea24595eb",
   "claims": [
     {
       "id": "claim_e58d32757ef34b6a8caff1e6252ae528",
@@ -128,7 +128,7 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
-          "version": "repo-file-v1:sha256:4dbb6c20becedf0b3a951b568e7ff79df38217219aca5c2d3db31d18be9d759d"
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         }
       ]
     },
@@ -153,6 +153,6 @@
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-10T15:06:52.784Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

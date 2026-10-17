@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:a242a8ede997a6afe8f622131367fb830c4b1d2f8b0eb23dee805644be4cfcb4",
+  "pageVersion": "sha256:b463fff5bb4a48eaa6e92597335b11988134ee487bc9b20862e7590b4dc8be33",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -12,7 +12,7 @@
         },
         {
           "resource": "repo://apps/whisper_summary/core/config.py#L32-L64",
-          "version": "repo-lines-v1:sha256:7ae20d3fec3c29ca3dbb003ca892a7a9d7a5fcbc1ed8ecac96875242e24a5531:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhiNmI0YjliMWMzMzAxNDQ0MWZjMGU3OWUzMjQ1MTAyZDIzNDVkNjQ4MWVjMTVkOWYzM2M4NjM2MDVkOTAwOWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMTFiNzZmNWE4YjNkODNhZWE1Y2MyYjIxMWFkNjRjNTViY2U3YmUwN2ZkZGE5YjM3MjkxOGZiZDcwMTBjN2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwM2IzZWRhYjE2NTc0ZDk4N2U1YmRjNTNlYjg1YjNhYTZjZGUxNTAyODRkOTZlZDYzNzRjM2MwMmRhMWY4M2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwNWQ0NzVjYzllNDNkMTJlODZkNGVjNTM4MWE5MTU5ZjAyMTkyMjQ5NDBlMTcxYzFjZTVlYTMyMDFmNzE5ZWEifQ"
+          "version": "repo-lines-v1:sha256:dc438266c87e85c8bd4779e443a2e3a50e6e5fde0124322290f5b6698d67f142:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhiNmI0YjliMWMzMzAxNDQ0MWZjMGU3OWUzMjQ1MTAyZDIzNDVkNjQ4MWVjMTVkOWYzM2M4NjM2MDVkOTAwOWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjcxMTFiNzZmNWE4YjNkODNhZWE1Y2MyYjIxMWFkNjRjNTViY2U3YmUwN2ZkZGE5YjM3MjkxOGZiZDcwMTBjN2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYwM2IzZWRhYjE2NTc0ZDk4N2U1YmRjNTNlYjg1YjNhYTZjZGUxNTAyODRkOTZlZDYzNzRjM2MwMmRhMWY4M2UiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjEwNWQ0NzVjYzllNDNkMTJlODZkNGVjNTM4MWE5MTU5ZjAyMTkyMjQ5NDBlMTcxYzFjZTVlYTMyMDFmNzE5ZWEifQ"
         },
         {
           "resource": "repo://apps/whisper_summary/core/config.py#L92-L130",
@@ -77,8 +77,8 @@
       "statement": "Nuxt private runtime config 保存 Notion 與選用已讀同步的憑證設定，public runtime config 包含公開 site URL、build date 與 commit SHA。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/nuxt.config.ts#L38-L60",
-          "version": "repo-lines-v1:sha256:da1d6fffb3ea1a02e9f09b602bab6d9ca41cdfac80f06794b93c4aff762d5087:eyJzZWxlY3RlZExpbmVDb3VudCI6MjMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBjMGIwYTQyM2E4Y2M3YzI0Yjg5OTYxMjZjZmZhYjAyOGI3ODdlNTRkODI3ZTFiZjY4YzQyN2JiNjJiZWIxZjYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZjQ4NTQ4NzQ3ODIzOTk0NjIyOGRhNWMyOGM2ZTRiNGYzMDYxMWU0YWY1NDFiNzYxMGFjMTE1YTg2OTNiNzUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmYjZlYTU4ZDFiNmU4YzIzMTk0YTU1MGU0NDNmN2FiMjM3ODhlZDlhMWU4YTAyZTcwNTViZDIyN2JjZTcyYzAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgzMjA2MTc0OWIzYzhlMmM1ZTA3MmU3MWMzZjYyY2Q2ZWNhMmJjNjRhNjg2NTc1OWRmODhhNTY5MDE0YzRkNzAifQ"
+          "resource": "repo://apps/showcase/nuxt.config.ts",
+          "version": "repo-file-v1:sha256:611f7f7e6b4a76d51b7673d263cf401c1edae1310fbfa9bb4def181b78a37c83"
         }
       ]
     },
@@ -178,7 +178,7 @@
       "evidence": [
         {
           "resource": "repo://Makefile",
-          "version": "repo-file-v1:sha256:e9e85b6b9cfd4a9e1a0cc00f06d37cfc5b02a4ea7012a50fa621003f6df19e3d"
+          "version": "repo-file-v1:sha256:cf0e14f8c169300e0fc58c95ade8ffa74a40c04a333385993ef16178da20c834"
         },
         {
           "resource": "repo://apps/showcase/scripts/check-env.mjs#L1-L32",
@@ -327,22 +327,22 @@
       "statement": "Showcase 公開 diagnostics/health 已移除；check-env 只檢查本機設定，部署排錯使用平台 log；對外錯誤不含設定 snapshot 或上游 body，log 僅含安全的設定狀態、route 與預定義錯誤分類。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/README.md#L165-L178",
-          "version": "repo-lines-v1:sha256:27bff2658f840728d17e5873b01cc894b16644119846ecc0a6cfa619bc5918ed:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYyMTc1MGNmM2YxOWVjNDk1YTcwYTY2Y2QzYzBjYzExNjQ3Mzc1OGE5ZjRmYjE0MWM5YjM1ZGZmMTc0ZGRjZjEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNiOTY4N2I3OGJiNmJhN2VjN2M4ZWRiMGFhY2IzMTFjODUxMTljYjhjZTFiNzZiZTZkMDk4YmY5NTQ1ZTc0NWYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJiNjM2ZGE2OTgzMzg5NmJhYTMwNjc1NGFlNWQwODk5YjljZDc3NmQ1ZDY0NzZiODgwOTEwNDg0MTE5ZDFhMjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
-        },
-        {
           "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L60-L95",
           "version": "repo-lines-v1:sha256:dd62b87e88d04e3e03113a31dc8bf80a6414cc871e2b7fd456e885bc77782db8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhY2VlMGNlODkxOTJkNDkyOWRjMzMzYjQxNGViYzVhNGZkMWQzODc0MmQ5OTdiMTk2YzZjZTRlMjY4ZWNjMDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3ZWNkNjEyM2NlNDljNTQzODE2YzQ4YWY0ZGE5NzU0ZThiY2IzODM5Njg5NjRlM2VhZTFkNWIyNmY5Y2I1NWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
           "resource": "repo://apps/showcase/server/utils/showcase-errors.ts#L1-L10",
           "version": "repo-lines-v1:sha256:9b4b76fdab2a7f30b26d96051f3496f23b3255eae7848c6a00bf444aa1e3838f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjNTVlNDc5NjZkYThkYzhjMjQyMmVlOWVkZTFiZTNmZGMxZDBhYzY0OTdjNWQ0MjA2ZjJkZThjNTk0NDM3NDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://docs/operations/showcase.md",
+          "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-10T15:06:52.784Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

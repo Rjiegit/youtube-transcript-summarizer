@@ -2,11 +2,7 @@
 
 這個專案會接收 YouTube URL，使用 `yt-dlp` 下載媒體、以 faster-whisper 轉錄，再透過 LLM 產生繁體中文摘要。任務與結果可儲存在 SQLite、Markdown 與 Notion，並提供 Streamlit、FastAPI、RSS monitor、Browser Extension 與 Nuxt Showcase 等入口。
 
-若要讓 Discord 完成通知附上知識庫摘要連結，在執行摘要流程的
-`apps/whisper_summary/.env` 設定 `SHOWCASE_BASE_URL=https://knowledge.example.com`，
-並重新載入 worker 環境。通知會使用摘要的 Notion page ID 連往 `/results/{id}`；
-完成通知只附加知識庫摘要入口，不再附加 Notion 網址。未設定知識庫網址或網址／摘要頁 ID 無效時，
-通知僅顯示完成標題與影片網址。Compose 的 env_file 變更需重新建立 worker container。
+Discord 完成通知可附上 Showcase 摘要入口，設定方式見 [通知操作手冊](docs/operations/notifications.md)。
 
 ## 系統流程
 
@@ -38,28 +34,9 @@ Streamlit / Extension / RSS monitor / HTTP client
 
 CLI worker 可以直接處理 backend 中的待辦任務；Nuxt Showcase 則直接讀取 Notion 的完成結果，不會呼叫 Python Task API。
 
-### Processing engine 切換
+### Processing engine 與 Worker
 
-processing pipeline 支援兩個具有相同外部行為的 orchestration engine：
-
-- `legacy`：既有循序流程，也是未設定時的安全預設。
-- `langgraph`：以 LangGraph `StateGraph` 執行相同的下載、轉錄、摘要、儲存與通知步驟。
-
-在 `apps/whisper_summary/.env` 設定全域預設，變更後重啟 processing worker：
-
-```bash
-PROCESSING_ENGINE=legacy
-# 驗證完成後可改為：PROCESSING_ENGINE=langgraph
-```
-
-Streamlit 建立任務時也可選擇 `Legacy` 或 `LangGraph` 覆寫單筆任務；選擇
-`Follow system default` 則使用 worker 的環境變數。API client 可在 `POST /tasks`
-加入 `"processing_engine": "legacy"` 或 `"langgraph"`。回退時將環境變數改回
-`legacy` 即可，已明確指定 engine 的待處理任務仍以任務設定優先。
-
-SQLite 會自動新增 `processing_engine` 欄位。若 Notion task backend 需要使用單筆
-覆寫，請先在 task database 建立名為 `Processing Engine` 的 Select property，選項為
-`Legacy` 與 `LangGraph`；未設定單筆覆寫的既有頁面仍使用全域預設。
+支援 Legacy 與 LangGraph engine，以及本機／Docker 多 Worker。切換、啟動與故障處置見 [Processing 操作手冊](docs/operations/processing.md)。
 
 ## 快速開始
 
@@ -150,67 +127,17 @@ make extension-check
 `make cleanup-data` 預設清理超過 3 天的影片與摘要檔案；可先執行 `make cleanup-data-dry-run` 預覽。
 完整的啟動、環境變數、資料清理與部署說明請看 [設定、執行與部署](openwiki/operations/configuration-and-deployment.md)。
 
-## 多 Worker 模式
-
-Processing API 是 task lease 的中央協調者。Docker 與本機 worker 可以同時運行；每個
-worker 一次處理一筆任務，而同一筆任務只會由一個 lease owner 取得。
-
-先在 `apps/whisper_summary/.env` 設定 worker token（未設定時暫時相容
-`PROCESSING_LOCK_ADMIN_TOKEN`）：
-
-```env
-PROCESSING_WORKER_TOKEN=<random-secret>
-```
-
-Docker worker 使用 Compose 內部 API URL：
-
-```bash
-docker compose up -d api streamlit rss-monitor processing-worker
-```
-
-本機 worker 使用 `TASK_API_BASE_URL`（預設 `http://localhost:8080`），並能使用主機上的
-Codex CLI：
-
-```bash
-make processing-worker
-```
-
-兩者會以唯一 instance ID 競爭任務。Worker 以 heartbeat 維持 lease；lease 過期時任務
-會直接標記為 `Failed`，不會自動交給另一個 worker 重跑。確認舊 worker 已停止後，可透過
-既有 retry 操作建立新任務。Streamlit 的 `Processing Leases` 維運區可查看及手動標記
-active lease 為 Failed。
-
 ## 主要元件
 
-| 元件 | 責任 |
-| --- | --- |
-| `apps/whisper_summary/apps/api/main.py` | FastAPI app 建立與 feature router 註冊 |
-| `apps/whisper_summary/apps/api/routers/` | Task、RSS 與 processing lock endpoints |
-| `apps/whisper_summary/apps/api/schemas.py` | API request／response models |
-| `apps/whisper_summary/domain/ports/` | Application services 使用的 repository contracts |
-| `apps/whisper_summary/infrastructure/composition.py` | Processing pipeline 的 concrete adapter 組裝 |
-| `apps/whisper_summary/infrastructure/repository_composition.py` | Database 與 RSS repository 組裝 |
-| `apps/whisper_summary/apps/ui/streamlit_app.py` | Streamlit UI 入口 |
-| `apps/whisper_summary/apps/workers/cli.py` | 同步處理 queue 的 CLI worker |
-| `apps/whisper_summary/apps/workers/processing_worker.py` | 持續輪詢 queue 的 dedicated processing worker |
-| `apps/whisper_summary/apps/workers/rss_monitor.py` | YouTube channel RSS monitor |
-| `apps/whisper_summary/services/pipeline/processing_runner.py` | Queue、lock 與 processing engine 選擇 |
-| `apps/whisper_summary/services/pipeline/engines.py` | 共用 pipeline operations、legacy engine 與 engine contract |
-| `apps/whisper_summary/services/pipeline/langgraph_engine.py` | LangGraph `StateGraph` orchestration |
-| `apps/whisper_summary/infrastructure/media/` | `yt-dlp` 下載與 faster-whisper 轉錄 |
-| `apps/whisper_summary/infrastructure/llm/` | LLM provider、候選模型與 failover |
-| `apps/whisper_summary/infrastructure/persistence/` | SQLite 與 Notion adapters |
-| `apps/browser-extension/` | Chrome／Edge Manifest V3 client |
-| `apps/showcase/` | 從 Notion 讀取成果的 Nuxt 展示站 |
+Python 處理平台、Browser Extension 與 Nuxt Showcase 的責任與依賴，見 [系統架構](openwiki/architecture/system-overview.md)及 [模組邊界](openwiki/architecture/module-boundaries-and-dependencies.md)。
 
 ## 文件怎麼讀
 
-文件權威順序：
+- [操作文件導覽](docs/README.md)：人工維護的安裝、設定、維運與內容規則。
+- [OpenWiki](openwiki/quickstart.md)：從程式與測試整理的架構、資料流與內部機制。
+- [CONTRIBUTING.md](CONTRIBUTING.md)、[AGENTS.md](AGENTS.md)：開發與協作規則。
 
-1. 原始碼與測試：實際行為。
-2. `openwiki/`：目前架構、流程、整合與維運說明。
-3. `CONTRIBUTING.md`、`AGENTS.md`：人類與 AI 開發規則。
-4. `.docs/`：仍需保留但尚未整併的補充設計資料；目前行為仍以程式碼、測試與 OpenWiki 為準。
+操作步驟只在 docs 維護，README 提供摘要與入口；實際行為仍以原始碼與測試為準。
 
 建議的新手閱讀順序：
 
@@ -233,29 +160,13 @@ active lease 為 Failed。
 
 ## 子專案
 
-- [Nuxt Showcase README](apps/showcase/README.md)：Nuxt 開發、環境變數、cache 與 diagnostics。
+- [Nuxt Showcase README](apps/showcase/README.md)：Nuxt 啟動、必要設定與功能文件入口。
 - [Browser Extension README](apps/browser-extension/README.md)：本機載入、整合邊界與驗證方式。
 - [Browser Extension 架構文件](openwiki/integrations/browser-extension.md)：Extension API 設定與安全邊界；OpenWiki 下次更新時會同步新路徑。
 
 ### 成功任務的媒體清理
 
-`DELETE_MEDIA_ON_SUCCESS=true`（預設）會在本機摘要保存、Notion 發布與任務
-`Completed` 寫入成功後，刪除下載器回傳的單一媒體檔。狀態更新明確回傳失敗時保留媒體並中止流程。可設為 `false` 保留媒體排錯。
-legacy 與 LangGraph 行為一致；Discord 通知失敗及清理失敗只記錄警告，不會將成功任務改為 Failed。
-檔案已不存在視為清理完成。只清理 `data/videos` 內的媒體，拒絕路徑越界、父目錄穿越、
-符號連結與非一般檔案；不掃描資料夾、不按影片 ID wildcard 刪除，也不刪摘要、
-metadata、SQLite 或模型快取。
-
-共用資料目錄的 processing engines 透過 POSIX `flock` 保護整段下載、讀取與清理。
-同一影片 ID（包括不同 URL 寫法）使用同一把鎖，不同影片可並行；無法解析影片 ID 時，
-保守地取得整個資料目錄的排他鎖。鎖檔為 `data/.media-use.lock` 與
-`data/.media-use-<video-id>.lock`，避免多 worker 共用影片檔名時誤刪。
-即使關閉清理仍會取得鎖；程序異常退出會由作業系統釋放鎖。請勿刪除鎖檔；
-所有 worker 必須使用同一資料目錄且檔案系統須支援 `flock`。
-獨立下載指令、外部程式與手動清理不受此鎖協調，請在 worker 停止後操作。
-
-失敗、lease 遺失、中斷及跳過清理的媒體保留供重試，沿用既有手動清理方式；
-`make cleanup-data` 的 3 天保留政策不變。本功能未新增排程或逐字稿快取。
+成功任務預設清理媒體；保留開關、共用資料限制與手動清理見 [媒體清理操作手冊](docs/operations/media-cleanup.md)。
 
 ### 雲端影片收件匣
 

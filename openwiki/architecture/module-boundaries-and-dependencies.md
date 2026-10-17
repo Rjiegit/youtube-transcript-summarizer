@@ -5,7 +5,7 @@ description: 說明 Python modular monolith、獨立應用、composition roots�
 tags: [architecture, dependencies, python, boundaries]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-17T08:55:14.960Z
 sources:
   - id: openwiki-source-269e1e25890c094aaa09d0a0
     resource: repo://.docker/Dockerfile
@@ -51,7 +51,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -62,7 +62,7 @@ Python 主系統位於 `apps/whisper_summary/`，import 名稱維持 `whisper_su
 
 Application service 依賴 domain contracts。資料庫與 RSS repository 由 `infrastructure/repository_composition.py` 建立；processing pipeline 的 downloader、transcriber、summarizer、storage、file manager、notifier 與 config factories 集中在 `infrastructure/composition.py`，再以 `ProcessingDependencies` 注入 `ProcessingWorker`。個別 factory 仍可由測試覆寫。
 
-Task queue 的 lease 操作定義在 `domain/ports/task_queue.py`；常駐 worker 透過 `infrastructure/task_queue/http_client.py` 呼叫中央 FastAPI queue。API 持有 SQLite backend，worker 可與 API 分開執行。兩種 processing engine 共用 `services/pipeline/engines.py` 的操作，`langgraph_engine.py` 只負責圖的順序編排。
+Task queue 的 lease 操作定義在 `domain/ports/task_queue.py`；常駐 worker 透過 `infrastructure/task_queue/http_client.py` 呼叫中央 FastAPI queue。API 持有 SQLite backend，worker 可與 API 分開執行。兩種 processing engine 共用 `services/pipeline/engines.py` 的操作，`langgraph_engine.py` 負責圖的順序編排，執行時與 legacy engine 一樣以媒體使用鎖保護整段操作。
 
 FastAPI 以 feature routers 組裝 HTTP surface；Streamlit、同步 CLI、processing worker 與 RSS monitor 各有獨立 entrypoint。Nuxt Showcase 的 server routes 直接讀取 Notion，Browser Extension 則以 HTTP 呼叫 FastAPI，因此兩者不 import Python implementation。
 

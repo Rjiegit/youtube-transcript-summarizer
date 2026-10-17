@@ -3,9 +3,6 @@ type: workflow
 title: 每週回顧整理與內容發布流程
 description: 從 Notion 摘要的手動整理、逐週 checkpoint 到公開文件驗證與 Nuxt registry 建置，說明週報的時間口徑、發布邊界及續跑方式。
 tags: [weekly-insights, content, workflow, checkpoint, nuxt]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-10T15:06:52.784Z
 sources:
   - id: openwiki-source-41d6fd61738e966a1f855639
     resource: repo://.agents/skills/showcase-weekly-insights/scripts/progress.py
@@ -17,7 +14,10 @@ sources:
     resource: repo://apps/showcase/scripts/weekly-insights-content.mjs
   - id: openwiki-source-263e3bdd5cbd1e9c173088e9
     resource: repo://apps/showcase/server/utils/weekly-insights.ts
-generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # 每週回顧整理與內容發布流程
@@ -38,18 +38,7 @@ generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
 
 ## 整理與 checkpoint
 
-1. 從 repository root 執行 `make showcase-insights-plan`，逐週找出缺口。預設選取最近已結束的週；本週需明確加入 `--include-open`，歷史重查使用 `--refresh` 與日期範圍。
-2. 依週報 skill 完整取得來源分頁，保存不可變私人快照，再核對正文、來源鍵、分類與完整性。查詢失敗或分頁不足不能以零筆代替。
-3. 編輯該週 `report.json`／`report.md`，維護 manifest、overview 與分類洞見。新增週先作 draft；既有週的實質修改增加 revision。
-4. 執行 `npm --prefix apps/showcase run insights:check`，核對本機展示後逐週登記：
-
-```bash
-python3 .agents/skills/showcase-weekly-insights/scripts/progress.py record \
-  --week YYYY-MM-DD \
-  --snapshot data/reports/weekly-insights/runs/RUN/snapshot.private.json
-```
-
-5. 再執行 plan 確認缺口；一週成功就 checkpoint，失敗週不記錄成功。
+人工更新步驟、CLI 範例、checkpoint 保存時機與分析口徑統一維護於 [週報操作文件](../../docs/features/showcase-weekly-insights.md#可續跑的週報-skill)。本節只說明進度工具的判定與保存機制。
 
 planner 核對每週紀錄，而非只看最新完成日期。規則改變、report 或快照變動、快照遺失、manifest 移除、先前 open 週與指定 refresh 都可能重新排入待辦。進度指紋排除 `asOf`／`publishedAt`，同步共同時間不代表歷史週重新查詢。
 

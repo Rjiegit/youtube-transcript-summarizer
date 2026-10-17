@@ -18,10 +18,10 @@ sources:
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
   - id: openwiki-source-36cce2c34e32cbad2ec20271
     resource: repo://apps/showcase/pages/settings/sync.vue
-  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
-    resource: repo://apps/showcase/README.md
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-fdde1868d0c23ae3c40266ae
+    resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-51d27e8448c6ca65ff1ee504
@@ -36,15 +36,17 @@ sources:
     resource: repo://apps/showcase/tests/weekly-insights-pages.test.ts
   - id: openwiki-source-0790ba7e8a15c95a134e6b3f
     resource: repo://apps/showcase/utils/title-search.ts
-generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
+  - id: openwiki-source-a018598f940064e36f33cafc
+    resource: repo://docs/operations/showcase.md
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T15:06:52.784Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
 
-Nuxt Showcase 是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 取得列表，詳細頁同樣在 server 階段取得單筆內容；Notion credentials 與呼叫均留在 Nitro server routes，瀏覽器只接觸 `/api/showcase/*`。
+Nuxt Showcase 的文章區是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 取得列表，詳細頁同樣在 server 階段取得單筆內容；Notion credentials 與呼叫均留在 Nitro server routes，文章瀏覽透過 `/api/showcase/*` 取得資料。另有受保護的 `/submit` 提交入口，與文章讀取路徑分開。
 
 此頁負責瀏覽行為、畫面狀態與快取；Notion schema 和跨應用資料契約見[Notion 資料整合](../integrations/notion-and-showcase.md)，週報作者的整理、進度與建置流程見[每週回顧整理與內容發布流程](../workflows/weekly-insights.md)。
 
@@ -94,3 +96,7 @@ Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗�
 - [跨裝置已讀同步](read-state-sync.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 - [開發規則與測試策略](../operations/development-and-testing.md)
+
+## 操作手冊與提交邊界
+
+設定、分享預覽及部署核對見 [Showcase 操作手冊](../../docs/operations/showcase.md)。影片提交 API 驗證個人提交碼與 Origin，透過受限 RPC 寫入 Supabase Queue，回應為 private、no-store；安裝與輪替見 [收件匣手冊](../../docs/video-inbox.md)。

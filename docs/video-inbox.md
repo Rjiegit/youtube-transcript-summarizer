@@ -6,7 +6,7 @@ Showcase（既有 Vercel Nuxt server）→ Supabase durable pgmq queue → 本�
 ## Supabase 安裝與權限
 
 1. 建議建立專用 Supabase project，啟用 Data API，expose `public`；不要 expose `pgmq`、`pgmq_public`、`video_inbox_private`。
-2. 以 postgres 套用 `supabase/migrations/202610170001_video_inbox.sql`。此為尚未發布的初始 migration，不可重複直接執行。若已手動套用舊 JWT 版本，請先在新測試 project 驗證，勿直接重跑或刪除含待領訊息的 queue。
+2. 以 postgres 套用 `supabase/migrations/202610170001_video_inbox.sql`。此為初始 migration，不可重複直接執行。若已手動套用舊 JWT 版本，請先在新測試 project 驗證，勿直接重跑或刪除含待領訊息的 queue。
 3. Migration 只建立本收件匣的 queue、私有雜湊憑證表與三個受保護 RPC，不會撤銷其他 Queue 的 grants。若 anon／authenticated 能存取原始 pgmq schema／本 queue，或通用 pgmq_public API，會中止並整筆回滾。請使用新的私有 project，或由管理者評估原本授權，勿為了安裝而任意撤權。
 4. 準備 Supabase publishable key。這不是收件授權；每個 RPC 還會驗證專用的 `x-video-inbox-key` header。submit token 僅可 submit，receiver token 僅可 read/delete；遺失、無效或未配置 token 一律拒絕。匿名／authenticated 即使知道 RPC 名稱，沒有正確 token 也無法執行工作。原始 queue 與憑證表不對 Data API 開放。
 5. 在受控環境產生兩個**不同**的 256-bit 隨機 token，僅將 SHA-256 雜湊存入 `video_inbox_private.credentials`。不使用自簽 JWT、signing private key、service-role 或 secret key，因此沒有每日人工續期需求。
@@ -107,11 +107,7 @@ HTTP header 驗證透過 PostgREST 的 transaction-scoped `request.headers`，�
 
 SQL 容器測試不涵蓋 Supabase hosted gateway 對 custom header 的傳遞或雲端專案部署設定；仍需按上述清單執行真實 E2E。沒有雲端憑證時不能宣稱已驗證這一段。
 
-## Review 修正與驗證（2026-10-17）
+## 實作來源導覽
 
-- 初始版本的全域 pgmq 撤權改為前置檢查；已有不安全 grants 時整筆回滾，不改其他 queue 權限。
-- 自簽短期 JWT 改為兩組用途分離的隨機 token，資料庫僅存 SHA-256；不用每日人工續期，可立即撤銷。
-- 提交 API 與本機 bridge 保留安全的錯誤類別與 HTTP status，不輸出憑證、上游 body 或本機路徑。
-- Python：184 tests 通過；Showcase：230 tests 通過、1 skipped；lint、production build、git diff check 通過。
-- 隔離 pgmq 容器：migration 安全停止／回滾、既有 queue 與 grants 保留、用途隔離、憑證替換／撤銷、正常收件與刪除均通過；測試容器已清理。
-- 未取得真實 Supabase credentials，hosted gateway／header 傳遞及完整雲端 E2E 尚未執行；未部署或推送。
+本頁維護安裝、權限、輪替與復原操作。Showcase 入口位於 `apps/showcase/server/api/video-inbox/`，本機 bridge 位於 `apps/whisper_summary/apps/workers/video_inbox_bridge.py`，資料庫定義位於 `supabase/migrations/202610170001_video_inbox.sql`。
+OpenWiki 尚無獨立收件匣頁面；入庫後的處理機制見 [任務生命週期](../openwiki/workflows/task-lifecycle.md)。既有 Wiki 對 Showcase 唯讀的敘述僅適用文章讀取路徑，不涵蓋 `/submit`。

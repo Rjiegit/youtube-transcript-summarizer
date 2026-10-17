@@ -6,12 +6,6 @@ tags: [notion, integration, persistence, showcase]
 sources:
   - id: openwiki-source-fd187f7783d8b744deda578e
     resource: repo://apps/showcase/components/ShowcaseCard.vue
-  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
-    resource: repo://apps/showcase/README.md
-  - id: openwiki-source-f987324e0612a557c62a85fb
-    resource: repo://apps/showcase/server/api/showcase/results.get.ts
-  - id: openwiki-source-f1a67212459cd418a8f6d3d6
-    resource: repo://apps/showcase/server/api/showcase/results/%5Bid%5D.get.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
@@ -32,15 +26,17 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_notion_contract.py
   - id: openwiki-source-9225efb0c61a21bf97b44e10
     resource: repo://contracts/notion_completed_page.json
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
+  - id: openwiki-source-a018598f940064e36f33cafc
+    resource: repo://docs/operations/showcase.md
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # Notion 資料整合與 Showcase 邊界
 
-Notion 在本系統有兩種不同角色：Python `NotionDB` 可把 database 當作任務 queue；`SummaryStorage` 另建立承載完整摘要 blocks 的成果 page。Nuxt Showcase 不建立或更新資料，只用 server-side API 讀取 database schema、完成項目與 page blocks。
+Notion 在本系統有兩種不同角色：Python `NotionDB` 可把 database 當作任務 queue；`SummaryStorage` 另建立承載完整摘要 blocks 的成果 page。Nuxt Showcase 的 Notion adapter 不建立或更新 Notion 資料，只用 server-side API 讀取 database schema、完成項目與 page blocks；影片收件匣另走 Supabase Queue。
 
 本頁聚焦 Python 與 Nuxt 之間的 Notion schema contract；SQLite transaction、task leases、recent history 與檔案 artifacts 集中在[任務、鎖與結果持久化](../persistence/task-and-result-storage.md)。
 
@@ -94,3 +90,7 @@ Repository 以 `contracts/notion_completed_page.json` 表示共同的 Completed 
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
+
+## 操作文件
+
+Notion 設定與排錯見 [Showcase 手冊](../../docs/operations/showcase.md)，Discord 網址設定見 [通知手冊](../../docs/operations/notifications.md)，影片提交安裝與權限見 [收件匣手冊](../../docs/video-inbox.md)。本頁維護 Notion 契約與讀寫機制。

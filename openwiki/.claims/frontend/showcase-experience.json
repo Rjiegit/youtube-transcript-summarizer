@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:d290373e536da23c084cbf49ca7646b02a383c1504affe7a58519ef524851eca",
+  "pageVersion": "sha256:b2a9a991da3dc3ccaf50b9d0f859c6454dd0a6abb15b7ef3528e08ea72728f90",
   "claims": [
     {
       "id": "claim_4875a56afdaa46d48f8f363b756ddb8e",
@@ -141,20 +141,16 @@
       "statement": "公開 diagnostics 與 health API 已移除且首頁不再提供診斷連結；列表、詳情與每週回顧 routes 對錯誤回應設 no-store，使用固定一般錯誤、safe server log 與預定義錯誤類型。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/README.md#L165-L178",
-          "version": "repo-lines-v1:sha256:9e42fb20c955d580265b819a3158df605d4c1b9da648164798947a1fc1b2c456:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNTRhNTM4NmE4OTA0ODVjYzBhOTUzZmE4Mjg1ZjllMmIxNWYxZWZlZTc0MTcwNGI4ZGRiNzIyZmQwZjc1NTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDNjNDA1OGI2Mzk5ZWVmZjUzN2YyMjdlZGQyMjMxMDhlZmQxOTIxMDIzOWUzOTNiMDA3Y2I3NjIyMDg2YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MWMxZDFhYTE4NWNkZjgyZDVhNjk1ZmFlNmZjZjZkMDVlNWU3NTlmMDAwNWNmZWRkM2NmNmNiN2U3MDM0NWMifQ"
-        },
-        {
-          "resource": "repo://apps/showcase/pages/index.vue#L254-L260",
-          "version": "repo-lines-v1:sha256:e116390a5a08762fe2ea525f8c60347fcc975a2b569be3a28a80bd2dce055660:eyJzZWxlY3RlZExpbmVDb3VudCI6NywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZTE4NTY2ZWMxOTM2NmU0ZjgwYWExMzExMGJhNjViMWYzMTFiMzY4NjZjZTJjOTYxMmRkNTQ0OGNhYjc1Y2ZhMiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYjE0NjE3YjJkNTFlZjlkYWNmMTU4ZTcxMTNlMzhlYjgxMWNlYzVjOGNkMTM0NmJkYTUyMTk1MTQ5ZGRlOGNmYSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNmZmZmEzNDc1OGExMDg3YjBkZWFhN2JkM2QxM2M0MTg5YmJiMzVlYzkzZTIzYTM3YjIzMGU0NTk1YWY4MTQ4YSJ9"
-        },
-        {
           "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts",
           "version": "repo-file-v1:sha256:c4d4fc94470b635985d23afcb5dee3514fb1657a9f9d5ff23a4e83a799645d2e"
         },
         {
-          "resource": "repo://apps/showcase/server/utils/showcase-errors.ts#L1-L10",
-          "version": "repo-lines-v1:sha256:9b4b76fdab2a7f30b26d96051f3496f23b3255eae7848c6a00bf444aa1e3838f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjNTVlNDc5NjZkYThkYzhjMjQyMmVlOWVkZTFiZTNmZGMxZDBhYzY0OTdjNWQ0MjA2ZjJkZThjNTk0NDM3NDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/utils/showcase-errors.ts",
+          "version": "repo-file-v1:sha256:9b4b76fdab2a7f30b26d96051f3496f23b3255eae7848c6a00bf444aa1e3838f"
+        },
+        {
+          "resource": "repo://docs/operations/showcase.md",
+          "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
     },
@@ -171,10 +167,20 @@
           "version": "repo-lines-v1:sha256:9965a2ed02032bc1cba8d1c17c7c5ca1a64bf062d91f429de464f222dcfa31a1:eyJzZWxlY3RlZExpbmVDb3VudCI6MjgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2MWEyNjVhYjQzZDM5MGRlM2Q2YWQ4NWVjZTkwMWYyMzFkMDcyMDAxZjkyZTU3M2RhZTQyMzEzMTliYWVkZTIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk5MmVmNTk0NDUzZjdmZWJlZTE2ZmE2ZGU1YWE5ZmMzYWUxODJiMDk0NWQ4MmNiYWZlOTIwYjgzNWVkYTcwNDAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwZDZiODAyZDc3NWUzZWJlYzIxODJjYjk1YTgxZjI5NjQyMjdkZjcyOGUyMDc3OTcyNmJlZmEzNjcxZmRhZjciLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJjZDk0MWZkZWQ5NDQxNGNiNDQzNDA5ZjEwMzc4YjkxOThiY2I0ZTM4ZDZmYWZjNDEyOWU2YWZhNzFhNzI4YTMifQ"
         }
       ]
+    },
+    {
+      "id": "claim_d9b3c1a00b6544a79a4ce8753856da8c",
+      "statement": "Showcase 的影片提交 API 驗證個人提交碼與 Origin，透過受限 RPC 寫入 Supabase Queue，回應採 private、no-store。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts",
+          "version": "repo-file-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-10T15:06:52.784Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

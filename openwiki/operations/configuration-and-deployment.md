@@ -18,8 +18,6 @@ sources:
     resource: repo://.github/workflows/openwiki-update.yml
   - id: openwiki-source-dac0a79ee8362683638fa30e
     resource: repo://apps/showcase/nuxt.config.ts
-  - id: openwiki-source-6b47ec2bb946dbfe3f605cea
-    resource: repo://apps/showcase/README.md
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
   - id: openwiki-source-f987324e0612a557c62a85fb
@@ -52,17 +50,21 @@ sources:
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
+  - id: openwiki-source-a018598f940064e36f33cafc
+    resource: repo://docs/operations/showcase.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-10T15:06:52.784Z" }
+generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T15:06:52.784Z
+    at: 2026-10-17T08:55:14.960Z
 ---
 
 # 設定、執行與部署
+
+本頁維護設定解析、runtime 邊界與部署機制；完整操作依 [docs 功能導覽](../../docs/README.md)進入各手冊。Showcase 部署核對見 [操作手冊](../../docs/operations/showcase.md)，同步安裝與輪替見 [已讀同步手冊](../../docs/operations/showcase-read-sync.md)。
 
 ## Python 主系統
 
@@ -72,19 +74,7 @@ verified:
 
 `PROCESSING_ENGINE` 預設 `legacy`，也可設 `langgraph`；建立 task 時的 `processing_engine` 可逐筆覆寫。Worker 需要 `PROCESSING_WORKER_TOKEN`（若未設則沿用 `PROCESSING_LOCK_ADMIN_TOKEN`）才能透過中央 API claim、heartbeat 與回寫 task。`TASK_API_BASE_URL` 指向 API，`TASK_LOCK_TIMEOUT_SECONDS` 與 `TASK_LEASE_HEARTBEAT_SECONDS` 控制 lease 生命週期。常駐 worker 預設每 60 秒輪詢一次。Codex CLI 的執行檔與 timeout 可由 `CODEX_BIN`、`CODEX_TIMEOUT_SECONDS` 設定。
 
-常用入口：
-
-| 目的 | 指令 |
-| --- | --- |
-| 安裝 frozen Python dependencies | `uv sync --project apps/whisper_summary --frozen --no-install-project` |
-| API | `make api` |
-| Streamlit | `make streamlit` |
-| SQLite worker 一次 | `make run` |
-| Dedicated processing worker | `make processing-worker` |
-| RSS monitor | `make rss-monitor` / `make rss-monitor-once` |
-| 預覽過期 data 容量 | `make cleanup-data-dry-run` |
-| 刪除過期 data | `make cleanup-data` |
-| Python tests | `make test` |
+啟動與 engine 切換步驟見 [Processing 手冊](../../docs/operations/processing.md)；最短啟動入口見 [README](../../readme.md)。
 
 `make install` 還會寫入 `/usr/local/bin/yt-dlp`，本機可能需要權限，不應把它視為純 dependency sync。API 的開發命令綁定 `0.0.0.0:8080` 並啟用 reload。
 
@@ -104,13 +94,13 @@ SHOWCASE_BASE_URL=https://knowledge.example.com
 
 通知保留完成標題與 YouTube 網址，僅選擇性附加知識庫摘要入口，不再附加 Notion 網址；知識庫連結不要求 `NOTION_URL`。Discord request 仍有 10 秒預設 timeout；HTTP 錯誤或 request exception 會記錄並回傳 `False`。
 
-設定變更後重新載入執行摘要的 process。Compose 的 services 共用 env_file，需重新建立 container 才載入更新值，例如 `docker compose up -d --force-recreate processing-worker`；單純 restart 不會重新載入 env_file。清空新設定並重新載入環境即可讓通知只顯示完成標題與影片網址。部署網址保留在不受 Git 追蹤的 `.env` 或環境變數，測試與文件僅使用測試網域。
+設定、重建 worker 與通知核對步驟見 [通知手冊](../../docs/operations/notifications.md)。
 
 ### 本機 Data 清理
 
 `make cleanup-data-dry-run` 只統計符合條件的檔案數與預估可釋放容量，不列出或刪除檔案；確認後才執行 `make cleanup-data`。實際清理會顯示 `data/videos` 與 `data/summaries` 的清理前容量、清理後容量與總 reclaimed 容量。
 
-影片與 summary artifacts 預設都保留 3 天；可在命令列以 `VIDEO_RETENTION_DAYS` 與 `SUMMARY_RETENTION_DAYS` 覆寫，例如 `make cleanup-data-dry-run VIDEO_RETENTION_DAYS=30 SUMMARY_RETENTION_DAYS=365`。兩個值都必須是非負整數，且 `data/videos` 與 `data/summaries` 都必須存在，否則 target 會在掃描或刪除前停止。`readme.md` 也記載了 3 天預設值，並建議先用 dry-run 預覽。
+影片與 summary artifacts 預設都保留 3 天；可在命令列以 `VIDEO_RETENTION_DAYS` 與 `SUMMARY_RETENTION_DAYS` 覆寫，例如 `make cleanup-data-dry-run VIDEO_RETENTION_DAYS=30 SUMMARY_RETENTION_DAYS=365`。兩個值都必須是非負整數，且 `data/videos` 與 `data/summaries` 都必須存在，否則 target 會在掃描或刪除前停止。完整預覽與執行步驟見 [媒體清理手冊](../../docs/operations/media-cleanup.md)。
 
 清理範圍只包含 `data/videos` 與 `data/summaries` 中超過期限的 regular files，不會處理 `data/tasks.db` 或其他 `data` 內容。這兩個 Make targets 都是人工觸發的維運操作；目前沒有自動排程，也不會在 worker 完成後自動執行。
 
@@ -120,7 +110,7 @@ SHOWCASE_BASE_URL=https://knowledge.example.com
 
 Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 保留同一 TTL 的 Nitro SWR，但 route rule 不再設定固定 Cache-Control header；列表與詳情 handler 仍產生成功回應的 public s-maxage／stale-while-revalidate 標頭，避免固定規則覆蓋錯誤的 no-store。
 
-Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅包含公開的 site URL、build date 與 commit SHA。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
+Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅包含公開的 site URL、build date 與 commit SHA。影片收件匣的提交碼、Supabase 設定與 submit token 也位於 private runtime config。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
 
 跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 

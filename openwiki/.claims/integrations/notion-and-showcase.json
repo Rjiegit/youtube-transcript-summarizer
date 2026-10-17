@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:a693745d3cca9b5341eb4036df693ee35b1f697f459252a8d1fe73914baa44fc",
+  "pageVersion": "sha256:05ec7fa21da07406a2482fb30ca939f4b5ef8ea88d6fd1cd181115414ee00ab4",
   "claims": [
     {
       "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
@@ -108,7 +108,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/components/ShowcaseCard.vue#L37-L45",
-          "version": "repo-lines-v1:sha256:6a84d3f83aaf0b5ba34147a61d4633a9fb1f091a00dda4334ad708c95dcfb86a:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTExNGEwN2I2ZDA1ZDc2YWJmYTAzZWRlMTkyNmMxZTJlNzQ3MjczMTI3OWQ4NTg4ZThjNjNjNTY4OWI1MDA3NyIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMTM0OWNhOGQyNGJmN2M4ODczM2ZmNmY1ZmYwY2M5MWM3NGE1NWIzY2M2Mjc3NDEwZDBlNDdjMzUyOGY0OTJmYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNGUzNTZiZWI2NDU2NjFmYjFiMGQzZTk0YWU4YjI3MzVmZWIzZjZjYWM2ZjE4ZGJlZjdlYTE1NjJmYmJiNGRlOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTUzZmU3N2U3MzgzZWY0ZTU3ZDFiNDEwYzkyMTgxYzlhMjUzODc5NDBhNGI4OWJiZWYxY2ViZjA3NDY2NmQ2MyJ9"
+          "version": "repo-lines-v1:sha256:d17029c0ef5c33cc2e07d2bd5d55f9c5f64af04a226f7a752ac6be9f621b14f8:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMjdlNTc4OGQ1ZDlkNzNkMjRhODFkYmMwYTVhNzRiZmE4MmM5YzNiM2FmOTllNTJhZjc5NmU5MGI0NjhhOGEzZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNmU1NzhkMGE2MTNkYzc2YjkyYjY3ZTdkNTViZjU4YzM4YjM1YzM4Yzk5MWVjYzhlZDFjNjJjZmNjNzI5MjE1YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMGEzODc3NjhlMjcxMDFiMjZiYjAwOTJjNWU5ZTQwZmFhODliNTJmMzc3ODJjMjBmMWViZTFjMTU0NzEwNjRhOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNjQyNDMyMDY0Njc3ZGEzZDhiNjlkYzJlMzkyYjI0ODMzNmEwYTI2YzA5OWMwMDk1NDkyMTlmMWEyMjhlNDVlMSJ9"
         },
         {
           "resource": "repo://apps/showcase/server/utils/notion.ts#L228-L239",
@@ -119,8 +119,8 @@
           "version": "repo-lines-v1:sha256:fcc800b387ad4f2d1dae398a27b8a6a642423c0a206925403893ccc01a491479:eyJzZWxlY3RlZExpbmVDb3VudCI6MjUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI3MDJkNzA4YzEwNWRlZTg2MTBkNjk2ODdmMWY4ZGJkOTdiMDExMWM4MGQ0YmJjMDZkYWM0ZjM3ZDc5NDRmMDciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2YThhNzUxZGQ4NWRmZGI0YTlhZTcwZjdjNDQwMmQ2NDUwNTZjNTRjNjhhNmQ4MDZlMGU1OTk2N2Q2M2M5MzEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM0OWZlOWVmZjY1NjZkYWNlNTRkMzdkYzk1YmIwZTk1NjQ5MWFkZDFhOTNiMjA4YTcwMTdlOGY2ZDUwOGQ3YzgifQ"
         },
         {
-          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py#L185-L217",
-          "version": "repo-lines-v1:sha256:e8eaf3261a2131733f7dbcde3f5da318f33f1b07ce87c646c1abd6b62fe4bcea:eyJzZWxlY3RlZExpbmVDb3VudCI6MzMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI4ZTljYzQ1ZDVjNzliYTkwZmFmMGFjZTgzN2ZjMzMzYmZlNmFjOTdmNTc1MGUzNGVkNmI2MTA3NjgzN2M4OGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmMjhlMTA2Y2I3M2E4NDJmZjhlMDg4MzA4MzdkNTIwZjk1NWI0YzA5NGE5NzBkMGU2M2Y0MDUyNWMxOGZjMjUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI0N2QyZWJlYzk4MmRlODliMmVjNmI2MGFlZjAxMzM2MGJlMTlkZjQ2ODU4OTg5ZjM4YzZlZjdjNjY0ZjZkZGMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQzMGM2YjczNmVlMGQwYTliN2IxMThmNWQ5NjA1MTZkMjcxNzhiYmZjNGZlNjZkNDY2ZTMzZDJiZDIyMzhiMGMifQ"
+          "resource": "repo://apps/whisper_summary/services/pipeline/engines.py",
+          "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         }
       ]
     },
@@ -153,30 +153,22 @@
       "statement": "Showcase 公開診斷端點已移除；Notion adapter 的內部錯誤不直接傳給訪客或 log，結果列表與詳情以固定錯誤、安全分類 log 與 no-store 回應失敗。Showcase error hook 亦涵蓋每週洞察頁與 API 的錯誤回應。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/README.md#L165-L178",
-          "version": "repo-lines-v1:sha256:9e42fb20c955d580265b819a3158df605d4c1b9da648164798947a1fc1b2c456:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNTRhNTM4NmE4OTA0ODVjYzBhOTUzZmE4Mjg1ZjllMmIxNWYxZWZlZTc0MTcwNGI4ZGRiNzIyZmQwZjc1NTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDNjNDA1OGI2Mzk5ZWVmZjUzN2YyMjdlZGQyMjMxMDhlZmQxOTIxMDIzOWUzOTNiMDA3Y2I3NjIyMDg2YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MWMxZDFhYTE4NWNkZjgyZDVhNjk1ZmFlNmZjZjZkMDVlNWU3NTlmMDAwNWNmZWRkM2NmNmNiN2U3MDM0NWMifQ"
-        },
-        {
-          "resource": "repo://apps/showcase/server/api/showcase/results.get.ts#L60-L95",
-          "version": "repo-lines-v1:sha256:dd62b87e88d04e3e03113a31dc8bf80a6414cc871e2b7fd456e885bc77782db8:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFhY2VlMGNlODkxOTJkNDkyOWRjMzMzYjQxNGViYzVhNGZkMWQzODc0MmQ5OTdiMTk2YzZjZTRlMjY4ZWNjMDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc3ZWNkNjEyM2NlNDljNTQzODE2YzQ4YWY0ZGE5NzU0ZThiY2IzODM5Njg5NjRlM2VhZTFkNWIyNmY5Y2I1NWUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
-        },
-        {
-          "resource": "repo://apps/showcase/server/api/showcase/results/%5Bid%5D.get.ts#L38-L85",
-          "version": "repo-lines-v1:sha256:5ba5c4c50bff1e1224d6632c634dfa6f6bd46f29f82042cbe4b905d49029d542:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjczYjc1ZmUxNWM1NjcwNTliMGIxZWMxYjQzZTNlMmY4MDdmMTNiNjZlZTg1YjU2MjVmNTg5MTcwZTgwNmE1ZTkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEzNDVhZjkzMGRlNjdjYmNmMjZmNzFmZGM1OWMyN2YyMTEwYmIwNGM5MDMyODVmMmU1ZjAwNzBlYjRmOTRkZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
-        },
-        {
           "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts",
           "version": "repo-file-v1:sha256:c4d4fc94470b635985d23afcb5dee3514fb1657a9f9d5ff23a4e83a799645d2e"
         },
         {
-          "resource": "repo://apps/showcase/server/utils/showcase-errors.ts#L1-L10",
-          "version": "repo-lines-v1:sha256:9b4b76fdab2a7f30b26d96051f3496f23b3255eae7848c6a00bf444aa1e3838f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjNTVlNDc5NjZkYThkYzhjMjQyMmVlOWVkZTFiZTNmZGMxZDBhYzY0OTdjNWQ0MjA2ZjJkZThjNTk0NDM3NDEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/utils/showcase-errors.ts",
+          "version": "repo-file-v1:sha256:9b4b76fdab2a7f30b26d96051f3496f23b3255eae7848c6a00bf444aa1e3838f"
+        },
+        {
+          "resource": "repo://docs/operations/showcase.md",
+          "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }

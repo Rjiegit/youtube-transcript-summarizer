@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:520f19b1976ca147a181b537eb53f3b6a3d7b09f46b0813da0f8fe5056fc3af6",
+  "pageVersion": "sha256:c513d0136133f718bc9eb4df80c157bd62548fdaa19c1323f726eb9ef97cad8b",
   "claims": [
     {
       "id": "claim_048e0f27efda42cbbc213c3a5b8ee451",
@@ -153,10 +153,6 @@
       "statement": "Showcase 列表與詳情缺少設定時回固定 500 訊息，上游失敗且沒有快取時回固定 502 訊息，詳情缺少 id 為 400；診斷與 health API 已移除。展示 API 錯誤及不存在的週報回應使用 no-store，Nitro hook 為結果與 weekly insights routes 補上錯誤回應標頭。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/README.md#L165-L178",
-          "version": "repo-lines-v1:sha256:9e42fb20c955d580265b819a3158df605d4c1b9da648164798947a1fc1b2c456:eyJzZWxlY3RlZExpbmVDb3VudCI6MTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMyNTRhNTM4NmE4OTA0ODVjYzBhOTUzZmE4Mjg1ZjllMmIxNWYxZWZlZTc0MTcwNGI4ZGRiNzIyZmQwZjc1NTciLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjA3MDNjNDA1OGI2Mzk5ZWVmZjUzN2YyMjdlZGQyMjMxMDhlZmQxOTIxMDIzOWUzOTNiMDA3Y2I3NjIyMDg2YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImQ2MWMxZDFhYTE4NWNkZjgyZDVhNjk1ZmFlNmZjZjZkMDVlNWU3NTlmMDAwNWNmZWRkM2NmNmNiN2U3MDM0NWMifQ"
-        },
-        {
           "resource": "repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts",
           "version": "repo-file-v1:sha256:7a933f395f81352b343b553aa88bd757ca33074ff9798f78484212c8ce38c1fa"
         },
@@ -171,12 +167,16 @@
         {
           "resource": "repo://apps/showcase/server/plugins/showcase-error-cache.ts",
           "version": "repo-file-v1:sha256:c4d4fc94470b635985d23afcb5dee3514fb1657a9f9d5ff23a4e83a799645d2e"
+        },
+        {
+          "resource": "repo://docs/operations/showcase.md",
+          "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-17T08:55:14.960Z"
   }
 }
