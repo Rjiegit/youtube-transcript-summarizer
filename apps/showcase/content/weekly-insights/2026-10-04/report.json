@@ -2,54 +2,54 @@
   "schemaVersion": 1,
   "analysisVersion": "topic-v1-sunday",
   "published": true,
-  "publishedAt": "2026-10-09T09:44:10Z",
-  "revision": 1,
+  "publishedAt": "2026-10-17T13:13:16.971339Z",
+  "revision": 2,
   "start": "2026-10-04",
   "endExclusive": "2026-10-11",
   "coverageStart": "2026-10-04",
-  "asOf": "2026-10-09T09:44:10Z",
-  "periodState": "open",
+  "asOf": "2026-10-17T13:13:16.971339Z",
+  "periodState": "closed",
   "dataCompleteness": "complete",
-  "title": "工程判斷與人生選擇",
-  "summary": "本週仍在進行，新增內容關心審查、路由、職涯角色與退休生活。",
+  "title": "驗證回路、職涯選擇與社會議題",
+  "summary": "本週 78 個不同來源；Agent 工程延續驗證與可靠交付，職涯與理財討論選擇和資源配置，社會議題出現單週集中。",
   "metrics": {
-    "rawCount": 68,
-    "sourceCount": 66,
-    "newSourceCount": 59,
+    "rawCount": 83,
+    "sourceCount": 78,
+    "newSourceCount": 71,
     "recurringSourceCount": 7
   },
   "categories": [
     {
       "id": "agent-engineering",
-      "count": 18
+      "count": 19
     },
     {
       "id": "models-tools",
-      "count": 8
+      "count": 9
     },
     {
       "id": "career",
-      "count": 13
+      "count": 14
     },
     {
       "id": "finance-retirement",
-      "count": 11
+      "count": 12
     },
     {
       "id": "crypto-policy",
-      "count": 3
-    },
-    {
-      "id": "technology-business",
-      "count": 3
-    },
-    {
-      "id": "wellbeing-learning",
       "count": 4
     },
     {
-      "id": "society-leisure",
+      "id": "technology-business",
+      "count": 4
+    },
+    {
+      "id": "wellbeing-learning",
       "count": 6
+    },
+    {
+      "id": "society-leisure",
+      "count": 10
     }
   ],
   "sources": [
@@ -72,7 +72,12 @@
       "title": "Jev 最大竞争对手来了！OpenAI Decisions API 实测，文字、图片与三种决策类型",
       "categoryId": "models-tools",
       "sourceUrl": "https://www.youtube.com/watch?v=pJwpUcL3K7s"
+    },
+    {
+      "title": "Bill Gates 談 AI，科技進步了，人類就會過得更好嗎？",
+      "categoryId": "society-leisure",
+      "sourceUrl": "https://www.youtube.com/watch?v=68sqg_knJqk"
     }
   ],
-  "qualityNote": "統計反映個人收錄題材，日期依資料收錄時間（台灣時間）分週；僅列部分代表來源，摘要內的外部事實未另行查核。"
+  "qualityNote": "依資料收錄建立時間（台灣時間）分週；同週相同影片只計一次，僅列部分代表來源。少數短片與動畫摘要資訊不足，不作主題推論；文章中的產品、健康、政策及行情主張未另行查核。"
 }
