@@ -32,9 +32,9 @@ description: 在本 repository 執行 Video Summary 功能開發與修正的協�
 
 ### 功能分支命名
 
-格式：`feature/YYYY-MM-DD-<功能名稱>`，例如 `feature/2026-10-17-media-cleanup-on-success`。
+格式：`feature/YYYYMMDD-<功能名稱>`，例如 `feature/20261017-media-cleanup-on-success`。
 
-- 日期採建立功能分支當日的 `Asia/Taipei` 日期，年份四碼、月日兩碼。延續開發、rebase 或追加 commit 時保留原日期，不隨執行日改名。
+- 日期採建立功能分支當日的 `Asia/Taipei` 日期，年份四碼、月日兩碼，連續八碼、不加分隔符號。延續開發、rebase 或追加 commit 時保留原日期，不隨執行日改名。
 - 功能名稱使用簡短英文小寫 kebab-case，以 `-` 連接單字，描述具體功能或目的；避免空白、底線及只有 `update`、`changes` 等模糊名稱。
 - 建立前檢查本機及已知遠端 refs 是否同名；同名且屬於同一任務時優先重用，不能直接覆寫。若是不同任務，使用更明確的功能名稱區分。
 - WorkTree 目錄名稱可使用相同功能名稱；以實際 Git branch 為準，不要求目錄與分支完全同名。
@@ -65,7 +65,7 @@ WorkTree 不等於交棒：可以在新目錄自行完成。只有使用者或�
 
 ## 6. 本機 commit 與遠端發布
 
-使用者授權本機 commit 後：確認正確的 `feature/YYYY-MM-DD-<功能名稱>` 分支（使用者明確指定其他分支時依其指示），只 stage 本次檔案，檢查 staged diff 與 secrets hook，建立聚焦的 commit。
+使用者授權本機 commit 後：確認正確的 `feature/YYYYMMDD-<功能名稱>` 分支（使用者明確指定其他分支時依其指示），只 stage 本次檔案，檢查 staged diff 與 secrets hook，建立聚焦的 commit。
 不要以 `--no-verify` 跳過失敗 hook；修正原因並重試。回報 commit hash、subject 與剩餘未提交修改。
 不因前一個任務曾授權 commit，就自動提交後續獨立任務。
 
