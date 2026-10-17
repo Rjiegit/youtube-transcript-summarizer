@@ -1,6 +1,6 @@
 ---
 name: video-summary-development
-description: 在本 repository 執行 Video Summary 功能開發與修正的協作流程，涵蓋需求規劃、獨立 WorkTree、feature 分支、實作驗證、review 與本機提交。適用於推進開發任務；純程式碼問答不需啟動完整流程。
+description: 在本 repository 執行 Video Summary 功能開發與修正的協作流程，涵蓋需求規劃、獨立 WorkTree、feature 分支、實作驗證、review、本機提交與 WorkTree 安全收尾。適用於推進開發任務；純程式碼問答不需啟動完整流程。
 ---
 
 # Video Summary 開發流程
@@ -61,3 +61,26 @@ WorkTree 不等於交棒：可以在新目錄自行完成。只有使用者或�
 **本機 commit 不代表 push 授權。** 任何 push、遠端歷史改寫、PR 發布／合併或部署，均遵循根目錄 `AGENTS.md` 的當次確認規則。
 push 前依實際 remote／branch 與全部未推送 commits，用繁體中文提供完整異動、使用影響、驗證與 workflow／部署預期，再停下取得當次確認。
 範圍改變要重新取得確認；使用者只索取指令時不得代執行。
+
+## 7. WorkTree 收尾與刪除
+
+開發完成不代表自動授權刪除環境；使用者要求清理 WorkTree，或已明確授權完成後清理時才執行。
+已授權且保存檢查通過即可繼續，不必再次詢問相同的刪除許可。
+
+刪除前逐項核對：
+
+- **對象與程序**：以 `git worktree list` 與管理工具確認完整路徑、分支、HEAD；確認沒有仍在執行的開發、測試或寫檔工作。只處理指定 WorkTree，不影響主工作目錄及其他 WorkTree。
+- **程式修改**：檢查 staged、unstaged 與 untracked 檔案。需要保留的修改必須已 commit，或已另存到 WorkTree 外並驗證；未取得 commit 授權時，不能自行提交來通過檢查。
+- **Commit 保存**：記錄 HEAD 及功能 commits，確認有刪除後仍會存在的本機分支或 tag 可到達它們。Detached HEAD 或只有 reflog 可找回不算保存完成。尚未合併、未 push 不妨礙移除 WorkTree，但必須保留對應 ref 並提醒使用者。
+- **本機資料**：乾淨的 `git status` 不代表資料已保存。另檢查 ignored 檔案（例如 `git status --short --ignored`）、`.env`、SQLite、`data/`、手動筆記、測試報告與產物；區分可重建依賴／cache 與唯一資料。僅列必要路徑，不輸出 secrets 或資料內容。
+- **備份確認**：唯一資料須保存在 WorkTree 外，核對備份存在、大小或 checksum 等適當證據。遇到符號連結或共享目錄，要確認實際資料位置與移除工具行為，不能假設已備份，也不能連帶刪除共享資料。
+
+刪除前簡短提醒使用者：將移除的環境路徑、已保存的 commit／分支、資料保存位置或可重建項目，以及是否尚未合併／push。
+若仍有未保存修改、唯一資料、無法確認的刪除副作用或運行中的寫入程序，先保留環境並說明缺口；只詢問必要的保存或捨棄決策，不用 `--force` 略過問題。
+
+Orca 管理的 WorkTree 使用對應 CLI；先確認刪除是否也會嘗試刪分支、停止 terminal 或執行 hooks。
+若工具可能刪除唯一保留 commits 的 ref，先在授權範圍內建立並驗證保留 ref，或使用能保留分支的移除方式。
+不要為了刪除 WorkTree 自動 push、合併、部署或執行未授權的遠端操作。
+
+刪除後重新核對 WorkTree 清單、環境路徑與保留分支的 HEAD，確認 commits 仍可讀取。
+回報移除結果、保留的分支與 commit、資料保存情況及後續尚待合併／push 的事項；工具回傳「正在移除」時不能直接當作已完成。
