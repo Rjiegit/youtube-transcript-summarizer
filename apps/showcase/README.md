@@ -207,3 +207,8 @@ YYYY.MM.DD · shortSha
 請透過平台設定與 Notion integration 權限檢查問題，不要公開完整設定或原始 Notion 回應。
 若 schema 內找不到 `Status`，系統會先嘗試自動偵測像是 `狀態` / `State` 等 `status` 或 `select` 欄位；
 仍不符時可用 `NOTION_STATUS_PROPERTY` 與 `NOTION_COMPLETED_STATUS` 明確指定。
+
+### 影片收件匣
+
+首頁「提交影片」連到 `/submit`，需個人提交碼。Server 透過受限 Supabase RPC 入 queue，
+本機離線不影響提交；不顯示處理狀態。設定請見 [安裝與權限文件](../../docs/video-inbox.md)。

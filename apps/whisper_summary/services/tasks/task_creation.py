@@ -29,6 +29,15 @@ def create_task_record(
     completed_task_policy: str = "cache_ttl",
     processing_engine: str | None = None,
 ) -> TaskCreationResult:
+    # SQLite must serialize URL lookup + insert with inbox receipt transactions.
+    # Other repository implementations retain the existing policy below.
+    atomic_create = getattr(type(db), "create_task_record_atomic", None)
+    if callable(atomic_create):
+        return atomic_create(
+            db, url=url, source_type=source_type, source_channel_id=source_channel_id,
+            cache_ttl_seconds=cache_ttl_seconds, completed_task_policy=completed_task_policy,
+            processing_engine=processing_engine,
+        )
     existing_task = db.find_recent_task_by_url(url)
     if existing_task is not None:
         if existing_task.status in ("Pending", "Processing"):

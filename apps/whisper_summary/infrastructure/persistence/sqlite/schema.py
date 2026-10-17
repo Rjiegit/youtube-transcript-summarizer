@@ -69,6 +69,19 @@ def initialize_schema(conn: sqlite3.Connection) -> None:
         """
     )
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS video_inbox_receipts (
+            submission_id TEXT PRIMARY KEY, url TEXT NOT NULL, task_id TEXT NOT NULL,
+            received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS video_inbox_quarantine (
+            message_id TEXT PRIMARY KEY, envelope TEXT NOT NULL,
+            received_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
     # Ensure legacy databases get the new columns.
     cursor.execute("PRAGMA table_info(tasks)")
     existing_columns = {row[1] for row in cursor.fetchall()}

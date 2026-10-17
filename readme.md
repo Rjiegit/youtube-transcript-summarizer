@@ -256,3 +256,9 @@ metadata、SQLite 或模型快取。
 
 失敗、lease 遺失、中斷及跳過清理的媒體保留供重試，沿用既有手動清理方式；
 `make cleanup-data` 的 3 天保留政策不變。本功能未新增排程或逐字稿快取。
+
+### 雲端影片收件匣
+
+Showcase 可受保護提交 YouTube 網址，Supabase Queue 暫存，本機上線後執行
+`make video-inbox-bridge` 入庫，再由既有 processing-worker 處理。
+安裝 migration、權限與設定請見 [影片收件匣文件](docs/video-inbox.md)。

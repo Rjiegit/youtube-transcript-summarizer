@@ -31,6 +31,35 @@ class SQLiteDB(BaseDB):
         finally:
             conn.close()
 
+    def create_task_record_atomic(self, **kwargs):
+        from whisper_summary.infrastructure.persistence.sqlite.video_inbox import TransactionTasks
+        from whisper_summary.services.tasks.task_creation import create_task_record
+        conn = self._get_connection()
+        conn.row_factory = sqlite3.Row
+        try:
+            conn.execute('BEGIN IMMEDIATE')
+            result = create_task_record(db=TransactionTasks(conn, self.adapter), **kwargs)
+            conn.commit()
+            return result
+        finally:
+            conn.close()
+
+    def accept_video_submission(self, message, *, cache_ttl_seconds=3600):
+        from whisper_summary.infrastructure.persistence.sqlite.video_inbox import accept_submission
+        return accept_submission(self, message, cache_ttl_seconds)
+
+    def quarantine_video_message(self, envelope):
+        import json
+        conn = self._get_connection()
+        try:
+            conn.execute(
+                "INSERT OR IGNORE INTO video_inbox_quarantine (message_id, envelope) VALUES (?, ?)",
+                (str(envelope['msg_id']), json.dumps(envelope)),
+            )
+            conn.commit()
+        finally:
+            conn.close()
+
     def record_recent_task_view(
         self,
         task_id: str,

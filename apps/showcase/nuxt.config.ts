@@ -42,6 +42,11 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
+    videoInboxAccessToken: process.env.VIDEO_INBOX_ACCESS_TOKEN || '',
+    videoInboxOrigin: process.env.VIDEO_INBOX_ORIGIN || '',
+    videoInboxSupabaseUrl: process.env.VIDEO_INBOX_SUPABASE_URL || '',
+    videoInboxPublishableKey: process.env.VIDEO_INBOX_PUBLISHABLE_KEY || '',
+    videoInboxSubmitToken: process.env.VIDEO_INBOX_SUBMIT_TOKEN || '',
     notionApiKey: showcaseConfig.notionApiKey,
     notionDatabaseId: showcaseConfig.notionDatabaseId,
     statusPropertyName: showcaseConfig.statusPropertyName,

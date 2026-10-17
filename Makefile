@@ -156,3 +156,7 @@ clear-processing-lock:
 		-H "Content-Type: application/json" \
 		-H "X-Maintainer-Token: $$token" \
 		-d '$(PROCESSING_LOCK_PAYLOAD)'
+
+.PHONY: video-inbox-bridge
+video-inbox-bridge:
+	uv run --env-file $(PYTHON_PROJECT_DIR)/.env python -m whisper_summary.apps.workers.video_inbox_bridge
