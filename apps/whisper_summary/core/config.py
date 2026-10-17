@@ -52,6 +52,8 @@ class Config:
         )
         self.processing_engine = self._get_processing_engine()
 
+        self.delete_media_on_success = os.getenv("DELETE_MEDIA_ON_SUCCESS", "true").lower() in {"1", "true", "yes", "on"}
+
         # File paths
         self.data_dir = "data"
         self.videos_dir = os.path.join(self.data_dir, "videos")

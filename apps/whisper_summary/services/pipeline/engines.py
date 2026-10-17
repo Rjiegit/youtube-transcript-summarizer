@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Callable, Protocol, TypedDict
 
 from whisper_summary.core.logger import logger
+from whisper_summary.infrastructure.media.lifecycle import delete_downloaded_media, media_use_lock
 from whisper_summary.domain.interfaces.database import BaseDB
 from whisper_summary.domain.media.models import VideoMetadata
 from whisper_summary.domain.tasks.models import Task
@@ -53,6 +54,7 @@ class PipelineState(TypedDict, total=False):
     processing_duration: float
     processing_engine: str
     persist_processing_engine: bool
+    published_successfully: bool
 
 
 @dataclass(frozen=True)
@@ -122,11 +124,13 @@ class PipelineOperations:
         update_kwargs = {"title": state["title"]}
         if state["persist_processing_engine"]:
             update_kwargs["processing_engine"] = state["processing_engine"]
-        self.runtime.db.update_task_status(
+        updated = self.runtime.db.update_task_status(
             state["task_id"],
             "Processing",
             **update_kwargs,
         )
+        if updated is False:
+            raise RuntimeError("Task progress update was rejected")
         return {}
 
     def transcribe_media(self, state: PipelineState) -> dict:
@@ -165,6 +169,8 @@ class PipelineOperations:
             state["summarized_text"],
             output_file,
         )
+        if isinstance(summary_file_result, dict) and summary_file_result.get("success") is False:
+            raise RuntimeError("Local summary save failed")
         metadata = state.get("metadata")
         if metadata is not None:
             saved_summary_path = output_file
@@ -189,14 +195,19 @@ class PipelineOperations:
             model=state["model_label"],
             url=state["url"],
         )
+        if isinstance(storage_result, dict) and storage_result.get("success") is False:
+            raise RuntimeError("Summary publication failed")
         notion_page_id = state.get("notion_page_id")
         if isinstance(storage_result, dict) and storage_result.get("page_id"):
             notion_page_id = str(storage_result["page_id"])
-        return {"notion_page_id": notion_page_id}
+        return {
+            "notion_page_id": notion_page_id,
+            "published_successfully": isinstance(storage_result, dict) and bool(storage_result.get("page_id")),
+        }
 
     def complete_task(self, state: PipelineState) -> dict:
         duration = time.time() - state["start_time"]
-        self.runtime.db.update_task_status(
+        updated = self.runtime.db.update_task_status(
             state["task_id"],
             "Completed",
             title=state["title"],
@@ -204,16 +215,29 @@ class PipelineOperations:
             processing_duration=duration,
             notion_page_id=state.get("notion_page_id"),
         )
+        if updated is False:
+            raise RuntimeError("Task completion update was rejected; retaining media")
         return {"processing_duration": duration}
 
     def send_notification(self, state: PipelineState) -> dict:
-        self.runtime.notifier(
-            state["title"] or "untitled",
-            state["url"],
-            self.runtime.config.discord_webhook_url,
-            notion_task_id=state.get("notion_page_id"),
-            showcase_base_url=self.runtime.config.showcase_base_url,
-        )
+        try:
+            self.runtime.notifier(
+                state["title"] or "untitled",
+                state["url"],
+                self.runtime.config.discord_webhook_url,
+                notion_task_id=state.get("notion_page_id"),
+                showcase_base_url=self.runtime.config.showcase_base_url,
+            )
+        except Exception as exc:
+            logger.warning(f"Completion notification failed for task {state['task_id']}: {exc}")
+        return {}
+
+    def cleanup_media(self, state: PipelineState) -> dict:
+        if getattr(self.runtime.config, "delete_media_on_success", True) and state.get("published_successfully"):
+            try:
+                delete_downloaded_media(state["file_path"], self.runtime.config.data_dir)
+            except Exception as exc:
+                logger.warning(f"Media cleanup skipped or failed for task {state['task_id']}: {exc}")
         return {}
 
     @staticmethod
@@ -232,6 +256,10 @@ class LegacyProcessingEngine:
         self.operations = PipelineOperations(runtime)
 
     def execute(self, task: Task) -> ProcessingResult:
+        with media_use_lock(self.operations.runtime.config.data_dir, task.url):
+            return self._execute(task)
+
+    def _execute(self, task: Task) -> ProcessingResult:
         state = self.operations.initial_state(task, LEGACY_ENGINE)
         for operation in (
             self.operations.download_media,
@@ -241,6 +269,7 @@ class LegacyProcessingEngine:
             self.operations.save_local_artifacts,
             self.operations.publish_summary,
             self.operations.complete_task,
+            self.operations.cleanup_media,
             self.operations.send_notification,
         ):
             state.update(operation(state))

@@ -2,6 +2,8 @@
 
 from langgraph.graph import END, START, StateGraph
 
+from whisper_summary.infrastructure.media.lifecycle import media_use_lock
+
 from whisper_summary.domain.tasks.models import Task
 from whisper_summary.services.pipeline.engines import (
     LANGGRAPH_ENGINE,
@@ -24,6 +26,7 @@ class LangGraphProcessingEngine:
             ("save_local_artifacts", self.operations.save_local_artifacts),
             ("publish_summary", self.operations.publish_summary),
             ("complete_task", self.operations.complete_task),
+            ("cleanup_media", self.operations.cleanup_media),
             ("send_notification", self.operations.send_notification),
         )
         for name, node in nodes:
@@ -35,7 +38,8 @@ class LangGraphProcessingEngine:
         self.graph = builder.compile()
 
     def execute(self, task: Task) -> ProcessingResult:
-        final_state = self.graph.invoke(
-            self.operations.initial_state(task, LANGGRAPH_ENGINE)
-        )
+        with media_use_lock(self.operations.runtime.config.data_dir, task.url):
+            final_state = self.graph.invoke(
+                self.operations.initial_state(task, LANGGRAPH_ENGINE)
+            )
         return self.operations.result(final_state)

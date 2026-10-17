@@ -236,3 +236,23 @@ active lease 為 Failed。
 - [Nuxt Showcase README](apps/showcase/README.md)：Nuxt 開發、環境變數、cache 與 diagnostics。
 - [Browser Extension README](apps/browser-extension/README.md)：本機載入、整合邊界與驗證方式。
 - [Browser Extension 架構文件](openwiki/integrations/browser-extension.md)：Extension API 設定與安全邊界；OpenWiki 下次更新時會同步新路徑。
+
+### 成功任務的媒體清理
+
+`DELETE_MEDIA_ON_SUCCESS=true`（預設）會在本機摘要保存、Notion 發布與任務
+`Completed` 寫入成功後，刪除下載器回傳的單一媒體檔。狀態更新明確回傳失敗時保留媒體並中止流程。可設為 `false` 保留媒體排錯。
+legacy 與 LangGraph 行為一致；Discord 通知失敗及清理失敗只記錄警告，不會將成功任務改為 Failed。
+檔案已不存在視為清理完成。只清理 `data/videos` 內的媒體，拒絕路徑越界、父目錄穿越、
+符號連結與非一般檔案；不掃描資料夾、不按影片 ID wildcard 刪除，也不刪摘要、
+metadata、SQLite 或模型快取。
+
+共用資料目錄的 processing engines 透過 POSIX `flock` 保護整段下載、讀取與清理。
+同一影片 ID（包括不同 URL 寫法）使用同一把鎖，不同影片可並行；無法解析影片 ID 時，
+保守地取得整個資料目錄的排他鎖。鎖檔為 `data/.media-use.lock` 與
+`data/.media-use-<video-id>.lock`，避免多 worker 共用影片檔名時誤刪。
+即使關閉清理仍會取得鎖；程序異常退出會由作業系統釋放鎖。請勿刪除鎖檔；
+所有 worker 必須使用同一資料目錄且檔案系統須支援 `flock`。
+獨立下載指令、外部程式與手動清理不受此鎖協調，請在 worker 停止後操作。
+
+失敗、lease 遺失、中斷及跳過清理的媒體保留供重試，沿用既有手動清理方式；
+`make cleanup-data` 的 3 天保留政策不變。本功能未新增排程或逐字稿快取。
