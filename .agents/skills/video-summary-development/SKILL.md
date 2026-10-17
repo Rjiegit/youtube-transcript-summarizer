@@ -24,11 +24,22 @@ description: 在本 repository 執行 Video Summary 功能開發與修正的協�
 ## 3. 在獨立 WorkTree 開發
 
 - 開始修改前確認 `git status`、目前分支、base commit 與既有 WorkTree；保留使用者未提交的修改。
-- 正式功能開發優先使用獨立 WorkTree，分支使用 `feature/<簡短功能名稱>`；先確認名稱未被占用。
+- 正式功能開發優先使用獨立 WorkTree，功能分支依下方命名規範建立；先確認名稱未被占用。
 - 延續已存在的功能 WorkTree 時重用它，不重新建立一份。新任務的 base 依使用者指定或 repository 的 master／預設 base，不能無意間疊在無關功能分支上。
-- Orca 管理的 WorkTree 使用可用的 Orca skill 與該版本 CLI 指南，不猜指令。若 CLI 自動產生其他分支前綴，在修改或提交前切換到正確的 `feature/*` 分支，並核對實際分支。
+- Orca 管理的 WorkTree 使用可用的 Orca skill 與該版本 CLI 指南，不猜指令。若 CLI 自動產生其他分支前綴或省略日期，在修改或提交前調整為符合命名規範的分支，並核對實際分支。
 - 未使用 Orca 管理狀態時可使用 Git WorkTree。遇到 sandbox 權限限制，依工具流程處理，不以改寫主目錄或繞過權限替代。
 - 建立後回報 WorkTree 路徑與分支；不要提交 `.env`、下載產物、credential 或複製 secrets 到新工作區。
+
+### 功能分支命名
+
+格式：`feature/YYYY-MM-DD-<功能名稱>`，例如 `feature/2026-10-17-media-cleanup-on-success`。
+
+- 日期採建立功能分支當日的 `Asia/Taipei` 日期，年份四碼、月日兩碼。延續開發、rebase 或追加 commit 時保留原日期，不隨執行日改名。
+- 功能名稱使用簡短英文小寫 kebab-case，以 `-` 連接單字，描述具體功能或目的；避免空白、底線及只有 `update`、`changes` 等模糊名稱。
+- 建立前檢查本機及已知遠端 refs 是否同名；同名且屬於同一任務時優先重用，不能直接覆寫。若是不同任務，使用更明確的功能名稱區分。
+- WorkTree 目錄名稱可使用相同功能名稱；以實際 Git branch 為準，不要求目錄與分支完全同名。
+- 修正本機分支名稱使用 `git branch -m`，保留 commits；先確認該分支是否由其他 WorkTree 使用。已推送的分支若需改名，另依遠端 Git 寫入規則處理，不自動推送或刪除遠端分支。
+- 此規範適用於功能分支；不因此改名 `master`／`main`，也不批次修改其他既有分支。
 
 WorkTree 不等於交棒：可以在新目錄自行完成。只有使用者或適用 skill 明確授權委派時才啟動另一個 agent。
 若採完整交棒，提供需求、驗收、參考位置與禁止發布的邊界，確認接收並回報 agent handle；不得把「已接收」說成「已完成」。
@@ -54,7 +65,7 @@ WorkTree 不等於交棒：可以在新目錄自行完成。只有使用者或�
 
 ## 6. 本機 commit 與遠端發布
 
-使用者授權本機 commit 後：確認正確的 `feature/*` 分支，只 stage 本次檔案，檢查 staged diff 與 secrets hook，建立聚焦的 commit。
+使用者授權本機 commit 後：確認正確的 `feature/YYYY-MM-DD-<功能名稱>` 分支（使用者明確指定其他分支時依其指示），只 stage 本次檔案，檢查 staged diff 與 secrets hook，建立聚焦的 commit。
 不要以 `--no-verify` 跳過失敗 hook；修正原因並重試。回報 commit hash、subject 與剩餘未提交修改。
 不因前一個任務曾授權 commit，就自動提交後續獨立任務。
 
