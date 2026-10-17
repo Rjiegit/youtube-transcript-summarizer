@@ -1,6 +1,6 @@
 # Showcase 雲端影片收件匣
 
-Showcase（既有 Vercel Nuxt server）→ Supabase durable pgmq queue → 本機 bridge → 既有 SQLite tasks → 原 processing-worker。
+Showcase（既有 Vercel Nuxt server）→ Supabase durable pgmq queue → 本機 bridge → 本機 Task API → 既有 SQLite tasks → 原 processing-worker。
 本機關機時網站仍能提交；沒有線上狀態列表、完成回報或結果同步。
 
 ## Supabase 安裝與權限
@@ -61,21 +61,21 @@ VIDEO_INBOX_SUBMIT_TOKEN=<submit.token 的內容，僅 server 使用>
 VIDEO_INBOX_SUPABASE_URL=https://你的專案.supabase.co
 VIDEO_INBOX_PUBLISHABLE_KEY=<publishable key>
 VIDEO_INBOX_RECEIVER_TOKEN=<receiver.token 的內容，僅本機使用>
-VIDEO_INBOX_DB_PATH=data/tasks.db
+TASK_API_BASE_URL=http://localhost:8080
+PROCESSING_WORKER_TOKEN=<與本機 Task API 相同的 worker token>
 VIDEO_INBOX_IDLE_SECONDS=300
 VIDEO_INBOX_BATCH_LIMIT=20
-TASK_CACHE_TTL_SECONDS=3600
 ```
 
-在 repository 根目錄執行 `make video-inbox-bridge`。**DB_PATH 必須指向既有本機 API 的同一個 `data/tasks.db`**（容器需共用 volume）；bridge 不經 API，直接交易式入庫。SQLite 初始化自動新增 receipts／quarantine tables，不搬移既有資料。備份／還原務必包含整個 SQLite DB（含 receipts），避免只還原 tasks 破壞去重。
+Task API 端沿用 `TASK_CACHE_TTL_SECONDS=3600`；URL 去重與快取政策由 API 執行。先啟動 Task API，再於 repository 根目錄執行 `make video-inbox-bridge`。bridge 使用 `TASK_API_BASE_URL` 與既有 `PROCESSING_WORKER_TOKEN` 呼叫受保護的 `POST /video-inbox/messages`，不直接開啟 SQLite；API 必須能寫入原本的 `data/tasks.db`。容器部署時 bridge 能連到 API 即可，不需掛載 SQLite volume。SQLite 初始化自動新增 receipts／quarantine tables，不搬移既有資料。備份／還原務必包含整個 SQLite DB（含 receipts），避免只還原 tasks 破壞去重。
 
-另外啟動既有 `make api` 與 `make processing-worker`，沿用原 worker token 與 TASK_API_BASE_URL。bridge 不啟動影片處理，不改 worker 的 60 秒輪詢／heartbeat。
+另外啟動既有 `make processing-worker`，沿用原 worker token 與 TASK_API_BASE_URL。bridge 不啟動影片處理，不改 worker 的 60 秒輪詢／heartbeat。若 API 使用 `PROCESSING_LOCK_ADMIN_TOKEN` 作為 worker token 的既有 fallback，bridge 也可沿用該值。
 
 啟動立即 read；每次領取 1 筆，visibility 預設 60 秒，只涵蓋短暫本機交易。單輪最多 20 筆，有工作立即接續（輪間 0.1 秒），空閒等 300 秒；錯誤從 5 秒倍增至 300 秒。HTTP timeout 15 秒、SQLite lock timeout 5 秒。若延遲超過 visibility，允許安全重送，交易與唯一鍵仍阻止重複建立；不需要長時間鎖住影片處理。
 
-本機 BEGIN IMMEDIATE 將既有 URL 去重／快取政策、新 tasks 與 receipt 同交易提交；其他 SQLite create_task_record 呼叫也使用同一交易保護。入庫前當機：雲端重送。入庫後 delete 前當機／刪除失敗：receipt 命中，不再新增。不同 ID 同 URL 沿用 Pending/Processing 去重與 Completed TTL。一般成功只 delete，不 archive，沒有短 TTL。
+Task API 收到訊息後，以 BEGIN IMMEDIATE 將既有 URL 去重／快取政策、新 tasks 與 receipt 同交易提交；其他 SQLite create_task_record 呼叫也使用同一交易保護。API 回覆成功前或入庫前當機：雲端重送。入庫後 delete 前當機／刪除失敗：receipt 命中，不再新增。不同 ID 同 URL 沿用 Pending/Processing 去重與 Completed TTL。一般成功只 delete，不 archive，沒有短 TTL。
 
-無效 payload／同 ID 不同 URL 先寫本機 `video_inbox_quarantine`，成功後才 delete；隔離失敗則保留雲端訊息重試。隔離含原始 payload，僅供本機管理者檢查，請限制 DB 檔案存取及按需清理；一般 log 不含 URL、token 或原始錯誤。檢查範例：`SELECT message_id, received_at FROM video_inbox_quarantine;`。修正後以新 UUID 重新提交；不要隨意移除 receipts。
+API 將無效 payload／同 ID 不同 URL 先寫本機 `video_inbox_quarantine`，成功後 bridge 才 delete；隔離失敗則保留雲端訊息重試。隔離含原始 payload，僅供本機管理者檢查，請限制 DB 檔案存取及按需清理；一般 log 不含 URL、token 或原始錯誤。檢查範例：`SELECT message_id, received_at FROM video_inbox_quarantine;`。修正後以新 UUID 重新提交；不要隨意移除 receipts。
 
 ## 上線驗證清單
 
@@ -90,9 +90,9 @@ TASK_CACHE_TTL_SECONDS=3600
 - `upstream`／其他 HTTP status：檢查 Supabase 專案狀態、RPC migration 與服務可用性。
 - `network`：連線／timeout；檢查網路與 Supabase URL。
 - `invalid_response`：上游未回傳有效 JSON。
-- 本機 `local_database`：SQLite 存取／鎖／寫入問題；檢查 DB 路徑、磁碟與權限。`unexpected` 需由管理者進一步調查。
+- 本機 `local_api`：Task API 未正常回應；檢查 API 狀態、`TASK_API_BASE_URL`、API 所用 DB 路徑、磁碟與權限。`unexpected` 需由管理者進一步調查。
 
-Showcase server 只記錄類別與 status，本機只記錄類別、status 與退避秒數；不記錄上游 body、URL、token 或原始 exception。對外仍統一顯示「尚未確認收件」，使用相同 ID 重試。
+Showcase server 只記錄類別與 status，本機 bridge 只記錄類別、status 與退避秒數；不記錄上游 body、URL、token 或原始 exception。對外仍統一顯示「尚未確認收件」，使用相同 ID 重試。
 
 HTTP header 驗證透過 PostgREST 的 transaction-scoped `request.headers`，參考[官方 request settings 說明](https://postgrest.org/en/stable/references/transactions.html)。
 
@@ -109,5 +109,5 @@ SQL 容器測試不涵蓋 Supabase hosted gateway 對 custom header 的傳遞或
 
 ## 實作來源導覽
 
-本頁維護安裝、權限、輪替與復原操作。Showcase 入口位於 `apps/showcase/server/api/video-inbox/`，本機 bridge 位於 `apps/whisper_summary/apps/workers/video_inbox_bridge.py`，資料庫定義位於 `supabase/migrations/202610170001_video_inbox.sql`。
-OpenWiki 尚無獨立收件匣頁面；入庫後的處理機制見 [任務生命週期](../openwiki/workflows/task-lifecycle.md)。既有 Wiki 對 Showcase 唯讀的敘述僅適用文章讀取路徑，不涵蓋 `/submit`。
+本頁維護安裝、權限、輪替與復原操作。Showcase 入口位於 `apps/showcase/server/api/video-inbox/`，本機 bridge 位於 `apps/whisper_summary/apps/workers/video_inbox_bridge.py`，本機收件 API 位於 `apps/whisper_summary/apps/api/routers/video_inbox.py`，資料庫定義位於 `supabase/migrations/202610170001_video_inbox.sql`。
+OpenWiki 的收件流程與模組責任見 [影片收件與本機入列](../openwiki/workflows/video-inbox.md)；入庫後的處理機制見 [任務生命週期](../openwiki/workflows/task-lifecycle.md)。

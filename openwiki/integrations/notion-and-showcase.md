@@ -1,11 +1,16 @@
 ---
 type: integration
 title: Notion 資料整合與 Showcase 邊界
-description: 說明 Python 的 Notion queue/摘要寫入與 Nuxt Showcase 唯讀查詢、schema 映射及可見性邊界。
+description: 說明 Python 的 Notion 任務與摘要寫入、Nuxt Showcase 的文章讀取，以及獨立的 Supabase 影片提交路徑。
 tags: [notion, integration, persistence, showcase]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-fd187f7783d8b744deda578e
     resource: repo://apps/showcase/components/ShowcaseCard.vue
+  - id: openwiki-source-fdde1868d0c23ae3c40266ae
+    resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
@@ -14,6 +19,8 @@ sources:
     resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-db42db5a52daaee659ddab56
     resource: repo://apps/showcase/tests/showcase-notion-contract.test.ts
+  - id: openwiki-source-9c63a6764b08e1059697a6b4
+    resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-3224679c3e8a326edddf16ce
     resource: repo://apps/whisper_summary/infrastructure/notifications/discord.py
   - id: openwiki-source-3dcaeedd9757866ead8ffb84
@@ -28,10 +35,7 @@ sources:
     resource: repo://contracts/notion_completed_page.json
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -53,6 +57,10 @@ Showcase 列表查詢先讀 database schema；詳細頁則透過 `Promise.all` �
 列表 query 依 created time 倒序、最多 50 筆，通常以解析出的狀態欄位篩選 `Completed`。詳細頁讀取 page properties，並從 page 的 children endpoint 分頁抓取 blocks；每一層遇到 `has_children` 的 block，會再以該 block id 遞迴抓取並分頁完成其 children，形成完整 block tree。這個流程是逐層、依 API 回傳順序進行，任一層的 Notion request 失敗都會讓詳細頁查詢失敗，而不會回傳不完整樹。
 
 完整 block tree 再轉成 Markdown。一般子內容接在 parent 後方；bulleted/numbered list item 與 to-do 的子內容縮排四個 spaces，以保存巢狀清單層級；quote 與 callout 則將自己的文字和所有子內容一起套用引用前綴。若 parent block 本身沒有可呈現內容，仍保留其可呈現 children。只有整棵 block tree 最終沒有 Markdown content 時，詳細頁才 fallback 到 Summary property。
+
+## 影片提交的另一條路徑
+
+Showcase 的 `/submit` 是獨立的寫入入口：瀏覽器只提交網址與個人提交碼到 Nitro API；Nitro 驗證後以 server-only submit token 呼叫 Supabase `video_inbox_submit` RPC。這條路徑不寫入 Notion，也不直接呼叫 Python Task API；本機 bridge 稍後透過 Task API 將訊息變成 SQLite 任務。文章讀取所用的 Notion schema 與可見性規則不適用於收件權限，完整可靠性設計見[影片收件流程](../workflows/video-inbox.md)。
 
 ## 每週洞察展示資料
 
@@ -88,6 +96,7 @@ Repository 以 `contracts/notion_completed_page.json` 表示共同的 Completed 
 
 - [任務、鎖與結果持久化](../persistence/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
+- [影片收件流程](../workflows/video-inbox.md)
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)
 

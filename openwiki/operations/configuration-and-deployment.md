@@ -1,8 +1,11 @@
 ---
 type: operations-guide
 title: 設定、執行與部署
-description: 整理 Python 與 Nuxt 的環境設定、啟動指令、Docker topology、診斷與秘密管理。
+description: 整理 Python 與 Nuxt 的環境設定、影片收件、Docker topology、診斷與秘密管理。
 tags: [operations, configuration, docker, deployment]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -32,10 +35,14 @@ sources:
     resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-4406f4d9096d90261e3f6198
     resource: repo://apps/whisper_summary/.env.example
+  - id: openwiki-source-24b20dc38c8f480c4a39a119
+    resource: repo://apps/whisper_summary/apps/api/routers/video_inbox.py
   - id: openwiki-source-e8a3e4e8f72c5329a78957ec
     resource: repo://apps/whisper_summary/apps/api/schemas.py
   - id: openwiki-source-fb3a71308a5a59482c2767f3
     resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-9c63a6764b08e1059697a6b4
+    resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-445a1c8f48d3b2e4f898d6be
     resource: repo://apps/whisper_summary/core/config.py
   - id: openwiki-source-cd3c19edb3412c855091bcd0
@@ -56,10 +63,9 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+  - id: openwiki-source-00403ba8c9deb95d36c82af7
+    resource: repo://supabase/migrations/202610170001_video_inbox.sql
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # 設定、執行與部署
@@ -81,6 +87,12 @@ verified:
 Docker Compose 以共用 runtime base、`apps/whisper_summary/.env` 與 bind-mounted repository 啟動 api、streamlit、processing-worker、rss-monitor。Dockerfile 以 `api`、`ui`、`worker` targets 分別安裝對應 dependency group。API 暴露 8080、Streamlit 暴露 8501；Streamlit、RSS monitor 與 processing worker 的 `TASK_API_BASE_URL` 都指向 Docker DNS 名稱 `api`。API 與 processing worker 啟動時預設更新 yt-dlp，可用 `YTDLP_AUTO_UPDATE=0` 停用。
 
 processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-processing-lock` 會從 environment 或 `apps/whisper_summary/.env` 取 token 並送出 force release；執行前應先用 GET/dry-run 確認目標 backend 與 lock age，避免中斷活躍 worker。
+
+### Showcase 影片收件設定
+
+收件功能需在 Supabase 專案套用 `supabase/migrations/202610170001_video_inbox.sql`，建立 pgmq `video_inbox`、兩種用途的雜湊憑證及 submit/read/delete RPC。Showcase server-only 設定包含 `VIDEO_INBOX_ACCESS_TOKEN`、`VIDEO_INBOX_ORIGIN`、`VIDEO_INBOX_SUPABASE_URL`、`VIDEO_INBOX_PUBLISHABLE_KEY` 和 `VIDEO_INBOX_SUBMIT_TOKEN`；未配置完整時提交 API 拒絕工作。瀏覽器只持有個人提交碼，不取得 Supabase submit/receiver token。
+
+本機 `make video-inbox-bridge` 另需 Supabase URL、publishable key、`VIDEO_INBOX_RECEIVER_TOKEN`、`TASK_API_BASE_URL` 與 API 使用的 `PROCESSING_WORKER_TOKEN`（或既有 admin token fallback）。bridge 不設定 SQLite DB 路徑；在收件流程中由本機 Task API 開啟原有 `data/tasks.db`，交易式寫入任務與 receipt。`VIDEO_INBOX_IDLE_SECONDS` 預設 300 秒，`VIDEO_INBOX_BATCH_LIMIT` 預設 20；`TASK_CACHE_TTL_SECONDS` 在 API 端決定網址快取政策。API、bridge 與 processing worker 需分別啟動；目前 Compose 沒有 bridge service。安裝、憑證輪替與雲端驗收依[收件匣手冊](../../docs/video-inbox.md)操作，資料流見[影片收件流程](../workflows/video-inbox.md)。
 
 ### Discord 知識庫連結設定
 
@@ -153,6 +165,7 @@ Workflow 使用 Node.js 22，安裝固定版本的 OpenWiki 與可選 Mermaid �
 - [HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)
 - [LLM Providers、選擇與 Failover](../integrations/llm-providers.md)
 - [Nuxt Showcase 使用體驗與資料快取](../frontend/showcase-experience.md)
+- [影片收件流程](../workflows/video-inbox.md)
 
 ### Showcase 安全錯誤與 log
 

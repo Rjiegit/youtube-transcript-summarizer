@@ -6,7 +6,7 @@ from unittest.mock import Mock
 from uuid import uuid4
 
 from whisper_summary.infrastructure.persistence.sqlite.client import SQLiteDB
-from whisper_summary.services.tasks.video_inbox import receive_message
+from whisper_summary.services.tasks.video_inbox import persist_message, receive_message
 
 
 class VideoInboxTests(unittest.TestCase):
@@ -18,11 +18,13 @@ class VideoInboxTests(unittest.TestCase):
 
     def test_redelivery_after_delete_failure(self):
         queue = Mock()
+        api = Mock()
+        api.deliver.side_effect = lambda envelope: persist_message(self.db, envelope)
         queue.delete.side_effect = RuntimeError('offline')
         with self.assertRaises(RuntimeError):
-            receive_message(self.db, queue, {'msg_id': 1, 'message': self.message})
+            receive_message(api, queue, {'msg_id': 1, 'message': self.message})
         queue.delete.side_effect = None
-        receive_message(self.db, queue, {'msg_id': 1, 'message': self.message})
+        receive_message(api, queue, {'msg_id': 1, 'message': self.message})
         self.assertEqual(len(self.db.get_all_tasks()), 1)
 
     def test_concurrent_ids_and_normalized_url(self):
@@ -38,14 +40,12 @@ class VideoInboxTests(unittest.TestCase):
     def test_write_failure_does_not_delete(self):
         queue = Mock()
         with self.assertRaises(RuntimeError):
-            receive_message(Mock(accept_video_submission=Mock(side_effect=RuntimeError())), queue,
+            receive_message(Mock(deliver=Mock(side_effect=RuntimeError())), queue,
                             {'msg_id': 1, 'message': self.message})
         queue.delete.assert_not_called()
 
     def test_invalid_message_quarantined_before_delete(self):
-        queue = Mock()
-        receive_message(self.db, queue, {'msg_id': 2, 'message': {'version': 99}})
-        queue.delete.assert_called_once_with(2)
+        self.assertEqual(persist_message(self.db, {'msg_id': 2, 'message': {'version': 99}}), 'quarantined')
         self.assertEqual(len(self.db.get_all_tasks()), 0)
 
     def test_transaction_rolls_back(self):
@@ -67,9 +67,7 @@ class VideoInboxTests(unittest.TestCase):
     def test_conflicting_id_is_quarantined(self):
         self.db.accept_video_submission(self.message)
         other = dict(self.message, url='https://youtu.be/abcdefghijk')
-        queue = Mock()
-        receive_message(self.db, queue, {'msg_id': 3, 'message': other})
-        queue.delete.assert_called_once_with(3)
+        self.assertEqual(persist_message(self.db, {'msg_id': 3, 'message': other}), 'quarantined')
         self.assertEqual(len(self.db.get_all_tasks()), 1)
 
     def test_poll_immediate_drain_idle_and_backoff(self):
@@ -85,7 +83,9 @@ class VideoInboxTests(unittest.TestCase):
             if len(delays) == 3:
                 stop.is_set.return_value = True
         stop.wait.side_effect = wait
-        run_forever(self.db, queue, stop_event=stop)
+        api = Mock()
+        api.deliver.side_effect = lambda envelope: persist_message(self.db, envelope)
+        run_forever(api, queue, stop_event=stop)
         self.assertEqual(delays, [300, 5, 300])
         self.assertEqual(len(self.db.get_all_tasks()), 1)
 
@@ -101,12 +101,12 @@ class VideoInboxTests(unittest.TestCase):
         self.assertEqual(len(set(ids)), 1)
         self.assertEqual(len(self.db.get_all_tasks()), 1)
 
-    def test_poll_reports_safe_diagnostics_for_credentials_and_database_errors(self):
-        import sqlite3
+    def test_poll_reports_safe_diagnostics_for_credentials_and_api_errors(self):
         from whisper_summary.apps.workers.video_inbox_bridge import run_forever
         from whisper_summary.infrastructure.task_queue.supabase_inbox import InboxTransportError
+        from whisper_summary.infrastructure.task_queue.video_inbox_api import InboxApiError
         for error, category in [(InboxTransportError('credentials', 403), 'credentials'),
-                                (sqlite3.OperationalError('private-db-path'), 'local_database')]:
+                                (InboxApiError('local_api', 503), 'local_api')]:
             with self.subTest(category=category):
                 queue = Mock()
                 queue.read.side_effect = error
@@ -114,7 +114,6 @@ class VideoInboxTests(unittest.TestCase):
                 stop.is_set.return_value = False
                 stop.wait.side_effect = lambda delay: setattr(stop.is_set, 'return_value', True)
                 with self.assertLogs('whisper_summary.apps.workers.video_inbox_bridge', level='WARNING') as logs:
-                    run_forever(self.db, queue, stop_event=stop)
+                    run_forever(Mock(), queue, stop_event=stop)
                 self.assertIn('category=' + category, logs.output[0])
-                self.assertNotIn('private-db-path', logs.output[0])
                 self.assertEqual(queue.read.call_count, 1)

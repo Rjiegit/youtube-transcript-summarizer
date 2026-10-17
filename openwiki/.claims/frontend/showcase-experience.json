@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:b2a9a991da3dc3ccaf50b9d0f859c6454dd0a6abb15b7ef3528e08ea72728f90",
+  "pageVersion": "sha256:3db72d0258f59cee72ad50d248e8c1e554df37a2503802f4c1c011d7390d2581",
   "claims": [
     {
       "id": "claim_4875a56afdaa46d48f8f363b756ddb8e",
@@ -177,10 +177,38 @@
           "version": "repo-file-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c"
         }
       ]
+    },
+    {
+      "id": "claim_d06b2d7e882947fdbc72376b333994c5",
+      "statement": "Showcase /submit 在首次提交前建立 UUID 並將 UUID 與網址保存於 localStorage；未確認回應時使用相同識別碼重試，成功後清除暫存，提交碼不進入 localStorage。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/pages/submit.vue#L1-L47",
+          "version": "repo-lines-v1:sha256:2425ce6e28af5ffbaf3c6e4135126a46de5b91c22e44febae56495a31fe3a65c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmNDMzNTYxNDJhMWEyMzRiMWEwMzE5ZmIyNzYzYmU3ZWQxMDhmYjgxYWM5YzNlNmQyNDQ5NmY5MmVhYjk2YWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2NTc5NTBlYzJiNjYzMzEzNzA1MTQ2YTdlZTExYzc3NzY3NmNlMmJjM2M5MGI4YmUzYjY0ZmRjNjQzYmFmZTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRmYTZjMjk0NjgwNmEzNjhiYTVkZmZlZjc0ZDA4ZDdkYzQ2NTU1YWRhMWI2YTEzYjRjZjZlNTBhOGVlMTdlNzkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_af6029fe8a9e4614a542fe9dafe453f0",
+      "statement": "Showcase 的影片提交 API 驗證個人提交碼、精確 Origin 與 YouTube URL，然後由 server 呼叫 Supabase submit RPC；清除瀏覽器待確認提交不會撤回已入列訊息。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/pages/submit.vue#L35-L46",
+          "version": "repo-lines-v1:sha256:1862a8bef33e2168bf38794f29bdaf2a1f56bde98cfc8bf388c8d4faadfef68f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2OGJjNzdlZWQ3MDlkOTExMGQ2Y2UzNjQ4YTIwOWFkOTQ4YjBhNDlkOWJhNGY5M2RlNWJlMjI5ZGNlNzQ0MjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlMDk0ZDg3NTVjOWFhMTUyNzk2YjYzMWVkYzIxMmMzNjBjOTI2ZGFlNTZlN2MwZGU1ZjA1MmVlNTAwNGQ4Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5MjMwMjAwNjdkYmNjZjVkMDRjZmExNDE4YWIyNTdmN2MxMjFkZjdjNGJjZTEzODNkYTYzNzRjYTdhYTAxMGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgxYTE1M2ZhOGQxODlmNGNiM2M3MTBlNDU2NTRjNDNlYmJmMTA4OTkxMzZhMGI4MzExNjU1YjZkYjRhZWJjY2IifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts#L1-L29",
+          "version": "repo-lines-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4NjQ1MGZlNzI0OTgwNzY2YmU0MTQyMTQ4NjI2MWNlM2M1NmFiM2RiMzIyYTAzNzk3ZDRjZmJlZDcxN2YzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/video-inbox.ts#L1-L26",
+          "version": "repo-lines-v1:sha256:9ee788f031fd0bb7513b8180367214f1632e55b374100f0949b62425ed3b7299:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5ZWMyOWM1ZDE0ZGQzYzc4NDljOTU2MjU2NGM2N2QxZTdkZWNkNGQ1NWZkMTRlMGY0Y2FiYjJiMTM2MjYzNDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T08:55:14.960Z"
+    "at": "2026-10-17T13:28:28.405Z"
   }
 }

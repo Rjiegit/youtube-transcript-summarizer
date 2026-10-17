@@ -21,15 +21,23 @@ def validate_message(message):
     return submission_id, normalized
 
 
-def receive_message(db, queue, envelope, *, cache_ttl_seconds=3600):
+def persist_message(db, envelope, *, cache_ttl_seconds=3600):
+    """Persist a task or quarantine record before the caller acknowledges the queue."""
     try:
         validate_message(envelope['message'])
     except (ValueError, KeyError, TypeError, AttributeError):
-        # Keep the original in restricted local quarantine for operator inspection.
         db.quarantine_video_message(envelope)
+        return 'quarantined'
     else:
         try:
             db.accept_video_submission(envelope['message'], cache_ttl_seconds=cache_ttl_seconds)
         except ValueError:
             db.quarantine_video_message(envelope)
+            return 'quarantined'
+    return 'accepted'
+
+
+def receive_message(api, queue, envelope):
+    """Acknowledge cloud delivery only after the local API confirms persistence."""
+    api.deliver(envelope)
     queue.delete(envelope['msg_id'])

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:b463fff5bb4a48eaa6e92597335b11988134ee487bc9b20862e7590b4dc8be33",
+  "pageVersion": "sha256:530632f56057069d9025b60208272c34196bab82169de9e5f5b54af192c4b378",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -339,10 +339,56 @@
           "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
+    },
+    {
+      "id": "claim_670d2d1324b04848b2ddaa3aaa4336e1",
+      "statement": "影片收件 Supabase migration 建立 pgmq queue、私有雜湊憑證與受保護的 submit/read/delete RPC；Showcase server 的提交設定不會公開到 browser runtime config。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/nuxt.config.ts#L40-L52",
+          "version": "repo-lines-v1:sha256:c44c91de858b977eddeea3293d4380ead98d7a818ad10c222946a6a886ece0f0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NjA3YmNiNDU1YzY4OTk3MGI1MDAzNmZkN2UwZWY3MmU0ODMwYjQyYWRjNmIwYzY3NDQ3MzdlMjBhZjNlMTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliODkyY2NkZGIyY2Q2ZWJmNGQ1ODdjZjk2MTljMDkwNzgxYTQxMDJiOTU3NzJmMjU0ZWVhYTViOTYzMzI2MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0YTBmYzU1ZWQ5MGQyNDcyZDI0N2JkYTBjYjNjYTliNzdjYzk1N2YyYTZiZGNiYjg3YTNiNDgwNTQ1YmY5YTAifQ"
+        },
+        {
+          "resource": "repo://supabase/migrations/202610170001_video_inbox.sql#L1-L78",
+          "version": "repo-lines-v1:sha256:1527ebd4a41810221525ca5def9153728413f8a6baf6ac5308d045bccba4c57f:eyJzZWxlY3RlZExpbmVDb3VudCI6NzgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwY2MzZGZkY2M5YTllNzQ4ZGUwZTNlZWY1ZjBlMDcwODU5MTUxMTdkYzc2NmNkZjNjNzdhY2VlY2ZjYzhhMjkiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4M2U4YzFmNGFkNjEyYTViZDkyMDY3YzI5YmRiOWIxNTk3ZmQ1NDFlYmVkNDEwMjYwNzlhYWJkNmE0YTViZjMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_97d2c7d6184845d7895cde6c988f9c3d",
+      "statement": "本機 bridge 使用 receiver token 從 Supabase 領取訊息，再用 TASK_API_BASE_URL 及既有 worker token 呼叫 Task API；bridge 不讀取 VIDEO_INBOX_DB_PATH，SQLite 寫入留在 API 端。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/.env.example#L18-L39",
+          "version": "repo-lines-v1:sha256:88d578798057d96b108e1dc6ff79741e94c0bcebc747cb930f4b0a2f873c877f:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjlhZmExYmI1MWUzNDc2ZjYyMDFkZDAzNDY0NGI0ODVlYTAwOTA4MDA3YzlmMjc0Mzc5N2NlOTZkZTVjNjNlNTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhmNzNkYmVmNTFjMWYzZjMzYWRhNWExNzVkMDlmZDViMWNiZDY2NmI0ZjkzNzJiODY1ZmRhOTU3YzFlZDc3NzMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijc1Y2UzYzExMmE1Y2QyOTU4MDY4MTY3MjU0OTVlMWU5ZTI5MzVkY2Q3MmJmZTYxZjQ5MWMyYzdhOWQ0MGFiY2MiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/api/routers/video_inbox.py#L13-L27",
+          "version": "repo-lines-v1:sha256:7f8b1a064759781eb31e7926ecc6b742c75da6f5877134ecbe8a4af100964fa5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0MTEwNDNkMGIwNmI4YWYyMDQ5ZDYxYzdhYjZlMTI1ZDgyOTE1MmM0ODk2Y2M0YTIzNjFmYmIzYjg3NGVmZjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZhNGY4YTZlYmE2ZjBlOTU2MmZjMWQzNzg0MzE0OGJjMGY2YmJhYjRhN2U0OGEwZGY0MDI3YzA2ODJkNjBiYjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py#L39-L55",
+          "version": "repo-lines-v1:sha256:8eb33fb0c28758d8131e04c0c8f375b5f9c68bdc5fc94ed604cec0be2c60aeea:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjVmMDdlNzAyYzc0MWIwMmNjZGIwZWE3NThmMzViMzRkMmRhNjgxODE1MTZkYmQ3NWVkYzUwY2ZjMTRmOGNhZGQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_21b2558f67b34e4b909d80f1f7b7514b",
+      "statement": "make video-inbox-bridge 是單獨的本機命令；目前 Docker Compose 編排 API、Streamlit、processing worker 與 RSS monitor，但沒有 video inbox bridge service。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L160-L162",
+          "version": "repo-lines-v1:sha256:e0747df49fd1e10eaae0f81ead5036422bdd6e732163e69f6c049dbfb4df723a:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjE5M2RiY2U1ZWJmZGU0YmVjMDRjZjg0MTQxNDhjMWM2NDk0OWFjMjdlOGE5ZWMxODkyMmVjZTVmZTVmODZiZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiOTllM2I5MjkzMjIxMDZlZTNhYzdmNWMxMmUxZmZiYzhjMTVkYzk0ZjYyZDg3NWJlZjc3ZDRhOGNiN2IwYTM5NiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMzVkOTg1Yzc1ZmYwYWYyNDMwOWE1ZTU4ZmY0YmE0N2E0ZTEwZDMwN2IxZmFjNmMxNmQzYTgyYmNhNDg1YWZjNCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        },
+        {
+          "resource": "repo://compose.yaml",
+          "version": "repo-file-v1:sha256:a3a69cecd8bf3274283cc00bc74f5ed8acb6c5b184b387837c5504f421d816df"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T08:55:14.960Z"
+    "at": "2026-10-17T13:28:28.405Z"
   }
 }

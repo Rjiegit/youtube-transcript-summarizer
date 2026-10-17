@@ -1,17 +1,24 @@
 ---
 type: interface-guide
 title: HTTP API 與客戶端整合
-description: 說明 FastAPI feature routers、task queue 回應、RSS 與 processing lock API，以及各 client 邊界。
-tags: [api, fastapi, clients, rss, processing-lock]
+description: 說明 FastAPI task、worker、RSS 與影片收件契約，以及 Showcase 提交 API 的邊界。
+tags: [api, fastapi, clients, rss, processing-lock, video-inbox]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
+  - id: openwiki-source-2f2ad998e7e5048be4a2f79c
+    resource: repo://apps/showcase/pages/submit.vue
   - id: openwiki-source-8de160800c7fe6a0417a5cac
     resource: repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-f1a67212459cd418a8f6d3d6
     resource: repo://apps/showcase/server/api/showcase/results/%5Bid%5D.get.ts
+  - id: openwiki-source-fdde1868d0c23ae3c40266ae
+    resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
   - id: openwiki-source-1733e19cd888bc4a90558aa4
@@ -22,29 +29,32 @@ sources:
     resource: repo://apps/whisper_summary/apps/api/routers/rss.py
   - id: openwiki-source-2f9fce5f97d840294b957a0b
     resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-24b20dc38c8f480c4a39a119
+    resource: repo://apps/whisper_summary/apps/api/routers/video_inbox.py
   - id: openwiki-source-e8a3e4e8f72c5329a78957ec
     resource: repo://apps/whisper_summary/apps/api/schemas.py
-  - id: openwiki-source-fe5f0de19ee909f2cb957b09
-    resource: repo://apps/whisper_summary/apps/ui/ui_api.py
+  - id: openwiki-source-9c63a6764b08e1059697a6b4
+    resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
+  - id: openwiki-source-2256523c6944df3a2c9ce6fd
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py
+  - id: openwiki-source-ff45e7f56e0675d46760554a
+    resource: repo://apps/whisper_summary/infrastructure/task_queue/video_inbox_api.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
-  - id: openwiki-source-daab87d344d0f6ce8a388ee8
-    resource: repo://apps/whisper_summary/services/rss/channel_monitor.py
   - id: openwiki-source-5862fc4af2e29ada3e6abb6a
     resource: repo://apps/whisper_summary/services/rss/subscription_service.py
   - id: openwiki-source-4ef6c51002fe401d434edeb5
     resource: repo://apps/whisper_summary/services/tasks/processing_scheduler.py
+  - id: openwiki-source-518ecd7240447ddd14177fb5
+    resource: repo://apps/whisper_summary/services/tasks/video_inbox.py
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # HTTP API 與客戶端整合
 
-`whisper_summary.apps.api.main` 只建立 FastAPI app 並註冊 task、RSS 與 processing routers。Streamlit、Browser Extension 和 RSS monitor 是 API clients；Nuxt Showcase 不呼叫 Task API，而由 server route直接查詢 Notion。
+`whisper_summary.apps.api.main` 建立 FastAPI app 並註冊 task、RSS、processing 與影片收件 routers。Streamlit、Browser Extension、RSS monitor 和雲端影片收件 bridge 是 API clients；Nuxt Showcase 的文章路徑查詢 Notion，影片提交路徑寫入 Supabase Queue，不直接呼叫 Python Task API。
 
 ## Task API
 
@@ -55,6 +65,12 @@ verified:
 `POST /tasks/retry` 只接受 Failed task，建立新的 Pending retry並更新來源狀態；同樣由 dedicated worker後續取得。API process不啟動 daemon thread。
 
 `POST /processing-jobs` 現在是 dedicated-worker mode 的確認端點：驗證 backend設定後回202，告知 persisted queue會被專用 worker輪詢，不負責取得 lock或啟動執行緒。
+
+## 雲端影片收件 API
+
+Showcase 的 `POST /api/video-inbox` 接收 `submission_id` 與 YouTube URL；Nitro server 驗證個人提交碼、精確 Origin 和 URL，再以 server-only submit token 呼叫 Supabase `video_inbox_submit` RPC。缺少設定時拒絕提交；上游失敗對外回 503，瀏覽器保留同一 `submission_id` 重試。
+
+本機 bridge 以 receiver token 呼叫 Supabase `video_inbox_read`，再以既有 `X-Worker-Token` 向本機 `POST /video-inbox/messages` 傳入包含 `msg_id` 和 `message` 的 Queue envelope。API 驗證 worker token，以 SQLite 交易持久化 task 與 receipt；無效訊息先寫本機 quarantine，兩者成功時回 `outcome: accepted|quarantined`。未設定 worker token 回 503，缺少／錯誤 token 回 401／403；SQLite 錯誤回 503。bridge 只有收到有效的成功 outcome 才呼叫 `video_inbox_delete`，HTTP 或解析錯誤時保留雲端訊息待重送。既有 `POST /tasks` 沒有雲端 submission receipt 的契約，因此 bridge 使用專用端點。詳見[影片收件流程](../workflows/video-inbox.md)。
 
 ## Worker queue 與 lease API
 
@@ -82,4 +98,4 @@ Showcase 的 GET 列表與詳情正常回應及快取備援保持原有格式。
 
 ## 操作文件
 
-Worker 啟動與故障處置見 [Processing 手冊](../../docs/operations/processing.md)；Showcase 設定與排錯見 [Showcase 手冊](../../docs/operations/showcase.md)。影片提交的安裝與權限設定見 [收件匣手冊](../../docs/video-inbox.md)，此入口與 Notion 成果 GET API 分開。
+Worker 啟動與故障處置見 [Processing 手冊](../../docs/operations/processing.md)；Showcase 設定與排錯見 [Showcase 手冊](../../docs/operations/showcase.md)。影片提交的流程見 [影片收件流程](../workflows/video-inbox.md)，安裝與權限設定見 [收件匣手冊](../../docs/video-inbox.md)，此入口與 Notion 成果 GET API 分開。

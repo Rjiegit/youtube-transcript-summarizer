@@ -171,5 +171,5 @@ Python 處理平台、Browser Extension 與 Nuxt Showcase 的責任與依賴，�
 ### 雲端影片收件匣
 
 Showcase 可受保護提交 YouTube 網址，Supabase Queue 暫存，本機上線後執行
-`make video-inbox-bridge` 入庫，再由既有 processing-worker 處理。
+`make video-inbox-bridge` 透過本機 Task API 入庫，再由既有 processing-worker 處理。
 安裝 migration、權限與設定請見 [影片收件匣文件](docs/video-inbox.md)。

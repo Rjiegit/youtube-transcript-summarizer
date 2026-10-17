@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:443d2723ddaa11702949b66f20c9ca3cbd1a3c44e265df60aeee5bce9db3aafd",
+  "pageVersion": "sha256:d597bc8fea886772549037eb2c35b55987e5a5ef067067da12e9a8867540b636",
   "claims": [
     {
       "id": "claim_8ed51430c64f48079ab04ac6ec6329ba",
@@ -232,13 +232,31 @@
         },
         {
           "resource": "repo://docs/features/showcase-weekly-insights.md",
-          "version": "repo-file-v1:sha256:9814f869456ef7514cb1ab356c9c3000164a2af6dd9306b7005e682465453748"
+          "version": "repo-file-v1:sha256:04b3f2d8dee86392e4d9b27f736fa90341c0994789ac282096d293d7e7a1a9c7"
+        }
+      ]
+    },
+    {
+      "id": "claim_49af7319df9d44869fe1ea24363cdc66",
+      "statement": "Showcase 受保護影片提交先寫入 Supabase Queue；本機 video-inbox-bridge 將訊息透過 Task API 入列，原 processing worker 從本機任務系統接手處理。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts#L1-L29",
+          "version": "repo-lines-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4NjQ1MGZlNzI0OTgwNzY2YmU0MTQyMTQ4NjI2MWNlM2M1NmFiM2RiMzIyYTAzNzk3ZDRjZmJlZDcxN2YzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/api/routers/video_inbox.py#L13-L27",
+          "version": "repo-lines-v1:sha256:7f8b1a064759781eb31e7926ecc6b742c75da6f5877134ecbe8a4af100964fa5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0MTEwNDNkMGIwNmI4YWYyMDQ5ZDYxYzdhYjZlMTI1ZDgyOTE1MmM0ODk2Y2M0YTIzNjFmYmIzYjg3NGVmZjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZhNGY4YTZlYmE2ZjBlOTU2MmZjMWQzNzg0MzE0OGJjMGY2YmJhYjRhN2U0OGEwZGY0MDI3YzA2ODJkNjBiYjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py#L8-L55",
+          "version": "repo-lines-v1:sha256:e3a0ef63357518325820bfe07c148632e860b2ef58d8d593d8d2fc283525bd9d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1N2MzYWRhOGNiYTY4ZGYyMGIxMDk1MTQ1MDQ4NWQxODNiN2NhNWNlZDk0MGM4MmI2ZTkxYmY5NjNhOTMxY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM4MmQzZjNlNjY5ZmMzNjM0NWIxOGNkYTdhNzE1ZjJhNjJiOTA4Y2I4ZmJjYjM0ZjZlODEwMDM5ZTdmZTA5ZTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T08:55:14.960Z"
+    "at": "2026-10-17T13:28:28.405Z"
   }
 }

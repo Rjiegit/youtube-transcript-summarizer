@@ -1,6 +1,7 @@
 """Pydantic request and response schemas for the Task API."""
 
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -8,6 +9,15 @@ from whisper_summary.core.utils.url import is_valid_youtube_channel_id
 from whisper_summary.services.pipeline.engines import normalize_processing_engine
 
 SUPPORTED_DB_TYPES = {"sqlite", "notion"}
+
+
+class VideoInboxEnvelope(BaseModel):
+    """One Supabase queue delivery, including its original payload for quarantine."""
+
+    model_config = ConfigDict(extra="allow")
+
+    msg_id: int
+    message: Any = None
 
 
 def normalize_db_type(value: str) -> str:

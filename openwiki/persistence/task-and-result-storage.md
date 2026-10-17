@@ -1,8 +1,11 @@
 ---
 type: persistence-guide
 title: 任務、鎖與結果持久化
-description: 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
+description: 比較 Supabase Queue、SQLite 與 Notion 的責任，並說明收件去重、task lease、artifacts 和摘要發布。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-edc748d2ffa8cac498e9a351
     resource: repo://apps/showcase/content/weekly-insights/series.json
@@ -12,6 +15,8 @@ sources:
     resource: repo://apps/showcase/server/utils/weekly-insights.ts
   - id: openwiki-source-8a8f27feb31a478f83017412
     resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-9c63a6764b08e1059697a6b4
+    resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-8f9eb8eb57207a07e563e910
     resource: repo://apps/whisper_summary/domain/interfaces/database.py
   - id: openwiki-source-3dcaeedd9757866ead8ffb84
@@ -20,6 +25,8 @@ sources:
     resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py
   - id: openwiki-source-952fb6b7dcfe243a56ab0eb8
     resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/schema.py
+  - id: openwiki-source-2256523c6944df3a2c9ce6fd
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py
   - id: openwiki-source-afeda25a549a366dcbddf0d6
     resource: repo://apps/whisper_summary/infrastructure/storage/file_storage.py
   - id: openwiki-source-ff0286cd18c5814ca933998b
@@ -28,15 +35,14 @@ sources:
     resource: repo://apps/whisper_summary/services/outputs/path_builder.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
-generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+  - id: openwiki-source-518ecd7240447ddd14177fb5
+    resource: repo://apps/whisper_summary/services/tasks/video_inbox.py
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # 任務、鎖與結果持久化
 
-系統有四種不同目的的持久化資料：task/queue state、RSS 與 recent-view state、本機摘要 artifacts，以及供分享與 Showcase 使用的 Notion pages。它們不是同一份資料的完全鏡像，失敗與一致性保證也不同。
+系統有不同目的的持久化資料：Supabase Queue 暫存尚未交給本機的影片、SQLite task/receipt/lease 與 RSS/recent-view state、本機摘要 artifacts，以及供分享與 Showcase 使用的 Notion pages。它們不是同一份資料的完全鏡像，失敗與一致性保證也不同。
 
 ## `BaseDB` 與 backend 選擇
 
@@ -59,13 +65,21 @@ verified:
 - `tasks`：URL、status、summary/error、duration、retry relationship、task lease token、processing engine、Notion page id 與來源；
 - `processing_lock`：固定 id=1 的 global worker lease；
 - `recent_task_history`：每個 task 最新的 view timestamp；
-- `rss_channel_subscriptions`：channel、feed、enabled、watermark 與 poll status/error。
+- `rss_channel_subscriptions`：channel、feed、enabled、watermark 與 poll status/error；
+- `video_inbox_receipts`：已接收的 submission ID、正規化網址與 task ID；
+- `video_inbox_quarantine`：無效或衝突雲端訊息的原始 envelope。
 
 Legacy database 會在啟動時以 `ALTER TABLE` 補上已知缺少欄位。這是輕量的 forward migration，沒有 versioned rollback。
 
 Task claim 在 `BEGIN IMMEDIATE` transaction 內先將過期或缺少 lease 資料的 Processing task 標記 Failed，要求人工重試；接著選最舊 Pending，寫入 Processing、worker id、新 lease token 與 locked time。Heartbeat 和完成／失敗更新都必須匹配 worker id 與 lease token，過期 owner 不能改寫成果。舊的 global lock 資料與管理 API 仍存在，但常駐 worker 目前使用逐 task lease。
 
 Recent history 不是 task status：Streamlit 打開結果時 upsert view time，讀取按最新排序，並依 TTL prune。刪除 history 不會刪除 task 或摘要成果。
+
+## 雲端收件與本機交易
+
+Supabase pgmq `video_inbox` 只暫存網站已提交、尚未確認寫入本機的訊息。bridge 透過本機 Task API 送入 envelope；API 以 `BEGIN IMMEDIATE` 檢查既有 receipt，並在同一個 SQLite transaction 內套用既有 URL 去重／快取政策、建立或重用 task、寫入 receipt。相同 submission ID 與網址重送會回既有 task ID；同 ID 卻換網址則隔離到 `video_inbox_quarantine`。無效 payload 同樣先隔離；成功寫入或隔離後，bridge 才刪除雲端訊息。若 API 失敗或刪除前中斷，雲端訊息可重送，receipt 阻止重複建立任務。
+
+收件資料與原有 tasks 共用 SQLite 檔案；bridge 本身不需要資料庫路徑。備份／還原需包含 receipts，否則重送時去重依據會遺失。雲端 Queue 的憑證與操作見[影片收件流程](../workflows/video-inbox.md)。
 
 ## Notion task backend 與 summary publication
 
@@ -95,6 +109,7 @@ Summary output path 預設是 `data/summaries/_summarized_<timestamp>_<video-id>
 ## 延伸閱讀
 
 - [任務生命週期與併發控制](../workflows/task-lifecycle.md)
+- [影片收件流程](../workflows/video-inbox.md)
 - [媒體轉錄與摘要流程](../workflows/media-processing.md)
 - [Notion 資料整合與 Showcase 邊界](../integrations/notion-and-showcase.md)
 - [模組邊界與外部依賴](../architecture/module-boundaries-and-dependencies.md)

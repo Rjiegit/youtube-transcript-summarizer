@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:05ec7fa21da07406a2482fb30ca939f4b5ef8ea88d6fd1cd181115414ee00ab4",
+  "pageVersion": "sha256:204298356768ac4e0eca9b989425b173fb14716875daac0bdb38e0a63b2ecf3d",
   "claims": [
     {
       "id": "claim_2f5381edc2c24f3184919f3abdcd98eb",
@@ -165,10 +165,24 @@
           "version": "repo-file-v1:sha256:a8ad077bdd9cafc48f37e87635d61d36a19310b4ab2353074907de638ec312f5"
         }
       ]
+    },
+    {
+      "id": "claim_6a0db41dea5545c98bc33c0adf1373e4",
+      "statement": "Showcase 的 /submit 由 Nitro API 驗證後以 server-only submit token 呼叫 Supabase Queue RPC；它不寫入 Notion，也不直接呼叫 Python Task API，本機 bridge 稍後才經 Task API 入列。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts#L1-L29",
+          "version": "repo-lines-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4NjQ1MGZlNzI0OTgwNzY2YmU0MTQyMTQ4NjI2MWNlM2M1NmFiM2RiMzIyYTAzNzk3ZDRjZmJlZDcxN2YzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py#L8-L55",
+          "version": "repo-lines-v1:sha256:e3a0ef63357518325820bfe07c148632e860b2ef58d8d593d8d2fc283525bd9d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1N2MzYWRhOGNiYTY4ZGYyMGIxMDk1MTQ1MDQ4NWQxODNiN2NhNWNlZDk0MGM4MmI2ZTkxYmY5NjNhOTMxY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM4MmQzZjNlNjY5ZmMzNjM0NWIxOGNkYTdhNzE1ZjJhNjJiOTA4Y2I4ZmJjYjM0ZjZlODEwMDM5ZTdmZTA5ZTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T08:55:14.960Z"
+    "at": "2026-10-17T13:28:28.405Z"
   }
 }

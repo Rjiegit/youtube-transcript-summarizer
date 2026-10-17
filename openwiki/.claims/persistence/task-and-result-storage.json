@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:0aa75ebc53b6ec36f8f51eeefe202770c8f54c5569d8ddae5bacf5fa101dbcd2",
+  "pageVersion": "sha256:8fb388b17777473b35c6737c4e6ceda26558dc2905e1d8d272ceb7e741a8abeb",
   "claims": [
     {
       "id": "claim_84c6bc8f911e4e36bf355b3df4511d96",
@@ -14,15 +14,15 @@
     },
     {
       "id": "claim_e2c69c9b4f204dedbaa5a030457ee49a",
-      "statement": "SQLite schema初始化tasks、recent_task_history、processing_lock與rss_channel_subscriptions tables，並補齊legacy tasks缺少的已知欄位。",
+      "statement": "SQLite schema 初始化 tasks、recent history、processing lock、RSS subscriptions、video inbox receipts 與 quarantine tables，並補齊 legacy tasks 缺少的欄位。",
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py#L18-L30",
           "version": "repo-lines-v1:sha256:9a60c3a33e84bbb49824239a9b5da4634299580d5c54b0e0d396e6416e45dc04:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjBkMDU2OGVlOTAzYTI1ZTA2NGEwZTc3YWYwYmEyOWRhODlmMmNkNWNkZGFjMjU5YWNlZGQyMDRiNDFmZDI1ZTUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc0NGFhZTQ5NDQ1MDg5MDVmZWY0ZjhiOTNiMTNhZGUwMjVhZDFlMTY5NDg1Y2YzNmRhNzlhMTAzMDJjZDQ1ZjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY5NDBlZWQ5YTVlYmQ2MzEzNDc2ZGJjMTQ0MDI1N2VjODU4OGE0NTYxMzlmMjg0NjJkNzI2MTU3ZjBiYjA1ZDUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ4YThhODRjNGYwZmI1ODIwM2Y5MjI5Zjk0YjFhOWM0NzE2YjU0NjM4YjI0MjNhZjNiNWNlYWViMWRhYjQ4OTAifQ"
         },
         {
-          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/schema.py#L1-L90",
-          "version": "repo-lines-v1:sha256:9412af340295a9649eda7aa60c4bef691acc07d1b3789f1e0c50b61a27a638ce:eyJzZWxlY3RlZExpbmVDb3VudCI6MTAzLCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlNTJlZDFmOWU3Y2M2YTI4MzFlNTNiMjEyODIzNTJlMTQ4NjM4MWYxZTAyNGQ2ZjAwNGJmZDFkYzI3NzVjYTViIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiI2NTA3ZWU0ZWIzNTgyZjNjZGExMGY2NmUwZmEwNjBmYjU0YzYzZGMyYTVlMjI5MGIxZGZiNzMxNjllNDE2MGY3IiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MywiZm9sbG93aW5nQ29udGV4dEhhc2giOiJiMDY3NzVmOTFjMmIxZTliOWU2ZDhiMjJhMWI0OWY0MzBhMDliY2NkNjEzMGFmZjdhYWFmMTMzNjg0MmRhZjBlIn0"
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/schema.py#L1-L105",
+          "version": "repo-lines-v1:sha256:9acc394b114ee442a0cec44af09c2cc289a43f93b0cd728b02c30a972f6cfd4d:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA1LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJlNTJlZDFmOWU3Y2M2YTI4MzFlNTNiMjEyODIzNTJlMTQ4NjM4MWYxZTAyNGQ2ZjAwNGJmZDFkYzI3NzVjYTViIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiJjM2I2MjEwYmRkZTc0MjZlNWJmNjM4NGMzYzFkNmNjZjE4NWVmM2M4MWU4ZDVlMGM3YTBlNWI4MzI3OWY5MDRiIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MiwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlMjhlN2MxZmRlMzc5NTJmNTM5YWMyZTZiYjNmNzc5NDk4NGNmZmEyZTYwYjM4Y2EzNmU3NjExMWFhNmZlMzExIn0"
         }
       ]
     },
@@ -122,7 +122,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/content/weekly-insights/series.json",
-          "version": "repo-file-v1:sha256:f36b829a46deedacf6f9bac65c6574e5bc9ba06232cac1b2b5b37bea9734eb44"
+          "version": "repo-file-v1:sha256:9450d7fa08b1f3bca4665edc5d81b6b879771298bcac460256906c25869cc46c"
         },
         {
           "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs",
@@ -140,17 +140,49 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/content/weekly-insights/series.json#L107-L183",
-          "version": "repo-lines-v1:sha256:db7e02445d3896da671b5480537cd67a1a74101bc3a83d6bc2bc288342ae31f0:eyJzZWxlY3RlZExpbmVDb3VudCI6NzcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmZjZWQxZDg5OTMzOWQwODhkYjNiYWQzNDY3YmJmYTQ3M2YzYWI3MWY1YmQ2NWJhODkxNTNjM2IxZjU3Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4NjA2ODdiYzdlZGNhYzc5YTVjM2U2MzMwYzQ3ZDhkMWEwZGNmZDI3MGE4YTRhOGM5YmU2NjgzODU5ZjY4YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:e87b5c719283ae6c9c5d6dba838d93d74c9eb1656c45e1521d76193a2cc39d2d:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmZjZWQxZDg5OTMzOWQwODhkYjNiYWQzNDY3YmJmYTQ3M2YzYWI3MWY1YmQ2NWJhODkxNTNjM2IxZjU3Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4NjA2ODdiYzdlZGNhYzc5YTVjM2U2MzMwYzQ3ZDhkMWEwZGNmZDI3MGE4YTRhOGM5YmU2NjgzODU5ZjY4YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
           "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs#L129-L158",
           "version": "repo-lines-v1:sha256:8d73cfd94911969411bed259233907e9375fda7f9fcbc4ed2046edaf70110bc3:eyJzZWxlY3RlZExpbmVDb3VudCI6MzAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEyODhhMTk4MDg0MGJiNjJlY2JhYjg0ZmZlOGQyMDE5MTVhZmVjY2Q4MTdmZTFjNmJmMGU2ZTc0OTMwY2NiNDUiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQyMzA0YWFlYmNkODg1ZWZmYzJhMDAwYmM4ZGE2Yzg4MzYwYmVmYmQ1OWQ5OWViNDkzNTk5YTVkMjY3NzNjZmUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImFiYjM4MWQ3MDJmMjZkMDFkYTcxYWY3OTQyMTU5YTY0ZmI1MzIzM2RjMTg3OTdiNmFmMzUyNGUwNGFlNWRkMzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjcxMTYwOGJmMWM0YzVhMmRlYzIwZmJhZjMwOWJlZTFlZTAxYmFkMzFlYWI1ODMxYmZkOTU4NzI5OGZjMjU2OGEifQ"
         }
       ]
+    },
+    {
+      "id": "claim_1466e8d1febd46e2b48618df1bac3a29",
+      "statement": "本機 API 將影片 submission ID 的 receipt、正規化網址與 task ID 與 task 建立放在同一 BEGIN IMMEDIATE 交易；相同 ID 重送沿用既有 task，衝突網址進 quarantine。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py#L32-L53",
+          "version": "repo-lines-v1:sha256:969614bb069aba6bb1c42208d8e195beb101ec125704d0c50a6e649515b9608d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlOWE1NDA5M2E0ZWRiZGQzYTcwMmVmNjEwNWFjOTExMDRmNTc5YTVhZTk5ZjFmY2EzZDYyNTliYzhlOTNkYzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjNTdlYjI2ZWIxZDZiZDViMjQzYzM5M2I5N2Q5OTEzYmQ3NmQ1NGU1NDM1NzdiY2YxMDkwMDI0ODE1NWQwNjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/services/tasks/video_inbox.py#L23-L43",
+          "version": "repo-lines-v1:sha256:2fc465fcee80247cc406d5870cacc8e8f75ac75ff500bff26cd6d1257ae22878:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYjU3NzY5ZTBjZTRhZWYyYmEwODlkZDA1MzI3YzRiMzNkMWRiZGIzM2FlYjJmZDg5MDFmNjVkMGI5NDFkNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI2MzQzZjhhOWVkNTA3ZjU5YWU4MDY0M2EzN2Y0NTJhY2UwMzQ3ZGRmNDhhM2I2MTM2NDE5YWIxMjIzNDI1NmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_a48b586e41bc43d69af54a1ebc46245b",
+      "statement": "Supabase Queue 訊息直到本機 API 成功建立 task/receipt 或隔離後才由 bridge 刪除；bridge 不直接開啟 SQLite，API/刪除失敗可由 queue 重送並靠 receipt 去重。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py#L8-L55",
+          "version": "repo-lines-v1:sha256:e3a0ef63357518325820bfe07c148632e860b2ef58d8d593d8d2fc283525bd9d:eyJzZWxlY3RlZExpbmVDb3VudCI6NDgsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM1N2MzYWRhOGNiYTY4ZGYyMGIxMDk1MTQ1MDQ4NWQxODNiN2NhNWNlZDk0MGM4MmI2ZTkxYmY5NjNhOTMxY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE4ZTk5MjMyY2QzYTMwOWY1MGNiZDZmNjYyMTI3ZWVhYWZjZTFmNzM2MjkyZGVmYjExM2Q5ODFhMjBjN2Q4NTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM4MmQzZjNlNjY5ZmMzNjM0NWIxOGNkYTdhNzE1ZjJhNjJiOTA4Y2I4ZmJjYjM0ZjZlODEwMDM5ZTdmZTA5ZTYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/schema.py#L73-L84",
+          "version": "repo-lines-v1:sha256:c2920dd06f6db1ce76c90a8d544ff9bab7c0a2ad3674732bc73faa9f087aab9a:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE3NGIwODQ0ZDg3MzM0YmY4NDc2ZjBmOTk2ZTVkYzZiZTBmOWRhYmQyZmEzOWJlZjIwZjBhOWY1YjdhN2YxY2QiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6Ijg3YTVlZjBiOGUzNGRiNzE0MDdhNTBmMjAxMDE4YWZmMzE2ZmE1ZmEyNWU1MjVjNDFmMWI2Y2E0OTM2ZTZhMTEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjM2ZDEyMTNiY2MxZmIxZWQ2NWNiYWQ1MmU0ZDQwMGU0OTI5OTMwMjNkNDQzNDBkMGI4NDE2MGE1YTdkYjdmYzAifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/services/tasks/video_inbox.py#L39-L43",
+          "version": "repo-lines-v1:sha256:5cf0ffea4dd221a3dd33c460e1e3c0ce89cd3d3e26690aea539a83ac8bc137e3:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJiNTc3NjllMGNlNGFlZjJiYTA4OWRkMDUzMjdjNGIzM2QxZGJkYjMzYWViMmZkODkwMWY2NWQwYjk0MWQ3MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDEzYWM1NmUzNjI1ZDQzZWZhZjgzNmRmMmQ1MzQ4ZTFmNmE1OTcyM2E2Y2M4MjM4MDg5Yjc2YzQ4ODAyMmM0OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T08:55:14.960Z"
+    "at": "2026-10-17T13:28:28.405Z"
   }
 }

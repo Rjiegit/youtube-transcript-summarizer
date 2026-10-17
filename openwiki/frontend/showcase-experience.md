@@ -1,8 +1,11 @@
 ---
 type: frontend-guide
 title: Nuxt Showcase 使用體驗與資料快取
-description: 說明 Showcase 的 SSR 頁面、Notion server API、SWR 快取、已讀狀態與重新整理行為。
+description: 說明 Showcase 的文章瀏覽、影片提交、已讀狀態與資料快取行為。
 tags: [nuxt, showcase, swr, caching, ux]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-369da753c512075845679e7e
     resource: repo://apps/showcase/components/HighlightedTitle.vue
@@ -18,6 +21,8 @@ sources:
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
   - id: openwiki-source-36cce2c34e32cbad2ec20271
     resource: repo://apps/showcase/pages/settings/sync.vue
+  - id: openwiki-source-2f2ad998e7e5048be4a2f79c
+    resource: repo://apps/showcase/pages/submit.vue
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-fdde1868d0c23ae3c40266ae
@@ -28,6 +33,8 @@ sources:
     resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-acc677c60f44374b1f2d50cf
     resource: repo://apps/showcase/server/utils/swr-cache.ts
+  - id: openwiki-source-cbc89c71ea37fa753e3207c9
+    resource: repo://apps/showcase/server/utils/video-inbox.ts
   - id: openwiki-source-c2ec24a0ccca33febfd50837
     resource: repo://apps/showcase/tests/swr-cache.test.ts
   - id: openwiki-source-218f09975f8887eb7efa96c4
@@ -38,10 +45,7 @@ sources:
     resource: repo://apps/showcase/utils/title-search.ts
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -49,6 +53,12 @@ verified:
 Nuxt Showcase 的文章區是成果的唯讀瀏覽介面。首頁由 server-side `useFetch` 取得列表，詳細頁同樣在 server 階段取得單筆內容；Notion credentials 與呼叫均留在 Nitro server routes，文章瀏覽透過 `/api/showcase/*` 取得資料。另有受保護的 `/submit` 提交入口，與文章讀取路徑分開。
 
 此頁負責瀏覽行為、畫面狀態與快取；Notion schema 和跨應用資料契約見[Notion 資料整合](../integrations/notion-and-showcase.md)，週報作者的整理、進度與建置流程見[每週回顧整理與內容發布流程](../workflows/weekly-insights.md)。
+
+## 影片提交入口
+
+`/submit` 表單收集 YouTube 網址與個人提交碼。第一次送出前，瀏覽器以 `crypto.randomUUID()` 建立 `submission_id`，將識別碼及網址存入 `localStorage`；回應未確認或重新整理時沿用同一筆待確認提交。成功後清除暫存及表單；若瀏覽器無法保存待確認提交，表單不發送，避免失去可重試的識別碼。提交碼只留在輸入欄位，不寫入 `localStorage`。
+
+提交 API 驗證個人碼、精確 Origin 與 YouTube URL，再由 Showcase server 呼叫 Supabase 的 submit RPC；網站不直接建立本機任務。使用者清除待確認提交只會清掉瀏覽器暫存，已送到 Queue 的訊息仍可能被本機接收。後續資料流與去重見[影片收件流程](../workflows/video-inbox.md)。
 
 ## 列表與詳細頁
 
@@ -92,6 +102,7 @@ Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗�
 ## 延伸閱讀
 
 - [系統架構與端到端資料流](../architecture/system-overview.md)
+- [影片收件流程](../workflows/video-inbox.md)
 - [Notion 資料整合](../integrations/notion-and-showcase.md)
 - [跨裝置已讀同步](read-state-sync.md)
 - [設定、執行與部署](../operations/configuration-and-deployment.md)

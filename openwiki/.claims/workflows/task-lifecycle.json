@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:f34544a45627f80092e4a3fed9b64c45b853a2ff7928207b99b385213bbb4e1c",
+  "pageVersion": "sha256:cd4ccb02735275856cf1228c7c63289fbe9876ddc1667c3bbcd10057bed15141",
   "claims": [
     {
       "id": "claim_4468f4bf2f804e6fa40c8408f86773c5",
@@ -93,10 +93,46 @@
           "version": "repo-file-v1:sha256:e78eb6ea152b0522ca03dcd793332bebe71812ca6d527a434aad7e414c1f20cc"
         }
       ]
+    },
+    {
+      "id": "claim_cead0ab4f6714dcbabaae5ae862da53d",
+      "statement": "Showcase 雲端訊息由 bridge 交給 Task API 專用端點；API 沿用 create_task_record 的 URL 去重／快取政策並在同一 SQLite 交易寫入 submission ID receipt，處理影片仍由原 processing worker claim。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/apps/api/routers/processing.py#L82-L112",
+          "version": "repo-lines-v1:sha256:df05a19002621739cd99883a05c2cc648450902f0f075b37bf22420721854908:eyJzZWxlY3RlZExpbmVDb3VudCI6MzEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijc5MmM5MDQzNTMxMDAwYjJmNjVkNzhmZmY1ZDY2ZGFmNWMyYjk1ODE2Yjk1OWRmOGRmZWNmNzM1MzNjZTE2MTQiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijk0MzNkMGVhOWVjZjJmMzljOWE1MDQwNzM5NWVlNDExNzJmZTY4MmM5Yzg4NWEzNTA4Zjc1YmRlZTE1MWVmZmYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjhjYzRhN2QxY2M3OTZhYmEzZTQ2NzIzMzI3ZjUxN2U5ZjgxMTk4MmQyNTBmMDcwMjk4NmU0YjU3NjRhZDk1ODkifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/apps/api/routers/video_inbox.py#L13-L27",
+          "version": "repo-lines-v1:sha256:7f8b1a064759781eb31e7926ecc6b742c75da6f5877134ecbe8a4af100964fa5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE0MTEwNDNkMGIwNmI4YWYyMDQ5ZDYxYzdhYjZlMTI1ZDgyOTE1MmM0ODk2Y2M0YTIzNjFmYmIzYjg3NGVmZjAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZhNGY4YTZlYmE2ZjBlOTU2MmZjMWQzNzg0MzE0OGJjMGY2YmJhYjRhN2U0OGEwZGY0MDI3YzA2ODJkNjBiYjQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py#L32-L53",
+          "version": "repo-lines-v1:sha256:969614bb069aba6bb1c42208d8e195beb101ec125704d0c50a6e649515b9608d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlOWE1NDA5M2E0ZWRiZGQzYTcwMmVmNjEwNWFjOTExMDRmNTc5YTVhZTk5ZjFmY2EzZDYyNTliYzhlOTNkYzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjNTdlYjI2ZWIxZDZiZDViMjQzYzM5M2I5N2Q5OTEzYmQ3NmQ1NGU1NDM1NzdiY2YxMDkwMDI0ODE1NWQwNjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/services/tasks/task_creation.py#L22-L81",
+          "version": "repo-lines-v1:sha256:29c407fa1bff3a6fda3649be67d2901d4c963bc724cfbf521e5a2764ede99e11:eyJzZWxlY3RlZExpbmVDb3VudCI6NjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ0YWM1NmRmMWIyYzRkMGQzNTI0NTE4OWRlNWVmMzRhZGUzYTBhMDljNDgzYzI2NDZiNDMyZjIzOGY0NWZlM2IiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNjYzViMjkwZTY2ZWI5NTBjNzAwNjNmMjQ3MWFkYzllY2E4Yzg4OTdjMGRlYzcwMjU0MWRhOWQyMzM5Nzk0OGQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjYxNmE2MjFkMmE3OTU5NDY1OGZlNGJjMTJjYWEwMWJiZDI1YmJkYTRmM2NlNjU5M2U0OTA1MGIyNzNlMDNhNTAiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjYyNjZkM2E5ODZhOWYyNmFmZTUxMGM3YjZhNWY5OTE1MDJlMTlkNGU2MGZlNWJiYzNiNjY5ZDYyMmQ4NWI4MjkifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_fe824e685dc74e4fb5d428c203898cf3",
+      "statement": "雲端訊息只在本機 API 確認接受或隔離後刪除；相同 submission ID 重送沿用 receipt，而同 ID 變更 URL 會隔離。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py#L32-L53",
+          "version": "repo-lines-v1:sha256:969614bb069aba6bb1c42208d8e195beb101ec125704d0c50a6e649515b9608d:eyJzZWxlY3RlZExpbmVDb3VudCI6MjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJlOWE1NDA5M2E0ZWRiZGQzYTcwMmVmNjEwNWFjOTExMDRmNTc5YTVhZTk5ZjFmY2EzZDYyNTliYzhlOTNkYzgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZGQ0ZjQzOGVhMTU2MTg5YWE2Y2VlYjQ3YzY2ODZjNzY0ZGNhZmI0NDBmMDhjZTk0MGFjMDYwZjk1YWJiNWQiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImVjNTdlYjI2ZWIxZDZiZDViMjQzYzM5M2I5N2Q5OTEzYmQ3NmQ1NGU1NDM1NzdiY2YxMDkwMDI0ODE1NWQwNjgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/services/tasks/video_inbox.py#L23-L43",
+          "version": "repo-lines-v1:sha256:2fc465fcee80247cc406d5870cacc8e8f75ac75ff500bff26cd6d1257ae22878:eyJzZWxlY3RlZExpbmVDb3VudCI6MjEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYjU3NzY5ZTBjZTRhZWYyYmEwODlkZDA1MzI3YzRiMzNkMWRiZGIzM2FlYjJmZDg5MDFmNjVkMGI5NDFkNzAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImI2MzQzZjhhOWVkNTA3ZjU5YWU4MDY0M2EzN2Y0NTJhY2UwMzQ3ZGRmNDhhM2I2MTM2NDE5YWIxMjIzNDI1NmMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T08:55:14.960Z"
+    "at": "2026-10-17T13:28:28.405Z"
   }
 }

@@ -1,8 +1,11 @@
 ---
 type: workflow
 title: 任務生命週期與併發控制
-description: 說明任務建立、去重、背景排程、SQLite leases、狀態轉移、失敗重試與管理者 lock 操作。
+description: 說明任務建立、雲端收件去重、SQLite leases、狀態轉移與失敗重試。
 tags: [tasks, queue, locking, concurrency, retry]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-1733e19cd888bc4a90558aa4
     resource: repo://apps/whisper_summary/apps/api/dependencies.py
@@ -10,24 +13,27 @@ sources:
     resource: repo://apps/whisper_summary/apps/api/routers/processing.py
   - id: openwiki-source-2f9fce5f97d840294b957a0b
     resource: repo://apps/whisper_summary/apps/api/routers/tasks.py
+  - id: openwiki-source-24b20dc38c8f480c4a39a119
+    resource: repo://apps/whisper_summary/apps/api/routers/video_inbox.py
   - id: openwiki-source-fb3a71308a5a59482c2767f3
     resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
   - id: openwiki-source-445a1c8f48d3b2e4f898d6be
     resource: repo://apps/whisper_summary/core/config.py
   - id: openwiki-source-6273858b85e260ea458ff24b
     resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/client.py
+  - id: openwiki-source-2256523c6944df3a2c9ce6fd
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py
   - id: openwiki-source-79006d740abb2f90a0561607
     resource: repo://apps/whisper_summary/services/pipeline/engines.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-ca28727ce4b3dd82b2bdb95e
     resource: repo://apps/whisper_summary/services/tasks/task_creation.py
+  - id: openwiki-source-518ecd7240447ddd14177fb5
+    resource: repo://apps/whisper_summary/services/tasks/video_inbox.py
   - id: openwiki-source-af864f870947ae550426a1f1
     resource: repo://apps/whisper_summary/tests/unit/test_sqlite_client.py
-generated: { by: "codex", at: "2026-10-09T15:26:03.952Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # 任務生命週期與併發控制
@@ -44,6 +50,10 @@ verified:
 - 沒有上述情況：建立新的 `Pending` task。
 
 只有新 task 會寫入 queue；API 不啟動重型處理，cached 或 duplicate 也不建立新 task。HTTP status 與 response 欄位由[HTTP API 與 Client 契約](../interfaces/http-api-and-clients.md)統一說明。
+
+## 雲端影片提交如何入列
+
+Showcase 提交先停留在 Supabase Queue；本機 bridge 收到訊息後呼叫 Task API 的專用收件端點。API 沿用上述 `create_task_record` URL 政策，並在同一 SQLite 交易中記錄 submission ID receipt；重送同一 ID 不會再建立任務，不同 ID 但相同 URL 仍沿用 Pending／Processing 去重或 Completed TTL。無效或同 ID 不同 URL 的訊息會隔離。入列成功後才由 bridge 確認刪除雲端訊息；真正下載、轉錄與摘要仍由既有 processing worker claim。完整故障復原見[影片收件流程](video-inbox.md)。
 
 ## Dedicated worker 與 task lease
 
@@ -77,3 +87,4 @@ Retry 只接受現況為 `Failed` 的 source task。它建立有 relationship �
 - [任務與結果儲存](../persistence/task-and-result-storage.md)
 - [媒體轉錄與摘要流程](media-processing.md)
 - [YouTube RSS 自動化](rss-automation.md)
+- [影片收件流程](video-inbox.md)

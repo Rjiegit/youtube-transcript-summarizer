@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from whisper_summary.apps.api.routers.processing import router as processing_router
 from whisper_summary.apps.api.routers.rss import router as rss_router
 from whisper_summary.apps.api.routers.tasks import router as tasks_router
+from whisper_summary.apps.api.routers.video_inbox import router as video_inbox_router
 
 app = FastAPI(
     title="Task API",
@@ -14,3 +15,4 @@ app = FastAPI(
 app.include_router(tasks_router)
 app.include_router(rss_router)
 app.include_router(processing_router)
+app.include_router(video_inbox_router)

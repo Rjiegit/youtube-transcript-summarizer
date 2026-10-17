@@ -1,8 +1,11 @@
 ---
 type: quickstart
 title: 快速開始與開發導覽
-description: 從環境設定、安裝、啟動與測試開始，並依開發任務導向架構、API、持久層與整合文件。
+description: 從環境設定、安裝、啟動與測試開始，依任務導向架構、影片收件、API、持久層與整合文件。
 tags: [quickstart, setup, navigation]
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -22,14 +25,20 @@ sources:
     resource: repo://apps/showcase/scripts/build-weekly-insights.mjs
   - id: openwiki-source-d2d7610281b3f0057b9f9314
     resource: repo://apps/showcase/scripts/check-env.mjs
+  - id: openwiki-source-fdde1868d0c23ae3c40266ae
+    resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-3b0efe03f5b86982327fa144
     resource: repo://apps/showcase/server/utils/read-sync-config.ts
   - id: openwiki-source-8a8f27feb31a478f83017412
     resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-24b20dc38c8f480c4a39a119
+    resource: repo://apps/whisper_summary/apps/api/routers/video_inbox.py
   - id: openwiki-source-3510ac90ffbd030c0a1f2f0d
     resource: repo://apps/whisper_summary/apps/workers/cli.py
   - id: openwiki-source-fb3a71308a5a59482c2767f3
     resource: repo://apps/whisper_summary/apps/workers/processing_worker.py
+  - id: openwiki-source-9c63a6764b08e1059697a6b4
+    resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-445a1c8f48d3b2e4f898d6be
     resource: repo://apps/whisper_summary/core/config.py
   - id: openwiki-source-cd3c19edb3412c855091bcd0
@@ -50,10 +59,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # 快速開始與開發導覽
@@ -109,7 +115,7 @@ npm run check-env
 npm run dev
 ```
 
-開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 的文章瀏覽唯讀；另有受保護的 `/submit` 收件匣入口，透過雲端 Queue 與本機 bridge 入庫，不直接啟動 Python processing pipeline。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
+開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 的文章瀏覽唯讀；另有受保護的 `/submit` 收件匣入口，透過雲端 Queue 與本機 bridge 交給 Task API 入庫，再由既有 processing worker 處理。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
 
 ## Browser Extension
 
@@ -170,6 +176,7 @@ npm --prefix apps/showcase run build
 | 修改 API request、status、authentication 或 client | [HTTP API 與 Client 契約](interfaces/http-api-and-clients.md) |
 | 修改 SQLite/Notion backend、locks 或輸出 artifacts | [任務、鎖與結果持久化](persistence/task-and-result-storage.md) |
 | 修改 task API、dedup、retry 或 locks | [任務生命週期與併發控制](workflows/task-lifecycle.md) |
+| 修改 Showcase 影片提交、Supabase Queue、本機 bridge 或收件 API | [影片收件與本機入列](workflows/video-inbox.md) |
 | 修改下載、Whisper、LLM 或輸出 | [媒體轉錄與摘要流程](workflows/media-processing.md) |
 | 修改 provider、模型權重或 failover | [LLM Providers、選擇與 Failover](integrations/llm-providers.md) |
 | 修改 Chrome/Edge Extension | [Browser Extension 任務與 RSS 入口](integrations/browser-extension.md) |
@@ -186,6 +193,7 @@ npm --prefix apps/showcase run build
 
 - Showcase 無法載入：本機先執行 `npm run check-env`；部署後檢查平台環境設定與 server log。check-env 不驗證已部署 runtimeConfig 或 Notion 權限。
 - 設定存在但仍無資料：檢查 Notion integration 權限、database id 與 status schema。公開 diagnostics／health API 已移除，錯誤細節不再提供給訪客；安全 log 分類見[設定、執行與部署](operations/configuration-and-deployment.md)。
+- 網站已提交但本機沒有新 task：檢查 Supabase Queue、`make video-inbox-bridge`、`TASK_API_BASE_URL`、worker token 與 Task API；詳見[影片收件與本機入列](workflows/video-inbox.md)。
 - task 已 Pending 但未開始：確認 dedicated processing worker 正在執行，或用 `make processing-worker` 啟動；`POST /processing-jobs` 只會確認目前採 dedicated mode，`make run` 則會同步處理一次 queue。再以維運端點檢查 active task leases。
 - Extension 無法送出：確認 Options API Base URL、API connectivity 與頁面是否為支援的 YouTube URL；channel handle 還需要 DOM 提供 channel id。
 - RSS 沒有建立舊影片 tasks：首次 poll 只 seed watermark，這是避免回填整個歷史 feed 的預期行為。

@@ -1,3 +1,3 @@
 # 檔案
 
-- [任務、鎖與結果持久化](task-and-result-storage.md) - 比較 SQLite 與 Notion task backend，並說明 recent history、Markdown/JSON artifacts 與 Notion summary publication。
+- [任務、鎖與結果持久化](task-and-result-storage.md) - 比較 Supabase Queue、SQLite 與 Notion 的責任，並說明收件去重、task lease、artifacts 和摘要發布。

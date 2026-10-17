@@ -1,11 +1,11 @@
 ---
 type: architecture
 title: 模組邊界與外部依賴
-description: 說明 Python modular monolith、獨立應用、composition roots，以及各 runtime 的依賴管理方式。
+description: 說明 Python modular monolith、獨立應用、Task API 對 SQLite 的寫入責任，以及各 runtime 的依賴管理。
 tags: [architecture, dependencies, python, boundaries]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-269e1e25890c094aaa09d0a0
     resource: repo://.docker/Dockerfile
@@ -21,18 +21,28 @@ sources:
     resource: repo://apps/showcase/package.json
   - id: openwiki-source-f987324e0612a557c62a85fb
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
+  - id: openwiki-source-fdde1868d0c23ae3c40266ae
+    resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-8a8f27feb31a478f83017412
     resource: repo://apps/whisper_summary/apps/api/routers/processing.py
+  - id: openwiki-source-24b20dc38c8f480c4a39a119
+    resource: repo://apps/whisper_summary/apps/api/routers/video_inbox.py
   - id: openwiki-source-e8a3e4e8f72c5329a78957ec
     resource: repo://apps/whisper_summary/apps/api/schemas.py
+  - id: openwiki-source-9c63a6764b08e1059697a6b4
+    resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-cfa98d1a4968f26a13388580
     resource: repo://apps/whisper_summary/infrastructure/composition.py
   - id: openwiki-source-e3deef680a5ed6126a3e663d
     resource: repo://apps/whisper_summary/infrastructure/media/downloader.py
   - id: openwiki-source-b94cf9b6029f1843e044616d
     resource: repo://apps/whisper_summary/infrastructure/media/transcription/transcriber.py
+  - id: openwiki-source-2256523c6944df3a2c9ce6fd
+    resource: repo://apps/whisper_summary/infrastructure/persistence/sqlite/video_inbox.py
   - id: openwiki-source-8a62d9c1de9e763d89cb9eb8
     resource: repo://apps/whisper_summary/infrastructure/task_queue/http_client.py
+  - id: openwiki-source-ff45e7f56e0675d46760554a
+    resource: repo://apps/whisper_summary/infrastructure/task_queue/video_inbox_api.py
   - id: openwiki-source-44f784ddceb054f0c06a5950
     resource: repo://apps/whisper_summary/pyproject.toml
   - id: openwiki-source-4594a94ad039182278792218
@@ -51,7 +61,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
+generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -62,9 +72,9 @@ Python 主系統位於 `apps/whisper_summary/`，import 名稱維持 `whisper_su
 
 Application service 依賴 domain contracts。資料庫與 RSS repository 由 `infrastructure/repository_composition.py` 建立；processing pipeline 的 downloader、transcriber、summarizer、storage、file manager、notifier 與 config factories 集中在 `infrastructure/composition.py`，再以 `ProcessingDependencies` 注入 `ProcessingWorker`。個別 factory 仍可由測試覆寫。
 
-Task queue 的 lease 操作定義在 `domain/ports/task_queue.py`；常駐 worker 透過 `infrastructure/task_queue/http_client.py` 呼叫中央 FastAPI queue。API 持有 SQLite backend，worker 可與 API 分開執行。兩種 processing engine 共用 `services/pipeline/engines.py` 的操作，`langgraph_engine.py` 負責圖的順序編排，執行時與 legacy engine 一樣以媒體使用鎖保護整段操作。
+Task queue 的 lease 操作定義在 `domain/ports/task_queue.py`；常駐 processing worker 透過 `infrastructure/task_queue/http_client.py` 呼叫中央 FastAPI queue。雲端影片收件 bridge 則以 `SupabaseInbox` 領取訊息，再透過 `VideoInboxApi` HTTP adapter 呼叫本機 `POST /video-inbox/messages`。Task API 負責將任務與收件 receipt 交易式寫入 SQLite；bridge 不持有 SQLite 路徑，也不直接寫資料庫。兩種 processing engine 共用 `services/pipeline/engines.py` 的操作，`langgraph_engine.py` 負責圖的順序編排，執行時與 legacy engine 一樣以媒體使用鎖保護整段操作。
 
-FastAPI 以 feature routers 組裝 HTTP surface；Streamlit、同步 CLI、processing worker 與 RSS monitor 各有獨立 entrypoint。Nuxt Showcase 的 server routes 直接讀取 Notion，Browser Extension 則以 HTTP 呼叫 FastAPI，因此兩者不 import Python implementation。
+FastAPI 以 feature routers 組裝 HTTP surface；Streamlit、同步 CLI、processing worker 與 RSS monitor 各有獨立 entrypoint。Nuxt Showcase 的文章 server routes 直接讀取 Notion；其影片提交 route 則呼叫 Supabase Queue RPC。Browser Extension 以 HTTP 呼叫 FastAPI，因此兩者不 import Python implementation。
 
 ## Runtime dependencies
 
@@ -78,6 +88,6 @@ GitHub Actions 分別執行 Python 的 lockfile 安裝、Flake8 與 unittest，S
 
 Python 的 unit／integration 測試與 fixtures 放在 `apps/whisper_summary/tests/`；Nuxt 測試放在 `apps/showcase/tests/`，兩者共用的契約 fixture 保留在頂層 `contracts/`。
 
-相關閱讀：[系統架構](system-overview.md)、[開發與測試](../operations/development-and-testing.md)。
+相關閱讀：[系統架構](system-overview.md)、[影片收件流程](../workflows/video-inbox.md)、[開發與測試](../operations/development-and-testing.md)。
 
 Nuxt production dependencies 包含 Nuxt、markdown-it 與 opencc-js；opencc-js 提供字元轉換支援標題繁簡搜尋。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 放在 devDependencies；Python dev group 包含 flake8 與 httpx。
