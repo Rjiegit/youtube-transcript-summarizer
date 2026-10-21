@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-10-21T14:11:09.595751Z",
+  "revision": 1,
+  "start": "2026-10-11",
+  "endExclusive": "2026-10-18",
+  "coverageStart": "2026-10-11",
+  "asOf": "2026-10-21T14:11:09.595751Z",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "職涯溝通、加密安全與可驗證的 Agent 流程",
+  "summary": "本週 56 個不同來源；職涯與組織溝通最多，加密資產的安全與量子風險集中出現，Agent 工程延續可驗證的工作流程。",
+  "metrics": {
+    "rawCount": 56,
+    "sourceCount": 56,
+    "newSourceCount": 56,
+    "recurringSourceCount": 0
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 12
+    },
+    {
+      "id": "models-tools",
+      "count": 8
+    },
+    {
+      "id": "career",
+      "count": 13
+    },
+    {
+      "id": "finance-retirement",
+      "count": 1
+    },
+    {
+      "id": "crypto-policy",
+      "count": 9
+    },
+    {
+      "id": "technology-business",
+      "count": 6
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 3
+    },
+    {
+      "id": "society-leisure",
+      "count": 4
+    }
+  ],
+  "sources": [
+    {
+      "title": "外商升遷不只看績效！為什麼有主見的人更容易被重用？建設性衝突 Constructive Confrontation｜職能解剖01 ｜外商職場關鍵職能",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=EMHXBQRfQL0"
+    },
+    {
+      "title": "不用等量子電腦！AI 恐直接破解加密錢包!? ｜幣圈週報",
+      "categoryId": "crypto-policy",
+      "sourceUrl": "https://www.youtube.com/watch?v=TKvWic7PpVo"
+    },
+    {
+      "title": "多AI Agent架構怎麼用、如何判斷該不該用？用對才能省時又省錢！｜Kelly Tsai ft. @creao-ai",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=wDk6OVRLtPs"
+    },
+    {
+      "title": "Jev 1.14 新特性初体验：全新问题类型 Box，基于图片定位目标",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=N4ludG1EieM"
+    },
+    {
+      "title": "2028算力泡沫引爆？水滴資本示警若「這件事」沒發生，全球AI基建恐淪為最大泡沫！",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=wnQF37AojeA"
+    }
+  ],
+  "qualityNote": "依收錄建立時間（台灣時間）分週；56 筆皆為不同來源，僅列部分代表來源。數篇短片與辨識錯誤的摘要資訊不足，不用於主題推論；影片對市場、科技、健康及政策的外部主張未另行查核。"
+}
