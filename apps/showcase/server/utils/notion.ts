@@ -398,7 +398,28 @@ function renderNotionBlockTree(block: NotionBlock): string {
   return `${content}\n\n${childrenContent}`;
 }
 
+function getLegacySummaryChunk(block: NotionBlock): string | null {
+  if (block.type !== "paragraph" || block.children || block.paragraph?.rich_text?.length !== 1) {
+    return null;
+  }
+  const item = block.paragraph.rich_text[0];
+  if (item.href || item.text?.link) {
+    return null;
+  }
+  return item.plain_text ?? item.text?.content ?? "";
+}
+
 export function renderNotionBlocks(blocks: NotionBlock[]): string {
+  const chunks = blocks.map(getLegacySummaryChunk);
+  // The old writer stored an entire Markdown summary as sequential 1800-character paragraphs.
+  if (chunks.length > 1
+    && /^#{1,6} /.test(chunks[0] ?? "")
+    && chunks.every((chunk, index) => chunk !== null
+      && chunk.length > 0
+      && (index === chunks.length - 1 || [...chunk].length === 1800))) {
+    return chunks.join("").trim();
+  }
+
   return blocks
     .map((block) => renderNotionBlockTree(block))
     .filter((content) => content.length > 0)

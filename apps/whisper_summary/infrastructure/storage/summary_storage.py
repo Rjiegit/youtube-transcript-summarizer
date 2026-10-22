@@ -118,11 +118,11 @@ class SummaryStorage:
                 {
                     "object": "block",
                     "paragraph": {
-                        "rich_text": build_rich_text_array(chunk),
+                        "rich_text": build_rich_text_array("".join(text_chunks[offset:offset + 100])),
                         "color": "default",
                     },
                 }
-                for chunk in text_chunks
+                for offset in range(0, len(text_chunks), 100)
             ]
 
             response = notion.pages.create(

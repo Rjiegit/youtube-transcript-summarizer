@@ -141,6 +141,27 @@ describe("showcase Notion mapping", () => {
     ])).toBe("## 重點整理\n\n- 第一點\n- 第二點\n\n[參考連結](https://example.com/docs)");
   });
 
+  it("rejoins legacy 1800-character paragraph chunks without breaking nested lists", () => {
+    const listStart = "# 學習筆記 📸\n\n*   **美食探索：**\n    *   ";
+    const source = `${listStart}${"食".repeat(1800 - [...listStart].length - 2)}豬骨湯\n    *   炸雞`;
+    const characters = [...source];
+    const chunks = [characters.slice(0, 1800).join(""), characters.slice(1800).join("")];
+
+    expect(renderNotionBlocks(chunks.map((chunk, index) => ({
+      id: `chunk-${index}`,
+      type: "paragraph",
+      paragraph: { rich_text: [{ plain_text: chunk }] },
+    })))).toBe(source);
+  });
+
+  it("keeps separate Notion paragraphs when a plain paragraph happens to be 1800 characters", () => {
+    const paragraph = "文字".repeat(900);
+    expect(renderNotionBlocks([
+      { id: "long", type: "paragraph", paragraph: { rich_text: [{ plain_text: paragraph }] } },
+      { id: "next", type: "paragraph", paragraph: { rich_text: [{ plain_text: "下一段" }] } },
+    ])).toBe(`${paragraph}\n\n下一段`);
+  });
+
   it("preserves nested Notion blocks as indented markdown", () => {
     expect(renderNotionBlocks([
       {
