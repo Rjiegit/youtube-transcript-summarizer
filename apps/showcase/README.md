@@ -29,6 +29,7 @@ SSR 檢查需先完成 build。各項測試與 CI 責任見 [開發與測試](..
 | 文章瀏覽、搜尋、分享 | 首頁與 `/results/{id}`；[設定與排錯](../../docs/operations/showcase.md) | [Showcase 體驗與快取](../../openwiki/frontend/showcase-experience.md) |
 | 每週回顧 | `/insights`；[分析規則與更新步驟](../../docs/features/showcase-weekly-insights.md) | [內容建置流程](../../openwiki/workflows/weekly-insights.md) |
 | 已讀同步 | `/settings/sync`；[安裝與維運](../../docs/operations/showcase-read-sync.md) | [Session 與資料合併](../../openwiki/frontend/read-state-sync.md) |
+| 受邀帳號登入 | `/login`；[Feature Toggle 與啟用步驟](../../docs/operations/showcase-account-auth.md) | Supabase Auth；預設關閉 |
 | 影片收件匣 | `/submit`；[安裝、輪替與復原](../../docs/video-inbox.md) | 見操作手冊的實作來源導覽；OpenWiki 尚無獨立收件匣頁面 |
 
 週報由 `content/weekly-insights/` 在啟動／建置時載入；定期整理使用 [週報 skill](../../.agents/skills/showcase-weekly-insights/SKILL.md)。

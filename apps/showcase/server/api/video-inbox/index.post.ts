@@ -1,11 +1,19 @@
 import { defineEventHandler, readBody, getHeader, createError, setHeader } from 'h3';
 import { authorizeSubmission, validateSubmission } from '../../utils/video-inbox';
+import { requireAccountUser } from '../../utils/account-access';
 
 export default defineEventHandler(async (event) => {
   setHeader(event, 'Cache-Control', 'private, no-store');
   const config = useRuntimeConfig(event);
-  authorizeSubmission(getHeader(event, 'x-video-inbox-token'), String(config.videoInboxAccessToken || ''),
-    getHeader(event, 'origin') || '', String(config.videoInboxOrigin || ''));
+  if (config.accountAuthEnabled) {
+    if (!config.videoInboxOrigin || getHeader(event, 'origin') !== config.videoInboxOrigin) {
+      throw createError({ statusCode: 403, statusMessage: 'Submission access denied' });
+    }
+    await requireAccountUser(event);
+  } else {
+    authorizeSubmission(getHeader(event, 'x-video-inbox-token'), String(config.videoInboxAccessToken || ''),
+      getHeader(event, 'origin') || '', String(config.videoInboxOrigin || ''));
+  }
   if (!config.videoInboxSupabaseUrl || !config.videoInboxSubmitToken || !config.videoInboxPublishableKey) {
     throw createError({ statusCode: 503, statusMessage: 'Inbox unavailable' });
   }

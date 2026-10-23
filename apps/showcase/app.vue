@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, ref, watch } from "vue";
 
 import AppLoadingSkeleton from "./components/AppLoadingSkeleton.vue";
+import AccountControls from './components/AccountControls.vue';
 import { useAppLoading } from "./composables/useAppLoading";
 
 const runtimeConfig = useRuntimeConfig();
@@ -111,6 +112,7 @@ useHead({
 
 <template>
   <div class="app-frame">
+    <AccountControls />
     <AppLoadingSkeleton
       v-if="isLoadingVisible"
       :variant="loadingSkeletonVariant"

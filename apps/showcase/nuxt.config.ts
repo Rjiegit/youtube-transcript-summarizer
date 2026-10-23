@@ -4,9 +4,11 @@ import {
 } from "./server/utils/config";
 import { resolveSiteUrl } from "./utils/site-url";
 import { resolveReadSyncConfig } from "./server/utils/read-sync-config";
+import { resolveAccountFeatures } from "./server/utils/account-features";
 
 const showcaseConfig = resolveShowcaseConfig({ env: process.env });
 const readSyncConfig = resolveReadSyncConfig({ env: process.env });
+const accountFeatures = resolveAccountFeatures(process.env);
 const CACHE_TTL_SECONDS = showcaseConfig.cacheTtlSeconds;
 const isProduction = process.env.NODE_ENV === "production";
 const buildDate = firstNonEmptyEnvValue("SHOWCASE_BUILD_DATE", "NUXT_SHOWCASE_BUILD_DATE") || formatTaipeiBuildDate();
@@ -42,6 +44,10 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
+    accountAuthEnabled: accountFeatures.authEnabled,
+    accountSupabaseUrl: process.env.SHOWCASE_SUPABASE_URL || '',
+    accountSupabasePublishableKey: process.env.SHOWCASE_SUPABASE_PUBLISHABLE_KEY || '',
+    accountAllowedUserIds: process.env.SHOWCASE_ALLOWED_USER_IDS || '',
     videoInboxAccessToken: process.env.VIDEO_INBOX_ACCESS_TOKEN || '',
     videoInboxOrigin: process.env.VIDEO_INBOX_ORIGIN || '',
     videoInboxSupabaseUrl: process.env.VIDEO_INBOX_SUPABASE_URL || '',
@@ -60,6 +66,9 @@ export default defineNuxtConfig({
     readStateSyncSpaceId: readSyncConfig.spaceId,
     readStateSyncTtlSeconds: readSyncConfig.ttlSeconds,
     public: {
+      accountAuthEnabled: accountFeatures.authEnabled,
+      accountSupabaseUrl: accountFeatures.authEnabled ? process.env.SHOWCASE_SUPABASE_URL || '' : '',
+      accountSupabasePublishableKey: accountFeatures.authEnabled ? process.env.SHOWCASE_SUPABASE_PUBLISHABLE_KEY || '' : '',
       siteUrl: resolveSiteUrl(process.env.NUXT_PUBLIC_SITE_URL),
       buildDate,
       commitSha,

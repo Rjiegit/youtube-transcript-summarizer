@@ -5,6 +5,7 @@ import HighlightedTitle from "../components/HighlightedTitle.vue";
 import ShowcaseCard from "../components/ShowcaseCard.vue";
 import { useAppLoading } from "../composables/useAppLoading";
 import { useReadResults } from "../composables/useReadResults";
+import { useAccountAuth } from '../composables/useAccountAuth';
 import type { ShowcaseApiResponse } from "../types/showcase";
 import { findTitleMatches, normalizeTitleSearch, prepareTitleSearch } from "../utils/title-search";
 import { formatTaipeiDateTime } from "../utils/datetime";
@@ -51,6 +52,9 @@ useHead({
 const items = computed(() => data.value?.items ?? []);
 const dedupedItems = computed(() => dedupeShowcaseResults(items.value));
 const { isReady, markManyAsRead, readMap, refreshReadState } = useReadResults();
+const accountAuth = useAccountAuth();
+const accountReadEnabled = Boolean(typeof useRuntimeConfig === 'function' && useRuntimeConfig().public.accountAuthEnabled);
+const showReadControls = computed(() => !accountReadEnabled || Boolean(accountAuth.userId.value));
 const { finish: finishLoading, start: startLoading } = useAppLoading();
 const titleSearchQuery = ref("");
 const listRenderRevision = ref(0);
@@ -225,6 +229,7 @@ onBeforeUnmount(() => {
         <ClientOnly>
           <div class="showcase-toolbar__client-actions">
             <button
+              v-if="showReadControls"
               type="button"
               class="showcase-toolbar__button"
               data-testid="mark-all-read-button"
@@ -236,7 +241,7 @@ onBeforeUnmount(() => {
           </div>
 
           <template #fallback>
-            <button type="button" class="showcase-toolbar__button" disabled>全部標記已讀</button>
+            <button v-if="!accountReadEnabled" type="button" class="showcase-toolbar__button" disabled>全部標記已讀</button>
           </template>
         </ClientOnly>
       </div>
@@ -298,6 +303,7 @@ onBeforeUnmount(() => {
           :item="item"
           :title-matches="titleMatchesById.get(item.id) ?? []"
           :is-read="isResultRead(item, readMap)"
+          :show-read-controls="showReadControls"
           @mark-read="markManyAsRead(getResultReadKeys(item))"
         />
       </TransitionGroup>

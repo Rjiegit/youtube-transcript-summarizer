@@ -8,6 +8,7 @@ import {
 import type { ReadSyncPrincipal } from "./read-sync-auth";
 import { resolveReadSyncConfig } from "./read-sync-config";
 import type { ReadSyncConfig } from "./read-sync-config";
+import { requireAccountUser } from './account-access';
 
 export function getRequestReadSyncConfig(event: H3Event): ReadSyncConfig {
   return resolveReadSyncConfig({ runtimeConfig: useRuntimeConfig(event) });
@@ -42,4 +43,14 @@ export function requireReadSyncPrincipal(
     });
   }
   return principal;
+}
+
+export async function requireReadStateSpace(event: H3Event, config: ReadSyncConfig): Promise<string> {
+  if (config.accountMode) {
+    if (!config.configured) {
+      throw createError({ statusCode: 503, statusMessage: 'Read-state sync is not configured.' });
+    }
+    return `account:${await requireAccountUser(event)}`;
+  }
+  return requireReadSyncPrincipal(event, config).syncSpaceId;
 }

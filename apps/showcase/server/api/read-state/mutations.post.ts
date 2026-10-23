@@ -4,7 +4,7 @@ import type { ReadStateMutation } from "../../../types/read-sync";
 import { createReadStateRepository } from "../../utils/read-state-repository";
 import {
   getRequestReadSyncConfig,
-  requireReadSyncPrincipal,
+  requireReadStateSpace,
   setPrivateNoStore,
 } from "../../utils/read-sync-server";
 
@@ -42,7 +42,7 @@ function normalizeMutations(value: unknown, ttlSeconds: number): ReadStateMutati
 export default defineEventHandler(async (event) => {
   setPrivateNoStore(event);
   const config = getRequestReadSyncConfig(event);
-  const principal = requireReadSyncPrincipal(event, config);
+  const spaceId = await requireReadStateSpace(event, config);
   const body = await readBody<{ mutations?: unknown }>(event);
   const mutations = normalizeMutations(body?.mutations, config.ttlSeconds);
   if (!mutations) {
@@ -50,6 +50,6 @@ export default defineEventHandler(async (event) => {
   }
   const repository = createReadStateRepository(config);
   return {
-    entries: await repository.applyMutations(principal.syncSpaceId, mutations),
+    entries: await repository.applyMutations(spaceId, mutations),
   };
 });

@@ -48,6 +48,8 @@ const snapshot = {
     readStateSync: {
       enabled: ["1", "true", "yes", "on"].includes(
         firstNonEmptyEnvValue("READ_STATE_SYNC_ENABLED").toLowerCase(),
+      ) || ["1", "true", "yes", "on"].includes(
+        firstNonEmptyEnvValue("SHOWCASE_ACCOUNT_AUTH_ENABLED").toLowerCase(),
       ),
       upstashUrl: Boolean(firstNonEmptyEnvValue("UPSTASH_REDIS_REST_URL")),
       upstashToken: Boolean(firstNonEmptyEnvValue("UPSTASH_REDIS_REST_TOKEN")),
@@ -55,6 +57,12 @@ const snapshot = {
       sessionSecret: Boolean(firstNonEmptyEnvValue("READ_STATE_SYNC_SESSION_SECRET")),
       spaceId: firstNonEmptyEnvValue("READ_STATE_SYNC_SPACE_ID") || "personal",
       ttlSeconds: firstNonEmptyEnvValue("READ_STATE_SYNC_TTL_SECONDS") || "2592000",
+    },
+    accountAuth: {
+      enabled: ["1", "true", "yes", "on"].includes(firstNonEmptyEnvValue("SHOWCASE_ACCOUNT_AUTH_ENABLED").toLowerCase()),
+      supabaseUrl: Boolean(firstNonEmptyEnvValue("SHOWCASE_SUPABASE_URL")),
+      publishableKey: Boolean(firstNonEmptyEnvValue("SHOWCASE_SUPABASE_PUBLISHABLE_KEY")),
+      allowedUserIds: Boolean(firstNonEmptyEnvValue("SHOWCASE_ALLOWED_USER_IDS")),
     },
   },
   processEnv: {

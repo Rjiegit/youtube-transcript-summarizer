@@ -1,6 +1,7 @@
 export interface ReadSyncConfig {
   enabled: boolean;
   configured: boolean;
+  accountMode: boolean;
   upstashUrl: string;
   upstashToken: string;
   accessToken: string;
@@ -41,7 +42,8 @@ function parseTtlSeconds(value: unknown): number {
 export function resolveReadSyncConfig(source: ReadSyncConfigSource = {}): ReadSyncConfig {
   const runtimeConfig = source.runtimeConfig ?? {};
   const env = source.env ?? process.env;
-  const enabled = parseEnabled(runtimeConfig.readStateSyncEnabled) ||
+  const accountMode = parseEnabled(runtimeConfig.accountAuthEnabled ?? env.SHOWCASE_ACCOUNT_AUTH_ENABLED);
+  const enabled = accountMode || parseEnabled(runtimeConfig.readStateSyncEnabled) ||
     parseEnabled(env.READ_STATE_SYNC_ENABLED);
   const upstashUrl = readString(runtimeConfig.upstashRedisRestUrl) ||
     readEnv(env, "UPSTASH_REDIS_REST_URL");
@@ -63,7 +65,8 @@ export function resolveReadSyncConfig(source: ReadSyncConfigSource = {}): ReadSy
 
   return {
     enabled,
-    configured: Boolean(enabled && upstashUrl && upstashToken && accessToken && sessionSecret && spaceId),
+    configured: Boolean(enabled && upstashUrl && upstashToken && (accountMode || (accessToken && sessionSecret && spaceId))),
+    accountMode,
     upstashUrl,
     upstashToken,
     accessToken,

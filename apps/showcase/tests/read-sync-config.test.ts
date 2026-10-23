@@ -36,4 +36,25 @@ describe("read sync config", () => {
       },
     }).configured).toBe(false);
   });
+
+  it("enables account read sync with only the account switch and Redis settings", () => {
+    expect(resolveReadSyncConfig({
+      env: { SHOWCASE_ACCOUNT_AUTH_ENABLED: 'true', READ_STATE_SYNC_ENABLED: 'false',
+        UPSTASH_REDIS_REST_URL: 'https://example.upstash.io',
+        UPSTASH_REDIS_REST_TOKEN: 'redis-token' },
+    })).toMatchObject({ enabled: true, configured: true, accountMode: true });
+  });
+
+  it("uses the same account switch from Nuxt runtime configuration", () => {
+    expect(resolveReadSyncConfig({
+      env: {},
+      runtimeConfig: { accountAuthEnabled: true, upstashRedisRestUrl: 'https://example.upstash.io',
+        upstashRedisRestToken: 'redis-token' },
+    })).toMatchObject({ enabled: true, configured: true, accountMode: true });
+  });
+
+  it("keeps account mode active and unavailable when Redis is missing", () => {
+    expect(resolveReadSyncConfig({ env: { SHOWCASE_ACCOUNT_AUTH_ENABLED: 'true' } }))
+      .toMatchObject({ enabled: true, configured: false, accountMode: true });
+  });
 });

@@ -19,6 +19,9 @@ import {
 export default defineEventHandler(async (event) => {
   setPrivateNoStore(event);
   const config = getRequestReadSyncConfig(event);
+  if (config.accountMode) {
+    throw createError({ statusCode: 410, statusMessage: 'Personal sync code is no longer used.' });
+  }
   if (!config.configured) {
     throw createError({ statusCode: 503, statusMessage: "Read-state sync is not configured." });
   }

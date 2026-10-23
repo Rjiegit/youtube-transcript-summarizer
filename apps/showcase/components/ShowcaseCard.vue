@@ -10,9 +10,11 @@ import { formatTaipeiDate } from "../utils/datetime";
 const props = withDefaults(defineProps<{
   item: ShowcaseResult;
   isRead?: boolean;
+  showReadControls?: boolean;
   titleMatches?: readonly TitleSearchRange[];
 }>(), {
   isRead: false,
+  showReadControls: true,
   titleMatches: () => [],
 });
 
@@ -58,6 +60,7 @@ const durationLabel = computed(() => {
         <div class="showcase-card__title-row">
           <h2 class="showcase-card__title"><HighlightedTitle :title="item.title" :ranges="titleMatches" /></h2>
           <span
+            v-if="showReadControls"
             class="showcase-card__read-badge"
             :class="{ 'showcase-card__read-badge--visible': isRead }"
             :aria-hidden="isRead ? 'false' : 'true'"
@@ -68,9 +71,9 @@ const durationLabel = computed(() => {
         <p v-if="item.summary" class="showcase-card__summary">{{ item.summary }}</p>
       </a>
     </NuxtLink>
-    <div v-if="item.source_url || !isRead" class="showcase-card__links">
+    <div v-if="item.source_url || (showReadControls && !isRead)" class="showcase-card__links">
       <button
-        v-if="!isRead"
+        v-if="showReadControls && !isRead"
         type="button"
         class="showcase-card__link showcase-card__quick-read"
         data-testid="quick-mark-read"

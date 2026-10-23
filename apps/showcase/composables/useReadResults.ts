@@ -1,4 +1,5 @@
 import { computed } from "vue";
+import { useAccountReadResults } from './useAccountReadResults';
 
 import type {
   ReadStateMutation,
@@ -174,6 +175,9 @@ function errorStatusCode(error: unknown): number | null {
 }
 
 export function useReadResults() {
+  if (typeof useRuntimeConfig === 'function' && useRuntimeConfig().public.accountAuthEnabled) {
+    return useAccountReadResults();
+  }
   const state = useState<ReadMap>(READ_RESULTS_STATE_KEY, () => ({}));
   const isReady = useState<boolean>(READ_RESULTS_READY_STATE_KEY, () => false);
   const revision = useState<number>(READ_RESULTS_REVISION_STATE_KEY, () => 0);

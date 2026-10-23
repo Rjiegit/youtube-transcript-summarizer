@@ -2,7 +2,10 @@
 
 import { afterEach, expect, it, vi } from 'vitest';
 import { createApp, toWebHandler } from 'h3';
+import { createClient } from '@supabase/supabase-js';
 import handler from '../server/api/video-inbox/index.post';
+
+vi.mock('@supabase/supabase-js', () => ({ createClient: vi.fn() }));
 
 const config = {
   videoInboxAccessToken: 'allowed', videoInboxOrigin: 'https://site.test',
@@ -44,4 +47,26 @@ it('logs only safe upstream metadata and preserves an unconfirmed response', asy
     expect(JSON.stringify(log.mock.calls)).not.toContain('private');
     expect(await response.text()).not.toContain('private');
   } finally { log.mockRestore(); }
+});
+
+it('switches submission authorization to an invited account without accepting the old code', async () => {
+  vi.stubGlobal('useRuntimeConfig', () => ({ ...config,
+    accountAuthEnabled: true, accountSupabaseUrl: 'https://project.supabase.co',
+    accountSupabasePublishableKey: 'publishable', accountAllowedUserIds: 'invited-user' }));
+  vi.mocked(createClient).mockReturnValue({ auth: {
+    getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'invited-user' } }, error: null }),
+  } } as never);
+  const rpc = vi.fn().mockResolvedValue(null);
+  vi.stubGlobal('$fetch', rpc);
+  const call = toWebHandler(createApp().use(handler));
+  const base = { method: 'POST', headers: { origin: 'https://site.test', 'content-type': 'application/json',
+    'x-video-inbox-token': 'allowed' }, body: JSON.stringify({
+      submission_id: 'b1cdf760-37af-4b70-95ac-64484a97da91', url: 'https://youtu.be/dQw4w9WgXcQ',
+    }) };
+  expect((await call(new Request('https://site.test/api/video-inbox', base))).status).toBe(401);
+  const response = await call(new Request('https://site.test/api/video-inbox', {
+    ...base, headers: { ...base.headers, authorization: 'Bearer account-token' },
+  }));
+  expect(response.status).toBe(200);
+  expect(rpc).toHaveBeenCalledTimes(1);
 });
