@@ -6,7 +6,7 @@
 
 - [`whisper_summary/`](whisper_summary/)：Python package，包含 FastAPI、Streamlit、worker 入口及共用的 domain、services、infrastructure。
 - [`browser-extension/`](browser-extension/)：Chrome／Edge Manifest V3 client，透過 HTTP 呼叫 FastAPI。
-- [`showcase/`](showcase/)：Nuxt 3/Nitro 成果展示站，server routes 直接讀取 Notion。
+- [`showcase/`](showcase/)：Nuxt 4/Nitro 成果展示站，server routes 直接讀取 Notion。
 
 Python 專案的 `pyproject.toml`、`uv.lock`、`.env.example` 與 lint 設定都放在
 `apps/whisper_summary/`；Showcase 使用自己的 `package.json` 與 `.env`。

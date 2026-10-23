@@ -38,7 +38,7 @@ instance ID、定期 heartbeat，並以 lease token 保護 progress／complete�
 - `apps/whisper_summary/apps/`：FastAPI、Streamlit、CLI 與 RSS monitor 等 Python 入口。
 - `apps/whisper_summary/tests/`：Python unit／integration tests 與 fixtures。
 - `apps/browser-extension/`：獨立 Chrome／Edge Manifest V3 client。
-- `apps/showcase/`：獨立 Nuxt 3 成果展示站。
+- `apps/showcase/`：獨立 Nuxt 4 成果展示站。
 - `contracts/`：Python writer 與 Showcase reader 共用的契約 fixture。
 
 Python package 位於 `apps/whisper_summary/`，import 名稱仍是 `whisper_summary`。

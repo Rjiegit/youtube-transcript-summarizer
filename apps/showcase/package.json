@@ -18,8 +18,8 @@
     "pretest": "node ./scripts/build-weekly-insights.mjs"
   },
   "dependencies": {
-    "markdown-it": "^14.2.0",
-    "nuxt": "^3.21.11",
+    "markdown-it": "^14.3.3",
+    "nuxt": "^4.6.2",
     "opencc-js": "1.4.2"
   },
   "devDependencies": {

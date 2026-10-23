@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-本專案是 Nuxt 3 的展示頁應用。路由頁面放在 `pages/`（例如 `pages/index.vue`、`pages/results/[id].vue`），共用 UI 元件在 `components/`，可重用邏輯放在 `composables/`、`utils/` 與 `types/`。Server 端 API 與整合程式位於 `server/api/showcase/` 和 `server/utils/`。測試集中在 `tests/`，整合型測試用的固定資料放在 `test-data/`。全域樣式位於 `assets/css/main.css`，環境檢查等輔助腳本則放在 `scripts/`。
+本專案是 Nuxt 4 的展示頁應用，沿用原有目錄結構。路由頁面放在 `pages/`（例如 `pages/index.vue`、`pages/results/[id].vue`），共用 UI 元件在 `components/`，可重用邏輯放在 `composables/`、`utils/` 與 `types/`。Server 端 API 與整合程式位於 `server/api/showcase/` 和 `server/utils/`。測試集中在 `tests/`，整合型測試用的固定資料放在 `test-data/`。全域樣式位於 `assets/css/main.css`，環境檢查等輔助腳本則放在 `scripts/`。
 
 ## Build, Test, and Development Commands
 - `npm install`：安裝相依套件。
