@@ -1,6 +1,6 @@
 # YouTube 影片轉錄與摘要平台
 
-這個專案會接收 YouTube URL，使用 `yt-dlp` 下載媒體、以 faster-whisper 轉錄，再透過 LLM 產生繁體中文摘要。任務與結果可儲存在 SQLite、Markdown 與 Notion，並提供 Streamlit、FastAPI、RSS monitor、Browser Extension 與 Nuxt Showcase 等入口。
+這個專案會接收 YouTube URL，使用 `yt-dlp` 優先下載音訊、以 faster-whisper 轉錄，再透過 LLM 產生繁體中文摘要。任務與結果可儲存在 SQLite、Markdown 與 Notion，並提供 Streamlit、FastAPI、RSS monitor、Browser Extension 與 Nuxt Showcase 等入口。
 
 Discord 完成通知可附上 Showcase 摘要入口，設定方式見 [通知操作手冊](docs/operations/notifications.md)。
 
@@ -96,8 +96,10 @@ Nuxt Showcase 不在此 Compose topology 中。
 
 ## 常用操作
 
+下載採用 `bestaudio/best`，保留來源音訊格式，不額外轉碼；來源沒有獨立音訊時退回含音訊的影片格式。檔案仍儲存在 `data/videos/`，不需新增設定或依賴。
+
 ```bash
-# 下載 YouTube 媒體
+# 下載 YouTube 音訊（無獨立音訊時退回影片格式）
 make yt-dlp url="<YOUTUBE_URL>"
 
 # 處理 SQLite queue

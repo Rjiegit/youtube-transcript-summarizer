@@ -103,7 +103,7 @@ docker-down:
 	$(DOCKER_COMPOSE) down
 
 yt-dlp:
-	yt-dlp -S "res:360" -o "data/videos/%(title)s.%(ext)s" $(url)
+	yt-dlp -f "bestaudio/best" -o "data/videos/%(title)s.%(ext)s" $(url)
 
 yt-dlp-update:
 	@if [ "$(YTDLP_AUTO_UPDATE)" != "1" ]; then echo "Skip yt-dlp update (YTDLP_AUTO_UPDATE=$(YTDLP_AUTO_UPDATE))"; exit 0; fi

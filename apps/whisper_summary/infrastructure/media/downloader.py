@@ -16,7 +16,7 @@ class YouTubeDownloader:
 
     def download(self):
         # Always use yt-dlp for download（移除測試模式與模擬下載邏輯）
-        logger.info("Download YouTube video using yt-dlp...")
+        logger.info("Download YouTube audio using yt-dlp...")
         return self._download_with_yt_dlp()
 
     def _download_with_yt_dlp(self):
@@ -78,8 +78,8 @@ class YouTubeDownloader:
         cmd = [
             "yt-dlp",
             "--no-overwrites",
-            "-S",
-            "res:360",
+            "-f",
+            "bestaudio/best",
             "-o",
             template,
             "--print",

@@ -13,7 +13,7 @@ class TestYouTubeDownloaderMetadata(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             video_dir = os.path.join(tmpdir, "videos")
             os.makedirs(video_dir)
-            video_path = os.path.join(video_dir, "dQw4w9WgXcQ.mp4")
+            video_path = os.path.join(video_dir, "dQw4w9WgXcQ.m4a")
             with open(video_path, "wb") as video_file:
                 video_file.write(b"video")
 
@@ -47,7 +47,12 @@ class TestYouTubeDownloaderMetadata(unittest.TestCase):
                     output_path=tmpdir,
                 ).download()
 
+            self.assertEqual(result["path"], video_path)
+            mock_run.assert_called_once()
             command = mock_run.call_args.args[0]
+            self.assertEqual(command[command.index("-f") + 1], "bestaudio/best")
+            self.assertNotIn("-S", command)
+            self.assertNotIn("--extract-audio", command)
             self.assertTrue(
                 any(
                     "description,channel,channel_id,upload_date" in argument
