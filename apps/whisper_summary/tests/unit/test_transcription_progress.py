@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from whisper_summary.infrastructure.media.transcription.transcriber import Transcriber
 
@@ -12,6 +13,12 @@ class _InfoWithDuration:
 class TestTranscriptionProgress(unittest.TestCase):
     def setUp(self):
         self.transcriber = Transcriber()
+
+    def test_transcribe_uses_faster_whisper(self):
+        with patch.object(self.transcriber, "_is_test_mode", return_value=False):
+            with patch.object(self.transcriber, "transcribe_with_faster_whisper", return_value="轉錄文字") as transcribe:
+                self.assertEqual(self.transcriber.transcribe("audio.wav"), "轉錄文字")
+        transcribe.assert_called_once_with("audio.wav")
 
     def test_get_total_duration_seconds_prefers_duration(self):
         info = _InfoWithDuration(duration=123.4, duration_ms=9999)

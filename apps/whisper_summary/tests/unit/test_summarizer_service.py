@@ -11,25 +11,6 @@ if "dotenv" not in sys.modules:  # pragma: no cover - testing scaffold
     dotenv_stub.load_dotenv = lambda *args, **kwargs: False
     sys.modules["dotenv"] = dotenv_stub
 
-if "google.generativeai" not in sys.modules:  # pragma: no cover
-    google_module = sys.modules.setdefault(
-        "google",
-        types.ModuleType("google"),
-    )
-    generativeai_stub = types.ModuleType("google.generativeai")
-    generativeai_stub.configure = lambda *args, **kwargs: None
-
-    class _GenerativeModel:
-        def __init__(self, *_args, **_kwargs):
-            pass
-
-        def generate_content(self, *_args, **_kwargs):
-            return types.SimpleNamespace(text="stub-gemini")
-
-    generativeai_stub.GenerativeModel = _GenerativeModel
-    google_module.generativeai = generativeai_stub
-    sys.modules["google.generativeai"] = generativeai_stub
-
 if "openai" not in sys.modules:  # pragma: no cover - testing scaffold
     openai_stub = types.ModuleType("openai")
 
@@ -90,6 +71,59 @@ class _FixedRng:
 
 
 class TestSummarizerService(unittest.TestCase):
+    def test_gemini_uses_scoped_client_and_preserves_prompt_and_model(self):
+        with patch.dict(os.environ, {"GOOGLE_GEMINI_API_KEY": "gemini-key"}, clear=True):
+            summarizer = Summarizer()
+        with patch.object(summarizer_service.genai, "Client") as factory:
+            client = factory.return_value.__enter__.return_value
+            client.models.generate_content.return_value.text = "摘要"
+            with patch.object(summarizer, "get_prompt", return_value="完整 prompt") as prompt:
+                result = summarizer.summarize_with_google_gemini("title", "text", model="gemini-test")
+        factory.assert_called_once_with(api_key="gemini-key")
+        client.models.generate_content.assert_called_once_with(model="gemini-test", contents="完整 prompt")
+        prompt.assert_called_once_with(title="title", text="text", metadata=None)
+        factory.return_value.__exit__.assert_called_once()
+        self.assertEqual(result, "摘要")
+        self.assertEqual(summarizer.last_backend, "gemini")
+        self.assertIn("gemini-test", summarizer.last_model_label)
+
+    def test_gemini_closes_client_and_propagates_provider_error(self):
+        with patch.dict(os.environ, {"GOOGLE_GEMINI_API_KEY": "gemini-key"}, clear=True):
+            summarizer = Summarizer()
+        with patch.object(summarizer_service.genai, "Client") as factory:
+            client = factory.return_value.__enter__.return_value
+            client.models.generate_content.side_effect = RuntimeError("provider unavailable")
+            with self.assertRaisesRegex(RuntimeError, "provider unavailable"):
+                summarizer.summarize_with_google_gemini("title", "text")
+        factory.return_value.__exit__.assert_called_once()
+
+    def test_gemini_missing_key_does_not_create_client(self):
+        with patch.dict(os.environ, {}, clear=True):
+            summarizer = Summarizer()
+        with patch.object(summarizer_service.genai, "Client") as factory:
+            with self.assertRaisesRegex(ValueError, "API key is not set"):
+                summarizer.summarize_with_google_gemini("title", "text")
+        factory.assert_not_called()
+
+    def test_gemini_transient_error_classification(self):
+        from google.genai.errors import ClientError, ServerError
+        import httpx
+
+        summarizer = Summarizer()
+        for code in (429, 500, 503, 504):
+            error_type = ServerError if code >= 500 else ClientError
+            with self.subTest(code=code):
+                self.assertTrue(summarizer._is_transient_provider_error(
+                    Backend.GEMINI, error_type(code, {"error": {"message": "busy"}}),
+                ))
+        for code in (400, 401, 403, 404):
+            with self.subTest(code=code):
+                self.assertFalse(summarizer._is_transient_provider_error(
+                    Backend.GEMINI, ClientError(code, {"error": {"message": "invalid"}}),
+                ))
+        self.assertTrue(summarizer._is_transient_provider_error(Backend.GEMINI, httpx.ReadTimeout("timeout")))
+        self.assertFalse(summarizer._is_transient_provider_error(Backend.GEMINI, ValueError("invalid")))
+
     def test_codex_startup_log_reports_available_executable(self):
         with patch.dict(os.environ, {"CODEX_BIN": "codex"}, clear=True):
             with patch(
@@ -454,7 +488,7 @@ class TestSummarizerService(unittest.TestCase):
         )
 
     def test_transient_error_reselects_once_and_records_successful_model(self):
-        from google.api_core.exceptions import TooManyRequests
+        from google.genai.errors import ClientError
 
         candidates = [
             ModelCandidate(Backend.GEMINI, "gemini-a", 80),
@@ -476,7 +510,7 @@ class TestSummarizerService(unittest.TestCase):
         with patch.object(
             summarizer,
             "summarize_with_google_gemini",
-            side_effect=TooManyRequests("busy"),
+            side_effect=ClientError(429, {"error": {"message": "busy"}}),
         ) as mock_gemini:
             with patch.object(
                 summarizer,
@@ -492,7 +526,7 @@ class TestSummarizerService(unittest.TestCase):
         mock_openai.assert_called_once_with("title", "text", model="openai-a")
 
     def test_non_transient_error_does_not_switch_candidate(self):
-        from google.api_core.exceptions import Unauthorized
+        from google.genai.errors import ClientError
 
         candidates = [
             ModelCandidate(Backend.GEMINI, "gemini-a", 80),
@@ -514,21 +548,21 @@ class TestSummarizerService(unittest.TestCase):
         with patch.object(
             summarizer,
             "summarize_with_google_gemini",
-            side_effect=Unauthorized("bad key"),
+            side_effect=ClientError(401, {"error": {"message": "bad key"}}),
         ):
             with patch.object(
                 summarizer,
                 "summarize_with_openai",
             ) as mock_openai:
-                with self.assertRaises(Unauthorized):
+                with self.assertRaises(ClientError):
                     summarizer.summarize("title", "text")
 
         mock_openai.assert_not_called()
 
     def test_transient_error_without_fallback_preserves_original_error(self):
-        from google.api_core.exceptions import TooManyRequests
+        from google.genai.errors import ClientError
 
-        original_error = TooManyRequests("busy")
+        original_error = ClientError(429, {"error": {"message": "busy"}})
         with patch.dict(
             os.environ,
             {"GOOGLE_GEMINI_API_KEY": "gemini-key"},
@@ -546,13 +580,13 @@ class TestSummarizerService(unittest.TestCase):
             "summarize_with_google_gemini",
             side_effect=original_error,
         ):
-            with self.assertRaises(TooManyRequests) as raised:
+            with self.assertRaises(ClientError) as raised:
                 summarizer.summarize("title", "text")
 
         self.assertIs(raised.exception, original_error)
 
     def test_fallback_is_attempted_only_once(self):
-        from google.api_core.exceptions import TooManyRequests
+        from google.genai.errors import ClientError
 
         candidates = [
             ModelCandidate(Backend.GEMINI, "gemini-a", 80),
@@ -577,7 +611,7 @@ class TestSummarizerService(unittest.TestCase):
         with patch.object(
             summarizer,
             "summarize_with_google_gemini",
-            side_effect=TooManyRequests("busy"),
+            side_effect=ClientError(429, {"error": {"message": "busy"}}),
         ):
             with patch.object(
                 summarizer,

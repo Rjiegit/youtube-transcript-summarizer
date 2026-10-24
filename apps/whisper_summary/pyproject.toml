@@ -19,14 +19,13 @@ ui = [
 ]
 worker = [
   "faster-whisper==1.2.0",
-  "google-generativeai==0.8.5",
+  "google-genai==2.33.0",
   "langgraph==1.2.11",
   "notion-client==2.4.0",
   "ollama==0.6.0",
   "openai==1.109.1",
   "pytubefix==9.4.1",
   "requests==2.32.5",
-  "whisper==1.1.10",
 ]
 dev = [
   "flake8",

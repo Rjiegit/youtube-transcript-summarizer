@@ -3,7 +3,6 @@ from whisper_summary.core.logger import logger
 import time
 from typing import Optional
 
-import whisper
 from faster_whisper import WhisperModel
 
 # 導入測試樣本管理器
@@ -30,12 +29,6 @@ class Transcriber:
             return self._mock_transcribe(file_path)
         else:
             return self.transcribe_with_faster_whisper(file_path)
-
-    def transcribe_with_whisper(self, file_path):
-        logger.info(f"Transcribing audio with Whisper...")
-        whisper_model = whisper.load_model(self.model_size)
-        result = whisper_model.transcribe(file_path, verbose=True, fp16=False)
-        return result["text"]
 
     def transcribe_with_faster_whisper(self, file_path):
         logger.info(f"Transcribing audio with Faster Whisper...")

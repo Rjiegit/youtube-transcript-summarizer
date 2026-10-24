@@ -49,6 +49,10 @@ make install-hooks
 make api
 ```
 
+轉錄統一使用 faster-whisper；已移除未使用的原版 Whisper 入口與 Graphite 同名 `whisper` 套件。
+Gemini 使用 `google-genai` SDK，仍沿用 `GOOGLE_GEMINI_API_KEY` 與既有模型設定。
+更新後請重新執行上述 `uv sync`；Docker 使用者請重建 worker image。
+
 Python 專案設定、lockfile 與 `.env` 位於 `apps/whisper_summary/`。`make` 指令會指定 uv project，
 並把 `apps/` 加入 `PYTHONPATH`；直接執行 Python 模組或 unittest 時，需使用
 `uv run --project apps/whisper_summary` 與 `PYTHONPATH=apps`。

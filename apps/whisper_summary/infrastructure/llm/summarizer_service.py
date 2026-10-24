@@ -6,7 +6,8 @@ import time
 from collections.abc import Iterable
 
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
+from google.genai import errors as genai_errors
 import openai
 from openai import OpenAI
 
@@ -29,11 +30,6 @@ from whisper_summary.infrastructure.llm.weighted_selection import (
     choose_weighted_candidate,
     validate_model_candidates,
 )
-
-try:
-    from google.api_core import exceptions as google_api_exceptions
-except ImportError:  # pragma: no cover - dependency fallback
-    google_api_exceptions = None
 
 try:
     import httpx
@@ -295,18 +291,10 @@ class Summarizer:
                 and getattr(error, "status_code", 0) >= 500
             )
 
-        if backend == Backend.GEMINI and google_api_exceptions:
-            return self._is_instance_of_named_types(
-                error,
-                google_api_exceptions,
-                (
-                    "TooManyRequests",
-                    "DeadlineExceeded",
-                    "ServiceUnavailable",
-                    "InternalServerError",
-                    "ServerError",
-                ),
-            )
+        if backend == Backend.GEMINI:
+            if isinstance(error, genai_errors.APIError):
+                return error.code == 429 or error.code >= 500
+            return bool(httpx and isinstance(error, (httpx.TimeoutException, httpx.TransportError)))
 
         if backend == Backend.OLLAMA:
             timeout_types = (TimeoutError, ConnectionError)
@@ -449,14 +437,14 @@ class Summarizer:
                 "API key is not set. Please add it to the .env file."
             )
 
-        genai.configure(api_key=self.google_gemini_api_key)
         self.last_backend = "gemini"
         self.last_model_label = self._format_model_label("gemini", model)
-        gemini = genai.GenerativeModel(model)
-        response = gemini.generate_content(
-            self.get_prompt(title=title, text=text, metadata=metadata)
-        )
-        return response.text
+        with genai.Client(api_key=self.google_gemini_api_key) as client:
+            response = client.models.generate_content(
+                model=model,
+                contents=self.get_prompt(title=title, text=text, metadata=metadata),
+            )
+            return response.text
 
     def summarize_with_ollama(
         self,
