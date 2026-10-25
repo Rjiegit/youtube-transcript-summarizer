@@ -2,6 +2,10 @@
 
 這個專案會接收 YouTube URL，使用 `yt-dlp` 優先下載音訊、以 faster-whisper 轉錄，再透過 LLM 產生繁體中文摘要。任務與結果可儲存在 SQLite、Markdown 與 Notion，並提供 Streamlit、FastAPI、RSS monitor、Browser Extension 與 Nuxt Showcase 等入口。
 
+新產生的摘要採「一句話結論 → 核心重點 → 必要補充（選用）」格式，一般以 400–700 字為目標，
+內容單純可更短，複雜內容可放寬至約 1,000 字。篇幅由 LLM 依 prompt 控制，並非硬性截斷。
+既有摘要不會自動改寫；更新程式後，請重新啟動使用中的 API、Streamlit 或 worker，讓後續摘要載入新 prompt。
+
 Discord 完成通知可附上 Showcase 摘要入口，設定方式見 [通知操作手冊](docs/operations/notifications.md)。
 
 ## 系統流程

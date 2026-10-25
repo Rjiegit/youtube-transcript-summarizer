@@ -162,24 +162,21 @@ class TestSummarizerService(unittest.TestCase):
             "Codex CLI will be excluded from automatic model selection"
         )
 
-    def test_get_prompt_uses_learning_notes_template(self):
+    def test_get_prompt_uses_concise_video_summary_template(self):
         summarizer = Summarizer()
 
         result = summarizer.get_prompt("測試影片", "這是逐字稿")
 
-        self.assertIn("# 學習筆記", result)
-        self.assertIn("## TL;DR", result)
-        self.assertIn("## 快速結論", result)
-        self.assertIn("## 這支影片在說什麼", result)
-        self.assertIn("## 最重要的 3-5 個重點", result)
-        self.assertIn("## 知識架構", result)
-        self.assertIn("## 複習問題", result)
-        self.assertIn("2-4 段", result)
-        self.assertIn("核心主張、理由、影響與可採取的行動", result)
+        self.assertIn("## 一句話結論", result)
+        self.assertIn("## 核心重點", result)
+        self.assertIn("## 必要補充", result)
         self.assertIn("測試影片", result)
         self.assertIn("這是逐字稿", result)
+        self.assertNotIn("## 快速結論", result)
+        self.assertNotIn("## 複習問題", result)
         self.assertNotIn("{title}", result)
         self.assertNotIn("{text}", result)
+        self.assertNotIn("{metadata_context}", result)
 
     def test_get_prompt_adds_bounded_untrusted_video_metadata(self):
         summarizer = Summarizer()
