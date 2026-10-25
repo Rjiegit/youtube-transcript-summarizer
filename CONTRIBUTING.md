@@ -51,6 +51,20 @@ Processing pipeline 的具體操作集中在 `services/pipeline/engines.py`，le
 LangGraph engine 必須重用相同 operations。新增或調整 pipeline 步驟時，需同步更新
 兩個 engine 的 parity test，避免切換後出現外部行為差異。
 
+## Log 格式
+
+Python 共用 `whisper_summary.core.logger` 每行輸出一筆 JSON，包含 `timestamp`、`level`、`message`。
+時間固定使用 `Asia/Taipei` 時區的 ISO 8601 格式，包含毫秒與 `+08:00`，
+不依賴主機的本地時區，也不需要設定 `TZ`。例如：
+
+```json
+{"timestamp":"2026-10-25T15:30:45.123+08:00","level":"INFO","message":"開始處理"}
+```
+
+`exception()` 會將 traceback 放在同一筆 JSON 的 `exception` 欄位；訊息與堆疊中的換行會被跳脫，
+方便逐行解析。第三方套件、標準 logging 與直接 `print()` 的輸出不會自動套用此格式。
+時間戳記不代表已記錄各階段耗時；既有純文字 Log 解析工具須調整為讀取 JSON 欄位。
+
 ## Python 風格
 
 - 遵循 PEP 8，使用 4 spaces indentation。
