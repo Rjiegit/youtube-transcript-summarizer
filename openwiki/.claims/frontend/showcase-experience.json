@@ -1,14 +1,14 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:3db72d0258f59cee72ad50d248e8c1e554df37a2503802f4c1c011d7390d2581",
+  "pageVersion": "sha256:604832e97de131025187741f393447bd3a9f7666566cf0636d9829a6f1f4ff24",
   "claims": [
     {
       "id": "claim_4875a56afdaa46d48f8f363b756ddb8e",
       "statement": "Showcase 首頁與詳細頁都透過 server-side useFetch 呼叫內部 API；首頁在 client 端去重、搜尋並把未讀結果排在前面。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/pages/index.vue#L17-L67",
-          "version": "repo-lines-v1:sha256:bfd361c8c19e6984380b2ccae395146d691929cd8f5b3f65239a3b6e96796cd1:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6Ijg0ZjgzODMyMDRjMTMzY2Q0NjRjYTgzN2U5Y2U0MjU2NWVlZDcyOGZiOTAxNDFkZDIzM2U3MzZkM2FmYjE3ZjgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjJkNjlhYTUzY2FhYTkzNjc1ZWFlZjI3NDNiZGZiNzVkN2FjNjFhNjA0OWM4MjY1ZjlmZDBmZTljZDE3ZjU5MzYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdlNDA1NDFhMGE1ZjM2NDkxMGE3YmU0YTM3OGVmZWViOTM5OWJjMjlkN2UyYzNjYjY0ZTdjMjE1OGRmZTY1YTMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImYxNzFkNDI4OWQ3NmY0ZTU3YTlmNzg2OTM1MmNhZTM5NzhmMWI3NmZiYWE2OTViM2JiMjM3OTk1ZjU5OWYyODMifQ"
+          "resource": "repo://apps/showcase/pages/index.vue#L20-L81",
+          "version": "repo-lines-v1:sha256:0622617f50e21c19fe0bf6a64114df05571a8144d6be3fb71af7c694b168e33d:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1YmQ5YWE2YjY2MTU4NGI0ZWQ4ODExNWM2OTljYWU2MTYyMzY5MzFmMTFhODcyN2VlYWI4ZDQ5ODlhYmRmNjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImIwOGY4YzNmYThjNGM5NjAxZWQ2YWJkNzJiMjcyYmM5MGI3ODQyM2E3Yzg1NmJkZTcwNTdlNjAyZDNhM2MwYjYiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImU2NDZmMTcwN2RkOTczMjhiZGIzYjJkZDlkZWMzMTNhZWJkMTgyODYwMGY5MGVkYzdjNTRiN2M0MWE0YzYwZDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImY4MmI3MGRhMGVhZTkzNWRjNDk1Yzc0NjllOGU4MDk1ZGNiMjc2NjM2YWJjMTMyMmQ3OTdjZTNlOGIyODk2OTIifQ"
         },
         {
           "resource": "repo://apps/showcase/pages/results/%5Bid%5D.vue#L14-L25",
@@ -18,15 +18,11 @@
     },
     {
       "id": "claim_9b2e034376b045b2b6c3ce57aa20b1bd",
-      "statement": "已讀狀態在 SSR 安全的 Nuxt state 中管理，browser 可用時同步 localStorage，儲存失敗不影響 session 記憶體狀態，且最多保留 500 筆。",
+      "statement": "關閉帳號模式時，已讀在 SSR 安全的 Nuxt state 中管理並同步 localStorage，最多保留 500 筆；帳號模式改用 server 狀態。",
       "evidence": [
         {
           "resource": "repo://apps/showcase/composables/useReadResults.ts",
-          "version": "repo-file-v1:sha256:d86fcc4022d345d4285044e4c7d2e6918a97e2810b1a1447a18b8c58d44395f7"
-        },
-        {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L3-L93",
-          "version": "repo-lines-v1:sha256:3f4eee37cec0061f4afbfcc669406e0a5421222218c357bd3b3bdd98e4c82c14:eyJzZWxlY3RlZExpbmVDb3VudCI6OTAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxYjdmOTA3OGU5ZTRlMWE0OWRiZDk4MmZiZmIxYWU5ZmVlMzU5NDlhNjhhNTdiN2FiNWE4NGE5ZDcyZTA1MmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmZmQxYjIyMTIzZTMzNzhkNTVmNGIzNDY2NWUyMzEzNTQ5ZjZjZGQ2YTZmNTM0NmM4NTkyMGUxNTk5YjJkMTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjoyLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjJhYjVhYjVlY2VmMGE0MTVhY2YzYzY3MDRiYWU1YzkyNzJhMzJlMmEwOWNjN2Q1MWZhOTdmMWMwNTgzZWVkZmUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjBhMTg0ZTllZWM2NzEzZDZkOGQ0NmZmNTgyNWRkMDNkODUyYjkyOGVhOWY3NTFlNGE4MWVlMTEyZmYzZDJiZGUifQ"
+          "version": "repo-file-v1:sha256:76bd1039aab288e8796377b186647a6d70884ba1c002ea46b89b0f78c2cb3a42"
         }
       ]
     },
@@ -102,19 +98,15 @@
     },
     {
       "id": "claim_eebdd8af01eb4164b02daac1fec109e0",
-      "statement": "Showcase 的跨裝置已讀同步控制位於 /settings/sync；輸入個人同步碼取得 session 後透過私人 API 同步，已有有效 session 的裝置自動恢復同步，遠端故障時保留本機資料。",
+      "statement": "/settings/sync 在舊模式使用個人同步碼連結裝置並於有效 session 自動恢復；帳號模式提示登入受邀帳號並自動同步該帳號。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/components/ReadSyncControl.vue#L1-L108",
-          "version": "repo-lines-v1:sha256:41e43abcace02fd05c81bf9cfd39cc52a8ce0721e881413e5973dbd2a6ef8db5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTA4LCJmaXJzdFNlbGVjdGVkTGluZUhhc2giOiJjZjQzMzU2MTQyYTFhMjM0YjFhMDMxOWZiMjc2M2JlN2VkMTA4ZmI4MWFjOWMzZTZkMjQ0OTZmOTJlYWI5NmFjIiwibGFzdFNlbGVjdGVkTGluZUhhc2giOiIwNTIyODQwZWQ1ZWM1OGEzNjJmMjBiNzFiOGFlYjY3NWQ3ZWZiOTc0MzljOTBjM2Y2MTU1YWZlYzY1Mjg1OTQzIiwicHJlY2VkaW5nQ29udGV4dExpbmVDb3VudCI6MCwicHJlY2VkaW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1IiwiZm9sbG93aW5nQ29udGV4dExpbmVDb3VudCI6MCwiZm9sbG93aW5nQ29udGV4dEhhc2giOiJlM2IwYzQ0Mjk4ZmMxYzE0OWFmYmY0Yzg5OTZmYjkyNDI3YWU0MWU0NjQ5YjkzNGNhNDk1OTkxYjc4NTJiODU1In0"
+          "resource": "repo://apps/showcase/composables/useReadResults.ts",
+          "version": "repo-file-v1:sha256:76bd1039aab288e8796377b186647a6d70884ba1c002ea46b89b0f78c2cb3a42"
         },
         {
-          "resource": "repo://apps/showcase/composables/useReadResults.ts#L427-L445",
-          "version": "repo-lines-v1:sha256:b28ef62929f2e4e9f14063f2b30d98f48a771e3c0f885b9238abd6b3dd919f1c:eyJzZWxlY3RlZExpbmVDb3VudCI6MTksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4OTNmNDBlMzc4MWViODk2YzgyZDA0NmEwODA2N2ExMWUzNWNkZjJmMWRmYWYyNmZlYTkwYjhkYjY2NzY0MTMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY5NjczOWQ0OWExNjA2NjZjNWM5YjM5NWYzNjM4Zjg0NDEyZmZkODJkNDg2YmMwOWJjZGYwNjEwMGNlODg3NDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjdmZDczZTdkZTUxOWIxOGE2NjgwNmI4NTEzYTI2YjcwN2Q2N2Y5N2ZkMzBhN2VhMTk2NzdhOWRhNmJkY2E3NWIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE3OWVhNzViZTkxY2E2NmJiNjgzMmJkMTdmNTRkZWI5YzcyZmQ3ZWRlNzM1M2VjMzg1ZDhmNmYwYmNiOTNlOWEifQ"
-        },
-        {
-          "resource": "repo://apps/showcase/pages/settings/sync.vue",
-          "version": "repo-file-v1:sha256:48706df8e3039ebf88dc95f22e9d49a165d248ac774b484a2c1ca658b2ed5f8a"
+          "resource": "repo://apps/showcase/pages/settings/sync.vue#L22-L30",
+          "version": "repo-lines-v1:sha256:dcfeabdde9c614cfcea3e96676f8af28e5c72772d83b4b593f46f8843e5c9ee0:eyJzZWxlY3RlZExpbmVDb3VudCI6OSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNjNhZGQ4MDVjODExNzlkNWIwNmU0YmViOTg1Zjg5YWYzOGY1YzE1ZWJkNTFkNmUxZjQ4NGI0YWJiODJlMmExYiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiN2M3YWYzYTIwNGIzNzZlMWE0Y2Q2YTNmOWY2ZDc2OTBlNTExYjVlZDBlMGM3YTNmOGE2OWRhZmIxMjM2ODhlMSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiZmNhMGVjN2JkNjFiYWMwNjhjNjI1MGU4MDdlYzY3MWNiM2QzZDBmZDI5ZmU2MjllYTgwNmE2MWQyYTI0MTgxOCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMzdhMjA2YTlkMzMzN2JhZWUwN2Y5NmExNzhjZTFkZjRiZmRiYzBiYzUxMjk1YTcwZGMzMWQwYzhjMWM1YmQ1YiJ9"
         }
       ]
     },
@@ -170,11 +162,11 @@
     },
     {
       "id": "claim_d9b3c1a00b6544a79a4ce8753856da8c",
-      "statement": "Showcase 的影片提交 API 驗證個人提交碼與 Origin，透過受限 RPC 寫入 Supabase Queue，回應採 private、no-store。",
+      "statement": "影片提交 API 依模式驗證個人碼或受邀帳號，檢查 Origin，透過受限 RPC 寫入 Supabase Queue，回應 private、no-store。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts",
-          "version": "repo-file-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c"
+          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts#L5-L28",
+          "version": "repo-lines-v1:sha256:25d6ab50fcd6a9cdaee2771c35e5445632154306d2756487bba40cb8cb853a40:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlZGJmODM4NzUzNjg5NjZmMzEzYWU2Mzk1MzljNDAzNzAwNDViYTUzZTJlMmNlZTkzYmI2N2Q1ZGExN2I5ODAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEyZTIyZDM4MjM4YWNiZTNhZjNiNGEyMDI2M2RhMjFiODk3YjEzNWZhZDYyNDcwMTc2MDhhZTg2NTg0Y2RkZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxNGJhNTMxOWE5ZDU5OGE0ODY2NjdmYWMxYmNmMjUyZDAyNmY3ODg0MGI3MjAxNWE2Y2RjZWIzZmZmZTJmMTYifQ"
         }
       ]
     },
@@ -183,32 +175,54 @@
       "statement": "Showcase /submit 在首次提交前建立 UUID 並將 UUID 與網址保存於 localStorage；未確認回應時使用相同識別碼重試，成功後清除暫存，提交碼不進入 localStorage。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/pages/submit.vue#L1-L47",
-          "version": "repo-lines-v1:sha256:2425ce6e28af5ffbaf3c6e4135126a46de5b91c22e44febae56495a31fe3a65c:eyJzZWxlY3RlZExpbmVDb3VudCI6NDcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNmNDMzNTYxNDJhMWEyMzRiMWEwMzE5ZmIyNzYzYmU3ZWQxMDhmYjgxYWM5YzNlNmQyNDQ5NmY5MmVhYjk2YWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImQ2NTc5NTBlYzJiNjYzMzEzNzA1MTQ2YTdlZTExYzc3NzY3NmNlMmJjM2M5MGI4YmUzYjY0ZmRjNjQzYmFmZTMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjRmYTZjMjk0NjgwNmEzNjhiYTVkZmZlZjc0ZDA4ZDdkYzQ2NTU1YWRhMWI2YTEzYjRjZjZlNTBhOGVlMTdlNzkifQ"
+          "resource": "repo://apps/showcase/pages/submit.vue#L12-L53",
+          "version": "repo-lines-v1:sha256:4c357d78bcd05abe61762470dd01abc2cd5b3fe07b6c987031f39c584111ef60:eyJzZWxlY3RlZExpbmVDb3VudCI6NDIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1MDc0Nzg1NzE0MzI3MmE3NDgyNjVmNGZjNDQ0MTNhMjRhY2U0ZjMyYTAyODQ2OTRjN2U0ZTQ0NTQ3NmY1NWYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjRlNmM0ODI1NTBjNjc2NTE0YTQzZWFmOWEzNGJkMzZkY2VjMDc5NjA0OTIxMTE2MzEyODgxZDc0YWQ3N2Y3NDkiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUwOTg3MDhhYmJlMjBlMjFkZTExNDU0ZDJiYzE2MmQ1ZjViYWQ3NWI2MThiNTY0OGMyOGVjOGVhNWJmNzQ5YWQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjQ5NWEzNmZhMGE5NmI3ZDdjZjNlMDE1ZDc0YzE3MDZjODAwY2JlM2Q2MGVkMzNmOWZkOGJjNjI3OGMyMTY3OTMifQ"
         }
       ]
     },
     {
       "id": "claim_af6029fe8a9e4614a542fe9dafe453f0",
-      "statement": "Showcase 的影片提交 API 驗證個人提交碼、精確 Origin 與 YouTube URL，然後由 server 呼叫 Supabase submit RPC；清除瀏覽器待確認提交不會撤回已入列訊息。",
+      "statement": "影片提交 API 依模式驗證個人碼或受邀帳號、精確 Origin 與 YouTube URL，再呼叫 submit RPC；清除瀏覽器待確認提交不撤回入列訊息。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/pages/submit.vue#L35-L46",
-          "version": "repo-lines-v1:sha256:1862a8bef33e2168bf38794f29bdaf2a1f56bde98cfc8bf388c8d4faadfef68f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImE2OGJjNzdlZWQ3MDlkOTExMGQ2Y2UzNjQ4YTIwOWFkOTQ4YjBhNDlkOWJhNGY5M2RlNWJlMjI5ZGNlNzQ0MjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjNlMDk0ZDg3NTVjOWFhMTUyNzk2YjYzMWVkYzIxMmMzNjBjOTI2ZGFlNTZlN2MwZGU1ZjA1MmVlNTAwNGQ4Y2MiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImQ5MjMwMjAwNjdkYmNjZjVkMDRjZmExNDE4YWIyNTdmN2MxMjFkZjdjNGJjZTEzODNkYTYzNzRjYTdhYTAxMGIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgxYTE1M2ZhOGQxODlmNGNiM2M3MTBlNDU2NTRjNDNlYmJmMTA4OTkxMzZhMGI4MzExNjU1YjZkYjRhZWJjY2IifQ"
+          "resource": "repo://apps/showcase/pages/submit.vue#L50-L53",
+          "version": "repo-lines-v1:sha256:24f898b59b6797dc3d9f9e590b3a339d990907933fff12d213d900245f95396d:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTIwZDEyYTA3NjhmMTRjNjE3ZTNhOTc3ZjU0MTc2OGI0OTA0M2MxY2E1ZDY1MDU3MjhkNjRlYjU5OGE0NmFjNSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNGU2YzQ4MjU1MGM2NzY1MTRhNDNlYWY5YTM0YmQzNmRjZWMwNzk2MDQ5MjExMTYzMTI4ODFkNzRhZDc3Zjc0OSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzBjMmVlNTNkOGZlYTE2ODZiZWVjNThhM2E3OGYzNTI5ZTBmMzg3Y2RiNjdiMzhiZDE1MjgzZDZjZDliOWE1NCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNDk1YTM2ZmEwYTk2YjdkN2NmM2UwMTVkNzRjMTcwNmM4MDBjYmUzZDYwZWQzM2Y5ZmQ4YmM2Mjc4YzIxNjc5MyJ9"
         },
         {
-          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts#L1-L29",
-          "version": "repo-lines-v1:sha256:d44124610756d434c9d6315fde0042ae85c77a938fb33383291690c968f2aa3c:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY4NjQ1MGZlNzI0OTgwNzY2YmU0MTQyMTQ4NjI2MWNlM2M1NmFiM2RiMzIyYTAzNzk3ZDRjZmJlZDcxN2YzMjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImY2ZjViNDBiMTU4NDU3ZDE3ODY0ZjIxNzkwNzg2ZGQ1YTJlY2RiNjRiNjZhNjUxZjc4OGQ0ZTI1Y2QzMzAzZDIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/api/video-inbox/index.post.ts#L5-L28",
+          "version": "repo-lines-v1:sha256:25d6ab50fcd6a9cdaee2771c35e5445632154306d2756487bba40cb8cb853a40:eyJzZWxlY3RlZExpbmVDb3VudCI6MjQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjkyNTYyZDE2ZmEzZjcwOTFiODIyZGJlMzIzN2Y3NWQ2NmE2MDhkNzhjZGQ2MDlhOTRjYmJjZmRlNThmODhiNzIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjhlZGJmODM4NzUzNjg5NjZmMzEzYWU2Mzk1MzljNDAzNzAwNDViYTUzZTJlMmNlZTkzYmI2N2Q1ZGExN2I5ODAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImEyZTIyZDM4MjM4YWNiZTNhZjNiNGEyMDI2M2RhMjFiODk3YjEzNWZhZDYyNDcwMTc2MDhhZTg2NTg0Y2RkZmYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjkxNGJhNTMxOWE5ZDU5OGE0ODY2NjdmYWMxYmNmMjUyZDAyNmY3ODg0MGI3MjAxNWE2Y2RjZWIzZmZmZTJmMTYifQ"
         },
         {
-          "resource": "repo://apps/showcase/server/utils/video-inbox.ts#L1-L26",
-          "version": "repo-lines-v1:sha256:9ee788f031fd0bb7513b8180367214f1632e55b374100f0949b62425ed3b7299:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU5ZWMyOWM1ZDE0ZGQzYzc4NDljOTU2MjU2NGM2N2QxZTdkZWNkNGQ1NWZkMTRlMGY0Y2FiYjJiMTM2MjYzNDYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "resource": "repo://apps/showcase/server/utils/video-inbox.ts#L11-L26",
+          "version": "repo-lines-v1:sha256:9bbd7177c9374cc66362626a65fdd57239cfc1ed6305f3bf98d5efdc391809ac:eyJzZWxlY3RlZExpbmVDb3VudCI6MTYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImFjZGQ1YTdiN2QyYzhmNzRkMzQ2MTdkY2RmZjc4YWE3YmYzOTBhZTJiZTA2OTE3MGE3OWY1MWQyYWQyYTM5YjAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImZiNTgwZTk2NGY4M2E0NzNmNDNkNDQzODQ2Mjk0OWQ2OGI1NjAwZmRhNzg3ZjE2Mzc0NWQwMGRlODljYmYzNmEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_0bbe02522b89402881b61bf392938d9c",
+      "statement": "帳號開關預設關閉；啟用後文章仍公開，訪客不顯示已讀控制，登入頁提供密碼登入、重設與變更密碼，server 驗證 Supabase user 及 allowlist。",
+      "evidence": [
+        {
+          "resource": "repo://apps/showcase/pages/index.vue#L54-L57",
+          "version": "repo-lines-v1:sha256:ec45a9ffe3cf7fb27f9a7a3cbb95c50ba0be8a9e089a819c224616aa709331eb:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOWFiNTIyZjQ1YTJkMDk5MTFiZWZhMGFjNjkyZDA2ZWE0YmQ5MzUwMTBjYmM0NDM1NGQ4NTU4Y2ExNTJmMGYxZiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiM2M3ZDdmYjY0OTJlMDFkN2E5MzMzZmM5NzQwMzYwNWJkOTNiYTA1MGM5MzFkYWNmODdlMzU3YzlmNWVjMWYxYSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiYTg3MmMyMTYyMmVlYmU4MmI3N2Q0ZmFjYmI2YTliNTBiODRiZTY2OGM5NDU3NDY0ZjQ2MjQxN2M4ZTYzZTE4YSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTc2MmVjOGNiMThlMjU4YWE4MzAzM2Q1MmU3MWM1ZmU3Njg3MGI0NDk3OTNlOWU0ZjAwMGIwNjgwYjA0OWY1NyJ9"
+        },
+        {
+          "resource": "repo://apps/showcase/pages/login.vue#L32-L60",
+          "version": "repo-lines-v1:sha256:21c9e6dd8f8dd27b5ec3ef95243902fbb1962e759a4150825bde61d572737cee:eyJzZWxlY3RlZExpbmVDb3VudCI6MjksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImNiOGRkM2YwMTcyYWVlNTQ4ZWRmYjkyNjM4ZThiZjg3NWUyNzMzOGRiZmZmNjUxYjA0YTNhNDcxYWNiZmNlNGYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1MjI4NDBlZDVlYzU4YTM2MmYyMGI3MWI4YWViNjc1ZDdlZmI5NzQzOWM5MGMzZjYxNTVhZmVjNjUyODU5NDMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY0ZTdhNjZlNTRkNjUwYmQwNzJhOGFkNDk0YjgwNTVlNzIyYmMxMmRhYjJhYzRkMDJiZDE3OTBiYTM4YmU4NDQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/account-access.ts",
+          "version": "repo-file-v1:sha256:974ec5626f12ab50db5dc2138cf6a9428fc856dd4cd7f154a5c46aa0f7cc2fba"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/account-features.ts#L6-L16",
+          "version": "repo-lines-v1:sha256:a2e2acdea83997a81c1a7c96cfa844cf03ef5fd9fe23505735892ab5fe16c0ae:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQ4Mzg0Mjg3MTA1MzQ5MTVlNTY5YmIxMTE3YWNiNzJlYWUzNDgwYWI5NGRiYjVjZTljMjExYzdmODk2ZThhMWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI5YTU3ODRhYTgwMmYwMjQzMjYyZTY0YzAxOGQzNTY5MTlmNGQ2NzA3MTExMzQ2YmM0ZmY1OWM4ZDA4MDEwZTgiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T13:28:28.405Z"
+    "at": "2026-10-25T16:13:59.896Z"
   }
 }

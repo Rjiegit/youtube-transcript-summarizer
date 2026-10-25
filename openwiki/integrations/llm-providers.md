@@ -4,6 +4,8 @@ title: LLM Providers、選擇與 Failover
 description: 說明 Gemini、OpenAI、Ollama、Codex CLI 的候選資格、加權選擇、provider 呼叫與一次性 transient failover。
 tags: [llm, gemini, openai, ollama, codex, failover]
 sources:
+  - id: openwiki-source-fc48aec9da2b3d8d448354e3
+    resource: repo://apps/whisper_summary/core/prompt.py
   - id: openwiki-source-cd3c19edb3412c855091bcd0
     resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
   - id: openwiki-source-ef820dbbe7cff90830a1c016
@@ -12,16 +14,20 @@ sources:
     resource: repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py
   - id: openwiki-source-25d6d487d3ae6567d7b0397b
     resource: repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-f12c286a8db7af762102db25
+    resource: repo://apps/whisper_summary/scripts/list_models.py
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-5882e8a0d3ce6c6d6fd7381f
     resource: repo://apps/whisper_summary/tests/unit/test_summarizer_service.py
   - id: openwiki-source-e17149958db116451aa12495
     resource: repo://apps/whisper_summary/tests/unit/test_weighted_selection.py
-generated: { by: "codex", at: "2026-09-27T11:42:53.431Z" }
+  - id: openwiki-source-f1b1aacc63642e5304668821
+    resource: repo://readme.md
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-09T15:26:03.952Z
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # LLM Providers、選擇與 Failover
@@ -59,18 +65,22 @@ Selector 每次 request 做一次 weighted random draw；它沒有紀錄已用 R
 
 ## Provider 呼叫
 
-共用 prompt 將 title、transcript 與受限的 creator metadata context 組成學習筆記指令。OpenAI 使用 `OpenAI(...).chat.completions.create`；Gemini 先 configure API key，再建立 `GenerativeModel`；Ollama 使用指定 host、Authorization header 與 client chat。成功後 `last_backend` 與 `last_model_label` 設為實際 provider 及 `provider:model`，worker 再組成 `faster-whisper-<size>+<provider:model>`。
+共用 prompt 將 title、transcript 與受限的 creator metadata context 組成精簡影片摘要指令。OpenAI 使用 `OpenAI(...).chat.completions.create`；Gemini 使用 `google-genai` 的 scoped `genai.Client(api_key=...)` 呼叫 `client.models.generate_content(model=..., contents=...)`，離開 context 時關閉 client；Ollama 使用指定 host、Authorization header 與 client chat。成功後 `last_backend` 與 `last_model_label` 設為實際 provider 及 `provider:model`，worker 再組成 `faster-whisper-<size>+<provider:model>`。
 
 Ollama import 是 optional guard：套件不可用時會保留明確 runtime error，而不是在 module import 階段讓所有其他 provider 無法使用。
 
 Codex CLI 以 `codex exec --ephemeral --ignore-user-config --sandbox read-only --model ... -` 接收 prompt，並讀取 stdout 作為摘要；執行時移除子程序環境中的敏感 credential 變數。`CODEX_TIMEOUT_SECONDS` 預設 900 秒且必須為正整數。非零結束碼或空輸出會使 task 失敗。
+
+共用摘要 prompt 使用「一句話結論 → 核心重點 → 必要補充（選用）」；一般目標 400–700 字，複雜內容可約 1,000 字。
+這是 prompt 指引，程式不硬性截斷；既有摘要不會自動改寫。資訊不足需標示，不加入外部知識。
+`make list-models` 同樣使用 `genai.Client` 的 `models.list()`，缺少 `GOOGLE_GEMINI_API_KEY` 時直接報錯。
 
 ## 一次性 failover
 
 第一次 candidate 失敗時，只有被分類為 transient 的錯誤才會重選一次，且第二次排除原 candidate：
 
 - OpenAI：rate limit、timeout、connection error 或 HTTP 5xx；
-- Gemini：quota/resource exhausted、timeout、temporary unavailable/server 類錯誤；
+- Gemini：`google.genai.errors.APIError` 的 HTTP 429／5xx，以及 httpx timeout／transport error；
 - Ollama：timeout、connection、HTTP 429 或 5xx。
 - Codex CLI：timeout；一般非零結束碼不視為 transient。
 

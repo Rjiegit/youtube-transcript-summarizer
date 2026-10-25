@@ -5,7 +5,7 @@ description: 說明 Python modular monolith、獨立應用、Task API 對 SQLite
 tags: [architecture, dependencies, python, boundaries]
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
+    at: 2026-10-25T16:13:59.896Z
 sources:
   - id: openwiki-source-269e1e25890c094aaa09d0a0
     resource: repo://.docker/Dockerfile
@@ -33,6 +33,8 @@ sources:
     resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-cfa98d1a4968f26a13388580
     resource: repo://apps/whisper_summary/infrastructure/composition.py
+  - id: openwiki-source-e207b6167639ff1973fe1237
+    resource: repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py
   - id: openwiki-source-e3deef680a5ed6126a3e663d
     resource: repo://apps/whisper_summary/infrastructure/media/downloader.py
   - id: openwiki-source-b94cf9b6029f1843e044616d
@@ -61,7 +63,7 @@ sources:
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
 ---
 
 # 模組邊界與外部依賴
@@ -80,7 +82,7 @@ FastAPI 以 feature routers 組裝 HTTP surface；Streamlit、同步 CLI、proce
 
 `apps/whisper_summary/pyproject.toml` 將 Python 依賴分成 `api`、`ui`、`worker` 與 `dev` groups；本機預設安裝全部 groups，Docker targets 則只安裝各自需要的 group。Nuxt Showcase 是獨立 npm application，使用 `apps/showcase/package.json` 與 `package-lock.json` 管理依賴；package scripts 包含 dev/build/preview、Vitest、SSR 驗證與每週洞察內容檢查，dev/build/test 前置流程會先建置週報內容。`yt-dlp` 是 downloader 透過 subprocess 呼叫的外部 executable，由 Makefile／Docker 流程安裝，與 Python dependency resolution 分開。
 
-轉錄 adapter 的預設路徑使用 `faster_whisper.WhisperModel`，同時保留 `whisper.load_model` 的 legacy method。API schema 直接使用 Pydantic，而 Pydantic 目前由 FastAPI dependency 帶入；若未來要獨立使用 schemas，應考慮升格為 direct API dependency。Worker group 另包含 LangGraph，供選用的圖式 orchestration 使用。
+轉錄 adapter 使用 `faster_whisper.WhisperModel`，已移除 `whisper.load_model` 的 legacy method 與同名 `whisper` 套件。Gemini 使用 `google-genai` client，仍沿用既有 API key 與模型設定。API schema 直接使用 Pydantic，而 Pydantic 目前由 FastAPI dependency 帶入；若未來要獨立使用 schemas，應考慮升格為 direct API dependency。Worker group 另包含 LangGraph，供選用的圖式 orchestration 使用。
 
 ## 驗證邊界
 
@@ -90,4 +92,4 @@ Python 的 unit／integration 測試與 fixtures 放在 `apps/whisper_summary/te
 
 相關閱讀：[系統架構](system-overview.md)、[影片收件流程](../workflows/video-inbox.md)、[開發與測試](../operations/development-and-testing.md)。
 
-Nuxt production dependencies 包含 Nuxt、markdown-it 與 opencc-js；opencc-js 提供字元轉換支援標題繁簡搜尋。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 放在 devDependencies；Python dev group 包含 flake8 與 httpx。
+Nuxt production dependencies 包含 Nuxt、markdown-it、opencc-js 與 `@supabase/supabase-js`；opencc-js 提供字元轉換支援標題繁簡搜尋。TypeScript、Vitest、jsdom、Vue Test Utils 與 Vite Vue plugin 放在 devDependencies；Python dev group 包含 flake8 與 httpx。

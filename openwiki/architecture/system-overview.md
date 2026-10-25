@@ -3,9 +3,6 @@ type: architecture
 title: 系統架構與端到端資料流
 description: 說明任務輸入、Supabase 影片收件、本機 Task API、專用 worker 與獨立前端應用的資料流。
 tags: [architecture, pipeline, api, worker, nuxt]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-edc748d2ffa8cac498e9a351
     resource: repo://apps/showcase/content/weekly-insights/series.json
@@ -23,6 +20,8 @@ sources:
     resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-7c8ae95541eb7e7de0873e3d
     resource: repo://apps/showcase/server/utils/notion.ts
+  - id: openwiki-source-3b0efe03f5b86982327fa144
+    resource: repo://apps/showcase/server/utils/read-sync-config.ts
   - id: openwiki-source-1733e19cd888bc4a90558aa4
     resource: repo://apps/whisper_summary/apps/api/dependencies.py
   - id: openwiki-source-e6eed307c821ffad09957373
@@ -49,12 +48,19 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+  - id: openwiki-source-64648ff2faae78d736102c15
+    resource: repo://docs/operations/showcase-account-auth.md
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 系統架構與端到端資料流
 
 本 repository 的三個應用位於頂層 `apps/`：`apps/whisper_summary/` 是 Python modular monolith，另有 Browser Extension 與 Nuxt Showcase。Python package 的 import 名稱仍是 `whisper_summary`，提供 FastAPI、Streamlit、同步 CLI、dedicated processing worker、RSS monitor 與雲端影片收件 bridge；Extension 呼叫 FastAPI。Showcase 的文章路徑由 Nitro server routes 讀取 Notion，受保護的 `/submit` 路徑則把影片網址送進 Supabase Queue。
+
+Showcase 可用 `SHOWCASE_ACCOUNT_AUTH_ENABLED` 啟用受邀 Supabase 帳號模式，將影片提交與個人已讀同步一起切換為帳號授權；文章仍公開。關閉時沿用個人提交碼與同步碼。細節見[Showcase 使用體驗](../frontend/showcase-experience.md)。
 
 ## Runtime
 

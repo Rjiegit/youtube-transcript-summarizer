@@ -3,20 +3,17 @@ type: frontend-guide
 title: Nuxt Showcase 使用體驗與資料快取
 description: 說明 Showcase 的文章瀏覽、影片提交、已讀狀態與資料快取行為。
 tags: [nuxt, showcase, swr, caching, ux]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-369da753c512075845679e7e
     resource: repo://apps/showcase/components/HighlightedTitle.vue
-  - id: openwiki-source-bb92958ed21ee9cf0accb45d
-    resource: repo://apps/showcase/components/ReadSyncControl.vue
   - id: openwiki-source-6b1be9f1b66868fbfe965160
     resource: repo://apps/showcase/composables/useReadResults.ts
   - id: openwiki-source-8f9c3fc6564a596df49d04e9
     resource: repo://apps/showcase/pages/index.vue
   - id: openwiki-source-3d0ab990c23027fbcac5d169
     resource: repo://apps/showcase/pages/insights/index.vue
+  - id: openwiki-source-8420db110cf517b097372f83
+    resource: repo://apps/showcase/pages/login.vue
   - id: openwiki-source-714810166c8a4a2d54858dbf
     resource: repo://apps/showcase/pages/results/%5Bid%5D.vue
   - id: openwiki-source-36cce2c34e32cbad2ec20271
@@ -29,6 +26,10 @@ sources:
     resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
+  - id: openwiki-source-ddee58d6c29e9dfd1d7bb1f1
+    resource: repo://apps/showcase/server/utils/account-access.ts
+  - id: openwiki-source-4656e5df44756fe35962547b
+    resource: repo://apps/showcase/server/utils/account-features.ts
   - id: openwiki-source-51d27e8448c6ca65ff1ee504
     resource: repo://apps/showcase/server/utils/showcase-errors.ts
   - id: openwiki-source-acc677c60f44374b1f2d50cf
@@ -45,7 +46,10 @@ sources:
     resource: repo://apps/showcase/utils/title-search.ts
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # Nuxt Showcase 使用體驗與資料快取
@@ -56,9 +60,9 @@ Nuxt Showcase 的文章區是成果的唯讀瀏覽介面。首頁由 server-side
 
 ## 影片提交入口
 
-`/submit` 表單收集 YouTube 網址與個人提交碼。第一次送出前，瀏覽器以 `crypto.randomUUID()` 建立 `submission_id`，將識別碼及網址存入 `localStorage`；回應未確認或重新整理時沿用同一筆待確認提交。成功後清除暫存及表單；若瀏覽器無法保存待確認提交，表單不發送，避免失去可重試的識別碼。提交碼只留在輸入欄位，不寫入 `localStorage`。
+`/submit` 表單收集 YouTube 網址；預設模式另輸入個人提交碼，帳號模式則需登入受邀帳號。第一次送出前，瀏覽器以 `crypto.randomUUID()` 建立 `submission_id`，將識別碼及網址存入 `localStorage`；回應未確認或重新整理時沿用同一筆待確認提交。成功後清除暫存及表單；若瀏覽器無法保存待確認提交，表單不發送，避免失去可重試的識別碼。提交碼只留在輸入欄位，不寫入 `localStorage`。
 
-提交 API 驗證個人碼、精確 Origin 與 YouTube URL，再由 Showcase server 呼叫 Supabase 的 submit RPC；網站不直接建立本機任務。使用者清除待確認提交只會清掉瀏覽器暫存，已送到 Queue 的訊息仍可能被本機接收。後續資料流與去重見[影片收件流程](../workflows/video-inbox.md)。
+提交 API 依模式驗證個人碼或受邀帳號，並檢查精確 Origin 與 YouTube URL，再由 Showcase server 呼叫 Supabase 的 submit RPC；網站不直接建立本機任務。使用者清除待確認提交只會清掉瀏覽器暫存，已送到 Queue 的訊息仍可能被本機接收。後續資料流與去重見[影片收件流程](../workflows/video-inbox.md)。
 
 ## 列表與詳細頁
 
@@ -74,11 +78,23 @@ Overview 也可顯示固定的話題演變紀錄：每個話題列出已核對�
 
 ## 已讀狀態與選用同步
 
-已讀紀錄以 Nuxt `useState` 保留 session 記憶體狀態，並在 browser 可用時同步到 `localStorage`；SSR 階段不讀取 browser API。資料會驗證 shape、合併跨 navigation 狀態，並只保留最近 500 筆。storage quota 或 privacy mode 失敗不阻止本次 session 的 in-memory 行為。
+關閉帳號模式時，已讀紀錄以 Nuxt `useState` 保留 session 記憶體狀態，並在 browser 可用時同步到 `localStorage`；SSR 階段不讀取 browser API。資料會驗證 shape、合併跨 navigation 狀態，並只保留最近 500 筆。storage quota 或 privacy mode 失敗不阻止本次 session 的 in-memory 行為。
 
-首頁提供前往 `/settings/sync` 的入口，由該頁的 `ReadSyncControl` 輸入個人同步碼連結裝置。取得 HttpOnly session 後，瀏覽器透過 Nuxt 私人 API 與 Upstash 同步 read/unread；有效 session 會在頁面載入時自動恢復，遠端故障時保留本機狀態。詳細的驗證、合併與儲存語意見[跨裝置已讀同步](read-state-sync.md)。
+舊模式首頁提供前往 `/settings/sync` 的入口，由該頁的 `ReadSyncControl` 輸入個人同步碼連結裝置。取得 HttpOnly session 後，瀏覽器透過 Nuxt 私人 API 與 Upstash 同步 read/unread；有效 session 會在頁面載入時自動恢復，遠端故障時保留本機狀態。詳細的驗證、合併與儲存語意見[跨裝置已讀同步](read-state-sync.md)。
 
 首頁在 mounted、activated、focus、重新變為 visible、返回 list route，以及 BFCache `pageshow` 時重新同步已讀狀態。這些事件也會在 server response 已超過自己的 `cache_ttl_seconds` 時觸發資料刷新。
+
+## 受邀帳號登入
+
+`SHOWCASE_ACCOUNT_AUTH_ENABLED` 預設關閉；啟用時一起切換影片提交與個人已讀同步。
+文章、搜尋與分享預覽仍公開；訪客不顯示已讀控制，也不記錄已讀。
+`/login` 使用 Supabase Email＋密碼登入，提供邀請後設定密碼、重設與變更密碼；沒有公開註冊表單。
+Server 以 access token 驗證 user，再以 `SHOWCASE_ALLOWED_USER_IDS` 限制可用帳號。
+缺少必要設定時功能不可用，不退回舊個人碼授權。
+
+帳號已讀使用 `account:<user ID>` 隔離資料，成功回應後更新畫面；登出或切換帳號清空原帳號狀態。
+不自動遷移舊 localStorage／共用同步資料，也不提供離線已讀操作。
+設定與受邀流程見[帳號操作手冊](../../docs/operations/showcase-account-auth.md)。
 
 ## Server SWR cache
 
@@ -110,4 +126,4 @@ Browser 端 stale refresh 也會去重同時請求。若 forced refresh 失敗�
 
 ## 操作手冊與提交邊界
 
-設定、分享預覽及部署核對見 [Showcase 操作手冊](../../docs/operations/showcase.md)。影片提交 API 驗證個人提交碼與 Origin，透過受限 RPC 寫入 Supabase Queue，回應為 private、no-store；安裝與輪替見 [收件匣手冊](../../docs/video-inbox.md)。
+設定、分享預覽及部署核對見 [Showcase 操作手冊](../../docs/operations/showcase.md)。影片提交 API 依模式驗證個人提交碼或受邀帳號，並檢查 Origin，透過受限 RPC 寫入 Supabase Queue，回應為 private、no-store；安裝與輪替見 [收件匣手冊](../../docs/video-inbox.md)。

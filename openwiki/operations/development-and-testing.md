@@ -12,6 +12,10 @@ sources:
     resource: repo://AGENTS.md
   - id: openwiki-source-ec214e818e93e527ce43036b
     resource: repo://apps/showcase/AGENTS.md
+  - id: openwiki-source-98cb0d4f43caa7b04531e691
+    resource: repo://apps/showcase/tests/account-access.test.ts
+  - id: openwiki-source-5f78063a6b9c89e96319bee9
+    resource: repo://apps/showcase/tests/account-read-results.test.ts
   - id: openwiki-source-7a6b7883faa40aa2f71237b7
     resource: repo://apps/showcase/tests/highlighted-title.test.ts
   - id: openwiki-source-40202183da1fe23aacead855
@@ -28,6 +32,8 @@ sources:
     resource: repo://apps/showcase/tests/showcase-notion-timeout.test.ts
   - id: openwiki-source-dec663b9989d0cfd47f8817c
     resource: repo://apps/showcase/tests/showcase-results-api.test.ts
+  - id: openwiki-source-ce97ce65ba2cdc2b57422193
+    resource: repo://apps/showcase/tests/showcase-transform.test.ts
   - id: openwiki-source-218f09975f8887eb7efa96c4
     resource: repo://apps/showcase/tests/title-search.test.ts
   - id: openwiki-source-c4b4f6bb443d3d8efa5f9b95
@@ -42,16 +48,22 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_discord_notifier.py
   - id: openwiki-source-d28dcebc0da3aee83d630395
     resource: repo://apps/whisper_summary/tests/unit/test_http_task_queue.py
+  - id: openwiki-source-f9815c8cd0f70af575986537
+    resource: repo://apps/whisper_summary/tests/unit/test_logger.py
   - id: openwiki-source-5d2812b91933bc74fcb0c6d9
     resource: repo://apps/whisper_summary/tests/unit/test_processing_engines.py
+  - id: openwiki-source-5882e8a0d3ce6c6d6fd7381f
+    resource: repo://apps/whisper_summary/tests/unit/test_summarizer_service.py
+  - id: openwiki-source-df5dbc2cf306842de7bf1634
+    resource: repo://apps/whisper_summary/tests/unit/test_summary_storage_notion.py
   - id: openwiki-source-f317ee207e1653d2033c81a4
     resource: repo://CONTRIBUTING.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
-generated: { by: "codex", at: "2026-10-10T06:45:07.968Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-10T06:45:07.968Z
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 開發規則與測試策略
@@ -62,7 +74,7 @@ verified:
 - `apps/whisper_summary/services/` 放 use case 與流程 orchestration。
 - `apps/whisper_summary/infrastructure/` 放 LLM、媒體、通知、儲存與 SQLite/Notion adapters。
 - `apps/whisper_summary/apps/` 是 FastAPI、Streamlit、CLI、RSS monitor 等執行入口；入口負責輸入輸出與 use case 組裝。
-- `apps/showcase/` 是獨立的 Nuxt 3 展示站，使用自己的 TypeScript、Vue 與 Vitest 規則。
+- `apps/showcase/` 是獨立的 Nuxt 4 展示站，使用自己的 TypeScript、Vue 與 Vitest 規則。
 
 新增抽象放在 `apps/whisper_summary/domain/interfaces/`，新增 persistence adapter 放在 `apps/whisper_summary/infrastructure/persistence/`。主要行為應留在 service 層，不要把流程邏輯塞進 route 或 UI handler。
 
@@ -110,6 +122,13 @@ PYTHONPATH=apps uv run --project apps/whisper_summary python -m unittest whisper
 ```bash
 npm --prefix apps/showcase run test -- tests/showcase-detail-concurrency.test.ts tests/showcase-notion-timeout.test.ts tests/showcase-detail-api.test.ts
 ```
+
+### 新增行為的 focused checks
+
+`test_logger.py` 檢查 JSON 可解析、臺北時間跨日換算、換行跳脫與例外堆疊；`test_summarizer_service.py` 與 `test_list_models.py` 檢查新 Gemini scoped client、錯誤分類、模型與精簡 prompt。
+`test_summary_storage_notion.py` 與 Showcase `showcase-transform.test.ts` 驗證 Markdown 跨 rich_text chunks 與舊 paragraph chunks 的相容性。
+
+帳號模式測試包含 `account-access.test.ts`、`account-features.test.ts`、`account-read-results.test.ts` 與 `account-read-space.test.ts`，涵蓋 allowlist、訪客、帳號切換及請求排序；假 token／mock Supabase 不代表已驗證真實邀請、重設信或跨裝置服務。
 
 ## Commit 與文件規則
 

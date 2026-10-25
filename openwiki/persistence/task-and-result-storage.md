@@ -3,9 +3,6 @@ type: persistence-guide
 title: 任務、鎖與結果持久化
 description: 比較 Supabase Queue、SQLite 與 Notion 的責任，並說明收件去重、task lease、artifacts 和摘要發布。
 tags: [architecture, persistence, sqlite, notion, locking, artifacts]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-edc748d2ffa8cac498e9a351
     resource: repo://apps/showcase/content/weekly-insights/series.json
@@ -37,7 +34,12 @@ sources:
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-518ecd7240447ddd14177fb5
     resource: repo://apps/whisper_summary/services/tasks/video_inbox.py
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+  - id: openwiki-source-df5dbc2cf306842de7bf1634
+    resource: repo://apps/whisper_summary/tests/unit/test_summary_storage_notion.py
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 任務、鎖與結果持久化
@@ -85,11 +87,13 @@ Supabase pgmq `video_inbox` 只暫存網站已提交、尚未確認寫入本機�
 
 `NotionDB` 把 database page 當作 task record，以 URL、Name、Status 等 properties 建立與更新。它可供 CLI/API 選為 queue backend，但 task acquisition 與 global lock 沒有 SQLite 的原子性；並行 worker 可能取得同一 task，因此文件與部署都必須維持單 worker 假設。
 
-`SummaryStorage` 是另一個用途：pipeline 不論 task backend 為何，都會建立承載摘要的 Notion page，包含 Title、URL、Model、預設 false 的 Public 與 paragraph children。成功回傳的 page id 寫回 task，供 Streamlit、Discord link 與後續查詢使用。Notion write 失敗是 pipeline failure，不會被本機 Markdown 成功掩蓋。
+`SummaryStorage` 是另一個用途：pipeline 不論 task backend 為何，都會建立承載摘要的 Notion page，包含 Title、URL、Model、預設 false 的 Public 與 paragraph children。成功回傳的 page id 寫回 task，供 Streamlit、Discord link 與後續查詢使用。摘要文字 chunks 每 100 段組成一個 paragraph 的 rich_text array，避免在 chunk 邊界插入多餘段落。Notion write 失敗是 pipeline failure，不會被本機 Markdown 成功掩蓋。
 
 Showcase 每週洞察是獨立的內容發布資料：週報 JSON/Markdown 位於 `apps/showcase/content/weekly-insights/`，建置時驗證並打包至 Nuxt registry。它不是 task queue、summary artifact 或 Notion page 的另一種持久化副本。
 
 系列 JSON 可選擇包含 `topicTracks`，每筆保存穩定 slug、標籤、既有分類 ID、變化與後續觀察文字，以及 `{ week, summary }` 週次證據。建置 loader 只在全部週報已發布時輸出話題軌跡，並要求分類有效、觀察週已結束且資料完整；輸出採白名單欄位並依週排序。這些是整理後的質性內容，不會改動每週統計或 task 持久化。
+
+Showcase 個人已讀資料的 Redis namespace、帳號隔離與舊資料遷移限制見[跨裝置已讀同步](../frontend/read-state-sync.md)，與 task／receipt 資料分開管理。
 
 ## 本機 artifacts
 

@@ -3,9 +3,6 @@ type: operations-guide
 title: 設定、執行與部署
 description: 整理 Python 與 Nuxt 的環境設定、影片收件、Docker topology、診斷與秘密管理。
 tags: [operations, configuration, docker, deployment]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-6b7ed5378873fbdfb150c3d7
     resource: repo://.betterleaks-pre-commit.toml
@@ -27,6 +24,8 @@ sources:
     resource: repo://apps/showcase/server/api/showcase/results.get.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
+  - id: openwiki-source-ddee58d6c29e9dfd1d7bb1f1
+    resource: repo://apps/showcase/server/utils/account-access.ts
   - id: openwiki-source-bae0c48de5dc6743f6dddd59
     resource: repo://apps/showcase/server/utils/config.ts
   - id: openwiki-source-3b0efe03f5b86982327fa144
@@ -45,6 +44,8 @@ sources:
     resource: repo://apps/whisper_summary/apps/workers/video_inbox_bridge.py
   - id: openwiki-source-445a1c8f48d3b2e4f898d6be
     resource: repo://apps/whisper_summary/core/config.py
+  - id: openwiki-source-69ada802a6ac079b79c78df7
+    resource: repo://apps/whisper_summary/core/logger.py
   - id: openwiki-source-cd3c19edb3412c855091bcd0
     resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
   - id: openwiki-source-25d6d487d3ae6567d7b0397b
@@ -57,15 +58,22 @@ sources:
     resource: repo://apps/whisper_summary/services/pipeline/processing_runner.py
   - id: openwiki-source-e201e686a785f09b6d899f0b
     resource: repo://compose.yaml
+  - id: openwiki-source-f317ee207e1653d2033c81a4
+    resource: repo://CONTRIBUTING.md
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
+  - id: openwiki-source-f1b1aacc63642e5304668821
+    resource: repo://readme.md
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
   - id: openwiki-source-00403ba8c9deb95d36c82af7
     resource: repo://supabase/migrations/202610170001_video_inbox.sql
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 設定、執行與部署
@@ -90,7 +98,7 @@ processing lock 管理端點需 `PROCESSING_LOCK_ADMIN_TOKEN`。`make clear-proc
 
 ### Showcase 影片收件設定
 
-收件功能需在 Supabase 專案套用 `supabase/migrations/202610170001_video_inbox.sql`，建立 pgmq `video_inbox`、兩種用途的雜湊憑證及 submit/read/delete RPC。Showcase server-only 設定包含 `VIDEO_INBOX_ACCESS_TOKEN`、`VIDEO_INBOX_ORIGIN`、`VIDEO_INBOX_SUPABASE_URL`、`VIDEO_INBOX_PUBLISHABLE_KEY` 和 `VIDEO_INBOX_SUBMIT_TOKEN`；未配置完整時提交 API 拒絕工作。瀏覽器只持有個人提交碼，不取得 Supabase submit/receiver token。
+收件功能需在 Supabase 專案套用 `supabase/migrations/202610170001_video_inbox.sql`，建立 pgmq `video_inbox`、兩種用途的雜湊憑證及 submit/read/delete RPC。Showcase server-only 設定包含 `VIDEO_INBOX_ACCESS_TOKEN`、`VIDEO_INBOX_ORIGIN`、`VIDEO_INBOX_SUPABASE_URL`、`VIDEO_INBOX_PUBLISHABLE_KEY` 和 `VIDEO_INBOX_SUBMIT_TOKEN`；未配置完整時提交 API 拒絕工作。舊模式瀏覽器持有個人提交碼；帳號模式改用 Supabase access token。瀏覽器不取得 Queue submit/receiver token。
 
 本機 `make video-inbox-bridge` 另需 Supabase URL、publishable key、`VIDEO_INBOX_RECEIVER_TOKEN`、`TASK_API_BASE_URL` 與 API 使用的 `PROCESSING_WORKER_TOKEN`（或既有 admin token fallback）。bridge 不設定 SQLite DB 路徑；在收件流程中由本機 Task API 開啟原有 `data/tasks.db`，交易式寫入任務與 receipt。`VIDEO_INBOX_IDLE_SECONDS` 預設 300 秒，`VIDEO_INBOX_BATCH_LIMIT` 預設 20；`TASK_CACHE_TTL_SECONDS` 在 API 端決定網址快取政策。API、bridge 與 processing worker 需分別啟動；目前 Compose 沒有 bridge service。安裝、憑證輪替與雲端驗收依[收件匣手冊](../../docs/video-inbox.md)操作，資料流見[影片收件流程](../workflows/video-inbox.md)。
 
@@ -122,15 +130,32 @@ SHOWCASE_BASE_URL=https://knowledge.example.com
 
 Showcase 設定優先序為 runtime config，其次標準 `NOTION_*`/`SHOWCASE_*`，最後相容用的 `NUXT_*`。空字串視為未設定；completed status 預設 `Completed`，cache TTL 的無效或非正數值回退 3600 秒。production list route 保留同一 TTL 的 Nitro SWR，但 route rule 不再設定固定 Cache-Control header；列表與詳情 handler 仍產生成功回應的 public s-maxage／stale-while-revalidate 標頭，避免固定規則覆蓋錯誤的 no-store。
 
-Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 僅包含公開的 site URL、build date 與 commit SHA。影片收件匣的提交碼、Supabase 設定與 submit token 也位於 private runtime config。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
+Notion token/database id、status property、completed value，以及選用同步的 Upstash token、個人同步碼與 session secret 位於 private runtime config；public config 包含 site URL、build date、commit SHA 與帳號開關；啟用帳號模式時另提供 Supabase URL 與 publishable key，allowlist 仍只在 server。影片收件匣的提交碼、Supabase 設定與 submit token 也位於 private runtime config。build date 未指定時使用 Asia/Taipei 日期；commit SHA 依 Vercel、Showcase、GitHub 等變數依序 fallback。
 
-跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
+關閉帳號模式時，跨裝置已讀同步需同時設定 `READ_STATE_SYNC_ENABLED`、`UPSTASH_REDIS_REST_URL`、`UPSTASH_REDIS_REST_TOKEN`、`READ_STATE_SYNC_ACCESS_TOKEN` 和 `READ_STATE_SYNC_SESSION_SECRET`；`READ_STATE_SYNC_SPACE_ID` 預設 `personal`。設定細節與本機降級行為見[跨裝置已讀同步](../frontend/read-state-sync.md)。
 
 `npm run check-env` 輸出設定來源、key 是否存在，以及 completed status 和 cache TTL 的解析字串，不輸出 Notion secret value。它讀取 `apps/showcase/.env`，且不覆寫既有 process environment；`make showcase` 則會 export 該檔案的值。check-env 是獨立程序，執行成功不會把讀到的環境傳給後續 `npm run dev`。公開 diagnostics 與 health API 已移除；check-env 也不能證明已部署 runtimeConfig 正確或 Notion 權限可用。部署後請透過平台設定與 server log 排錯。
 
 Showcase 對每次 Notion HTTP 請求設定固定 5 秒 timeout，包含 schema、query、page 與每次 blocks 分頁／子內容讀取；整篇文章的累計時間仍可能超過 5 秒。後端不自動重試；已有成功快取時保留舊資料，沒有快取時回傳 502，後續請求可重新嘗試。詳細頁的三種初始讀取會平行開始，見[Notion 資料整合](../integrations/notion-and-showcase.md)。
 
 週報內容的整理、私人 checkpoint 與 registry 建置見[每週回顧整理與內容發布流程](../workflows/weekly-insights.md)；Streamlit 的直接 repository 存取與操作歷史見[Streamlit 任務操作與狀態導覽](../frontend/streamlit-console.md)。
+
+### 受邀帳號模式
+
+`SHOWCASE_ACCOUNT_AUTH_ENABLED` 預設 false；true 時一次切換登入、影片提交與個人已讀同步。
+需設定 `SHOWCASE_SUPABASE_URL`、`SHOWCASE_SUPABASE_PUBLISHABLE_KEY`、server-only `SHOWCASE_ALLOWED_USER_IDS`，以及已讀儲存的 Upstash URL/token。
+帳號開關會自動啟用同步，不需舊 `READ_STATE_SYNC_ENABLED`、同步碼或 session secret；缺少配置不退回舊模式。
+影片 Queue 的 server-only submit token 與精確 Origin 設定仍需要。
+開關在 build／部署時讀取，變更後重新部署；先於 Supabase 關閉公開註冊、邀請帳號並設定 `/login` redirect。
+舊已讀資料不自動遷移，詳細操作見[帳號手冊](../../docs/operations/showcase-account-auth.md)。
+
+### 依賴更新與 JSON Log
+
+Gemini 改用 `google-genai==2.33.0`，轉錄統一為 faster-whisper；更新 checkout 後重新 `uv sync --project apps/whisper_summary --frozen --no-install-project`，Docker worker 需重建 image。
+音訊下載使用 `bestaudio/best`，保留來源格式、無獨立音訊才退回影片。
+共用 `whisper_summary.core.logger` 每行輸出 JSON，包含 `timestamp`、`level`、`message`；`exception()` 另含 `exception` 堆疊。
+時間固定 `Asia/Taipei`，例如 `2026-10-25T21:17:24.470+08:00`，精確到毫秒，不依賴主機 TZ。
+第三方、標準 logging 與直接 print 不會自動轉換；bridge 使用標準 logging，因此也不套用此格式。既有文字 Log 解析工具需調整。
 
 ## Betterleaks 掃描設定
 

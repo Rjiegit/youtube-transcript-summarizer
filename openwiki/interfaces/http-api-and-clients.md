@@ -3,14 +3,15 @@ type: interface-guide
 title: HTTP API 與客戶端整合
 description: 說明 FastAPI task、worker、RSS 與影片收件契約，以及 Showcase 提交 API 的邊界。
 tags: [api, fastapi, clients, rss, processing-lock, video-inbox]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
   - id: openwiki-source-2f2ad998e7e5048be4a2f79c
     resource: repo://apps/showcase/pages/submit.vue
+  - id: openwiki-source-333b4aaecf4c25dcc12b6da4
+    resource: repo://apps/showcase/server/api/account/session.get.ts
+  - id: openwiki-source-9f5333e2cc4389f80938f0f7
+    resource: repo://apps/showcase/server/api/read-sync/session.post.ts
   - id: openwiki-source-8de160800c7fe6a0417a5cac
     resource: repo://apps/showcase/server/api/showcase/insights/%5Bstart%5D.get.ts
   - id: openwiki-source-f987324e0612a557c62a85fb
@@ -21,6 +22,10 @@ sources:
     resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
   - id: openwiki-source-98886cf9c4725ca201459fa1
     resource: repo://apps/showcase/server/plugins/showcase-error-cache.ts
+  - id: openwiki-source-ddee58d6c29e9dfd1d7bb1f1
+    resource: repo://apps/showcase/server/utils/account-access.ts
+  - id: openwiki-source-0a3a0e5a5d4a4438ab28921a
+    resource: repo://apps/showcase/server/utils/read-sync-server.ts
   - id: openwiki-source-1733e19cd888bc4a90558aa4
     resource: repo://apps/whisper_summary/apps/api/dependencies.py
   - id: openwiki-source-8a8f27feb31a478f83017412
@@ -49,7 +54,10 @@ sources:
     resource: repo://apps/whisper_summary/services/tasks/video_inbox.py
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # HTTP API 與客戶端整合
@@ -68,9 +76,17 @@ generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 
 ## 雲端影片收件 API
 
-Showcase 的 `POST /api/video-inbox` 接收 `submission_id` 與 YouTube URL；Nitro server 驗證個人提交碼、精確 Origin 和 URL，再以 server-only submit token 呼叫 Supabase `video_inbox_submit` RPC。缺少設定時拒絕提交；上游失敗對外回 503，瀏覽器保留同一 `submission_id` 重試。
+Showcase 的 `POST /api/video-inbox` 接收 `submission_id` 與 YouTube URL；Nitro server 依模式驗證個人提交碼或受邀帳號，再檢查精確 Origin 和 URL，再以 server-only submit token 呼叫 Supabase `video_inbox_submit` RPC。缺少設定時拒絕提交；上游失敗對外回 503，瀏覽器保留同一 `submission_id` 重試。
 
 本機 bridge 以 receiver token 呼叫 Supabase `video_inbox_read`，再以既有 `X-Worker-Token` 向本機 `POST /video-inbox/messages` 傳入包含 `msg_id` 和 `message` 的 Queue envelope。API 驗證 worker token，以 SQLite 交易持久化 task 與 receipt；無效訊息先寫本機 quarantine，兩者成功時回 `outcome: accepted|quarantined`。未設定 worker token 回 503，缺少／錯誤 token 回 401／403；SQLite 錯誤回 503。bridge 只有收到有效的成功 outcome 才呼叫 `video_inbox_delete`，HTTP 或解析錯誤時保留雲端訊息待重送。既有 `POST /tasks` 沒有雲端 submission receipt 的契約，因此 bridge 使用專用端點。詳見[影片收件流程](../workflows/video-inbox.md)。
+
+## Showcase 帳號與已讀 API
+
+`SHOWCASE_ACCOUNT_AUTH_ENABLED=true` 時，`GET /api/account/session` 驗證 Bearer token，回傳受邀帳號 `userId`；缺少帳號設定回 503，缺少／無效 token 回 401，不在 allowlist 回 403。
+`POST /api/video-inbox` 使用同一帳號驗證，舊 `x-video-inbox-token` 不再授權，Origin 仍須精確匹配。
+`GET /api/read-state` 與 `POST /api/read-state/mutations` 依驗證 user ID 存取 `account:<user ID>`，不接受 client 指定 namespace。
+私人 API 採 `private, no-store`；帳號模式的舊同步碼 session POST 回 410。關閉帳號模式時，已讀 API 沿用舊 HMAC cookie 授權。
+詳見[已讀同步](../frontend/read-state-sync.md)與[帳號操作手冊](../../docs/operations/showcase-account-auth.md)。
 
 ## Worker queue 與 lease API
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:c1e2f5d57cd81b9293816b1636f597752379cc157752a9d61e8f2ee92b81b3d0",
+  "pageVersion": "sha256:8841ae6463b955bde90b398460dbeb9ba7d9216696035630d1297d4d6a9a6c40",
   "claims": [
     {
       "id": "claim_f60d99543e014db3873ccc8adea4841f",
@@ -18,7 +18,7 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py",
-          "version": "repo-file-v1:sha256:d2080f5dbb71509a20b40905f64bbb0b64296c618a3504f0879013fc93fd23eb"
+          "version": "repo-file-v1:sha256:2206d739b7ed57ae28b965d039954c709c9aafd876749196547a64640aeb527c"
         },
         {
           "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L78-L86",
@@ -70,11 +70,11 @@
     },
     {
       "id": "claim_9c9ac40d14754a00a01e7b39d01fd0ea",
-      "statement": "Transient分類涵蓋OpenAI rate limit/timeout/connection/5xx、Gemini quota/timeout/server類錯誤與Ollama timeout/connection/429/5xx。",
+      "statement": "Transient 分類包含 OpenAI rate limit/timeout/connection/5xx、Gemini APIError 429/5xx 與 httpx timeout/transport error、Ollama timeout/connection/429/5xx。",
       "evidence": [
         {
-          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L195-L247",
-          "version": "repo-lines-v1:sha256:d8549bc54e7f0aa70f78e3084e94594d5871687221a0cbea9e766a9eb9ca4e10:eyJzZWxlY3RlZExpbmVDb3VudCI6NTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImM0YmQyMGYzZTBlMWYwZTdjZDYzMWJiNDU2ZDg1MzZjNDQ0N2QyYzU4NjFkMjQ5NDFhOWFlOWY1Nzc0ZDJiM2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU2ZjRjYmUwZjAxYzg3NGM5NWMyNTZhNjllNTIwNzVhOTI4MjZiYTdhYWMyNDQ2ZDcxNzNjZjJmN2Y4MjhhNDUiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImNlNzQ0ZTdmNTA5YzI2MDdjNmFmNTgxMDA5NDc2YzdkMDQ2NmZhMzI2ZmEyYjgyYWVjMTUwY2Q3NjRmZjdkMjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjY4MjY3NmQzYzM1YzViZWM5NWE1MGQxNTdiYTZmM2M2NzEwMGRiYThhNDlmZjMxYmE3OWFhNDU2YWExYWJkZjcifQ"
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L270-L312",
+          "version": "repo-lines-v1:sha256:eacdf017262edf9c9710192094bd93aa7afbb81d3325fc20501494da3e73a5cf:eyJzZWxlY3RlZExpbmVDb3VudCI6NDMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjMzYmVmZGIzMTQ0OTQ3NmI1NDU1YmFkNDU1OTZlNmVmMGY4M2MxNWNiNDBlYTUyMjJjODE2NzU4ZTRjZDM3ZmYiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA1ZGFhNjU5ZDM4YWNhZWNiNTkzZDg4MDEyOGQ1YTg3YjEzOWU4NjczMmQ2ZWU4ODhmYjQ2NTRmYjljMjc3MTgiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY1OTk1OGQ3NWYyODc0NTdmZGM1YmMzYzFhZGVhZThlYTFlMjU4ZTUwODQwZDIxYzAwNGU3OTNiM2M4MGJiNjEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjgyNDM5ODlkMTdmZTMwNTIyYTljYzVlNDZjMmM4N2IyMzk2YzI5MGE3N2M5MzU5MTJjNjQwODA2NDExNjljNmQifQ"
         }
       ]
     },
@@ -130,17 +130,45 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py",
-          "version": "repo-file-v1:sha256:d2080f5dbb71509a20b40905f64bbb0b64296c618a3504f0879013fc93fd23eb"
+          "version": "repo-file-v1:sha256:2206d739b7ed57ae28b965d039954c709c9aafd876749196547a64640aeb527c"
         },
         {
           "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L326-L330",
           "version": "repo-lines-v1:sha256:ce6c55a46de8c5bed2fdc46ead36301022e3d65787a60b48ea8ec01e9af04f3d:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZWI0MWI0MDhiYjhkODcyNWM0NWZkNWI5NDJhMWUyZjUwMzFjMWM1MmRkZDRmYThhYmM5NzE5NmJjMGEzYmYzOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiNTUwMzJlOTY0ZDA5MzIzNTFlNWQxODUyNjkyODFiMTcxYTNhMDliMDhiMjg2ZTY2MWVhNDcwMzIzYzgyZWI0ZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNjBiYTRhYmQ3OWZkZjQyNjllYmE0ZjAxMzg5ZDg3YjdiNGUwNWRkZDY5YzY4ZmI5NjE1NTgxMWFjYjE4NzU4ZCIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTdhODA0MTIzZmVkN2Y3MDMwY2Y3YTIzOTA3YjQyOWFhMzA1OTdlNDRkN2Y0NTMwMzUxZDI4MDliN2UxYWVhYyJ9"
         }
       ]
+    },
+    {
+      "id": "claim_39a51ea55c5e44678db0e041c5fb2191",
+      "statement": "Gemini 使用 google-genai scoped Client 呼叫 models.generate_content，模型清單使用 models.list；兩者沿用 GOOGLE_GEMINI_API_KEY。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/llm/summarizer_service.py#L428-L447",
+          "version": "repo-lines-v1:sha256:7e61fa8e419d2ca3c9d85b0d09f6ba4e5b3cc719cf16424a0836c15e07a15e36:eyJzZWxlY3RlZExpbmVDb3VudCI6MjAsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImUwNTQ2ZmM5OTEzOTY2MjEwYjkzYzY2OGQ4NGE1MTg4YWNjYjU2ZTY0MmYwMDc5YjE1MmM4NDFlNjhhM2UzYTAiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjVjN2ZlMTRiYjQ2NGM2OTljOGU4N2U5MzM2ZGRkNTZlODU1YzY1N2Y1ZTI2MjA3MGFkNmU4MGU5NzJiN2QzYTAiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjRlYjY5ZmFmNjJiYzE3MTc5MjA1Mzg4YTVmOTEwZDVmODFlMDRmYzdmNTg2MGU5NzM0NjJmYTZkOWQ0MzdjODQiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUyY2U5Njg0NTZlYmNhYjE2MWY4ODA0MTg1NGIxNjVmZGE5YTc3ZjVhMjczZTI4YTdhMTcyOTc0MjU0MmY0MmQifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/scripts/list_models.py#L8-L15",
+          "version": "repo-lines-v1:sha256:59683b0c744e9ed287780e5f5b49d07f4759309f50f8957a94001e96b4cfe97a:eyJzZWxlY3RlZExpbmVDb3VudCI6OCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiNzBiYzUxMjY1ZGEzYzQ5NGJkZDI5NDA4YzBlMTc3NjY1YmZlYWQ2ZmQyNzkzNmYwNTlkMmM1NTdiMTlhM2NlMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMGJkMmM3YWZhN2U1MWUyNzEwYTJmMzljNzcwMDRmNDE0Y2RmYzBmMjhhOThkNzE0OTkxNDJkMWU0ODZmOGU2NSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiMWEwZTQwOTIxMGRlYjNjOTM5MjY4MWE0N2I2MjIzMjZkNmEwYzcxZGM1OGFiZGE5ZTcwNTM5ODZiOTM3YzFiOSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiM2Q0MTM0MGNjMjM5YTE1OWNlOWI2MDIyZTlmNjMyMjgzMmUyZWFkNzZjYWU5ZTQ3NTRkMjEwZWI4ZmI2ZDVlOCJ9"
+        }
+      ]
+    },
+    {
+      "id": "claim_21bd852f46414ed39b37414ba0394584",
+      "statement": "摘要 prompt 使用一句話結論、核心重點與選用必要補充，一般目標 400–700 字、複雜可約 1,000 字，僅依逐字稿且標示資訊不足；篇幅不是硬性截斷。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/core/prompt.py#L105-L155",
+          "version": "repo-lines-v1:sha256:c409f5e947cc52153d9a432474badaae5d9afb62a2beb60374374f648fd56aef:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwMGNlZmVjZTViY2M0NWM1NGQ0ZjEwNzI1NmQ4Mjc0YmE5NTNkZWM1ZDdkMTlmZmM1ZjFhNGJlNTM1MjBiNWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImEzMDNlY2RkNGE0ZDEwZjE5YzczZmQ0MmZkMTI0MzdmZDMzNTRhODI2ODE2MDVkYTUyNTVhOTdhMzkwNjhkYmIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjM2ZjI2NTZmNDBhYTJhN2IwZGMwNWMzYmNhOTU5ODZiZTJhMWViNmM4Y2VhMmFkNjc3MDdlZDg0MzZmZDkzZWEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        },
+        {
+          "resource": "repo://readme.md#L5-L7",
+          "version": "repo-lines-v1:sha256:e49909ada03b18a46953859809dec2a4ece3082b84130020abe341c0ec8dc623:eyJzZWxlY3RlZExpbmVDb3VudCI6MywiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZjI0NjQxNmRlMzdlNTM2NzkyZDk2YWI3YTY1ZjQ1OWNkZTQ5ZTZiMGMyNzFmMmM3YTE2N2Q0YmFhYWNiZTcxMSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiODIzOWE5MWI1YmYxOTZhMzZhMzUyNTE3MGZhYzJkMmU4ZTZiMDk5Yjc1YmFmZmQ1M2E3YjgyZTFhYzAwN2JkZSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiOGU5OWQ1NDVhZjgyZjlkZGUzMDM2NTM2NDE4ZjE2NzUzNjhjZTcwNTAyMjNmNzk5NjA3ZjQyNzE4ZTJiYjY4ZSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYzQ4Y2Y3ZTY0MWM2NTE1MTUzZTViYzM3N2E3MzZkN2E5MzA0MWY0MTExOGQ5ZDI3NGVlMDUzZDEzMTRlZDAwOSJ9"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-09T15:26:03.952Z"
+    "at": "2026-10-25T16:13:59.896Z"
   }
 }

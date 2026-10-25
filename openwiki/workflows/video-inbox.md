@@ -3,14 +3,13 @@ type: workflow
 title: Showcase 影片收件與本機入列
 description: 說明 Showcase 提交、Supabase Queue 暫存、本機 bridge 經 Task API 入列，以及重送去重和故障復原。
 tags: [video-inbox, showcase, supabase, queue, api, sqlite]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-2f2ad998e7e5048be4a2f79c
     resource: repo://apps/showcase/pages/submit.vue
   - id: openwiki-source-fdde1868d0c23ae3c40266ae
     resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
+  - id: openwiki-source-ddee58d6c29e9dfd1d7bb1f1
+    resource: repo://apps/showcase/server/utils/account-access.ts
   - id: openwiki-source-cbc89c71ea37fa753e3207c9
     resource: repo://apps/showcase/server/utils/video-inbox.ts
   - id: openwiki-source-8a8f27feb31a478f83017412
@@ -31,7 +30,10 @@ sources:
     resource: repo://apps/whisper_summary/services/tasks/video_inbox.py
   - id: openwiki-source-00403ba8c9deb95d36c82af7
     resource: repo://supabase/migrations/202610170001_video_inbox.sql
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # Showcase 影片收件與本機入列
@@ -42,8 +44,8 @@ generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
 
 | 模組 | 責任與邊界 |
 | --- | --- |
-| Showcase `/submit` | 產生並保存待確認的 `submission_id`，讓回應遺失時可用同一 ID 重試；收集個人提交碼。 |
-| Showcase server API | 驗證提交碼、精確 Origin 與 YouTube URL；用 server-only submit token 呼叫 Supabase RPC。 |
+| Showcase `/submit` | 產生並保存待確認的 `submission_id`，讓回應遺失時可用同一 ID 重試；舊模式收集個人提交碼，帳號模式取得登入 access token。 |
+| Showcase server API | 依模式驗證提交碼或受邀帳號、精確 Origin 與 YouTube URL；用 server-only submit token 呼叫 Supabase RPC。 |
 | Supabase pgmq | 在 `video_inbox` queue 暫存網址與 ID；read 期間以 visibility timeout 隱藏訊息，delete 才確認移除。 |
 | 本機 bridge | 用 receiver token 領取 Queue 訊息，透過 HTTP 交給本機 Task API；收到明確成功結果後才刪除雲端訊息，不開啟 SQLite。 |
 | 本機 Task API | 驗證 worker token，決定接受或隔離；在原有 SQLite 中交易式建立／重用任務與 receipt。 |
@@ -66,7 +68,11 @@ flowchart LR
 
 瀏覽器第一次提交前建立 UUID，將 UUID 與網址寫入 `localStorage`。回應未確認、重新整理或重試會沿用同一 ID；成功後才清除。若無法保存待確認資料，提交不會送出。個人提交碼只在表單與請求 header 使用，不寫入 `localStorage`。Showcase server 將網址正規化為標準 YouTube watch URL，再以 `video_inbox_submit` RPC 發送 `version=1`、`submission_id` 與 `url`。
 
-Supabase migration 建立 pgmq queue、私有 `video_inbox_private.credentials` 雜湊表，以及 submit/read/delete 三個 `SECURITY DEFINER` RPC。submit token 只能送入，receiver token 只能領取與刪除；兩者明文分別只放在 Showcase server 和本機。RPC 驗證 `x-video-inbox-key`，不把原始 `pgmq` 或私有憑證表暴露給 Data API。瀏覽器個人提交碼是第三組獨立憑證。Migration 遇到不安全的既有 queue grants 會回滾，操作指引見[收件匣手冊](../../docs/video-inbox.md)。
+Supabase migration 建立 pgmq queue、私有 `video_inbox_private.credentials` 雜湊表，以及 submit/read/delete 三個 `SECURITY DEFINER` RPC。submit token 只能送入，receiver token 只能領取與刪除；兩者明文分別只放在 Showcase server 和本機。RPC 驗證 `x-video-inbox-key`，不把原始 `pgmq` 或私有憑證表暴露給 Data API。舊模式的瀏覽器個人提交碼是第三組獨立憑證，帳號模式不再接受此碼作為授權。Migration 遇到不安全的既有 queue grants 會回滾，操作指引見[收件匣手冊](../../docs/video-inbox.md)。
+
+`SHOWCASE_ACCOUNT_AUTH_ENABLED=true` 時，瀏覽器需登入受邀 Supabase 帳號並帶 Bearer token；server 用 Supabase `getUser` 驗證，再檢查 `SHOWCASE_ALLOWED_USER_IDS`。
+精確 Origin 與 Queue submit token 仍需要，缺設定或登入失效不退回舊碼。此切換只改提交授權，Queue payload、receipt 與本機處理流程不變。
+帳號啟用與回退見[帳號手冊](../../docs/operations/showcase-account-auth.md)。
 
 ## 本機接收、去重與隔離
 

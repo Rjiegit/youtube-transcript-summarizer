@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:530632f56057069d9025b60208272c34196bab82169de9e5f5b54af192c4b378",
+  "pageVersion": "sha256:d8d58b2012f28bbe2c035d859ade330fbd37b6bd9da070125368476b0385718b",
   "claims": [
     {
       "id": "claim_f800801274c84093ba82ec174c8732db",
@@ -74,11 +74,11 @@
     },
     {
       "id": "claim_815f782668924b1294f66d81295725d0",
-      "statement": "Nuxt private runtime config 保存 Notion 與選用已讀同步的憑證設定，public runtime config 包含公開 site URL、build date 與 commit SHA。",
+      "statement": "Nuxt private runtime config 保存 Notion、同步憑證、影片收件設定與帳號 allowlist；public 包含 site URL、build 資訊及帳號開關，啟用時提供帳號 Supabase URL/publishable key。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/nuxt.config.ts",
-          "version": "repo-file-v1:sha256:611f7f7e6b4a76d51b7673d263cf401c1edae1310fbfa9bb4def181b78a37c83"
+          "resource": "repo://apps/showcase/nuxt.config.ts#L42-L75",
+          "version": "repo-lines-v1:sha256:25e72623ff2f8818fa4334d1e5f2635fdeb5661b7b816ac129a6d9d42ea47e9c:eyJzZWxlY3RlZExpbmVDb3VudCI6MzQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjFmMGNkYjk3MmE3YmZiN2VkMjQ2ZjlmZjY3MjM4NWU1NWY0OTY4ZmMxMTA0M2RjNWI2ODRkNTFkZmEzMWRiY2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliODkyY2NkZGIyY2Q2ZWJmNGQ1ODdjZjk2MTljMDkwNzgxYTQxMDJiOTU3NzJmMjU0ZWVhYTViOTYzMzI2MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6Ijc1NzRkOWJlNjkyM2I5MmZlYmM1NjMxZGExN2I1YzEyZTY2MDUzMzNjMzJhMmVkYTEyYWJkYjM4MDU3NWFmN2MifQ"
         }
       ]
     },
@@ -88,7 +88,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/scripts/check-env.mjs#L28-L65",
-          "version": "repo-lines-v1:sha256:2f145f6a6eb656b42b7fb173705d72bf18ba267358ee48c115887efeffc1f2aa:eyJzZWxlY3RlZExpbmVDb3VudCI6NTQsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwODU1MWQyZWE3OTliNWM2OWUzMzg1YWJlMmI0NDBlODljNTJlZTIxYzk0NGJiNWYzOTc2NjNkZTQyNTA5NjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5YjliNDllY2UwMzc5ZTRiZWE1MjY2ZjFmNzBlZjVmMWUyZGU1NGE5YjA0MDc4NTY3MmQ0ZDA3MWIzOTYwN2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4ZTdhN2IxNDRhYjc1MDVlYmQzNTQ2MTNhMzg0YTljNDQ0Yjk4MzFmZWZjOTA5MjZiMWRhYzAwZmI3NTQxZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:a692bff6738544e56097858fd497b580d871249003d45abb92a3c9aed7ed226c:eyJzZWxlY3RlZExpbmVDb3VudCI6NjIsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAwODU1MWQyZWE3OTliNWM2OWUzMzg1YWJlMmI0NDBlODljNTJlZTIxYzk0NGJiNWYzOTc2NjNkZTQyNTA5NjIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjM5YjliNDllY2UwMzc5ZTRiZWE1MjY2ZjFmNzBlZjVmMWUyZGU1NGE5YjA0MDc4NTY3MmQ0ZDA3MWIzOTYwN2YiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImY4ZTdhN2IxNDRhYjc1MDVlYmQzNTQ2MTNhMzg0YTljNDQ0Yjk4MzFmZWZjOTA5MjZiMWRhYzAwZmI3NTQxZGUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -178,7 +178,7 @@
       "evidence": [
         {
           "resource": "repo://Makefile",
-          "version": "repo-file-v1:sha256:cf0e14f8c169300e0fc58c95ade8ffa74a40c04a333385993ef16178da20c834"
+          "version": "repo-file-v1:sha256:632823f0a7987b55aae422ace84f6e9d4323b8c6b3a35a56fa81e32f844ccd33"
         },
         {
           "resource": "repo://apps/showcase/scripts/check-env.mjs#L1-L32",
@@ -248,7 +248,7 @@
         },
         {
           "resource": "repo://apps/whisper_summary/pyproject.toml#L10-L36",
-          "version": "repo-lines-v1:sha256:10f6cca728ca30376b94856e73261c372c9ab40fd82a4cb82dc44adf855ff966:eyJzZWxlY3RlZExpbmVDb3VudCI6MjcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYjc0OTliMWNlMWM0ZjRiMjUyN2YzYTMyODRjYWM2YjZhMWUzYmY0OTg4YjU2Nzk4MmMzZGM4ZTlhMTdmMjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgzYTAwOWYwY2E1NjM0Yjc3MDIwMjA5NDJmZDE4OWNkY2Q4NGIxNjdhYjgwMTUwMTI4ZTZmNWI1ZGJmMjQwMzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1MmYyMGU0OGQ3MmQxNzNhOTA2MDAyZDlhOGI5NDNkMTE2YjRiOTEzY2RkNjNiZTNkM2RiYmY5ZTNjYjc5NzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3ODBlZmRhZDBmNDU5MmJjMGE0ZGEwZmZhZTM2ODkxNDdmMWI3NDcyOWJmOTc1MTNiOWQ3YmVkMzY3ZDNlOGUifQ"
+          "version": "repo-lines-v1:sha256:67e007c46097d1ea5078d92a930087fca6ec53cbbaa5890e1e24194eea27edbe:eyJzZWxlY3RlZExpbmVDb3VudCI6MjYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImRiYjc0OTliMWNlMWM0ZjRiMjUyN2YzYTMyODRjYWM2YjZhMWUzYmY0OTg4YjU2Nzk4MmMzZGM4ZTlhMTdmMjMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjgzYTAwOWYwY2E1NjM0Yjc3MDIwMjA5NDJmZDE4OWNkY2Q4NGIxNjdhYjgwMTUwMTI4ZTZmNWI1ZGJmMjQwMzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQ1MmYyMGU0OGQ3MmQxNzNhOTA2MDAyZDlhOGI5NDNkMTE2YjRiOTEzY2RkNjNiZTNkM2RiYmY5ZTNjYjc5NzYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjoxLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3ODBlZmRhZDBmNDU5MmJjMGE0ZGEwZmZhZTM2ODkxNDdmMWI3NDcyOWJmOTc1MTNiOWQ3YmVkMzY3ZDNlOGUifQ"
         }
       ]
     },
@@ -286,11 +286,15 @@
     },
     {
       "id": "claim_33e11c73f5294fbf83c5913544a8745d",
-      "statement": "Showcase 跨裝置已讀同步需要 server-side flag、Upstash REST URL/token、個人同步碼與 session secret，space id 預設 personal。",
+      "statement": "舊已讀同步需 flag、Upstash URL/token、同步碼與 session secret，space 預設 personal；帳號開關可自動啟用同步，儲存只需 Upstash 設定，授權另需 Supabase 與 allowlist。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/server/utils/read-sync-config.ts",
-          "version": "repo-file-v1:sha256:026780e7ee8b4ff7537a31b6c23247e3e7b9dad384062ea940c5970678f4f7ce"
+          "resource": "repo://apps/showcase/server/utils/account-access.ts",
+          "version": "repo-file-v1:sha256:974ec5626f12ab50db5dc2138cf6a9428fc856dd4cd7f154a5c46aa0f7cc2fba"
+        },
+        {
+          "resource": "repo://apps/showcase/server/utils/read-sync-config.ts#L43-L77",
+          "version": "repo-lines-v1:sha256:4fa4df0853da3c7d6a6d8fc7077ca9ee50f9d10feff7f2096faf8cb49f43e323:eyJzZWxlY3RlZExpbmVDb3VudCI6MzUsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY4ZDk3MjUwNzdlMDdjYTM5M2Q3OWMzMzljOTdlODUyNmRlYTA4NzcyNjU3MDhiNmJmNTllOWY4ZTJkNTFjY2YiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjY0OGExYzZlMGRkZTE0YTJmODI1ODdlYTg0ZGQwZGRkNDlmM2QwNjViZmI2ZTcxZWRmNjNlNDI4YTZjN2QwMDEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         }
       ]
     },
@@ -345,8 +349,8 @@
       "statement": "影片收件 Supabase migration 建立 pgmq queue、私有雜湊憑證與受保護的 submit/read/delete RPC；Showcase server 的提交設定不會公開到 browser runtime config。",
       "evidence": [
         {
-          "resource": "repo://apps/showcase/nuxt.config.ts#L40-L52",
-          "version": "repo-lines-v1:sha256:c44c91de858b977eddeea3293d4380ead98d7a818ad10c222946a6a886ece0f0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjAxYmE0NzE5YzgwYjZmZTkxMWIwOTFhN2MwNTEyNGI2NGVlZWNlOTY0ZTA5YzA1OGVmOGY5ODA1ZGFjYTU0NmIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjA2NjA3YmNiNDU1YzY4OTk3MGI1MDAzNmZkN2UwZWY3MmU0ODMwYjQyYWRjNmIwYzY3NDQ3MzdlMjBhZjNlMTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjliODkyY2NkZGIyY2Q2ZWJmNGQ1ODdjZjk2MTljMDkwNzgxYTQxMDJiOTU3NzJmMjU0ZWVhYTViOTYzMzI2MzMiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImE0YTBmYzU1ZWQ5MGQyNDcyZDI0N2JkYTBjYjNjYTliNzdjYzk1N2YyYTZiZGNiYjg3YTNiNDgwNTQ1YmY5YTAifQ"
+          "resource": "repo://apps/showcase/nuxt.config.ts#L50-L60",
+          "version": "repo-lines-v1:sha256:d522cf8e13d789344b406dfec716b58011838b158676cd57bc7bafea0281b9b0:eyJzZWxlY3RlZExpbmVDb3VudCI6MTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY3ZWY4NWJiZGQ5Y2M2ZDkwMmMyYWJiMzMyNGNjODExYTQxZDljMmVhMDZjYWNkYWQ4NGU1OWM4Mjg0ZDM2MjciLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjYwM2ZjZjY4ZmZkN2Y5ZjAxNTUzNTg4NzFlYzZhMTNiZTRmMWRkNTVjNTk5YmM0OTAwNmRlYTkzYzViODE1MTIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjQwMzgzZGNhZThjZGY2YzRmOTNjODJiZjAxZmQ1ZjA3Y2ZhMjZmNWUxNDU2NGQ2NDI0M2E1ZGMyMTgzYTI3OGEiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjNhNGQ1MjhhYjgyZTg0Yjc0ZGYxNDJlNDRhMjBkOGQwMGE5MjMwNjBmYTc3OWVlNmIxY2Q5MGEzYWUyNmQ1YmIifQ"
         },
         {
           "resource": "repo://supabase/migrations/202610170001_video_inbox.sql#L1-L78",
@@ -385,10 +389,38 @@
           "version": "repo-file-v1:sha256:a3a69cecd8bf3274283cc00bc74f5ed8acb6c5b184b387837c5504f421d816df"
         }
       ]
+    },
+    {
+      "id": "claim_d3fd8bf6e4f84719949e3fdaee1f65de",
+      "statement": "共用 Logger 每行輸出 JSON，含 timestamp/level/message，例外堆疊置於 exception；timestamp 固定 Asia/Taipei、毫秒及 +08:00，標準 logging、第三方與 print 不自動套用。",
+      "evidence": [
+        {
+          "resource": "repo://CONTRIBUTING.md#L54-L66",
+          "version": "repo-lines-v1:sha256:0533cea43116e8f3d3fbd46289b2d4cc7c5151ff29f780b6dc5c17bb0b909a3f:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjY0ODJhOWZjODc5OWQ1YzRhMjYxMDNiN2IxYTI3YjY1ZGRkYzc2OTg4NmU4YzE2ZDNlODM4Yjk0ZTc2OTVhZWMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImZkYTBkODU0NjU5ZDRiNmJjMjg2MTdmNWJkNWI3ZTc4M2UwZWRhZDNlZTUzZjU1ZDQyMjk0ODZhMjZiNDNiM2UiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMyOWQxOWE3MWU2Mjc4MjdlMjU1ZTllMmEzNDQ1YzU2ZWY4ODkwNzQ2MWYyMmE0MWQ1NTUyNjdhOTMxMzVmZjUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjA3ZDQ0MGE0NGYyM2Q2N2FiOTIwN2QwYjJkNTE2ZWUyYjJlMDViNDlmNmQ1ODc5OWE1NTczNTY3Nzk3MGFkZDQifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/core/logger.py#L1-L36",
+          "version": "repo-lines-v1:sha256:7e3be7ce943f2826b9050f49102b0df8a02f7faabff555f3e8cb2d26344b68c2:eyJzZWxlY3RlZExpbmVDb3VudCI6MzYsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjI2MWE5MTEyYTI5MThlMmFiYTAzZTE5YTJmMjIxYTAyN2FiNGI2ZjllOTQ2YTZjMzk4MTRmNTRlMThlMDdkZmMiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI5ZTllZmViMjYwODUyZDc2NzZmNTNiOTc0N2EyMjRmYzMzZjgwNTY1YTNlNjFiZjkyMzlkNmVhN2M4YjM4M2IiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjowLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
+    },
+    {
+      "id": "claim_c5ff6504f39149ad80889a6fc6e603d8",
+      "statement": "Gemini 改用 google-genai 且移除同名 whisper 依賴，更新需重新 uv sync，Docker worker 需重建 image；下載改用 bestaudio/best。",
+      "evidence": [
+        {
+          "resource": "repo://Makefile#L105-L106",
+          "version": "repo-lines-v1:sha256:86ede713b044e47cc8afcec83b1a237c7115b2af5ca46c1d6319e2afa2e630d3:eyJzZWxlY3RlZExpbmVDb3VudCI6MiwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYzk0OGU1OGJhMTNkYjBkNTBlN2I5OWFjZGEzYmNlMzc3OTA2ODQ4MDZlY2YxODYxZDllOGY1YjI4NGQ5NDRlNCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWY2OTBhMzY2ZWIzYWE4OTY4ZWI3NWRiNzA1NDAzMjlhMjFjZjNkNjBhNjVhYWMyNzZlNWY0YTkwYjExMmExOSIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDcxMTU3ZTcxY2RmYWRhYjUwNDU3NmRlMWU0YWE2M2ZmMjEwMWI2OTYzNTViMDVkOTY5OGE2NjgyYTY3ZmM4NiIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiMGY5ZWExOTI2ODFlNTI4ZGI2MWQ3NTVjZTkwMDZmMjdhMjhmZjRlZTkyOGFiMzBiZTM3NDI3OTI4ODdkOTZkOCJ9"
+        },
+        {
+          "resource": "repo://readme.md#L56-L59",
+          "version": "repo-lines-v1:sha256:e18405a5c99ccb25c0902071a70758bf6c9d5a4f4203908531a8ed762f9abaa4:eyJzZWxlY3RlZExpbmVDb3VudCI6NCwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiOTljMTIwOTlhZjk3ODNiNzM3OWJjNzg1YmM4NTM0YzI3NjUyYzM2ZWQ2ZDg5YTAxYmMxMjI1ODAzN2RkN2ZkZSIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNzM4MzkzODQzYmEyNWRlNmUxNTdjOTU5Yzc5NzYyZmI4NjVjZWY2ZTY3NjU4OWFmZTU4ZTE3MDFiOGEzMjAxNSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiYTBmY2Q2MmVjMDE3NjdjYWExNDU3NmU3MGM1MTRjY2VmNDU1YjczOTljNjliODY3YjE2M2ZjNjY5ZDRmMTkzZiJ9"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T13:28:28.405Z"
+    "at": "2026-10-25T16:13:59.896Z"
   }
 }

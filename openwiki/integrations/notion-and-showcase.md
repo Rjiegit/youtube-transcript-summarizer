@@ -3,9 +3,6 @@ type: integration
 title: Notion 資料整合與 Showcase 邊界
 description: 說明 Python 的 Notion 任務與摘要寫入、Nuxt Showcase 的文章讀取，以及獨立的 Supabase 影片提交路徑。
 tags: [notion, integration, persistence, showcase]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-fd187f7783d8b744deda578e
     resource: repo://apps/showcase/components/ShowcaseCard.vue
@@ -35,7 +32,10 @@ sources:
     resource: repo://contracts/notion_completed_page.json
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # Notion 資料整合與 Showcase 邊界
@@ -58,9 +58,13 @@ Showcase 列表查詢先讀 database schema；詳細頁則透過 `Promise.all` �
 
 完整 block tree 再轉成 Markdown。一般子內容接在 parent 後方；bulleted/numbered list item 與 to-do 的子內容縮排四個 spaces，以保存巢狀清單層級；quote 與 callout 則將自己的文字和所有子內容一起套用引用前綴。若 parent block 本身沒有可呈現內容，仍保留其可呈現 children。只有整棵 block tree 最終沒有 Markdown content 時，詳細頁才 fallback 到 Summary property。
 
+Python writer 將摘要的文字 chunks 按每 100 段組成一個 paragraph 的 rich_text array，保留原始 Markdown 連續性。
+Nuxt reader 對 paragraph／toggle 保留原始 Markdown；舊版 writer 的連續 1,800 字元純文字 paragraphs，若符合首段標題及 chunk 條件，會先接回完整文字，避免段落分隔破壞粗體、連結等語法。
+這是格式相容處理，不會改寫既有 Notion 頁面。
+
 ## 影片提交的另一條路徑
 
-Showcase 的 `/submit` 是獨立的寫入入口：瀏覽器只提交網址與個人提交碼到 Nitro API；Nitro 驗證後以 server-only submit token 呼叫 Supabase `video_inbox_submit` RPC。這條路徑不寫入 Notion，也不直接呼叫 Python Task API；本機 bridge 稍後透過 Task API 將訊息變成 SQLite 任務。文章讀取所用的 Notion schema 與可見性規則不適用於收件權限，完整可靠性設計見[影片收件流程](../workflows/video-inbox.md)。
+Showcase 的 `/submit` 是獨立的寫入入口：瀏覽器提交網址與識別碼，並依模式帶個人提交碼或帳號 Bearer token 到 Nitro API；Nitro 驗證後以 server-only submit token 呼叫 Supabase `video_inbox_submit` RPC。這條路徑不寫入 Notion，也不直接呼叫 Python Task API；本機 bridge 稍後透過 Task API 將訊息變成 SQLite 任務。文章讀取所用的 Notion schema 與可見性規則不適用於收件權限，完整可靠性設計見[影片收件流程](../workflows/video-inbox.md)。
 
 ## 每週洞察展示資料
 

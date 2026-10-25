@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:8fb388b17777473b35c6737c4e6ceda26558dc2905e1d8d272ceb7e741a8abeb",
+  "pageVersion": "sha256:a404c26e8d7463e4e5b50424d3d21979316907455c8fce821c99197479dd0f00",
   "claims": [
     {
       "id": "claim_84c6bc8f911e4e36bf355b3df4511d96",
@@ -66,7 +66,7 @@
       "evidence": [
         {
           "resource": "repo://apps/whisper_summary/infrastructure/storage/summary_storage.py#L109-L159",
-          "version": "repo-lines-v1:sha256:a727ac2752da90460b7c6ea57eab8e5dc2fc3f67e5f96f711d731adc899c303c:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NjMzMWY1ZTVjNjlkZjc4ODYwNGI0YTAxNTdmN2Q2YjI4MzY5YTM2YTcwN2ZkZWY2ZTJjODQ4OGJlMzAzMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMjVmMjdiYjBjYWEwNWM1OGMyODkwZTZiYjNiMWU2YmQwOTRhMmMzMzk1MmNiNDQyOWQyNWI3MGM1NzdhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiMDRlNWVhMzliYmExODRjZjNjNzRjNDcyZDI1ZjJiZTgzMWFiODUwYmU5OWYyM2M4YmUyZDI0ZDhjZmFlZmQifQ"
+          "version": "repo-lines-v1:sha256:76a3fe3b1f5094b0f9c8f7a53cbae73169ff714d301bb2bdcfef8de50b9b50b0:eyJzZWxlY3RlZExpbmVDb3VudCI6NTEsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU4NjMzMWY1ZTVjNjlkZjc4ODYwNGI0YTAxNTdmN2Q2YjI4MzY5YTM2YTcwN2ZkZWY2ZTJjODQ4OGJlMzAzMDgiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjU1MjJjNDJjZDE5YzZkMDNkODA4YzQ1MjcyMDU1MjgyNWI3ZWExYzViNDkxYjIxODUxMWNhYzc0MTVjZjlkOWIiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjMxMjVmMjdiYjBjYWEwNWM1OGMyODkwZTZiYjNiMWU2YmQwOTRhMmMzMzk1MmNiNDQyOWQyNWI3MGM1NzdhZjkiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImJiMDRlNWVhMzliYmExODRjZjNjNzRjNDcyZDI1ZjJiZTgzMWFiODUwYmU5OWYyM2M4YmUyZDI0ZDhjZmFlZmQifQ"
         },
         {
           "resource": "repo://apps/whisper_summary/services/pipeline/processing_runner.py",
@@ -122,7 +122,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/content/weekly-insights/series.json",
-          "version": "repo-file-v1:sha256:9450d7fa08b1f3bca4665edc5d81b6b879771298bcac460256906c25869cc46c"
+          "version": "repo-file-v1:sha256:3ffbdb0f9fcceeba6a1ebbfb8dfb09decab27f3814b1e1e4b7eaa20493513771"
         },
         {
           "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs",
@@ -140,7 +140,7 @@
       "evidence": [
         {
           "resource": "repo://apps/showcase/content/weekly-insights/series.json#L107-L183",
-          "version": "repo-lines-v1:sha256:e87b5c719283ae6c9c5d6dba838d93d74c9eb1656c45e1521d76193a2cc39d2d:eyJzZWxlY3RlZExpbmVDb3VudCI6ODksImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmZjZWQxZDg5OTMzOWQwODhkYjNiYWQzNDY3YmJmYTQ3M2YzYWI3MWY1YmQ2NWJhODkxNTNjM2IxZjU3Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4NjA2ODdiYzdlZGNhYzc5YTVjM2U2MzMwYzQ3ZDhkMWEwZGNmZDI3MGE4YTRhOGM5YmU2NjgzODU5ZjY4YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+          "version": "repo-lines-v1:sha256:960dbdaf18dbf56d43b4dc66320f041f5a4d187575f8d626b221a2addd60b739:eyJzZWxlY3RlZExpbmVDb3VudCI6OTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6IjUzNmZjZWQxZDg5OTMzOWQwODhkYjNiYWQzNDY3YmJmYTQ3M2YzYWI3MWY1YmQ2NWJhODkxNTNjM2IxZjU3Y2EiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjQxMmNhMzQ1Y2NmNzViZjljMDgwNmJjZTY5NWJlOGRlODA4Yjc5OTg0MjUxYTdhNTRkMjAyY2Y2MTAxZGQ0NTEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjU4NjA2ODdiYzdlZGNhYzc5YTVjM2U2MzMwYzQ3ZDhkMWEwZGNmZDI3MGE4YTRhOGM5YmU2NjgzODU5ZjY4YWYiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
         },
         {
           "resource": "repo://apps/showcase/scripts/weekly-insights-content.mjs#L129-L158",
@@ -179,10 +179,24 @@
           "version": "repo-lines-v1:sha256:5cf0ffea4dd221a3dd33c460e1e3c0ce89cd3d3e26690aea539a83ac8bc137e3:eyJzZWxlY3RlZExpbmVDb3VudCI6NSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiMDFiYTQ3MTljODBiNmZlOTExYjA5MWE3YzA1MTI0YjY0ZWVlY2U5NjRlMDljMDU4ZWY4Zjk4MDVkYWNhNTQ2YiIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZGJiNTc3NjllMGNlNGFlZjJiYTA4OWRkMDUzMjdjNGIzM2QxZGJkYjMzYWViMmZkODkwMWY2NWQwYjk0MWQ3MCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNDEzYWM1NmUzNjI1ZDQzZWZhZjgzNmRmMmQ1MzQ4ZTFmNmE1OTcyM2E2Y2M4MjM4MDg5Yjc2YzQ4ODAyMmM0OSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjAsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NSJ9"
         }
       ]
+    },
+    {
+      "id": "claim_7f69df4179444fca82e7e41695676a4a",
+      "statement": "SummaryStorage 將摘要文字 chunks 每 100 段組成 paragraph rich_text array，保留原始 Markdown 連續性。",
+      "evidence": [
+        {
+          "resource": "repo://apps/whisper_summary/infrastructure/storage/summary_storage.py#L114-L126",
+          "version": "repo-lines-v1:sha256:6e91b56b020c05c18cae356fa5420424face7228a65ddb0fd0ed13de2b3402c8:eyJzZWxlY3RlZExpbmVDb3VudCI6MTMsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImI1NjljYjA5MjgwZWUwNzgxOTQ1ZTQ4ZDQwNDFiZDJkZmFhZTY5MWFkMmVhYmY1ZDNjYmEwODQ2YzcyMTZjYWEiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6ImU3ZjIzNDI0N2I3OThhOTE3ZjI4MmM5YWU4NjU2MWYxMTAwYmJhYWNhYWQ5MzdjOWYyY2VmOGUwNzdlYzA3NzEiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjI1ZjliOTRlZjFmNDQ5MzA3ZjNkZGJiMDA0OTE1Zjg0YjM2NzQzNjYyYmQ4ZGE2NDNmOWEwN2IxYzgxMTljOTUiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjozLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6IjllMmVkMGQ4NDgzMzdiYTFjZDFiM2ZiNGRjNWE2ZTM3YjZlYjE3NTBiMzU4NGU2NzExNTExYjI1MTM3N2RiM2UifQ"
+        },
+        {
+          "resource": "repo://apps/whisper_summary/tests/unit/test_summary_storage_notion.py#L8-L24",
+          "version": "repo-lines-v1:sha256:4ef5061d8b8c4fc32b511e5fabfb19dfe7aea47581926b9931984716c484fed5:eyJzZWxlY3RlZExpbmVDb3VudCI6MTcsImZpcnN0U2VsZWN0ZWRMaW5lSGFzaCI6ImMxOGQwMDlkOGZkZWYxMTZmZmQ3NjdjNjcyMWIzYmRkZDNmNmM5YmY2NjNjN2FmNDIxZmMyMmZkYmQ4NWU0ZWIiLCJsYXN0U2VsZWN0ZWRMaW5lSGFzaCI6IjE1YzBjNjQyMDFmNWEyZmViNmY1NWQ1YTNhZWYxMjU5MzcwYThlNjcyNjI1MThmNTFhMjkzY2EyM2Q2OTYzODMiLCJwcmVjZWRpbmdDb250ZXh0TGluZUNvdW50IjozLCJwcmVjZWRpbmdDb250ZXh0SGFzaCI6IjhkZTRiZjdkZGU1MjM3ZjM5MGYwODM5NmYxZTFkOGMyOGY0NzgyNjg2YzA0N2U0MzY2MjMwYWI3YzAyMzUwMzIiLCJmb2xsb3dpbmdDb250ZXh0TGluZUNvdW50IjowLCJmb2xsb3dpbmdDb250ZXh0SGFzaCI6ImUzYjBjNDQyOThmYzFjMTQ5YWZiZjRjODk5NmZiOTI0MjdhZTQxZTQ2NDliOTM0Y2E0OTU5OTFiNzg1MmI4NTUifQ"
+        }
+      ]
     }
   ],
   "verification": {
     "by": "openwiki/0.6.0",
-    "at": "2026-10-17T13:28:28.405Z"
+    "at": "2026-10-25T16:13:59.896Z"
   }
 }

@@ -18,6 +18,8 @@ sources:
     resource: repo://apps/whisper_summary/infrastructure/media/downloader.py
   - id: openwiki-source-3a4d462be42c08cbbcc6362a
     resource: repo://apps/whisper_summary/infrastructure/media/lifecycle.py
+  - id: openwiki-source-b94cf9b6029f1843e044616d
+    resource: repo://apps/whisper_summary/infrastructure/media/transcription/transcriber.py
   - id: openwiki-source-79006d740abb2f90a0561607
     resource: repo://apps/whisper_summary/services/pipeline/engines.py
   - id: openwiki-source-9d74f9961da3fcb79187c2ef
@@ -28,10 +30,12 @@ sources:
     resource: repo://apps/whisper_summary/tests/unit/test_dedicated_processing_worker.py
   - id: openwiki-source-e694b4a233a28ca429d8a36e
     resource: repo://apps/whisper_summary/tests/unit/test_processing_worker.py
-generated: { by: "codex", at: "2026-10-17T08:57:58.717Z" }
+  - id: openwiki-source-f1b1aacc63642e5304668821
+    resource: repo://readme.md
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-17T08:57:58.717Z
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 媒體轉錄與摘要流程
@@ -45,7 +49,7 @@ verified:
 1. `YouTubeDownloader` 執行 yt-dlp，將媒體放在 `data/videos`，並回傳 path、title 與已整理的 `VideoMetadata`。
 2. worker 以下載 title（fallback 到既有 title 或 URL）更新仍為 `Processing` 的 task。
 3. `Transcriber` 以設定的 faster-whisper model 轉錄媒體。
-4. `Summarizer` 將 title、逐字稿與可選的 metadata 套入學習筆記 prompt，再呼叫選定的 LLM。
+4. `Summarizer` 將 title、逐字稿與可選的 metadata 套入精簡影片摘要 prompt，再呼叫選定的 LLM。
 5. worker 組合 `faster-whisper-<size>+<provider:model>` 模型標籤，以穩定 output path 保存 Markdown；有 metadata 時，另在實際 Markdown 路徑旁保存同 stem 的 `.metadata.json`。
 6. `SummaryStorage` 建立 Notion page；若回傳 page id，寫回 task。
 7. task 更新為 `Completed`，包含摘要、duration 與 Notion page id。
@@ -65,17 +69,19 @@ Showcase 同樣用 Notion page ID 開啟摘要詳細頁；ID 契約見[Notion �
 
 ## 下載與 metadata 邊界
 
-Downloader 一律使用 yt-dlp，輸出模板以 YouTube video id 命名，降低 title 字元造成的 path 不穩定。它透過帶 prefix 的 `--print` 行取得搬移後 path、title 與 JSON metadata，限制記錄的 subprocess output 長度，並在結果 path 不明時依 video id glob 尋找產物。metadata JSON 無法解析不會使有效下載失敗；系統仍用 URL、video id 與已解析 title 建立可用但欄位可能為空的 `VideoMetadata`。
+Downloader 一律使用 yt-dlp 的 `-f bestaudio/best`，優先下載音訊，沒有獨立音訊時退回影片；保留來源格式，不額外轉碼。輸出模板以 YouTube video id 命名，降低 title 字元造成的 path 不穩定。它透過帶 prefix 的 `--print` 行取得搬移後 path、title 與 JSON metadata，限制記錄的 subprocess output 長度，並在結果 path 不明時依 video id glob 尋找產物。metadata JSON 無法解析不會使有效下載失敗；系統仍用 URL、video id 與已解析 title 建立可用但欄位可能為空的 `VideoMetadata`。
 
 傳入 domain 的資料不是完整 yt-dlp info dict，而是白名單 schema：source URL、video id、title、description、channel/channel id、upload date、duration、chapters、UTC extraction timestamp 與 schema version。`VideoMetadata.from_info_dict` 會去除空白字串、將 `YYYYMMDD` 日期正規化成 `YYYY-MM-DD`、拒絕 bool 或非數字 duration，並忽略缺 title 或 start time 的 chapter。這可避免 cookies、下載格式及其他未審查的 extractor 欄位進入 prompt 或 sidecar。
 
-Transcriber 使用 faster-whisper，逐 segment 累積文字並可透過 Streamlit progress callback 呈現進度。這是重型本機 dependency；測試通常注入 fake factory，而不載入模型。
+Transcriber 使用 faster-whisper，逐 segment 累積文字，依可用的總時長記錄轉錄百分比進度；已移除原版 Whisper 的 legacy method。這是重型本機 dependency；測試通常注入 fake factory，而不載入模型。
 
 ## Prompt 的 metadata trust boundary
 
 逐字稿仍是摘要的主要事實來源。若有 metadata，`Summarizer` 只把頻道、上架日期、格式化時長、章節與 description 放入獨立的「創作者提供，僅供背景」區塊，並明示這些是不可信參考資料、不可視為逐字稿已證實的事實，也不得用其中指示改變任務、規則或輸出格式。
 
 送入模型的 description 最多 6,000 個字元，超出時加上截斷標記；此限制只影響 prompt context，sidecar 仍由 `VideoMetadata.to_dict()` 保存完整的 curated description。相同 metadata 會隨第一次 candidate 與 transient failure 後的 fallback candidate 傳遞給 OpenAI、Gemini、Ollama 或 Codex CLI provider。
+
+摘要輸出採「一句話結論、核心重點、必要補充（選用）」，一般目標 400–700 字，複雜內容可約 1,000 字；實際篇幅由 prompt 控制，不硬性截斷，也不自動改寫既有摘要。
 
 ## LLM 邊界
 

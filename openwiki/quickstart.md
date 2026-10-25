@@ -3,9 +3,6 @@ type: quickstart
 title: 快速開始與開發導覽
 description: 從環境設定、安裝、啟動與測試開始，依任務導向架構、影片收件、API、持久層與整合文件。
 tags: [quickstart, setup, navigation]
-verified:
-  - by: openwiki/0.6.0
-    at: 2026-10-17T13:28:28.405Z
 sources:
   - id: openwiki-source-bf5be0c9253ed1d07b502e10
     resource: repo://.githooks/pre-commit
@@ -15,8 +12,6 @@ sources:
     resource: repo://apps/browser-extension/options.js
   - id: openwiki-source-3f302af29bc8e91334af86aa
     resource: repo://apps/browser-extension/service_worker.js
-  - id: openwiki-source-bb92958ed21ee9cf0accb45d
-    resource: repo://apps/showcase/components/ReadSyncControl.vue
   - id: openwiki-source-bbc421d322d74564a269df19
     resource: repo://apps/showcase/package.json
   - id: openwiki-source-36cce2c34e32cbad2ec20271
@@ -27,8 +22,6 @@ sources:
     resource: repo://apps/showcase/scripts/check-env.mjs
   - id: openwiki-source-fdde1868d0c23ae3c40266ae
     resource: repo://apps/showcase/server/api/video-inbox/index.post.ts
-  - id: openwiki-source-3b0efe03f5b86982327fa144
-    resource: repo://apps/showcase/server/utils/read-sync-config.ts
   - id: openwiki-source-8a8f27feb31a478f83017412
     resource: repo://apps/whisper_summary/apps/api/routers/processing.py
   - id: openwiki-source-24b20dc38c8f480c4a39a119
@@ -45,6 +38,8 @@ sources:
     resource: repo://apps/whisper_summary/infrastructure/llm/model_options.py
   - id: openwiki-source-25d6d487d3ae6567d7b0397b
     resource: repo://apps/whisper_summary/infrastructure/llm/weighted_selection.py
+  - id: openwiki-source-e3deef680a5ed6126a3e663d
+    resource: repo://apps/whisper_summary/infrastructure/media/downloader.py
   - id: openwiki-source-44f784ddceb054f0c06a5950
     resource: repo://apps/whisper_summary/pyproject.toml
   - id: openwiki-source-5d30f93453a5fc9227aa0b47
@@ -53,18 +48,23 @@ sources:
     resource: repo://compose.yaml
   - id: openwiki-source-469a55bc4f498a65419781db
     resource: repo://docs/features/showcase-weekly-insights.md
+  - id: openwiki-source-64648ff2faae78d736102c15
+    resource: repo://docs/operations/showcase-account-auth.md
   - id: openwiki-source-a018598f940064e36f33cafc
     resource: repo://docs/operations/showcase.md
   - id: openwiki-source-012f2c78e3b1446dfc35803f
     resource: repo://Makefile
   - id: openwiki-source-da418bc01cba89686ece3492
     resource: repo://scripts/install-git-hooks.sh
-generated: { by: "codex", at: "2026-10-17T13:28:28.405Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
+verified:
+  - by: openwiki/0.6.0
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 快速開始與開發導覽
 
-這個 repository 包含 Python 3.14 的 YouTube 轉錄/摘要平台、`apps/showcase` 的獨立 Nuxt 3 成果展示站，以及 `apps/browser-extension` 的 Chrome/Edge Manifest V3 client。Python 側提供 FastAPI、Streamlit、queue worker 和 RSS monitor；Extension 呼叫 FastAPI；Nuxt server routes 直接讀取 Notion。
+這個 repository 包含 Python 3.14 的 YouTube 轉錄/摘要平台、`apps/showcase` 的獨立 Nuxt 4 成果展示站，以及 `apps/browser-extension` 的 Chrome/Edge Manifest V3 client。Python 側提供 FastAPI、Streamlit、queue worker 和 RSS monitor；Extension 呼叫 FastAPI；Nuxt server routes 直接讀取 Notion。
 
 ## 最短本機啟動路徑
 
@@ -98,6 +98,8 @@ make run
 
 本機下載另需 PATH 上的 `yt-dlp`；`uv sync` 不會安裝此執行檔。可用 `make yt-dlp-update` 安裝至 `/usr/local/bin/yt-dlp`，該位置可能需要寫入權限。
 
+Gemini 已改用 `google-genai`，轉錄使用 faster-whisper；更新既有 checkout 後需重新同步依賴，Docker worker 需重建 image。音訊優先下載與新摘要格式見[媒體流程](workflows/media-processing.md)。共用 JSON Log 與臺北時間格式見[設定與部署](operations/configuration-and-deployment.md#依賴更新與-json-log)。
+
 ## Docker 啟動
 
 ```bash
@@ -115,7 +117,7 @@ npm run check-env
 npm run dev
 ```
 
-開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 的文章瀏覽唯讀；另有受保護的 `/submit` 收件匣入口，透過雲端 Queue 與本機 bridge 交給 Task API 入庫，再由既有 processing worker 處理。跨裝置已讀同步的首次連結在 `/settings/sync` 輸入個人同步碼；有效 session 之後會自動恢復。
+開發站預設在 `http://localhost:3000`。上述直接執行 `npm run dev` 的流程請使用 frontend `.env` 或預先匯出的環境變數。`make showcase` 會載入 `apps/showcase/.env` 後啟動。`npm run check-env` 在獨立程序中讀取該檔案，其結果不會傳給後續程序。Showcase 另提供 `/insights` 每週回顧；內容由 `content/weekly-insights/` 文件建置，執行 `npm run insights:check` 可驗證資料，dev/test/build 前置流程會自動重建 registry。必要設定為 Notion token 與 database id；標準 `NOTION_*` 名稱優先於相容的 `NUXT_*` 名稱。Showcase 的文章瀏覽唯讀；另有受保護的 `/submit` 收件匣入口，透過雲端 Queue 與本機 bridge 交給 Task API 入庫，再由既有 processing worker 處理。帳號模式關閉時，跨裝置已讀同步首次在 `/settings/sync` 輸入個人同步碼；有效 session 之後自動恢復。啟用 `SHOWCASE_ACCOUNT_AUTH_ENABLED` 時改為受邀 Supabase 帳號登入，一起授權影片提交與個人已讀同步，文章仍公開。設定見[帳號手冊](../docs/operations/showcase-account-auth.md)。
 
 ## Browser Extension
 
@@ -163,6 +165,7 @@ npm --prefix apps/showcase run build
 | 媒體保留與清理 | [媒體清理](../docs/operations/media-cleanup.md) |
 | Discord 摘要入口 | [通知](../docs/operations/notifications.md) |
 | Showcase 設定與部署核對 | [Showcase](../docs/operations/showcase.md) |
+| 受邀帳號登入與功能切換 | [帳號模式](../docs/operations/showcase-account-auth.md) |
 | 已讀同步安裝與輪替 | [已讀同步](../docs/operations/showcase-read-sync.md) |
 | 雲端影片收件匣 | [收件匣](../docs/video-inbox.md) |
 | 週報分析與手動更新 | [每週回顧](../docs/features/showcase-weekly-insights.md) |

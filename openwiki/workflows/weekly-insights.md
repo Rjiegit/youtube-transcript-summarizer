@@ -8,16 +8,20 @@ sources:
     resource: repo://.agents/skills/showcase-weekly-insights/scripts/progress.py
   - id: openwiki-source-b493016d77bf2922d5f7e385
     resource: repo://.agents/skills/showcase-weekly-insights/SKILL.md
+  - id: openwiki-source-26d585bd2733c12b0b805461
+    resource: repo://apps/showcase/content/weekly-insights/2026-10-11/report.json
+  - id: openwiki-source-edc748d2ffa8cac498e9a351
+    resource: repo://apps/showcase/content/weekly-insights/series.json
   - id: openwiki-source-bbc421d322d74564a269df19
     resource: repo://apps/showcase/package.json
   - id: openwiki-source-17de8480042164f5a9040c86
     resource: repo://apps/showcase/scripts/weekly-insights-content.mjs
   - id: openwiki-source-263e3bdd5cbd1e9c173088e9
     resource: repo://apps/showcase/server/utils/weekly-insights.ts
-generated: { by: "codex", at: "2026-10-17T08:55:14.960Z" }
+generated: { by: "codex", at: "2026-10-25T16:13:59.896Z" }
 verified:
   - by: openwiki/0.6.0
-    at: 2026-10-17T08:55:14.960Z
+    at: 2026-10-25T16:13:59.896Z
 ---
 
 # 每週回顧整理與內容發布流程
@@ -57,6 +61,12 @@ planner 核對每週紀錄，而非只看最新完成日期。規則改變、rep
 registry 寫至 `.generated/weekly-insights.ts`，由 server 明確 import 進 Nitro bundle；列表省略正文、代表來源與品質說明，單週詳情才提供完整資料。內容變更需重新啟動 dev 或重新建置才載入。
 
 `published: true` 只決定內容是否進入本機 bundle。遠端 push、發布與部署仍須依 AGENTS.md 在具體結果可檢查後取得當次確認。此整理流程不會自動建立 cron 或推送；部署設定見[設定、執行與部署](../operations/configuration-and-deployment.md)。
+
+## 目前公開資料範圍
+
+目前 manifest 收錄七週：`2026-08-30` 至 `2026-10-11`；系列資料截至 `2026-10-21T14:11:09.595751Z`，全期不同來源數為 489。
+最新 `2026-10-11` 週涵蓋 10/11–10/17，標示 closed／complete，56 個來源；首週從 9/1 才開始 coverage，不能當完整七天比較。
+這是 repository 中已整理的內容範圍，不代表已追上目前日期，也不能由公開 manifest 推定私人 checkpoint 或最新 Notion 狀態。
 
 ## 驗證入口
 
