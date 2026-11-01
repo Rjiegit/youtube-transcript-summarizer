@@ -98,7 +98,7 @@ useHead({
     <nav class="insight-nav"><NuxtLink to="/">← 影片筆記庫</NuxtLink><span>週日 — 週六 · 每週回顧</span></nav>
     <header class="insight-hero" :class="{ 'insight-hero--brief': series?.highlights }">
       <p class="hero__eyebrow">Weekly Knowledge Review</p><h1>近期重點與每週回顧</h1>
-      <p>先看新增了什麼認識，再按需要查看依據與完整回顧。</p>
+      <p>先掌握近期重點，再深入查看來源依據與完整週報。</p>
       <p v-if="series" class="insight-caption">{{ series.collectionStart }} 起 · 資料截至 {{ formatTaipeiDateTime(series.asOf) }}</p>
     </header>
     <section v-if="!weeks.length" class="state-panel"><h2>尚未整理週報</h2><p>下一份每週回顧完成後會顯示在這裡。</p></section>
