@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-11-01T21:04:08.055369+08:00",
+  "revision": 1,
+  "start": "2026-10-25",
+  "endExclusive": "2026-11-01",
+  "coverageStart": "2026-10-25",
+  "asOf": "2026-11-01T21:04:08.055369+08:00",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "風險分級審查、個人助理與 AI 營運成本",
+  "summary": "124 個不同來源；Agent 審查、隔離與評測集中出現，個人助理選型轉向資料位置和控制權，科技企業內容更關心營運成本。",
+  "metrics": {
+    "rawCount": 128,
+    "sourceCount": 124,
+    "newSourceCount": 119,
+    "recurringSourceCount": 5
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 40
+    },
+    {
+      "id": "models-tools",
+      "count": 34
+    },
+    {
+      "id": "career",
+      "count": 13
+    },
+    {
+      "id": "finance-retirement",
+      "count": 9
+    },
+    {
+      "id": "crypto-policy",
+      "count": 5
+    },
+    {
+      "id": "technology-business",
+      "count": 10
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 5
+    },
+    {
+      "id": "society-leisure",
+      "count": 8
+    }
+  ],
+  "sources": [
+    {
+      "title": "How I Review AI Code - (Meta Senior Staff Engineer)",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=b2QkhmQ0sT0"
+    },
+    {
+      "title": "AI 写完代码，怎么放心上线？拆解 Claude Code 团队的审查流程",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=Ed28lQJgt3A"
+    },
+    {
+      "title": "EP449 - Claude Code 的 subagent 什麼時候該開？開之前先問這五個問題",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=Kau4-lDENz8"
+    },
+    {
+      "title": "dots、Muse、Grok Bot、Claude Code Projects 差在哪？ | 回到Axton",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=0M8o5KAQf6k"
+    },
+    {
+      "title": "🚀本地部署全方位实测Unlimited-OCR-2！33亿参数能把复杂文档读到什么程度？从模糊扫描书页到双栏研究报告，从复杂表格到数学公式，再到中日韩混排文档，逐项检查文字识别、表格结构与排版解析效果",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=W7lSIikNJBI"
+    },
+    {
+      "title": "EP452 - Google 雲端翻倍、股價卻大跌，Microsoft 同樣砸 AI 為什麼沒有一起大跌？兩家財報對照，市場在擔心什麼？",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=HTLXg6JeM-w"
+    },
+    {
+      "title": "你的年龄應該存多少錢？20-60歲財富目標大公開，如何有效積累財富 | 好葉",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=d1pu07s3ZVc"
+    }
+  ],
+  "qualityNote": "完整分頁讀取收錄紀錄與摘要正文，按台灣收錄建立日期分週並依來源去重。短片、辨識錯誤與資訊不足的摘要不作主題推論；模型、產品、研究、行情及事件主張未另行查核，代表來源並非完整清單。"
+}

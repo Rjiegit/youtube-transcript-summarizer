@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-11-01T21:04:08.055369+08:00",
+  "revision": 1,
+  "start": "2026-10-18",
+  "endExclusive": "2026-10-25",
+  "coverageStart": "2026-10-18",
+  "asOf": "2026-11-01T21:04:08.055369+08:00",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "記憶、循環工程與可接續的 Agent 工作",
+  "summary": "71 個不同來源；Agent 工程與模型實測並行，長期記憶、工作區與驗收標準延續可靠交付，財務目標題材重新出現。",
+  "metrics": {
+    "rawCount": 74,
+    "sourceCount": 71,
+    "newSourceCount": 70,
+    "recurringSourceCount": 1
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 18
+    },
+    {
+      "id": "models-tools",
+      "count": 15
+    },
+    {
+      "id": "career",
+      "count": 12
+    },
+    {
+      "id": "finance-retirement",
+      "count": 5
+    },
+    {
+      "id": "crypto-policy",
+      "count": 7
+    },
+    {
+      "id": "technology-business",
+      "count": 4
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 6
+    },
+    {
+      "id": "society-leisure",
+      "count": 4
+    }
+  ],
+  "sources": [
+    {
+      "title": "用 Pi Durable 做移动设备上的 Agent，是怎样的开发体验？",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=FEsans99Yic"
+    },
+    {
+      "title": "长期Agent怎么记住关键事？记住事实、模糊召回与动态更新的完整工程方案",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=ydxlle8MNu4"
+    },
+    {
+      "title": "mattpocock/skills 全技能实测：setup、grill-with-docs、to-spec、to-tickets、implement-spec 整套工作流拆解",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=cN0xrbc_7uQ"
+    },
+    {
+      "title": "Paperclip 實用入門：把 AI 任務、審批與花費放進同一個看板｜GitHub 雷達",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=3A6o0v7we4w"
+    },
+    {
+      "title": "🚀6亿Token只花了30元！我用DeepSeek-V4.1-Flash-1017连做7项开发测试，表现到底如何？在DeepSeek Harness中实测动画制作、游戏开发、iOS原生应用和前端开发",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=wwesbpJ0Yrg"
+    },
+    {
+      "title": "外商也可能是一言堂！面試如何判斷公司好壞？HR 揭露真正誰說了算｜外商面試技巧｜科技業｜上市公司｜家族企業｜Nvidia ｜Apple｜Motorola｜Intel｜Dell",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=qNaBCbGHd8M"
+    },
+    {
+      "title": "月薪三萬，如何滾出一千萬！『為什麼別人越來越有錢，你還在原地!?』Feat.＠闕又上",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=4r26OvTr_Ww"
+    }
+  ],
+  "qualityNote": "完整分頁讀取收錄紀錄與摘要正文，按台灣收錄建立日期分週並依來源去重。短片、辨識錯誤與資訊不足的摘要不作主題推論；模型、產品、研究、行情及事件主張未另行查核，代表來源並非完整清單。"
+}
