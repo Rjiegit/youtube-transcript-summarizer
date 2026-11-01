@@ -109,22 +109,25 @@ useHead({
         <p class="insight-caption">比較範圍：{{ observationRange(series.highlights.fromWeek) }} → {{ observationRange(series.highlights.toWeek) }} · 整理於 {{ formatTaipeiDateTime(series.highlights.updatedAt) }}</p>
         <p class="insight-caption">依上述收錄期間整理，不隨下方週次篩選改寫；不代表影片發布時間或外部趨勢。</p>
         <p v-if="!series.highlights.items.length" class="state-panel">{{ series.highlights.emptyReason }}</p>
-        <article v-for="item in series.highlights.items" :key="item.id" class="insight-highlight">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.change }}</p>
-          <p><strong>適用情境：</strong>{{ item.relevance }}</p>
-          <p class="insight-caption"><strong>判讀限制：</strong>{{ item.limitation }}</p>
-          <a v-if="item.evidence[0]" :href="item.evidence[0].sourceUrl" target="_blank" rel="noopener noreferrer">優先來源：{{ item.evidence[0].title }} ↗</a>
-          <details class="insight-highlight__details">
-            <summary>查看依據與下一步</summary>
-            <p><strong>可以怎麼做：</strong>{{ item.nextStep }}</p>
-            <ul><li v-for="ref in item.evidence" :key="`${ref.week}:${ref.sourceUrl}`">
-              <p>{{ ref.observation }}</p>
-              <NuxtLink :to="`/insights/${ref.week}`">{{ observationRange(ref.week) }} 週報</NuxtLink> ·
-              <a :href="ref.sourceUrl" target="_blank" rel="noopener noreferrer">{{ ref.title }} ↗</a>
-            </li></ul>
-          </details>
-        </article>
+        <div v-if="series.highlights.items.length" class="insight-highlight-grid">
+          <article v-for="(item, index) in series.highlights.items" :key="item.id" class="insight-highlight">
+            <p class="insight-highlight__number">重點 {{ String(index + 1).padStart(2, "0") }}</p>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.change }}</p>
+            <p class="insight-highlight__relevance"><strong>適用情境：</strong>{{ item.relevance }}</p>
+            <p class="insight-caption"><strong>判讀限制：</strong>{{ item.limitation }}</p>
+            <a v-if="item.evidence[0]" :href="item.evidence[0].sourceUrl" target="_blank" rel="noopener noreferrer">優先來源：{{ item.evidence[0].title }} ↗</a>
+            <details class="insight-highlight__details">
+              <summary>查看依據與下一步</summary>
+              <p><strong>可以怎麼做：</strong>{{ item.nextStep }}</p>
+              <ul><li v-for="ref in item.evidence" :key="`${ref.week}:${ref.sourceUrl}`">
+                <p>{{ ref.observation }}</p>
+                <NuxtLink :to="`/insights/${ref.week}`">{{ observationRange(ref.week) }} 週報</NuxtLink> ·
+                <a :href="ref.sourceUrl" target="_blank" rel="noopener noreferrer">{{ ref.title }} ↗</a>
+              </li></ul>
+            </details>
+          </article>
+        </div>
       </section>
       <details class="insight-panel insight-editorial insight-background" data-testid="insight-background" :open="!series?.highlights">
         <summary>長期脈絡與話題演變</summary>

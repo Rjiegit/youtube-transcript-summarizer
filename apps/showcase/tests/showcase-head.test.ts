@@ -146,12 +146,12 @@ describe("showcase head metadata", () => {
     expect(useHeadMock).toHaveBeenCalledWith(expect.objectContaining({
       title: SITE_NAME,
       meta: expect.arrayContaining([
-        expect.objectContaining({ name: "description", content: DEFAULT_DESCRIPTION }),
+        expect.objectContaining({ name: "description", content: "整理影片重點，讓值得留下的內容更容易查找與回顧。" }),
         expect.objectContaining({ property: "og:title", content: SITE_NAME }),
-        expect.objectContaining({ property: "og:description", content: DEFAULT_DESCRIPTION }),
+        expect.objectContaining({ property: "og:description", content: "整理影片重點，讓值得留下的內容更容易查找與回顧。" }),
         expect.objectContaining({ name: "twitter:card", content: "summary" }),
         expect.objectContaining({ name: "twitter:title", content: SITE_NAME }),
-        expect.objectContaining({ name: "twitter:description", content: DEFAULT_DESCRIPTION }),
+        expect.objectContaining({ name: "twitter:description", content: "整理影片重點，讓值得留下的內容更容易查找與回顧。" }),
       ]),
     }));
     const homeHeadArg = useHeadMock.mock.calls.find(([arg]) => arg?.title === SITE_NAME)?.[0];

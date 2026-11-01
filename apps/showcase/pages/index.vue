@@ -32,19 +32,19 @@ useHead({
   meta: [
     {
       name: "description",
-      content: "收藏從影片整理出的重點筆記",
+      content: "整理影片重點，讓值得留下的內容更容易查找與回顧。",
     },
     { property: "og:title", content: "影片筆記庫" },
     {
       property: "og:description",
-      content: "收藏從影片整理出的重點筆記",
+      content: "整理影片重點，讓值得留下的內容更容易查找與回顧。",
     },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary" },
     { name: "twitter:title", content: "影片筆記庫" },
     {
       name: "twitter:description",
-      content: "收藏從影片整理出的重點筆記",
+      content: "整理影片重點，讓值得留下的內容更容易查找與回顧。",
     },
   ],
 });
@@ -214,15 +214,23 @@ onBeforeUnmount(() => {
   <main class="showcase-shell">
     <section class="hero">
       <div class="hero__content">
-        <p class="hero__eyebrow">Video Knowledge Index</p>
-        <h1 class="hero__title">影片筆記庫</h1>
+        <p class="hero__eyebrow">影片筆記庫 · Video Knowledge Index</p>
+        <h1 class="hero__title">讓看過的，成為你的。</h1>
         <p class="hero__body">
-          收藏從影片整理出的重點筆記
+          整理影片重點，讓值得留下的內容更容易查找與回顧。
         </p>
         <NuxtLink to="/submit" class="hero__review-link">提交影片 →</NuxtLink>
-        <a href="/insights" class="hero__review-link">每週回顧與分類趨勢 →</a>
       </div>
     </section>
+
+    <NuxtLink to="/insights" class="home-review" aria-labelledby="home-review-title">
+      <div>
+        <p class="hero__eyebrow">每週回顧 · Weekly Review</p>
+        <h2 id="home-review-title">本週，值得再想一遍的事</h2>
+        <p class="home-review__description">查看近期重點、來源依據與完整週報。</p>
+      </div>
+      <span class="home-review__action">閱讀每週回顧 <span aria-hidden="true">→</span></span>
+    </NuxtLink>
 
     <section v-if="!pending && !error && items.length > 0" class="showcase-toolbar" aria-label="展示內容工具列">
       <div class="showcase-toolbar__actions">
