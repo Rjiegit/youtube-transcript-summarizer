@@ -1706,3 +1706,19 @@ a {
 .insight-category-button { border: 1px solid var(--line); border-radius: 24px; padding: 10px 16px; background: var(--panel); color: var(--ink); font: inherit; cursor: pointer; }
 .insight-category-button[aria-pressed="true"] { background: var(--accent-strong); border-color: var(--accent-strong); color: var(--panel); }
 .insight-category-button:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 3px; }
+
+/* Recent highlights keep the first read short; evidence remains available in place. */
+.insight-highlight { padding: 24px 0; border-top: 1px solid var(--line); }
+.insight-highlight:last-child { padding-bottom: 0; }
+.insight-highlight h3 { margin: 0 0 12px; font-size: clamp(20px, 3vw, 25px); }
+.insight-highlight p { line-height: 1.8; }
+.insight-highlight a { overflow-wrap: anywhere; }
+.insight-highlight__details { margin-top: 20px; }
+.insight-highlight__details summary, .insight-background > summary { cursor: pointer; font-weight: 600; }
+.insight-highlight__details li { margin: 16px 0; }
+.insight-background[open] > summary { margin-bottom: 28px; }
+.insight-highlight summary:focus-visible, .insight-background > summary:focus-visible {
+  outline: 2px solid var(--accent-strong); outline-offset: 4px;
+}
+.insight-hero--brief { padding: 24px 0 20px; }
+.insight-hero--brief h1 { font-size: clamp(28px, 4vw, 38px); }

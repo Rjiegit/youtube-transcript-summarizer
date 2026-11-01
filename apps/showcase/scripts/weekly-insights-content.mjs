@@ -151,11 +151,53 @@ export async function loadInsightContent(directory = join(getAppRoot(), "content
         watch: safeMarkdown(text(track.watch, "topic track watch")), observations };
     });
   }
+  let highlights = null;
+  if (allPublished && raw.highlights !== undefined) {
+    const brief = raw.highlights;
+    date(brief.fromWeek);
+    date(brief.toWeek);
+    timestamp(brief.updatedAt);
+    const covered = weeks.filter((week) => week.start >= brief.fromWeek && week.start <= brief.toWeek);
+    requireValue(brief.fromWeek <= brief.toWeek && covered[0]?.start === brief.fromWeek &&
+      covered.at(-1)?.start === brief.toWeek &&
+      covered.length === (date(brief.toWeek) - date(brief.fromWeek)) / (7 * 86400000) + 1 &&
+      covered.every((week) => week.periodState === "closed" && week.dataCompleteness === "complete" &&
+        week.coverageStart === week.start), "invalid highlight period");
+    requireValue(Date.parse(brief.updatedAt) >= Date.parse(`${covered.at(-1).endExclusive}T00:00:00+08:00`),
+      "highlight updated before period ended");
+    requireValue(Array.isArray(brief.items) && brief.items.length <= 3, "invalid highlight count");
+    const emptyReason = brief.items.length ? "" : safeMarkdown(text(brief.emptyReason, "highlight empty reason"));
+    const highlightIds = new Set();
+    const items = brief.items.map((item) => {
+      requireValue(typeof item.id === "string" && /^[a-z]+(?:-[a-z]+)*$/.test(item.id) &&
+        !highlightIds.has(item.id), "invalid/duplicate highlight ID");
+      highlightIds.add(item.id);
+      requireValue(Array.isArray(item.evidence) && item.evidence.length > 0, "missing highlight evidence");
+      const references = new Set();
+      const evidence = item.evidence.map((ref) => {
+        const week = covered.find((week) => week.start === ref.week);
+        const source = week?.sources.find((source) => source.sourceUrl === ref.sourceUrl);
+        const key = `${ref.week}:${ref.sourceUrl}`;
+        requireValue(source && !references.has(key), "unknown/duplicate highlight evidence");
+        references.add(key);
+        return { week: ref.week, sourceUrl: source.sourceUrl, title: source.title,
+          observation: safeMarkdown(text(ref.observation, "highlight evidence observation")) };
+      });
+      requireValue(evidence.some((ref) => ref.week === brief.fromWeek) &&
+        evidence.some((ref) => ref.week === brief.toWeek), "missing highlight comparison evidence");
+      return { id: item.id, title: safeMarkdown(text(item.title, "highlight title")),
+        change: safeMarkdown(text(item.change, "highlight change")),
+        relevance: safeMarkdown(text(item.relevance, "highlight relevance")),
+        limitation: safeMarkdown(text(item.limitation, "highlight limitation")),
+        nextStep: safeMarkdown(text(item.nextStep, "highlight next step")), evidence };
+    });
+    highlights = { fromWeek: brief.fromWeek, toWeek: brief.toWeek, updatedAt: brief.updatedAt, emptyReason, items };
+  }
   return {
     series: { collectionStart: raw.collectionStart, asOf: raw.asOf, timezone: raw.timezone,
       weekConvention: raw.weekConvention, dedupPolicy: raw.dedupPolicy,
       analysisVersion: raw.analysisVersion, uniqueSourceCount: allPublished ? raw.uniqueSourceCount : null,
-      categories, overview: allPublished ? overview : "", topicInsights, topicTracks },
+      categories, overview: allPublished ? overview : "", topicInsights, topicTracks, highlights },
     weeks,
   };
 }

@@ -37,7 +37,24 @@ export interface WeeklyInsight extends WeeklyInsightSummary {
   sources: Array<{ title: string; categoryId: string; sourceUrl: string }>;
 }
 
+export interface InsightHighlights {
+  fromWeek: string;
+  toWeek: string;
+  updatedAt: string;
+  emptyReason?: string;
+  items: Array<{
+    id: string;
+    title: string;
+    change: string;
+    relevance: string;
+    limitation: string;
+    nextStep: string;
+    evidence: Array<{ week: string; sourceUrl: string; title: string; observation: string }>;
+  }>;
+}
+
 export interface InsightSeries {
+  highlights?: InsightHighlights | null;
   topicTracks?: InsightTopicTrack[];
   topicInsights?: {
     fromWeek: string;

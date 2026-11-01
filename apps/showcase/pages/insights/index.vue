@@ -96,14 +96,38 @@ useHead({
 <template>
   <main class="insight-shell">
     <nav class="insight-nav"><NuxtLink to="/">← 影片筆記庫</NuxtLink><span>週日 — 週六 · 每週回顧</span></nav>
-    <header class="insight-hero">
-      <p class="hero__eyebrow">Weekly Knowledge Review</p><h1>把一週的內容，<br />串成看得見的變化。</h1>
-      <p>回顧收錄了什麼，也看看關注的重心如何移動。</p>
+    <header class="insight-hero" :class="{ 'insight-hero--brief': series?.highlights }">
+      <p class="hero__eyebrow">Weekly Knowledge Review</p><h1>近期重點與每週回顧</h1>
+      <p>先看新增了什麼認識，再按需要查看依據與完整回顧。</p>
       <p v-if="series" class="insight-caption">{{ series.collectionStart }} 起 · 資料截至 {{ formatTaipeiDateTime(series.asOf) }}</p>
     </header>
     <section v-if="!weeks.length" class="state-panel"><h2>尚未整理週報</h2><p>下一份每週回顧完成後會顯示在這裡。</p></section>
     <template v-else>
-      <section class="insight-panel insight-editorial">
+      <section v-if="series?.highlights" class="insight-panel insight-highlights" data-testid="highlights" aria-labelledby="highlights-heading">
+        <div class="insight-section-heading"><p class="hero__eyebrow">Recent Highlights</p><h2 id="highlights-heading">近期值得注意</h2>
+          <p>最多三個重點，依需要展開依據。</p></div>
+        <p class="insight-caption">比較範圍：{{ observationRange(series.highlights.fromWeek) }} → {{ observationRange(series.highlights.toWeek) }} · 整理於 {{ formatTaipeiDateTime(series.highlights.updatedAt) }}</p>
+        <p class="insight-caption">依上述收錄期間整理，不隨下方週次篩選改寫；不代表影片發布時間或外部趨勢。</p>
+        <p v-if="!series.highlights.items.length" class="state-panel">{{ series.highlights.emptyReason }}</p>
+        <article v-for="item in series.highlights.items" :key="item.id" class="insight-highlight">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.change }}</p>
+          <p><strong>適用情境：</strong>{{ item.relevance }}</p>
+          <p class="insight-caption"><strong>判讀限制：</strong>{{ item.limitation }}</p>
+          <a v-if="item.evidence[0]" :href="item.evidence[0].sourceUrl" target="_blank" rel="noopener noreferrer">優先來源：{{ item.evidence[0].title }} ↗</a>
+          <details class="insight-highlight__details">
+            <summary>查看依據與下一步</summary>
+            <p><strong>可以怎麼做：</strong>{{ item.nextStep }}</p>
+            <ul><li v-for="ref in item.evidence" :key="`${ref.week}:${ref.sourceUrl}`">
+              <p>{{ ref.observation }}</p>
+              <NuxtLink :to="`/insights/${ref.week}`">{{ observationRange(ref.week) }} 週報</NuxtLink> ·
+              <a :href="ref.sourceUrl" target="_blank" rel="noopener noreferrer">{{ ref.title }} ↗</a>
+            </li></ul>
+          </details>
+        </article>
+      </section>
+      <details class="insight-panel insight-editorial insight-background" data-testid="insight-background" :open="!series?.highlights">
+        <summary>長期脈絡與話題演變</summary>
         <div class="insight-section-heading"><p class="hero__eyebrow">The Bigger Picture</p><h2>整體觀察</h2></div>
         <MarkdownContent v-if="series?.overview" :source="series.overview" />
         <p v-else>目前展示已整理的單週回顧，整體分析尚未完成。</p>
@@ -124,7 +148,7 @@ useHead({
             <p><strong>接下來觀察：</strong>{{ topic.watch }}</p>
           </article>
         </div>
-      </section>
+      </details>
       <section class="insight-panel">
         <div class="insight-section-heading"><p class="hero__eyebrow">Topic Trends</p><h2>主題變化與洞見</h2><p>看看內容如何轉向、哪些訊號值得留意，以及接下來可以觀察什麼。</p></div>
         <div class="insight-category-picker" role="group" aria-label="觀察分類">

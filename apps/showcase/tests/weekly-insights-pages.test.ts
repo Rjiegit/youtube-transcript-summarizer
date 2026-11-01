@@ -46,6 +46,30 @@ beforeEach(() => {
 afterEach(() => { vi.clearAllMocks(); });
 
 describe("weekly insight pages", () => {
+  it("shows highlights before background, with direct sources and optional details", async () => {
+    const highlights = { fromWeek: "2026-09-06", toWeek: "2026-09-13", updatedAt: series.asOf,
+      items: [{ id: "delivery", title: "驗收成為焦點", change: "新增驗收條件", relevance: "適用開發工作",
+        limitation: "未獨立查核", nextStep: "查看檢查方式", evidence: [
+          { week: "2026-09-13", sourceUrl: "https://www.youtube.com/watch?v=test", title: "優先來源", observation: "討論驗收" },
+        ] }] };
+    useFetchMock.mockReturnValue({ data: ref({ series: { ...series, highlights }, weeks: items }), error: ref(null) });
+    const page = await import("../pages/insights/index.vue");
+    const wrapper = await mountAsyncPage(page.default, { global: { stubs } });
+    const brief = wrapper.get('[data-testid="highlights"]');
+    expect(brief.text()).toContain("新增驗收條件");
+    expect(brief.get('a[target="_blank"]').attributes("href")).toBe(highlights.items[0].evidence[0].sourceUrl);
+    expect(brief.get("details").attributes("open")).toBeUndefined();
+    expect(wrapper.get('[data-testid="insight-background"]').attributes("open")).toBeUndefined();
+    expect(wrapper.html().indexOf('data-testid="highlights"')).toBeLessThan(wrapper.html().indexOf('data-testid="insight-background"'));
+    await wrapper.get('select[aria-label="起始週"]').setValue("2026-09-13");
+    expect(brief.text()).toContain("新增驗收條件");
+    wrapper.unmount();
+    useFetchMock.mockReturnValue({ data: ref({ series: { ...series, highlights: { ...highlights, items: [], emptyReason: "沒有新訊號" } }, weeks: items }), error: ref(null) });
+    const empty = await mountAsyncPage(page.default, { global: { stubs } });
+    expect(empty.get('[data-testid="highlights"]').text()).toContain("沒有新訊號");
+    empty.unmount();
+  });
+
   it("renders reviews and compares only full Sunday–Saturday weeks by default", async () => {
     useFetchMock.mockReturnValue({ data: ref({ series, weeks: items }), error: ref(null) });
     const page = await import("../pages/insights/index.vue");

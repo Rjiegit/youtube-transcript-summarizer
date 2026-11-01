@@ -152,6 +152,22 @@ test("weekly insights are bundled, calendar-aligned and rendered before hydratio
   assert.equal(index.status, 200);
   const indexDom = new JSDOM(await index.text());
   assert.match(indexDom.window.document.body.textContent, /週日 — 週六/);
+  const highlightPanel = indexDom.window.document.querySelector('[data-testid="highlights"]');
+  assert.ok(series.highlights && highlightPanel);
+  assert.equal(highlightPanel.querySelectorAll("article").length, series.highlights.items.length);
+  assert.equal(indexDom.window.document.querySelector('[data-testid="insight-background"]').open, false);
+  for (const item of series.highlights.items) {
+    assert.ok(highlightPanel.textContent.includes(item.title));
+    assert.ok(highlightPanel.textContent.includes(item.limitation));
+    assert.ok(highlightPanel.querySelector(`a[href="${item.evidence[0].sourceUrl}"]`));
+    for (const ref of item.evidence) {
+      const detail = await fetch(`${server.baseUrl}/api/showcase/insights/${ref.week}`);
+      assert.equal(detail.status, 200);
+      const { week } = await detail.json();
+      assert.ok(week.sources.some((source) => source.sourceUrl === ref.sourceUrl && source.title === ref.title));
+    }
+  }
+
   assert.equal(indexDom.window.document.querySelectorAll(".insight-topic-track").length, series.topicTracks.length);
   for (const topic of series.topicTracks) {
     const heading = indexDom.window.document.getElementById(`topic-${topic.id}`);

@@ -32,5 +32,7 @@ SSR 檢查需先完成 build。各項測試與 CI 責任見 [開發與測試](..
 | 受邀帳號登入 | `/login`；[Feature Toggle 與啟用步驟](../../docs/operations/showcase-account-auth.md) | Supabase Auth；預設關閉 |
 | 影片收件匣 | `/submit`；[安裝、輪替與復原](../../docs/video-inbox.md) | 見操作手冊的實作來源導覽；OpenWiki 尚無獨立收件匣頁面 |
 
+近期重點在 `/insights` 優先展示，提供比較範圍、限制與來源；細節可於同頁展開。完整週報與統計仍可查閱。
+
 週報由 `content/weekly-insights/` 在啟動／建置時載入；定期整理使用 [週報 skill](../../.agents/skills/showcase-weekly-insights/SKILL.md)。
 完整的文件分工見 [操作文件導覽](../../docs/README.md)。
