@@ -141,7 +141,7 @@ test("weekly insights are bundled, calendar-aligned and rendered before hydratio
   assert.equal(response.status, 200);
   assert.match(response.headers.get("cache-control"), /s-maxage=300/);
   assert.ok(response.headers.get("etag"));
-  const { series, weeks } = await response.json();
+  const { series, weeks, topics } = await response.json();
   assert.equal(series.weekConvention, "sunday-saturday");
   for (const week of weeks) {
     assert.equal(new Date(`${week.start}T00:00:00Z`).getUTCDay(), 0);
@@ -185,7 +185,6 @@ test("weekly insights are bundled, calendar-aligned and rendered before hydratio
   assert.equal(indexDom.window.document.querySelectorAll(".insight-chart__column").length,
     weeks.filter((week) => week.periodState === "closed" && week.coverageStart === week.start &&
       week.dataCompleteness === "complete").length);
-  indexDom.window.close();
   if (weeks.length) {
     const week = weeks[0];
     const detail = await fetch(`${server.baseUrl}/insights/${week.start}`);
@@ -198,6 +197,36 @@ test("weekly insights are bundled, calendar-aligned and rendered before hydratio
     assert.ok(!dom.window.document.body.textContent.includes("snapshot.private"));
     dom.window.close();
   }
+  assert.equal(topics.length, 2);
+  const topicPanel = indexDom.window.document.querySelector('[data-testid="topic-readings"]');
+  assert.ok(topicPanel);
+  for (const topic of topics) {
+    assert.ok(!("sections" in topic) && !("sources" in topic) && !("intro" in topic));
+    assert.ok(topicPanel.querySelector(`a[href="/insights/topics/${topic.id}"]`));
+    const api = await fetch(`${server.baseUrl}/api/showcase/topics/${topic.id}`);
+    assert.equal(api.status, 200);
+    assert.match(api.headers.get("cache-control"), /s-maxage=300/);
+    assert.ok(api.headers.get("etag"));
+    const { topic: detail } = await api.json();
+    assert.ok(detail.sections.length > 0);
+    const page = await fetch(`${server.baseUrl}/insights/topics/${topic.id}`);
+    assert.equal(page.status, 200);
+    const topicDom = new JSDOM(await page.text());
+    assert.equal(topicDom.window.document.querySelector("h1").textContent, topic.title);
+    assert.equal(headValue(topicDom.window.document, "og:url"), `${siteUrl}/insights/topics/${topic.id}`);
+    assert.ok(topicDom.window.document.body.textContent.includes(topic.limitation));
+    assert.equal(topicDom.window.document.querySelector('[data-testid="topic-sources"]').open, false);
+    assert.ok(topicDom.window.document.querySelector(`a[href="${topic.prioritySourceUrl}"]`));
+    assert.ok(!topicDom.window.document.body.textContent.includes("snapshot.private"));
+    assert.ok(!topicDom.window.document.querySelector("main").textContent.includes("[M1]"));
+    topicDom.window.close();
+  }
+  indexDom.window.close();
+  const missingTopic = await fetch(`${server.baseUrl}/api/showcase/topics/missing`);
+  assert.equal(missingTopic.status, 404);
+  assert.equal(missingTopic.headers.get("cache-control"), "no-store");
+  const missingTopicPage = await fetch(`${server.baseUrl}/insights/topics/missing`);
+  assert.equal(missingTopicPage.status, 404);
   const missing = await fetch(`${server.baseUrl}/api/showcase/insights/1900-01-01`);
   assert.equal(missing.status, 404);
   assert.equal(missing.headers.get("cache-control"), "no-store");

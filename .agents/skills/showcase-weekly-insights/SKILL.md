@@ -1,13 +1,19 @@
 ---
 name: showcase-weekly-insights
-description: 從 Notion 文章摘要整理 Showcase 近期重點、週報與分類趨勢，依本機逐週進度補跑未完成週、更新進行中週或指定範圍重算。適用於手動定期整理每週回顧。
+description: 從 Notion 文章摘要整理 Showcase 週報、分類趨勢與跨影片專題，合併重複說法、保留新增資訊及分歧。適用於每週回顧補跑、專題整合與既有分析更新。
 ---
 
 # Showcase 週報整理
 
-在 openai-whisper repository 內操作。產出繁體中文近期重點、週報文件與整體分類趨勢，沿用 `apps/showcase/content/weekly-insights/` 契約，不新增網站實作或自動排程。
+在 openai-whisper repository 內操作。產出繁體中文近期重點、週報文件、整體分類趨勢與可持續更新的專題。週報沿用 `apps/showcase/content/weekly-insights/` 契約；專題閱讀稿保存在 `apps/showcase/content/topic-readings/`，由 `apps/showcase/content/topic-readings/manifest.json` 選入網站 bundle。不因整理內容新增網站實作或自動排程。
 
 先讀 repository 的 `docs/features/showcase-weekly-insights.md`，確認分類、來源去重與展示文件欄位。進度工具位於本 skill 的 `scripts/progress.py`，以下命令從 repository 根目錄執行；若 skill 安裝於其他位置，用實際路徑呼叫。
+
+## 選擇整理模式
+
+- 一般「每週回顧」：補齊週報，再核對既有專題是否有實質更新。已完成週不重查，專題更新不以影片數量取代新增認識。
+- 「同類放一起／整合重複影片／專題試作」：讀 [跨影片專題流程](references/topic-synthesis.md)，沿用私人快照，產出能直接閱讀的整合稿、差異與來源對照；不必先改網站。
+- 補跑後更新既有專題時也讀該 reference。專題有獨立的選材範圍與版本；逐週完成不代表專題全量分析完成。
 
 ## 決定此次範圍
 
@@ -16,7 +22,7 @@ python3 .agents/skills/showcase-weekly-insights/scripts/progress.py plan
 ```
 
 - 週日到週六、Asia/Taipei；起點讀 `series.json.collectionStart`，目前為 2026-09-01。首週 8/30 開始但只收 9/1 起資料。
-- 預設到最近已結束的週六，按時間順序處理 `weeks`，跳過有有效完成紀錄的週。沒有待辦就回報目前已完成範圍，不重新呼叫 Notion／LLM。
+- 預設到最近已結束的週六，按時間順序處理 `weeks`，跳過有有效完成紀錄的週。沒有待補週就不重新呼叫 Notion；再核對專題的選材範圍、來源指紋與處理紀錄。兩者都沒有待辦且未要求重整時，回報完成範圍，不重新呼叫 LLM 或更新日期。
 - 使用者指定截止日期時加 `--through YYYY-MM-DD`。日期選取包含該日的整週，已結束週保留完整七天，不切成日報。包含本週須加 `--include-open`；本週資料只讀至選定日期／查詢當下。
 - 使用者要重新分析既有週或追查 Notion 後續修改時，加 `--from YYYY-MM-DD --through YYYY-MM-DD --refresh`。不要把歷史首次收錄時間改成最後編輯時間。
 - 進度逐週記錄於 `data/reports/weekly-insights/progress.json`，包含完成狀態、版本指紋、報告指紋與私人快照。中途缺週、已記錄但尚未結束的週、報告變動或來源快照遺失都會列入待辦。不要只看最新日期跳過較早缺口。
@@ -33,6 +39,7 @@ python3 .agents/skills/showcase-weekly-insights/scripts/progress.py plan
    主分類維持長期可比較；細部話題以穩定 ID 的標籤追蹤，可跨分類。同義話題沿用既有 ID，不因新一週的措辭不同就新增。私人快照可記錄每來源的 `topicIds`，多標籤不加入主分類計數。來源內容被更正時核對受影響週；分類拆分／合併則記錄版本、生效時間、舊新對照與重算範圍，不能把規則變動當成內容趨勢。
 4. 產出每週主題、代表來源、分類數量與占比；使用完整週比較百分點，不將首週部分資料或本週進行中資料與完整週量直接比較。摘要品質不足時保留品質說明，不根據標題猜測文章內容。文章內的外部主張不是已驗證事實。
 5. 更新週日目錄 `report.json`、`report.md`、series 的 manifest／全期去重數及 overview。新增週先作 draft，核對展示內容後才設 `published: true`，此旗標只代表進入本機網站 bundle。實質修改既有週增加 revision，覆用原 slug，不另建重複週。
+6. 依 [跨影片專題流程](references/topic-synthesis.md) 檢查新增摘要對已登記專題的貢獻，將重複、補充、限制、反例及更正分開。以穩定問題維護同一份專題，保留來源對照；首版或抽樣試作明示尚無前版、未全量涵蓋。不為專題去重改動既有主分類或來源統計。
 
 ### 選出近期重點
 
@@ -77,6 +84,6 @@ python3 .agents/skills/showcase-weekly-insights/scripts/progress.py record \
 
 每次只執行一個整理流程。進度寫入有 `.lock` 防止並行寫入；若中斷留下 lock，先確認沒有另一個正在寫入的流程，再移除 lock 並續跑 plan。保留私人快照，不覆寫已被進度引用的檔案。
 
-完成後再跑 plan 確認剩餘缺口，檢查 diff 與週報頁面。沿用開發文件的測試／build／SSR 流程；重新啟動 dev 才載入新內容。若同一個 dev 程序正在使用 Nuxt 產物，先停止該程序再 build，完成後恢復開發頁。
+完成後再跑 plan 確認剩餘缺口，檢查 diff 與週報頁面。修改週報或已選入網站的專題時沿用開發文件的測試／build／SSR 流程；重新啟動 dev 才載入新內容。若同一個 dev 程序正在使用 Nuxt 產物，先停止該程序再 build，完成後恢復開發頁。僅更新未選入網站的閱讀稿或 skill 時，核對來源、相對連結與技能格式即可。
 
-向使用者回報本次處理、跳過、失敗與待補的週、資料截至時間及進度檔位置。更新文件與進度不代表遠端發佈：commit/push、發布或部署依 repository AGENTS.md 當次確認規則辦理；使用者要手動推送時只留下本機可檢查結果。
+向使用者回報本次處理、跳過、失敗與待補的週、資料截至時間及進度檔位置；另列專題首版／更新／無實質變更、選材與未涵蓋範圍，並提供可直接閱讀的入口。區分本機文件、網站 bundle 與遠端已上線。更新文件與進度不代表遠端發佈：commit/push、發布或部署依 repository AGENTS.md 當次確認規則辦理；使用者要手動推送時只留下本機可檢查結果。

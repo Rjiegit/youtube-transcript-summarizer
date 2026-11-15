@@ -133,3 +133,50 @@ describe("weekly insight pages", () => {
   });
 
 });
+
+const topicSummary = {
+  id: 'agent-memory', title: '如何維護記憶？', summary: '保存後仍須更正與淘汰。', relevance: '反覆交辦工作時。',
+  limitation: '選定來源，未獨立查核。', changes: '首次整理。', categoryIds: ['agent-engineering'],
+  revision: 1, analysisVersion: 'topic-synthesis-v1', updatedAt: '2026-11-15T20:03:45+08:00',
+  coverageStart: '2026-11-01', coverageThrough: '2026-11-14', coverageMode: 'selected-sources' as const,
+  sourceCount: 6, prioritySourceUrl: 'https://www.youtube.com/watch?v=test',
+};
+
+describe('topic reading experience', () => {
+  it('shows grouped readings before trends, filters by category and preserves them across week filters', async () => {
+    useFetchMock.mockReturnValue({ data: ref({ series, weeks: items, topics: [topicSummary] }), error: ref(null) });
+    const page = await import('../pages/insights/index.vue');
+    const wrapper = await mountAsyncPage(page.default, { global: { stubs } });
+    expect(wrapper.get('[data-testid="topic-readings"]').text()).toContain(topicSummary.title);
+    expect(wrapper.get('a[href="/insights/topics/agent-memory"]').exists()).toBe(true);
+    expect(wrapper.html().indexOf('data-testid="topic-readings"')).toBeLessThan(wrapper.html().indexOf('data-testid="insight-background"'));
+    await wrapper.get('select[aria-label="起始週"]').setValue('2026-09-13');
+    expect(wrapper.get('[data-testid="topic-readings"]').text()).toContain(topicSummary.title);
+    await wrapper.get('button[data-category="career"]').trigger('click');
+    expect(wrapper.get('[data-testid="topic-readings"]').text()).toContain('這個分類尚未整理專題');
+    expect(wrapper.find('a[href="/insights/topics/agent-memory"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+  it('renders a direct reading with limitations and collapsed sources, without read mutations', async () => {
+    useFetchMock.mockReturnValue({ data: ref({ categories, topic: { ...topicSummary, intro: '整合理解。',
+      sections: [{ heading: '整合做法', content: '## 不用重看每支影片\n\n保留差異。' }],
+      sources: { heading: '想深入時怎麼選', content: '[來源](https://www.youtube.com/watch?v=test)' },
+    } }), error: ref(null) });
+    vi.stubGlobal('useRoute', () => ({ params: { id: 'agent-memory' } }));
+    const page = await import('../pages/insights/topics/[id].vue');
+    const wrapper = await mountAsyncPage(page.default, { global: { stubs } });
+    expect(wrapper.get('h1').text()).toBe(topicSummary.title);
+    expect(wrapper.text()).toContain('首次整理');
+    expect(wrapper.text()).toContain(topicSummary.limitation);
+    expect(wrapper.get('[data-testid="topic-sources"]').attributes('open')).toBeUndefined();
+    expect(wrapper.text()).toContain('保留差異');
+    expect(wrapper.find('[data-testid="mark-all-read-button"]').exists()).toBe(false);
+    wrapper.unmount();
+  });
+  it('returns a missing-topic error for unknown IDs', async () => {
+    useFetchMock.mockReturnValue({ data: ref(null), error: ref({ statusCode: 404 }) });
+    vi.stubGlobal('useRoute', () => ({ params: { id: 'missing' } }));
+    const page = await import('../pages/insights/topics/[id].vue');
+    await expect(mountAsyncPage(page.default, { global: { stubs } })).rejects.toMatchObject({ statusCode: 404 });
+  });
+});

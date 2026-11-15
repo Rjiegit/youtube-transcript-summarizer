@@ -1,5 +1,17 @@
 # Showcase 每週回顧與分類趨勢
 
+## 跨影片專題閱讀
+
+同一問題可跨週、跨影片整理成一份閱讀稿，將重複說法合併，保留新增案例、適用條件、分歧與更正。入口為 [跨影片專題閱讀](../insights/topics/index.md)，首批以 11/1–11/14 的既有摘要選材，精讀 16 個來源，試作「Agent 記憶與規則維護」及「Agent 審查與驗收」。這是選定來源的初次整合，未全量分析 202 筆摘要，也未量測全期重複率。
+
+主分類、影片 ID 去重、週報統計與 `topicTracks` 契約維持原有用途。較細的專題以穩定問題及 ID 持續更新，`parentTrackId` 連回既有話題；新增來源不必然代表新增認識。`/insights` 在近期重點之後顯示分類專題卡片，再保留長期脈絡、分類趨勢與週報；分類按鈕同時切換專題與分類洞見，週次只篩選統計和週報。專題頁為 `/insights/topics/{id}`，資料 API 為 `/api/showcase/topics/{id}`；來源閱讀區預設收合，重要限制直接顯示。尚無個人專題閱讀版本同步。
+
+可重複執行的選材、說法比對、引用與版本保存程序見 [專題整合流程](../../.agents/skills/showcase-weekly-insights/references/topic-synthesis.md)。私人分析及獨立狀態保存在 `data/reports/weekly-insights/topic-digests/`，不修改原始快照或既有逐週完成紀錄。既有 `progress.py` 僅驗證週報，並未自動驗證專題。後續一般回顧先補週報，再核對已登記專題是否有實質更新；只有重複來源時保留已評估紀錄，不為了換日期重寫正文。
+
+專題稿使用 JSON frontmatter，保存在 `apps/showcase/content/topic-readings/{id}.md`，作為正文及 metadata 的單一來源。`apps/showcase/content/topic-readings/manifest.json` 指定 `{id, published}`，只有已選取且發布的稿件會在啟動／建置時打包；runtime 不從 repository 或私人快照讀檔。列表 API 只回傳卡片欄位，專題 API 才附正文；未知 metadata 不對外輸出。沒有對應稿件的分類顯示尚未整理，舊週報仍可閱讀。
+
+Frontmatter 包含原有專題識別、分類、revision、analysisVersion、updatedAt、選材範圍、coverageMode 與 sourceCount，另提供 title、summary、relevance、limitation、changes、prioritySourceUrl。正文最後的「想深入時怎麼選」為收合的來源閱讀區。建置會核對合法日期、分類、唯一來源數及 HTTPS YouTube 引用，優先來源必須出現在正文；完整契約及操作步驟以專題 skill reference 為準。
+
 ## 近期重點
 
 `/insights` 優先顯示零到三個近期重點，提供一句話結論、相較基準的新認識、適用情境、判讀限制及直接可開啟的優先來源；「查看依據與下一步」在同頁展開。長期整體觀察與話題演變預設收合，分類洞見、統計與完整週報仍可查閱。閱讀深度參考先總覽、按需看細節的原則，時間與重點數量不是研究證明的最佳配置。
@@ -136,6 +148,8 @@ npm --prefix apps/showcase run dev
 使用 $showcase-weekly-insights 補到 2026-11-07。
 使用 $showcase-weekly-insights 包含本週，更新到今天。
 使用 $showcase-weekly-insights 重算 2026-09-06 到 2026-09-19。
+使用 $showcase-weekly-insights 更新既有跨影片專題，只整理相較前版的實質新增。
+使用 $showcase-weekly-insights 把最近兩週同類內容整合，保留補充、限制與分歧。
 ```
 
 預設補到台灣時間最近已結束的週六，不固定只看最近一個月，因此隔數週再執行仍會列出所有未完成週。截止日期用於選取整週；指定已結束週內的平日，也包含該週完整日–六。包含本週需要明確指定，保留實際截至日期與 open 狀態。

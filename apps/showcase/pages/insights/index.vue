@@ -51,6 +51,8 @@ const visibleWeeks = computed(() => hasUnmappedLegacyDates.value
 const selectedTopic = computed(() => series.value?.topicInsights?.items.find((item) => item.categoryId === selectedCategory.value?.id));
 const categoryTopics = computed(() => (series.value?.topicTracks ?? [])
   .filter((topic) => topic.categoryIds.includes(selectedCategory.value?.id ?? "")));
+const readingTopics = computed(() => (data.value?.topics ?? [])
+  .filter((topic) => topic.categoryIds.includes(selectedCategory.value?.id ?? "")));
 const observationRange = (start: string) => {
   const week = weeks.value.find((item) => item.start === start);
   return week ? formatWeekRange(week) : start;
@@ -78,16 +80,16 @@ const totalSources = computed(() => visibleWeeks.value.reduce((sum, week) => sum
 const totalRaw = computed(() => visibleWeeks.value.reduce((sum, week) => sum + week.metrics.rawCount, 0));
 const siteUrl = resolveSiteUrl(useRuntimeConfig().public.siteUrl);
 useHead({
-  title: "每週回顧",
+  title: "專題閱讀與每週回顧",
   link: [{ rel: "canonical", href: `${siteUrl}/insights` }],
   meta: [
     { name: "description", content: "按週日到週六回顧影片筆記，理解主題內容的轉變、值得注意的訊號與後續觀察重點。" },
-    { property: "og:title", content: "每週回顧 | 影片筆記庫" },
+    { property: "og:title", content: "專題閱讀與每週回顧 | 影片筆記庫" },
     { property: "og:description", content: "每週內容摘要、分類趨勢與代表來源。" },
     { property: "og:url", content: `${siteUrl}/insights` },
     { property: "og:image", content: `${siteUrl}/share-preview.png` },
     { name: "twitter:card", content: "summary_large_image" },
-    { name: "twitter:title", content: "每週回顧 | 影片筆記庫" },
+    { name: "twitter:title", content: "專題閱讀與每週回顧 | 影片筆記庫" },
     { name: "twitter:image", content: `${siteUrl}/share-preview.png` },
   ],
 });
@@ -97,8 +99,8 @@ useHead({
   <main class="insight-shell">
     <nav class="insight-nav"><NuxtLink to="/">← 影片筆記庫</NuxtLink><span>週日 — 週六 · 每週回顧</span></nav>
     <header class="insight-hero" :class="{ 'insight-hero--brief': series?.highlights }">
-      <p class="hero__eyebrow">Weekly Knowledge Review</p><h1>近期重點與每週回顧</h1>
-      <p>先掌握近期重點，再深入查看來源依據與完整週報。</p>
+      <p class="hero__eyebrow">Weekly Knowledge Review</p><h1>專題閱讀與每週回顧</h1>
+      <p>先看近期重點，把同一問題集中讀完，再依需要查看來源與週報。</p>
       <p v-if="series" class="insight-caption">{{ series.collectionStart }} 起 · 資料截至 {{ formatTaipeiDateTime(series.asOf) }}</p>
     </header>
     <section v-if="!weeks.length" class="state-panel"><h2>尚未整理週報</h2><p>下一份每週回顧完成後會顯示在這裡。</p></section>
@@ -129,6 +131,33 @@ useHead({
           </article>
         </div>
       </section>
+      <section class="insight-panel insight-readings" data-testid="topic-readings" aria-labelledby="topic-readings-heading">
+        <div class="insight-section-heading"><p class="hero__eyebrow">Read by Topic</p>
+          <h2 id="topic-readings-heading">同一問題，集中讀一份</h2>
+          <p>重複介紹合併，案例與限制保留。先讀整合理解，再決定要不要開影片。</p>
+        </div>
+        <div class="insight-category-picker" role="group" aria-label="觀察分類">
+          <button v-for="category in series?.categories" :key="category.id" type="button"
+            class="insight-category-button" :data-category="category.id"
+            :aria-pressed="selectedCategory?.id === category.id" @click="categoryId = category.id">
+            {{ category.label }}
+          </button>
+        </div>
+        <div v-if="readingTopics.length" class="topic-reading-grid">
+          <article v-for="topic in readingTopics" :key="topic.id" class="topic-reading-card">
+            <div class="topic-reading-card__meta"><span class="topic-reading-badge">{{ topic.revision === 1 ? '首次整理' : '內容更新' }}</span>
+              <span>{{ formatTaipeiDateTime(topic.updatedAt) }}</span></div>
+            <h3><NuxtLink :to="`/insights/topics/${topic.id}`">{{ topic.title }}</NuxtLink></h3>
+            <p class="topic-reading-card__summary">{{ topic.summary }}</p>
+            <p><strong>適合：</strong>{{ topic.relevance }}</p>
+            <p class="insight-caption">{{ topic.limitation }}</p>
+            <div class="topic-reading-card__footer"><span>{{ topic.coverageMode === 'selected-sources' ? '選定來源' : '範圍內完整整理' }} · {{ topic.sourceCount }} 個影片參考</span>
+              <NuxtLink :to="`/insights/topics/${topic.id}`" class="topic-reading-link">閱讀整合內容 →</NuxtLink></div>
+          </article>
+        </div>
+        <p v-else class="state-panel">這個分類尚未整理專題，可切換分類，或查看下方的洞見與每週回顧。</p>
+        <p class="insight-caption topic-reading-note">各篇標示實際選材期間；週次篩選只影響統計與週報。參考影片數不代表獨立驗證數。</p>
+      </section>
       <details class="insight-panel insight-editorial insight-background" data-testid="insight-background" :open="!series?.highlights">
         <summary>長期脈絡與話題演變</summary>
         <div class="insight-section-heading"><p class="hero__eyebrow">The Bigger Picture</p><h2>整體觀察</h2></div>
@@ -154,13 +183,6 @@ useHead({
       </details>
       <section class="insight-panel">
         <div class="insight-section-heading"><p class="hero__eyebrow">Topic Trends</p><h2>主題變化與洞見</h2><p>看看內容如何轉向、哪些訊號值得留意，以及接下來可以觀察什麼。</p></div>
-        <div class="insight-category-picker" role="group" aria-label="觀察分類">
-          <button v-for="category in series?.categories" :key="category.id" type="button"
-            class="insight-category-button" :data-category="category.id"
-            :aria-pressed="selectedCategory?.id === category.id" @click="categoryId = category.id">
-            {{ category.label }}
-          </button>
-        </div>
         <article v-if="selectedTopic" class="insight-topic" data-testid="topic-insight">
           <h3>{{ selectedCategory?.label }}</h3>
           <p class="insight-caption">分析期間：{{ topicPeriod }}</p>

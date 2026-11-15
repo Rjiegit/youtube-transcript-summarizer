@@ -1760,3 +1760,32 @@ a {
   .home-review { align-items: flex-start; flex-direction: column; gap: 16px; padding: 20px; }
   .insight-highlight { padding: 20px 16px; }
 }
+
+/* Topic readings share the editorial rhythm of weekly insights. */
+.topic-reading-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; margin-top: 28px; }
+.topic-reading-card { display: flex; flex-direction: column; padding: 26px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg); }
+.topic-reading-card__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+.topic-reading-badge { padding: 3px 10px; border-radius: 20px; border: 1px solid var(--line); color: var(--accent-strong); font-weight: 600; }
+.topic-reading-card h3 { font-size: 22px; line-height: 1.6; margin: 20px 0 12px; letter-spacing: -.025em; }
+.topic-reading-card h3 a { text-decoration: none; color: inherit; }
+.topic-reading-card h3 a:hover, .topic-reading-card h3 a:focus-visible { color: var(--accent-strong); text-decoration: underline; }
+.topic-reading-card p { line-height: 1.85; margin: 0 0 14px; }
+.topic-reading-card__summary { font-size: 16px; }
+.topic-reading-card__footer { display: flex; flex-direction: column; gap: 14px; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.topic-reading-link { font-weight: 600; font-size: 14px; color: var(--accent-strong); text-underline-offset: 4px; }
+.topic-reading-note { margin-top: 24px; }
+.topic-reading-context { margin: 24px 0; border-left: 3px solid var(--accent-strong); padding: 6px 24px; }
+.topic-reading-context p { line-height: 1.9; }
+.topic-reading-update h2, .topic-reading-detail .insight-editorial > h2 { font-size: 22px; line-height: 1.6; }
+.topic-reading-update p { line-height: 1.9; }
+.topic-reading-detail .markdown-content { overflow-wrap: anywhere; }
+.topic-reading-detail .markdown-content table { display: block; overflow-x: auto; max-width: 100%; border-collapse: collapse; font-size: 14px; }
+.topic-reading-detail .markdown-content th, .topic-reading-detail .markdown-content td { min-width: 120px; padding: 12px; vertical-align: top; border: 1px solid var(--line); }
+.topic-reading-sources summary { cursor: pointer; font-weight: 600; line-height: 1.7; }
+.topic-reading-sources[open] summary { margin-bottom: 24px; }
+@media (max-width: 760px) {
+  .topic-reading-grid { grid-template-columns: 1fr; }
+  .topic-reading-card { padding: 20px; }
+  .topic-reading-card h3 { font-size: 20px; }
+  .topic-reading-context { padding-left: 16px; }
+}

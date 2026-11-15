@@ -13,6 +13,7 @@ README 保留專案簡介、最短啟動與功能入口；本目錄人工維護�
 | 安裝已讀同步、輪替與重新連結 | [已讀同步](operations/showcase-read-sync.md) | [Session 與資料合併](../openwiki/frontend/read-state-sync.md) |
 | 安裝及管理影片收件匣 | [影片收件匣](video-inbox.md) | 尚無獨立頁面；入庫後見 [任務生命週期](../openwiki/workflows/task-lifecycle.md) |
 | 整理週報、維護分析規則與資料契約 | [每週回顧](features/showcase-weekly-insights.md) | [週報建置流程](../openwiki/workflows/weekly-insights.md) |
+| 同類影片合併閱讀、查看新增資訊與差異 | [跨影片專題閱讀試作](insights/topics/index.md) | 人工整合閱讀稿；`/insights/topics/{id}` 展示 |
 
 ## 維護規則
 

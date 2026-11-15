@@ -2,6 +2,8 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { fileURLToPath, URL } from "node:url";
 import { join } from "node:path";
 
+import { loadTopicReadings } from "./topic-readings-content.mjs";
+
 const getAppRoot = () => fileURLToPath(new URL("../", import.meta.url));
 const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 function requireValue(condition, message) {
@@ -203,7 +205,9 @@ export async function loadInsightContent(directory = join(getAppRoot(), "content
 }
 
 export async function buildInsightRegistry() {
-  const content = await loadInsightContent();
+  const weekly = await loadInsightContent();
+  const topics = await loadTopicReadings(undefined, undefined, weekly.series.categories);
+  const content = { ...weekly, topics };
   const directory = join(getAppRoot(), ".generated");
   await mkdir(directory, { recursive: true });
   await writeFile(join(directory, "weekly-insights.ts"),

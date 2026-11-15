@@ -143,6 +143,7 @@ Python 處理平台、Browser Extension 與 Nuxt Showcase 的責任與依賴，�
 
 ## 文件怎麼讀
 
+- [跨影片專題閱讀](docs/insights/topics/index.md)：依問題整合同類影片；網站入口為 `/insights`。
 - [操作文件導覽](docs/README.md)：人工維護的安裝、設定、維運與內容規則。
 - [OpenWiki](openwiki/quickstart.md)：從程式與測試整理的架構、資料流與內部機制。
 - [CONTRIBUTING.md](CONTRIBUTING.md)、[AGENTS.md](AGENTS.md)：開發與協作規則。

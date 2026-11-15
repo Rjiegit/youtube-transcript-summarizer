@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "topics": [
+    { "id": "agent-memory-maintenance", "published": true },
+    { "id": "agent-review-verification", "published": true }
+  ]
+}

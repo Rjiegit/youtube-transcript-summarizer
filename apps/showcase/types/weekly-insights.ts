@@ -75,6 +75,7 @@ export interface InsightSeries {
 export interface InsightListResponse {
   series: InsightSeries;
   weeks: WeeklyInsightSummary[];
+  topics?: TopicReadingSummary[];
 }
 
 export interface InsightDetailResponse {
@@ -82,4 +83,33 @@ export interface InsightDetailResponse {
   week: WeeklyInsight;
   previous: string | null;
   next: string | null;
+}
+
+export interface TopicReadingSummary {
+  id: string;
+  title: string;
+  summary: string;
+  relevance: string;
+  limitation: string;
+  changes: string;
+  categoryIds: string[];
+  revision: number;
+  analysisVersion: string;
+  updatedAt: string;
+  coverageStart: string;
+  coverageThrough: string;
+  coverageMode: "selected-sources" | "full-scope";
+  sourceCount: number;
+  prioritySourceUrl: string;
+}
+
+export interface TopicReading extends TopicReadingSummary {
+  intro: string;
+  sections: Array<{ heading: string; content: string }>;
+  sources: { heading: string; content: string };
+}
+
+export interface TopicReadingResponse {
+  topic: TopicReading;
+  categories: InsightCategory[];
 }

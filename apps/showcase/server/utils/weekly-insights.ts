@@ -1,13 +1,14 @@
 import { createHash } from "node:crypto";
 import registry from "../../.generated/weekly-insights";
-import type { InsightListResponse, InsightSeries, WeeklyInsight } from "../../types/weekly-insights";
+import type { InsightListResponse, InsightSeries, WeeklyInsight, TopicReading } from "../../types/weekly-insights";
 
-const snapshot = registry as unknown as { series: InsightSeries; weeks: WeeklyInsight[] };
+const snapshot = registry as unknown as { series: InsightSeries; weeks: WeeklyInsight[]; topics: TopicReading[] };
 export const insightETag = `"${createHash("sha256").update(JSON.stringify(snapshot)).digest("hex").slice(0, 24)}"`;
 
 export function insightList(): InsightListResponse {
   return {
     series: snapshot.series,
+    topics: snapshot.topics.map(({ intro: _intro, sections: _sections, sources: _sources, ...summary }) => summary),
     weeks: snapshot.weeks.map(({ content: _content, sources: _sources, qualityNote: _quality, ...summary }) => summary),
   };
 }
@@ -21,4 +22,9 @@ export function insightDetail(start: string) {
     previous: snapshot.weeks[index - 1]?.start ?? null,
     next: snapshot.weeks[index + 1]?.start ?? null,
   };
+}
+
+export function topicReadingDetail(id: string) {
+  const topic = snapshot.topics.find((item) => item.id === id);
+  return topic ? { topic, categories: snapshot.series.categories } : null;
 }
