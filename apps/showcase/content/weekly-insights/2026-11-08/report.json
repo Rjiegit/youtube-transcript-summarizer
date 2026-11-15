@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-11-15T19:43:07.969651+08:00",
+  "revision": 1,
+  "start": "2026-11-08",
+  "endExclusive": "2026-11-15",
+  "coverageStart": "2026-11-08",
+  "asOf": "2026-11-15T19:43:07.969651+08:00",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "把 Agent 的測試、記憶與企業成果分開驗收",
+  "summary": "103 個不同來源；虛擬供應層測試與記憶維護補上 Agent 交付的驗證邊界，模型長任務展示伴隨失敗案例，企業導入更關心流程一致與業務成果。",
+  "metrics": {
+    "rawCount": 103,
+    "sourceCount": 103,
+    "newSourceCount": 103,
+    "recurringSourceCount": 0
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 20
+    },
+    {
+      "id": "models-tools",
+      "count": 32
+    },
+    {
+      "id": "career",
+      "count": 16
+    },
+    {
+      "id": "finance-retirement",
+      "count": 1
+    },
+    {
+      "id": "crypto-policy",
+      "count": 5
+    },
+    {
+      "id": "technology-business",
+      "count": 17
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 10
+    },
+    {
+      "id": "society-leisure",
+      "count": 2
+    }
+  ],
+  "sources": [
+    {
+      "title": "Pi Agent 开发实战：用 faux provider 做 0 成本测试",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=TFtvFRCAwFQ"
+    },
+    {
+      "title": "AI 開始會做夢了？Claude 記憶拆解！睡覺後就越來越好用？",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=ZJkfmrbmuFg"
+    },
+    {
+      "title": "彻底搞懂智能体记忆：Codex Memory 底层架构与设计全拆解",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=fNDRs-gEX0E"
+    },
+    {
+      "title": "用最火的 pstack 做开发是什么感觉？",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=4zJttsvAXuM"
+    },
+    {
+      "title": "Elephant-Goldfish：AI 當掉就失憶？Google 工程師叫「金魚」來挑錯 #shorts",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=KMIKfVXbkKQ"
+    },
+    {
+      "title": "EP466 - 個人用 AI 快了 100 倍，公司卻沒感覺？企業導入 AI 卡關的 2 個原因｜Basis 創辦人演講精華",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=PEUs59xg-uo"
+    },
+    {
+      "title": "FDE为什么突然火了?企业开出百万年薪,到底在抢谁？",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=BqaEPMolUS8"
+    },
+    {
+      "title": "AI時代最大的謊言：除了七大科技公司，根本沒人賺到錢！AI到底是不是泡沫？｜Kelly Tsai",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=ePXqAxP01to"
+    },
+    {
+      "title": "Gemini 4 Carbon：一隊 AI 分工做出整款 3D 遊戲，跑 20 小時卻只拿 5 分？ #shorts",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=n8onJF17PA4"
+    },
+    {
+      "title": "EP473 - Gemini 產品負責人：什麼都做得出來之後，PM 為什麼又變值錢？Lenny's Podcast 精華",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=HhAabekGFVY"
+    },
+    {
+      "title": "有5張00919「就贏過半投資人」！　怎樣月月領1萬~10萬元？｜懶錢包LazyWallet",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=wODConxXAIo"
+    },
+    {
+      "title": "幣安被盜 63 億美元之後：復盤兩年 16 起加密貨幣被盜事件，你的幣該放哪？",
+      "categoryId": "crypto-policy",
+      "sourceUrl": "https://www.youtube.com/watch?v=S6MunMPvVTk"
+    }
+  ],
+  "qualityNote": "完整分頁讀取收錄紀錄與摘要正文，按台灣收錄建立日期分週並依來源去重。不同影片可能轉述同一事件，不能當成獨立驗證；資訊不足、廣告、人物指控及未查核的產品、研究、健康、法律與行情主張不作事實或成效結論。代表來源並非完整清單。"
+}

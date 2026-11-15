@@ -1,0 +1,98 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-11-15T19:43:07.969651+08:00",
+  "revision": 1,
+  "start": "2026-11-01",
+  "endExclusive": "2026-11-08",
+  "coverageStart": "2026-11-01",
+  "asOf": "2026-11-15T19:43:07.969651+08:00",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "從自動接單到可控審查：Agent 的權限與成本",
+  "summary": "99 個不同來源；自動派工、獨立審查與權限邊界延續可靠交付主線，本地模型、語音與文件工具更關心使用條件，財務及內容經營仍有收錄。",
+  "metrics": {
+    "rawCount": 99,
+    "sourceCount": 99,
+    "newSourceCount": 99,
+    "recurringSourceCount": 0
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 26
+    },
+    {
+      "id": "models-tools",
+      "count": 26
+    },
+    {
+      "id": "career",
+      "count": 9
+    },
+    {
+      "id": "finance-retirement",
+      "count": 8
+    },
+    {
+      "id": "crypto-policy",
+      "count": 6
+    },
+    {
+      "id": "technology-business",
+      "count": 11
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 4
+    },
+    {
+      "id": "society-leisure",
+      "count": 9
+    }
+  ],
+  "sources": [
+    {
+      "title": "DeepSeek Super-Agent 架构浅析：让系统接管会话管理",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=acMNm0vNoKA"
+    },
+    {
+      "title": "DeepSeek SuperAgent 实测：接单干活全自动",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=OrNE5vMFD2k"
+    },
+    {
+      "title": "OpenCodeReview：把 AI Code Review 做得更可控｜GitHub 雷達",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=ii7GXZp4PZ8"
+    },
+    {
+      "title": "Google 開源 Elephant-Goldfish：大象寫計畫、金魚抓問題，別讓 AI 改自己的考卷 #shorts",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=RjoJgsQlGAM"
+    },
+    {
+      "title": "Claude Skill 是什麼？把格式整理成一包，不用每次重講｜AI 小白入門 #6 #shorts",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=ZIk_Bzz5H2o"
+    },
+    {
+      "title": "EP460 - 你的電腦能跑什麼 AI？16GB 到 128GB 一次講完｜Ollama、LM Studio 怎麼設定，新手五個坑",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=1nomxygMILI"
+    },
+    {
+      "title": "職業生涯你會做規劃，退休你會嗎？",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=kCmpB-31nKo"
+    },
+    {
+      "title": "EP457 - 怎麼用 AI 快速變強？最大的陷阱是讓它直接給你答案",
+      "categoryId": "wellbeing-learning",
+      "sourceUrl": "https://www.youtube.com/watch?v=Dvb3F8DKMrA"
+    }
+  ],
+  "qualityNote": "完整分頁讀取收錄紀錄與摘要正文，按台灣收錄建立日期分週並依來源去重。不同影片可能轉述同一事件，不能當成獨立驗證；資訊不足、廣告、人物指控及未查核的產品、研究、健康、法律與行情主張不作事實或成效結論。代表來源並非完整清單。"
+}
