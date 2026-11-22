@@ -3,7 +3,7 @@
   "analysisVersion": "topic-v1-sunday",
   "published": true,
   "publishedAt": "2026-11-22T09:05:55.028126+08:00",
-  "revision": 1,
+  "revision": 2,
   "start": "2026-11-15",
   "endExclusive": "2026-11-22",
   "coverageStart": "2026-11-15",
@@ -11,7 +11,7 @@
   "periodState": "closed",
   "dataCompleteness": "complete",
   "title": "檢查 Agent 的測試與驗收證據",
-  "summary": "128 個不同來源。Agent 工程回升，驗收延伸到測試能否抓錯、分工證據是否完整。3D 模型展示補充素材與用途限制，內容營運案例保留人工發布關卡。",
+  "summary": "這週最值得留意的是 Agent 驗收往前一步：測試要能抓到預期的錯誤，分工回報也要附上可重查的證據。",
   "metrics": {
     "rawCount": 130,
     "sourceCount": 128,
