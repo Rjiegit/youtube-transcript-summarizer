@@ -1,0 +1,113 @@
+{
+  "schemaVersion": 1,
+  "analysisVersion": "topic-v1-sunday",
+  "published": true,
+  "publishedAt": "2026-11-22T09:05:55.028126+08:00",
+  "revision": 1,
+  "start": "2026-11-15",
+  "endExclusive": "2026-11-22",
+  "coverageStart": "2026-11-15",
+  "asOf": "2026-11-22T09:02:02.450446+08:00",
+  "periodState": "closed",
+  "dataCompleteness": "complete",
+  "title": "檢查 Agent 的測試與驗收證據",
+  "summary": "128 個不同來源。Agent 工程回升，驗收延伸到測試能否抓錯、分工證據是否完整。3D 模型展示補充素材與用途限制，內容營運案例保留人工發布關卡。",
+  "metrics": {
+    "rawCount": 130,
+    "sourceCount": 128,
+    "newSourceCount": 113,
+    "recurringSourceCount": 15
+  },
+  "categories": [
+    {
+      "id": "agent-engineering",
+      "count": 38
+    },
+    {
+      "id": "models-tools",
+      "count": 35
+    },
+    {
+      "id": "career",
+      "count": 11
+    },
+    {
+      "id": "finance-retirement",
+      "count": 6
+    },
+    {
+      "id": "crypto-policy",
+      "count": 1
+    },
+    {
+      "id": "technology-business",
+      "count": 24
+    },
+    {
+      "id": "wellbeing-learning",
+      "count": 11
+    },
+    {
+      "id": "society-leisure",
+      "count": 2
+    }
+  ],
+  "sources": [
+    {
+      "title": "29 萬星的 AI skill 作者怎麼審 PR？Matt Pocock 演講重點整理",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=xPEr7P45rK0"
+    },
+    {
+      "title": "寫《Clean Code》的人說他不看程式碼了，你還要看嗎？｜Uncle Bob｜演講訪談系列",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=8Y6ovXMrdVs"
+    },
+    {
+      "title": "pstack 如何编排调度多个 Agent 协同工作？",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=YWkj7zmWXvQ"
+    },
+    {
+      "title": "EP478 - Anthropic 砍掉 Claude Code 八成 system prompt！照這套原則精簡設定，讓日常任務更俐落",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=K_0UezrjoKo"
+    },
+    {
+      "title": "EP477 - Repo 一多，AI agent 就無法掌控？拆解 Matt Pocock 的 Home Repo",
+      "categoryId": "agent-engineering",
+      "sourceUrl": "https://www.youtube.com/watch?v=P_MpsJm4adg"
+    },
+    {
+      "title": "Claude Fable 5.2 做 3D 有多強？同一個指令跟 Opus 5.5 比成品 #shorts",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=L1epo1SQA0M"
+    },
+    {
+      "title": "Breeze TTS 2 開源就能跑？Linux、CUDA、Voice Clone 與限制一次看",
+      "categoryId": "models-tools",
+      "sourceUrl": "https://www.youtube.com/watch?v=7QSMLkBWLrc"
+    },
+    {
+      "title": "被问爆的 AI 自媒体工作台，我直接开源了｜麦田：7 个平台自动分发 + 流量监控 + 转化追踪",
+      "categoryId": "technology-business",
+      "sourceUrl": "https://www.youtube.com/watch?v=ctLP0vasq_o"
+    },
+    {
+      "title": "EP484 - AI 會讓你失業嗎？OpenAI 首席經濟學家：短期不會有失業潮，但你每天做的事已經在變",
+      "categoryId": "career",
+      "sourceUrl": "https://www.youtube.com/watch?v=cYOgFEFgGyQ"
+    },
+    {
+      "title": "其實很多人都不懂「退休」",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=gJ_VP-41eT0"
+    },
+    {
+      "title": "別把你的錢留到死 Die With Zero: Getting All You Can from Your Money and Your Life",
+      "categoryId": "finance-retirement",
+      "sourceUrl": "https://www.youtube.com/watch?v=34c2URb5kkk"
+    }
+  ],
+  "qualityNote": "完整分頁讀取 Notion 收錄及摘要正文。以台灣收錄日期及來源鍵統計，同週保留最早收錄。不同影片可能轉述同一事件或講者。資訊不足、人物指控及未查核的產品、健康、財務與研究主張保留判讀限制。"
+}
