@@ -1,8 +1,13 @@
 ## Agent 驗收要測失敗，也要核對證據
 
-上週的案例用固定回應驗證訊息路由與狀態保存。本週的案例則指出，mock 若跳過真實的失敗路徑，CI 仍可能全綠。變異測試會刻意改動程式，看看斷言能否抓錯。另一個分工案例裡，主 Agent 發現「鍵盤操作通過」的回報缺少從頁面起點到輸入框的操作證據，補驗後也重跑核心流程。
+11/8 那一週用固定回應驗證訊息路由與狀態保存，驗證範圍限於流程。
 
-[先看 Matt Pocock 怎麼審 AI 寫的測試](https://www.youtube.com/watch?v=xPEr7P45rK0) · [看分工驗收漏了哪一步](https://www.youtube.com/watch?v=YWkj7zmWXvQ)
+- **測試全過，還是可能漏掉失敗路徑。** Matt Pocock 指出，mock 若繞過真正會出錯的路徑，CI 仍可能全綠。可以用變異測試刻意改壞一個關鍵行為，看看斷言能否抓到該錯誤。[看 Matt Pocock 怎麼審 AI 寫的測試](https://www.youtube.com/watch?v=xPEr7P45rK0)
+- **鍵盤操作回報通過，仍要核對走過哪些步驟。** 在 pstack 的分工案例裡，主 Agent 發現回報缺少從頁面起點到輸入框的操作證據，於是補查這段路徑，再重跑核心流程。[看分工驗收漏了哪一步](https://www.youtube.com/watch?v=YWkj7zmWXvQ)
+
+這些案例只涵蓋所選的失敗情境與實際操作路徑，原影片的測試未另行重跑。
+
+想知道不同測試各能證明什麼？[看 Agent 驗收專題](/insights/topics/agent-review-verification)。
 
 ## 評估 AI 成品時，記下素材與可用門檻
 

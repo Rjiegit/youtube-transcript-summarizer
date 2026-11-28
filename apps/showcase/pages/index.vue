@@ -223,14 +223,17 @@ onBeforeUnmount(() => {
       </div>
     </section>
 
-    <NuxtLink to="/insights" class="home-review" aria-labelledby="home-review-title">
+    <section class="home-review" aria-labelledby="home-review-title">
       <div>
-        <p class="hero__eyebrow">每週回顧 · Weekly Review</p>
-        <h2 id="home-review-title">本週，值得再想一遍的事</h2>
-        <p class="home-review__description">查看近期重點、來源依據與完整週報。</p>
+        <p class="hero__eyebrow">每週回顧 · 11/15–11/21</p>
+        <h2 id="home-review-title">CI 全綠之後，Agent 的交付怎麼驗收？</h2>
+        <p class="home-review__description">測試全過時，先問它能不能抓到你最在意的錯誤。收到『驗收通過』的回報時，再核對操作紀錄是否涵蓋關鍵步驟。</p>
       </div>
-      <span class="home-review__action">閱讀每週回顧 <span aria-hidden="true">→</span></span>
-    </NuxtLink>
+      <div class="home-review__actions">
+        <NuxtLink to="/insights/2026-11-15" class="home-review__primary">閱讀本期週報 <span aria-hidden="true">→</span></NuxtLink>
+        <NuxtLink to="/insights">查看全部週報</NuxtLink>
+      </div>
+    </section>
 
     <section v-if="!pending && !error && items.length > 0" class="showcase-toolbar" aria-label="展示內容工具列">
       <div class="showcase-toolbar__actions">

@@ -143,6 +143,39 @@ test("weekly insights are bundled, calendar-aligned and rendered before hydratio
   assert.ok(response.headers.get("etag"));
   const { series, weeks, topics } = await response.json();
   assert.equal(series.weekConvention, "sunday-saturday");
+  const featuredWeek = weeks.find((week) => week.start === "2026-11-15");
+  assert.equal(featuredWeek?.periodState, "closed");
+  assert.equal(featuredWeek.dataCompleteness, "complete");
+
+  const home = await fetch(server.baseUrl);
+  assert.equal(home.status, 200);
+  const homeDom = new JSDOM(await home.text());
+  const review = homeDom.window.document.querySelector("section.home-review");
+  assert.equal(review?.querySelector("h2")?.textContent, "CI 全綠之後，Agent 的交付怎麼驗收？");
+  assert.equal(review.querySelector(".home-review__description").textContent,
+    "測試全過時，先問它能不能抓到你最在意的錯誤。收到『驗收通過』的回報時，再核對操作紀錄是否涵蓋關鍵步驟。");
+  assert.deepEqual(Array.from(review.querySelectorAll("a"), (link) => [
+    link.getAttribute("href"), link.textContent.trim().replace(/\s*→$/, ""),
+  ]), [
+    ["/insights/2026-11-15", "閱讀本期週報"],
+    ["/insights", "查看全部週報"],
+  ]);
+  assert.equal(review.closest("a"), null);
+  homeDom.window.close();
+
+  const featured = await fetch(`${server.baseUrl}/insights/${featuredWeek.start}`);
+  assert.equal(featured.status, 200);
+  const featuredDom = new JSDOM(await featured.text());
+  const opening = featuredDom.window.document.querySelector(".insight-editorial .markdown-content");
+  const cases = opening.querySelectorAll("h2:first-child + p + ul > li");
+  assert.equal(cases.length, 2);
+  assert.ok(cases[0].querySelector('a[href="https://www.youtube.com/watch?v=xPEr7P45rK0"][target="_blank"]'));
+  assert.ok(cases[1].querySelector('a[href="https://www.youtube.com/watch?v=YWkj7zmWXvQ"][target="_blank"]'));
+  const guide = opening.querySelector('a[href="/insights/topics/agent-review-verification"]');
+  assert.equal(guide?.textContent, "看 Agent 驗收專題");
+  assert.equal(guide.hasAttribute("target"), false);
+  featuredDom.window.close();
+
   for (const week of weeks) {
     assert.equal(new Date(`${week.start}T00:00:00Z`).getUTCDay(), 0);
     assert.ok(!("content" in week));
